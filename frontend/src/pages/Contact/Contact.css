@@ -1,0 +1,321 @@
+.contact-page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.contact-eyebrow {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--color-accent-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.contact-hero {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 105px 0 85px;
+}
+
+.contact-hero-content {
+  max-width: 780px;
+}
+
+.contact-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(52px, 8vw, 90px);
+  font-weight: 400;
+  line-height: 0.93;
+  letter-spacing: -0.05em;
+}
+
+.contact-hero h1 span,
+.contact-information h2 span,
+.contact-hours h2 span,
+.contact-actions h2 span {
+  display: block;
+  color: var(--color-accent-dark);
+  font-style: italic;
+}
+
+.contact-hero p {
+  max-width: 570px;
+  margin: 30px 0 0;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* =====================================================
+   INFORMATION
+===================================================== */
+
+.contact-information {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 80px 0 120px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 100px;
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-information h2,
+.contact-actions h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 62px);
+  font-weight: 400;
+  line-height: 0.97;
+  letter-spacing: -0.045em;
+}
+
+.contact-detail-list {
+  margin-top: 55px;
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-detail {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 20px;
+  padding: 25px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contact-detail-number {
+  color: var(--color-accent-dark);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-style: italic;
+}
+
+.contact-detail small {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.contact-detail a,
+.contact-detail address {
+  display: block;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.contact-detail a:hover {
+  color: var(--color-accent-dark);
+}
+
+.contact-detail p {
+  max-width: 430px;
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* =====================================================
+   HOURS
+===================================================== */
+
+.contact-hours {
+  padding-top: 2px;
+}
+
+.contact-hours h2 {
+  margin-bottom: 35px;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 58px);
+  font-weight: 400;
+  line-height: 0.97;
+  letter-spacing: -0.045em;
+}
+
+.contact-hours-card {
+  padding: 28px;
+  background: #eee4dc;
+}
+
+.contact-hours-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-hours-card span {
+  color: var(--color-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-hours-card strong {
+  color: var(--color-accent-dark);
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 400;
+}
+
+.contact-home-service {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-home-service > span {
+  color: var(--color-accent-dark);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.contact-home-service p {
+  margin: 13px 0 17px;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.contact-home-service a {
+  color: var(--color-accent-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.contact-actions {
+  padding: 100px max(20px, calc((100% - 1180px) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  background: var(--color-dark);
+  color: var(--color-background);
+}
+
+.contact-actions .contact-eyebrow {
+  color: var(--color-accent-soft);
+}
+
+.contact-actions h2 span {
+  color: var(--color-accent-soft);
+}
+
+.contact-actions p {
+  max-width: 500px;
+  margin: 23px 0 0;
+  color: rgba(251, 248, 243, 0.65);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.contact-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.contact-primary-button,
+.contact-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 45px;
+  min-width: 190px;
+  padding: 0 22px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.contact-primary-button {
+  background: var(--color-background);
+  color: var(--color-accent-dark);
+}
+
+.contact-secondary-button {
+  border: 1px solid var(--color-accent-soft);
+  color: var(--color-accent-soft);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 850px) {
+  .contact-information {
+    grid-template-columns: 1fr;
+    gap: 70px;
+  }
+
+  .contact-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-action-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .contact-hero,
+  .contact-information {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .contact-hero {
+    padding: 70px 0 55px;
+  }
+
+  .contact-information {
+    padding: 60px 0 80px;
+  }
+
+  .contact-detail {
+    grid-template-columns: 35px 1fr;
+    gap: 12px;
+  }
+
+  .contact-detail a,
+  .contact-detail address {
+    font-size: 18px;
+  }
+
+  .contact-actions {
+    padding: 75px 20px;
+  }
+
+  .contact-action-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .contact-primary-button,
+  .contact-secondary-button {
+    width: 100%;
+  }
+}

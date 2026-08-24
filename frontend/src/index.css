@@ -1,0 +1,136 @@
+:root {
+  --color-background: #fbf8f3;
+  --color-surface: #fffdf9;
+  --color-text: #292522;
+  --color-muted: #756d67;
+  --color-border: #e7dfd7;
+
+  --color-accent: #b98282;
+  --color-accent-soft: #d9b7ad;
+  --color-accent-dark: #754f4f;
+
+  --color-dark: #292522;
+
+  --font-display:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  --font-body:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.site-shell {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+main {
+  min-height: 60vh;
+}
+
+.page-placeholder {
+  width: min(1180px, calc(100% - 40px));
+  min-height: 60vh;
+  margin: 0 auto;
+  padding: 120px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-placeholder > span {
+  margin-bottom: 16px;
+  color: var(--color-accent-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.page-placeholder h1 {
+  max-width: 800px;
+  margin: 0 0 20px;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -2px;
+}
+
+.page-placeholder p {
+  max-width: 560px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+@media (max-width: 640px) {
+  .page-placeholder {
+    width: min(100% - 32px, 560px);
+    padding: 90px 0;
+  }
+
+  .page-placeholder h1 {
+    letter-spacing: -1px;
+  }
+}

@@ -1,0 +1,49 @@
+.booking-cta {
+  padding: 130px 20px;
+  background: var(--color-accent-dark);
+  text-align: center;
+}
+
+.booking-cta-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.booking-cta .section-eyebrow {
+  color: var(--color-accent-soft);
+}
+
+.booking-cta h2 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 78px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -2px;
+}
+
+.booking-cta h2 em {
+  display: block;
+  color: var(--color-accent-soft);
+  font-weight: 400;
+}
+
+.booking-cta p {
+  max-width: 520px;
+  margin: 28px auto 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.booking-cta-button {
+  margin-top: 34px;
+  background: #fff;
+  color: var(--color-accent-dark);
+}
+
+.booking-cta-button:hover {
+  background: var(--color-text);
+  color: #fff;
+}

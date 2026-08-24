@@ -1,0 +1,390 @@
+.fashion-page {
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.fashion-eyebrow {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--color-accent-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.fashion-hero {
+  width: min(1180px, calc(100% - 40px));
+  min-height: 650px;
+  margin: 0 auto;
+  padding: 90px 0;
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  align-items: center;
+  gap: 80px;
+}
+
+.fashion-hero-content {
+  max-width: 650px;
+}
+
+.fashion-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(50px, 7vw, 84px);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+
+.fashion-hero h1 span,
+.fashion-heading h2 span,
+.fashion-process-heading h2 span,
+.fashion-consultation h2 span {
+  display: block;
+  color: var(--color-accent-dark);
+  font-style: italic;
+}
+
+.fashion-hero p {
+  max-width: 520px;
+  margin: 28px 0 32px;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.fashion-primary-button,
+.fashion-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 23px;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.fashion-primary-button {
+  background: var(--color-accent-dark);
+  color: #fff;
+}
+
+.fashion-secondary-button {
+  border: 1px solid var(--color-accent-dark);
+  color: var(--color-accent-dark);
+}
+
+.fashion-hero-image {
+  aspect-ratio: 0.82;
+  overflow: hidden;
+  border-radius: 180px 180px 14px 14px;
+  background: var(--color-accent-soft);
+}
+
+.fashion-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =====================================================
+   FASHION SERVICES
+===================================================== */
+
+.fashion-services {
+  padding: 110px 0;
+  background: #eee4dc;
+}
+
+.fashion-heading {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto 55px;
+  display: grid;
+  grid-template-columns: 1fr 0.7fr;
+  gap: 70px;
+  align-items: end;
+}
+
+.fashion-heading h2,
+.fashion-process-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 64px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.fashion-heading > p {
+  max-width: 430px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.fashion-card-grid {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.fashion-card {
+  overflow: hidden;
+  border: 1px solid rgba(117, 79, 79, 0.12);
+  border-radius: 18px;
+  background: var(--color-surface);
+}
+
+.fashion-card-image {
+  position: relative;
+  aspect-ratio: 0.9;
+  overflow: hidden;
+  background: var(--color-accent-soft);
+}
+
+.fashion-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.fashion-card:hover .fashion-card-image img {
+  transform: scale(1.04);
+}
+
+.fashion-card-badge {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-accent-dark);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.fashion-card-content {
+  padding: 20px;
+}
+
+.fashion-card-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-accent-dark);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.fashion-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.fashion-card p {
+  min-height: 75px;
+  margin: 12px 0 18px;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.fashion-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.fashion-card-footer span {
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.fashion-card-footer a {
+  color: var(--color-accent-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* =====================================================
+   PROCESS
+===================================================== */
+
+.fashion-process {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 120px 0;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 100px;
+}
+
+.fashion-process-heading h2 {
+  position: sticky;
+  top: 100px;
+}
+
+.fashion-process-list {
+  border-top: 1px solid var(--color-border);
+}
+
+.fashion-process-item {
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  gap: 25px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fashion-process-item > span {
+  color: var(--color-accent-dark);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-style: italic;
+}
+
+.fashion-process-item h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.fashion-process-item p {
+  max-width: 500px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* =====================================================
+   CONSULTATION
+===================================================== */
+
+.fashion-consultation {
+  padding: 110px 20px;
+  background: var(--color-dark);
+  color: var(--color-background);
+  text-align: center;
+}
+
+.fashion-consultation .fashion-eyebrow {
+  color: var(--color-accent-soft);
+}
+
+.fashion-consultation h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.fashion-consultation h2 span {
+  color: var(--color-accent-soft);
+}
+
+.fashion-consultation p {
+  max-width: 550px;
+  margin: 25px auto 32px;
+  color: rgba(251, 248, 243, 0.65);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.fashion-consultation .fashion-secondary-button {
+  border-color: var(--color-accent-soft);
+  color: var(--color-accent-soft);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+  .fashion-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fashion-process {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .fashion-process-heading h2 {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .fashion-hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 50px;
+    padding: 70px 0;
+  }
+
+  .fashion-heading {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .fashion-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-card p {
+    min-height: auto;
+  }
+
+  .fashion-process {
+    padding: 80px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .fashion-hero,
+  .fashion-heading,
+  .fashion-card-grid,
+  .fashion-process {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .fashion-hero {
+    padding: 60px 0;
+  }
+
+  .fashion-services {
+    padding: 75px 0;
+  }
+
+  .fashion-card-grid {
+    gap: 14px;
+  }
+
+  .fashion-consultation {
+    padding: 80px 20px;
+  }
+}

@@ -1,0 +1,122 @@
+.services-section {
+  padding: 120px max(20px, calc((100vw - 1180px) / 2));
+  background: var(--color-dark);
+  color: #fff;
+}
+
+.services-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 70px;
+}
+
+.services-section .section-eyebrow {
+  color: var(--color-accent-soft);
+}
+
+.services-header h2 {
+  max-width: 650px;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 68px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.services-header h2 em {
+  display: block;
+  color: var(--color-accent-soft);
+  font-weight: 400;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.text-link span {
+  font-size: 16px;
+}
+
+.services-list {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.service-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 50px;
+  align-items: center;
+  gap: 30px;
+  padding: 30px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  transition: padding 200ms ease;
+}
+
+.service-item:hover {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.service-number {
+  color: var(--color-accent-soft);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.service-main h3 {
+  margin: 0 0 8px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.service-main p {
+  max-width: 620px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.service-arrow {
+  color: var(--color-accent-soft);
+  font-size: 20px;
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  .services-section {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
+
+  .services-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 50px;
+  }
+
+  .service-item {
+    grid-template-columns: 45px 1fr 25px;
+    gap: 15px;
+  }
+
+  .service-main h3 {
+    font-size: 23px;
+  }
+}

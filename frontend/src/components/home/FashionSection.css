@@ -1,0 +1,127 @@
+.fashion-section {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 140px 0;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  align-items: center;
+  gap: 100px;
+}
+
+.fashion-visual {
+  position: relative;
+}
+
+.fashion-visual-placeholder {
+  aspect-ratio: 0.82;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(
+      145deg,
+      #e8d9d2,
+      #c9a6a0
+    );
+}
+
+.fashion-visual-placeholder span {
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-display);
+  font-size: 180px;
+  font-style: italic;
+  line-height: 1;
+}
+
+.fashion-label {
+  position: absolute;
+  right: -30px;
+  bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 22px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent-dark);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.fashion-content h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 68px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.fashion-content h2 em {
+  display: block;
+  color: var(--color-accent-dark);
+  font-weight: 400;
+}
+
+.fashion-content > p {
+  max-width: 530px;
+  margin: 30px 0;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.fashion-content ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 25px;
+  margin: 0 0 34px;
+  padding: 0;
+  list-style: none;
+}
+
+.fashion-content li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.fashion-content li::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+@media (max-width: 850px) {
+  .fashion-section {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    padding: 100px 0;
+  }
+
+  .fashion-visual {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 520px) {
+  .fashion-section {
+    width: min(100% - 32px, 560px);
+  }
+
+  .fashion-content ul {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-label {
+    right: 10px;
+  }
+}

@@ -1,0 +1,65 @@
+.intro-section {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 130px 0;
+  display: grid;
+  grid-template-columns: 0.7fr 1.8fr;
+  gap: 80px;
+  border-top: 1px solid var(--color-border);
+}
+
+.intro-label {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.intro-label span:first-child {
+  color: var(--color-accent-dark);
+}
+
+.section-eyebrow {
+  display: block;
+  margin-bottom: 20px;
+  color: var(--color-accent-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+}
+
+.intro-content h2 {
+  max-width: 800px;
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5.5vw, 70px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -2px;
+}
+
+.intro-content h2 em {
+  display: block;
+  color: var(--color-accent-dark);
+  font-weight: 400;
+}
+
+.intro-content p {
+  max-width: 650px;
+  margin: 32px 0 0;
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+@media (max-width: 800px) {
+  .intro-section {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 90px 0;
+  }
+}

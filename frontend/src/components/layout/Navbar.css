@@ -1,0 +1,126 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 252, 247, 0.94);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(14px);
+}
+
+.site-header-container {
+  width: min(1180px, calc(100% - 40px));
+  min-height: 82px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+  margin-top: 5px;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.main-navigation {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.main-navigation a {
+  position: relative;
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.main-navigation a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.main-navigation a:hover,
+.main-navigation a.active {
+  color: var(--color-accent-dark);
+}
+
+.main-navigation a.active::after,
+.main-navigation a:hover::after {
+  transform: scaleX(1);
+}
+
+.header-book-button {
+  padding: 13px 20px;
+  background: var(--color-accent-dark);
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+  flex-shrink: 0;
+}
+
+.header-book-button:hover {
+  background: var(--color-text);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1024px) {
+  .site-header-container {
+    width: min(100% - 32px, 760px);
+  }
+
+  .main-navigation {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header-container {
+    min-height: 72px;
+  }
+
+  .brand-name {
+    font-size: 24px;
+  }
+
+  .header-book-button {
+    padding: 11px 14px;
+    font-size: 10px;
+  }
+}
