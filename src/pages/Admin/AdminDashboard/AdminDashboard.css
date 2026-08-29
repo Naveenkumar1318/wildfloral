@@ -1,0 +1,410 @@
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
+
+.admin-dashboard {
+  width: 100%;
+  min-height: 100%;
+  padding: 48px 52px 70px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 42px;
+}
+
+.admin-dashboard-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  color: #6c8430;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+}
+
+.admin-dashboard-header h1 {
+  margin: 0;
+  color: #1e2920;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(42px, 4vw, 64px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.admin-dashboard-header h1 span {
+  display: inline;
+  color: #54782d;
+}
+
+.admin-dashboard-header p {
+  max-width: 560px;
+  margin: 20px 0 0;
+  color: #718075;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.admin-dashboard-website-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 24px;
+  border: 1px solid #d9e1d4;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #355526;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-dashboard-website-button:hover {
+  border-color: #54782d;
+  background: #f4f7ef;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.admin-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 58px;
+}
+
+.admin-dashboard-stat-card {
+  min-height: 165px;
+  padding: 25px;
+  box-sizing: border-box;
+  border: 1px solid #e4e9e1;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.admin-dashboard-stat-label {
+  display: block;
+  margin-bottom: 20px;
+  color: #819080;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.admin-dashboard-stat-card strong {
+  display: block;
+  color: #263327;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.admin-dashboard-stat-card p {
+  margin: 10px 0 0;
+  color: #778279;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.admin-dashboard-section {
+  margin-bottom: 58px;
+}
+
+.admin-dashboard-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-section-heading h2 {
+  margin: 0;
+  color: #202b22;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(32px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.admin-dashboard-section-heading h2 span {
+  color: #5d7c34;
+}
+
+.admin-dashboard-view-link {
+  color: #496c2d;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin-dashboard-view-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.admin-dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-dashboard-action-card {
+  position: relative;
+  display: flex;
+  min-height: 190px;
+  padding: 25px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e1e7dd;
+  border-radius: 18px;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-dashboard-action-card:hover {
+  border-color: #b8c8ac;
+  box-shadow: 0 12px 30px rgba(42, 59, 40, 0.07);
+  transform: translateY(-3px);
+}
+
+.admin-dashboard-action-number {
+  color: #8ca078;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.admin-dashboard-action-card h3 {
+  margin: 28px 0 8px;
+  color: #263327;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 23px;
+  font-weight: 400;
+}
+
+.admin-dashboard-action-card p {
+  max-width: 310px;
+  margin: 0;
+  color: #788178;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.admin-dashboard-action-arrow {
+  position: absolute;
+  right: 24px;
+  bottom: 23px;
+  color: #54782d;
+  font-size: 21px;
+}
+
+/* =========================================================
+   APPOINTMENTS
+========================================================= */
+
+.admin-dashboard-appointment-list {
+  overflow: hidden;
+  border: 1px solid #e2e7df;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.admin-dashboard-appointment {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 100px;
+  padding: 18px 24px;
+  box-sizing: border-box;
+}
+
+.admin-dashboard-appointment + .admin-dashboard-appointment {
+  border-top: 1px solid #edf0eb;
+}
+
+.admin-dashboard-appointment-date {
+  display: flex;
+  width: 58px;
+  height: 58px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f1f5ed;
+}
+
+.admin-dashboard-appointment-date strong {
+  color: #33422f;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.admin-dashboard-appointment-date span {
+  margin-top: 4px;
+  color: #72806e;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.admin-dashboard-appointment-info h3 {
+  margin: 0 0 6px;
+  color: #29352b;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.admin-dashboard-appointment-info p {
+  margin: 0;
+  color: #7c857d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.admin-dashboard-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.admin-dashboard-status.confirmed {
+  background: #edf5e8;
+  color: #52752d;
+}
+
+.admin-dashboard-status.pending {
+  background: #f7f1e5;
+  color: #97703a;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-dashboard {
+    padding: 40px 32px 60px;
+  }
+
+  .admin-dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-dashboard {
+    padding: 30px 20px 50px;
+  }
+
+  .admin-dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 32px;
+  }
+
+  .admin-dashboard-website-button {
+    width: 100%;
+  }
+
+  .admin-dashboard-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 44px;
+  }
+
+  .admin-dashboard-stat-card {
+    min-height: 140px;
+  }
+
+  .admin-dashboard-section {
+    margin-bottom: 44px;
+  }
+
+  .admin-dashboard-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .admin-dashboard-appointments-heading {
+    align-items: flex-start;
+  }
+
+  .admin-dashboard-appointment {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .admin-dashboard-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard-header h1 {
+    font-size: 43px;
+  }
+
+  .admin-dashboard-section-heading h2 {
+    font-size: 34px;
+  }
+
+  .admin-dashboard-action-card {
+    min-height: 180px;
+  }
+
+  .admin-dashboard-appointment-info h3 {
+    font-size: 17px;
+  }
+}

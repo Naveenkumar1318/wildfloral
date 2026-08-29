@@ -2,22 +2,29 @@ import { useEffect, useState } from 'react'
 import {
   Link,
   NavLink,
+  useLocation,
 } from 'react-router'
 import {
-  ChevronDown,
   Menu,
-  ShoppingBag,
   UserRound,
   X,
 } from 'lucide-react'
+
 import { supabase } from '../../lib/supabase'
+
 import './Navbar.css'
 
 function Navbar() {
+  const location = useLocation()
+
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true)
+
+  /* =======================================================
+     AUTH SESSION
+  ======================================================= */
 
   useEffect(() => {
     let mounted = true
@@ -27,9 +34,11 @@ function Navbar() {
         data: { session },
       } = await supabase.auth.getSession()
 
-      if (mounted) {
-        setIsLoggedIn(Boolean(session))
+      if (!mounted) {
+        return
       }
+
+      setIsLoggedIn(Boolean(session))
     }
 
     void loadSession()
@@ -38,7 +47,9 @@ function Navbar() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        if (!mounted) return
+        if (!mounted) {
+          return
+        }
 
         setIsLoggedIn(Boolean(session))
       },
@@ -49,6 +60,18 @@ function Navbar() {
       subscription.unsubscribe()
     }
   }, [])
+
+  /* =======================================================
+     CLOSE MOBILE MENU ON ROUTE CHANGE
+  ======================================================= */
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location.pathname])
+
+  /* =======================================================
+     SCROLL BEHAVIOUR
+  ======================================================= */
 
   useEffect(() => {
     let lastScrollY = window.scrollY
@@ -61,12 +84,8 @@ function Navbar() {
       if (currentScrollY <= 12) {
         setShowNavbar(true)
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling UP
         setShowNavbar(true)
-      } else if (
-        currentScrollY > lastScrollY + 5
-      ) {
-        // Scrolling DOWN
+      } else if (currentScrollY > lastScrollY + 5) {
         setShowNavbar(false)
         setMobileOpen(false)
       }
@@ -77,7 +96,9 @@ function Navbar() {
     window.addEventListener(
       'scroll',
       handleScroll,
-      { passive: true },
+      {
+        passive: true,
+      },
     )
 
     return () => {
@@ -88,17 +109,32 @@ function Navbar() {
     }
   }, [])
 
+  /* =======================================================
+     MOBILE BODY LOCK
+  ======================================================= */
+
   useEffect(() => {
-    document.body.style.overflow =
-      mobileOpen ? 'hidden' : ''
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
 
     return () => {
       document.body.style.overflow = ''
     }
   }, [mobileOpen])
 
+  /* =======================================================
+     ACTIONS
+  ======================================================= */
+
   function closeMobileMenu() {
     setMobileOpen(false)
+  }
+
+  function toggleMobileMenu() {
+    setMobileOpen((current) => !current)
   }
 
   return (
@@ -117,7 +153,7 @@ function Navbar() {
           .join(' ')}
       >
         {/* =================================================
-            TOP ANNOUNCEMENT
+            ANNOUNCEMENT
         ================================================= */}
 
         <div className="navbar-announcement">
@@ -134,7 +170,10 @@ function Navbar() {
               Personalized experiences crafted for you
             </span>
 
-            <Link to="/services">
+            <Link
+              to="/services"
+              onClick={closeMobileMenu}
+            >
               Explore Services →
             </Link>
           </div>
@@ -152,6 +191,7 @@ function Navbar() {
             to="/"
             className="brand"
             onClick={closeMobileMenu}
+            aria-label="WildFloral home"
           >
             <span className="brand-name">
               WildFloral
@@ -162,7 +202,9 @@ function Navbar() {
             </span>
           </Link>
 
-          {/* DESKTOP NAVIGATION */}
+          {/* =================================================
+              DESKTOP NAVIGATION
+          ================================================= */}
 
           <nav
             className="main-navigation"
@@ -179,15 +221,8 @@ function Navbar() {
               About
             </NavLink>
 
-            <NavLink
-              to="/services"
-              className="navigation-dropdown-link"
-            >
+            <NavLink to="/services">
               Services
-              <ChevronDown
-                size={12}
-                strokeWidth={1.7}
-              />
             </NavLink>
 
             <NavLink to="/fashion">
@@ -203,7 +238,9 @@ function Navbar() {
             </NavLink>
           </nav>
 
-          {/* ACTIONS */}
+          {/* =================================================
+              DESKTOP ACTIONS
+          ================================================= */}
 
           <div className="header-actions">
 
@@ -215,7 +252,7 @@ function Navbar() {
                 title="My account"
               >
                 <UserRound
-                  size={19}
+                  size={18}
                   strokeWidth={1.5}
                 />
               </Link>
@@ -233,62 +270,51 @@ function Navbar() {
               className="header-book-button"
             >
               Book Appointment
-              <span>→</span>
-            </Link>
 
-            <Link
-              to="/booking"
-              className="header-cart-button"
-              aria-label="Booking bag"
-              title="Booking bag"
-            >
-              <ShoppingBag
-                size={19}
-                strokeWidth={1.5}
-              />
-
-              <span className="header-cart-count">
-                0
+              <span aria-hidden="true">
+                →
               </span>
             </Link>
           </div>
 
-          {/* MOBILE BUTTON */}
+          {/* =================================================
+              MOBILE MENU BUTTON
+          ================================================= */}
 
           <button
             type="button"
             className="mobile-menu-button"
-            onClick={() =>
-              setMobileOpen(
-                (current) => !current,
-              )
-            }
+            onClick={toggleMobileMenu}
             aria-label={
               mobileOpen
-                ? 'Close menu'
-                : 'Open menu'
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
             }
             aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileOpen ? (
               <X
-                size={23}
+                size={22}
                 strokeWidth={1.5}
+                aria-hidden="true"
               />
             ) : (
               <Menu
-                size={23}
+                size={22}
                 strokeWidth={1.5}
+                aria-hidden="true"
               />
             )}
           </button>
         </div>
 
         {/* =================================================
-            MOBILE MENU
+            MOBILE NAVIGATION
         ================================================= */}
 
         <div
+          id="mobile-navigation"
           className={[
             'mobile-navigation-wrapper',
             mobileOpen
@@ -370,8 +396,9 @@ function Navbar() {
                 onClick={closeMobileMenu}
               >
                 <UserRound
-                  size={18}
+                  size={17}
                   strokeWidth={1.5}
+                  aria-hidden="true"
                 />
 
                 My Account
@@ -383,8 +410,9 @@ function Navbar() {
                 onClick={closeMobileMenu}
               >
                 <UserRound
-                  size={18}
+                  size={17}
                   strokeWidth={1.5}
+                  aria-hidden="true"
                 />
 
                 Sign In
@@ -397,19 +425,24 @@ function Navbar() {
               onClick={closeMobileMenu}
             >
               Book Appointment
-              <span>→</span>
+
+              <span aria-hidden="true">
+                →
+              </span>
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* MOBILE BACKDROP */}
+      {/* =================================================
+          MOBILE BACKDROP
+      ================================================= */}
 
       {mobileOpen && (
         <button
           type="button"
           className="mobile-menu-backdrop"
-          aria-label="Close menu"
+          aria-label="Close navigation menu"
           onClick={closeMobileMenu}
         />
       )}

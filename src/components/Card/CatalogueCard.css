@@ -1,0 +1,679 @@
+/* =========================================================
+   CATALOGUE CARD
+   Reusable card for:
+   - Admin categories
+   - Admin services
+   - Customer services
+   - Portfolio
+   - Selected services
+   ========================================================= */
+
+.catalogue-card {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #dce4ef;
+  border-radius: 22px;
+
+  box-shadow:
+    0 8px 24px rgba(24, 44, 76, 0.06);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.catalogue-card-clickable {
+  cursor: pointer;
+}
+
+.catalogue-card-clickable:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 16px 34px rgba(24, 44, 76, 0.10);
+
+  border-color: #c9d8ee;
+}
+
+.catalogue-card-clickable:focus-visible {
+  outline: 3px solid rgba(43, 91, 211, 0.22);
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   IMAGE
+   Fixed image area.
+   Every card gets exactly the same image proportion.
+   ========================================================= */
+
+.catalogue-card-image {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  background: #edf2fa;
+
+  flex-shrink: 0;
+}
+
+.catalogue-card-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  user-select: none;
+
+  transition:
+    transform 300ms ease;
+}
+
+.catalogue-card-clickable:hover
+.catalogue-card-image img {
+  transform: scale(1.025);
+}
+
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+   ========================================================= */
+
+.catalogue-card-image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef4ff,
+      #dce8fb
+    );
+}
+
+.catalogue-card-image-placeholder span {
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: clamp(64px, 8vw, 110px);
+
+  line-height: 1;
+
+  color: #3161c9;
+}
+
+
+/* =========================================================
+   IMAGE LABEL
+   ========================================================= */
+
+.catalogue-card-image-label {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+
+  max-width: calc(100% - 24px);
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  color: #2455c4;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  box-shadow:
+    0 5px 16px rgba(15, 35, 65, 0.12);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.catalogue-card-status {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 3;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  box-shadow:
+    0 7px 18px rgba(15, 35, 65, 0.12);
+}
+
+.catalogue-card-status.active {
+  color: #087d4f;
+}
+
+.catalogue-card-status.inactive {
+  color: #b45309;
+}
+
+.catalogue-card-status-dot {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: #20a36a;
+}
+
+.catalogue-card-status.inactive
+.catalogue-card-status-dot {
+  background: #f59e0b;
+}
+
+
+/* =========================================================
+   IMAGE ACTION
+   Example:
+   [+]
+   Add to selection
+   ========================================================= */
+
+.catalogue-card-image-action {
+  position: absolute;
+
+  right: 12px;
+  bottom: 12px;
+
+  z-index: 4;
+}
+
+.catalogue-card-image-action button {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #245bd0;
+
+  font-size: 20px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px rgba(15, 35, 65, 0.18);
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.catalogue-card-image-action button:hover {
+  transform: scale(1.06);
+
+  box-shadow:
+    0 10px 22px rgba(15, 35, 65, 0.22);
+}
+
+
+/* =========================================================
+   BODY
+   The content automatically uses remaining space.
+   ========================================================= */
+
+.catalogue-card-body {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+}
+
+.catalogue-card-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px 20px 18px;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.catalogue-card-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #6b7f9d;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.catalogue-card-title {
+  margin: 0;
+
+  color: #13264a;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 25px;
+
+  font-weight: 700;
+
+  line-height: 1.18;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.catalogue-card-description {
+  margin: 9px 0 0;
+
+  color: #71839e;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1.55;
+
+  overflow-wrap: anywhere;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   META
+   ========================================================= */
+
+.catalogue-card-meta {
+  margin-top: 10px;
+
+  color: #71839e;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   PRICE + DURATION
+   ========================================================= */
+
+.catalogue-card-details {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-top: 18px;
+  padding-top: 14px;
+
+  border-top: 1px solid #e7ecf3;
+}
+
+.catalogue-card-price {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.catalogue-card-detail-label {
+  color: #7a8ba5;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+.catalogue-card-price strong {
+  color: #17294c;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 20px;
+
+  line-height: 1.2;
+}
+
+.catalogue-card-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  color: #71839e;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.catalogue-card-duration-icon {
+  color: #315fd0;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.catalogue-card-footer {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: auto;
+
+  padding: 10px 14px;
+
+  border-top: 1px solid #e6ebf2;
+
+  background: #ffffff;
+}
+
+.catalogue-card-footer-meta {
+  min-width: 0;
+
+  color: #71839e;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 10px;
+
+  line-height: 1.3;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.catalogue-card-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-left: auto;
+}
+
+.catalogue-card-action {
+  min-height: 38px;
+
+  padding: 0 15px;
+
+  border: 1px solid transparent;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.catalogue-card-action:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.catalogue-card-action:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   SECONDARY
+   ========================================================= */
+
+.catalogue-card-action-secondary {
+  border-color: #d6e0ee;
+
+  color: #2457c5;
+}
+
+.catalogue-card-action-secondary:hover:not(:disabled) {
+  background: #f3f7ff;
+
+  border-color: #bfd0ea;
+}
+
+
+/* =========================================================
+   PRIMARY
+   ========================================================= */
+
+.catalogue-card-action-primary {
+  border-color: #eadfff;
+
+  background: #f1ebff;
+
+  color: #5131b8;
+}
+
+.catalogue-card-action-primary:hover:not(:disabled) {
+  background: #e7dcff;
+
+  border-color: #d9c8ff;
+}
+
+
+/* =========================================================
+   DANGER
+   ========================================================= */
+
+.catalogue-card-action-danger {
+  border-color: #f3caca;
+
+  color: #d33131;
+}
+
+.catalogue-card-action-danger:hover:not(:disabled) {
+  background: #fff5f5;
+
+  border-color: #edaaaa;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .catalogue-card {
+    border-radius: 18px;
+  }
+
+  .catalogue-card-content {
+    padding: 17px 16px 15px;
+  }
+
+  .catalogue-card-title {
+    font-size: 22px;
+  }
+
+  .catalogue-card-description {
+    font-size: 13px;
+  }
+
+  .catalogue-card-footer {
+    min-height: 54px;
+
+    padding: 9px 12px;
+  }
+
+  .catalogue-card-action {
+    min-height: 36px;
+
+    padding: 0 12px;
+
+    font-size: 10px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .catalogue-card-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .catalogue-card-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .catalogue-card-footer-meta {
+    width: 100%;
+  }
+
+  .catalogue-card-actions {
+    width: 100%;
+  }
+
+  .catalogue-card-action {
+    flex: 1;
+  }
+}

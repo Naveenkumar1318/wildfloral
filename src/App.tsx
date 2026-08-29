@@ -1,51 +1,50 @@
 import { Route, Routes } from 'react-router'
 
+/* =========================================================
+   PUBLIC LAYOUT
+========================================================= */
+
 import PublicLayout from './layouts/PublicLayout'
 
 /* =========================================================
-   PUBLIC PAGES
+   GENERAL PUBLIC PAGES
 ========================================================= */
 
-import Home from './pages/Home/Home'
-import About from './pages/About/About'
-import Services from './pages/Services/Services'
-import Fashion from './pages/Fashion/Fashion'
-import Portfolio from './pages/Portfolio/Portfolio'
-import Contact from './pages/Contact/Contact'
-import Booking from './pages/Booking/Booking'
-import Enquiry from './pages/Enquiry/Enquiry'
+import Home from './pages/General Public Pages/Home/Home'
+import About from './pages/General Public Pages/About/About'
+import Services from './pages/General Public Pages/Services/Services'
+import Fashion from './pages/General Public Pages/Fashion/Fashion'
+import Portfolio from './pages/General Public Pages/Portfolio/Portfolio'
+import Contact from './pages/General Public Pages/Contact/Contact'
+import Enquiry from './pages/General Public Pages/Enquiry/Enquiry'
 
 /* =========================================================
-   CUSTOMER AUTHENTICATION
+   CUSTOMER
 ========================================================= */
 
-import Login from './pages/Auth/Login'
-import Register from './pages/Auth/Register'
-import ForgotPassword from './pages/Auth/ForgotPassword'
-import AuthCallback from './pages/Auth/AuthCallback'
+import CustomerLogin from './pages/Customer/Login/CustomerLogin'
+import CustomerRegister from './pages/Customer/Register/CustomerRegister'
+import CustomerDashboard from './pages/Customer/CustomerDashboard/CustomerDashboard'
+import AuthCallback from './pages/Customer/AuthCallback'
+import ForgotPassword from './pages/Customer/ForgotPassword'
 
-/* =========================================================
-   CUSTOMER ACCOUNT
-========================================================= */
-
-import Account from './pages/Account/Account'
-import Bookings from './pages/Account/Bookings'
-import BookingDetails from './pages/Account/BookingDetails'
+import CustomerLayout from './components/customer/CustomerLayout'
+import CustomerProtectedRoute from './components/customer/CustomerProtectedRoute'
 
 /* =========================================================
    ADMIN
 ========================================================= */
 
-import AdminLogin from './pages/Admin/Login/AdminLogin'
-import AdminDashboard from './pages/Admin/Dashboard/Dashboard'
-import AdminBookings from './pages/Admin/Bookings/Bookings'
-import AdminServices from './pages/Admin/Services/Services'
-import AdminPortfolio from './pages/Admin/Portfolio/Portfolio'
-import AdminCustomers from './pages/Admin/Customers/Customers'
+import AdminLogin from './pages/Admin/AdminLogin/AdminLogin'
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard'
+
+import AdminBeautyServices from './pages/Admin/AdminServices/AdminbeautyServices'
+import AdminBeautyCategories from './pages/Admin/AdminServices/AdminbeautyCategories'
+import AdminBeautyServiceForm from './pages/Admin/AdminServices/AdminbeautyServiceForm'
+import AdminBeautyCategoryForm from './pages/Admin/AdminServices/AdminbeautyCategoryForm'
 
 import AdminLayout from './components/admin/AdminLayout'
 import AdminProtectedRoute from './components/admin/AdminProtectedRoute'
-
 
 function App() {
   return (
@@ -57,14 +56,10 @@ function App() {
 
       <Route element={<PublicLayout />}>
 
-        {/* Home */}
-
         <Route
           path="/"
           element={<Home />}
         />
-
-        {/* Main pages */}
 
         <Route
           path="/about"
@@ -91,68 +86,55 @@ function App() {
           element={<Contact />}
         />
 
-        {/* Booking */}
-
-        <Route
-          path="/booking"
-          element={<Booking />}
-        />
-
         <Route
           path="/enquiry"
           element={<Enquiry />}
         />
 
-        {/* =================================================
-            CUSTOMER AUTH
-        ================================================= */}
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
-        <Route
-          path="/forgot-password"
-          element={<ForgotPassword />}
-        />
-
-        {/* =================================================
-            CUSTOMER ACCOUNT
-        ================================================= */}
-
-        <Route
-          path="/account"
-          element={<Account />}
-        />
-
-        <Route
-          path="/account/bookings"
-          element={<Bookings />}
-        />
-
-        <Route
-          path="/account/bookings/:id"
-          element={<BookingDetails />}
-        />
-
       </Route>
 
-
       {/* =====================================================
-          SUPABASE / GOOGLE AUTH CALLBACK
+          CUSTOMER AUTHENTICATION
       ===================================================== */}
+
+      <Route
+        path="/login"
+        element={<CustomerLogin />}
+      />
+
+      <Route
+        path="/register"
+        element={<CustomerRegister />}
+      />
+
+      <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
 
       <Route
         path="/auth/callback"
         element={<AuthCallback />}
       />
 
+      {/* =====================================================
+          CUSTOMER APPLICATION
+      ===================================================== */}
+
+      <Route
+        element={
+          <CustomerProtectedRoute>
+            <CustomerLayout />
+          </CustomerProtectedRoute>
+        }
+      >
+
+        <Route
+          path="/account"
+          element={<CustomerDashboard />}
+        />
+
+      </Route>
 
       {/* =====================================================
           ADMIN LOGIN
@@ -163,9 +145,8 @@ function App() {
         element={<AdminLogin />}
       />
 
-
       {/* =====================================================
-          PROTECTED ADMIN APPLICATION
+          ADMIN APPLICATION
       ===================================================== */}
 
       <Route
@@ -175,42 +156,54 @@ function App() {
           </AdminProtectedRoute>
         }
       >
-
-        {/* Admin dashboard */}
+        {/* DASHBOARD */}
 
         <Route
           path="/admin"
           element={<AdminDashboard />}
         />
 
-        {/* Bookings */}
+        {/* BEAUTY SERVICES */}
 
         <Route
-          path="/admin/bookings"
-          element={<AdminBookings />}
+          path="/admin/services/beauty"
+          element={<AdminBeautyServices />}
         />
 
-        {/* Services */}
+        {/* BEAUTY CATEGORIES */}
 
         <Route
-          path="/admin/services"
-          element={<AdminServices />}
+          path="/admin/services/categories"
+          element={<AdminBeautyCategories />}
         />
 
-        {/* Portfolio */}
+        {/* CREATE SERVICE */}
 
         <Route
-          path="/admin/portfolio"
-          element={<AdminPortfolio />}
+          path="/admin/services/new"
+          element={<AdminBeautyServiceForm />}
         />
 
-        {/* Customers */}
+        {/* EDIT SERVICE */}
 
         <Route
-          path="/admin/customers"
-          element={<AdminCustomers />}
+          path="/admin/services/:id/edit"
+          element={<AdminBeautyServiceForm />}
         />
 
+        {/* CREATE CATEGORY */}
+
+        <Route
+          path="/admin/services/categories/new"
+          element={<AdminBeautyCategoryForm />}
+        />
+
+        {/* EDIT CATEGORY */}
+
+        <Route
+          path="/admin/services/categories/:id/edit"
+          element={<AdminBeautyCategoryForm />}
+        />
       </Route>
 
     </Routes>

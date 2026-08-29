@@ -1,0 +1,741 @@
+/* =========================================================
+   REGISTER PAGE
+========================================================= */
+
+.customer-register-page {
+  min-height: 100vh;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.95fr)
+    minmax(460px, 0.8fr);
+
+  background: #f7f8f5;
+
+  color: #29362e;
+}
+
+/* =========================================================
+   LEFT INTRO
+========================================================= */
+
+.customer-register-intro {
+  position: relative;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 54px 8vw;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #edf4e8,
+      #dfe9db
+    );
+}
+
+.customer-register-brand {
+  position: relative;
+
+  z-index: 5;
+
+  width: fit-content;
+
+  color: #365d32;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 30px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.customer-register-intro-content {
+  position: relative;
+
+  z-index: 5;
+
+  max-width: 520px;
+
+  margin: auto 0;
+}
+
+.customer-register-intro-content > span {
+  display: block;
+
+  margin-bottom: 24px;
+
+  color: #71846d;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2em;
+}
+
+.customer-register-intro-content h1 {
+  margin: 0;
+
+  color: #293c2f;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size:
+    clamp(46px, 4.8vw, 72px);
+
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.customer-register-intro-content h1 em {
+  color: #6d9633;
+
+  font-weight: 400;
+}
+
+.customer-register-intro-content > p {
+  max-width: 430px;
+
+  margin: 28px 0 34px;
+
+  color: #748078;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.customer-register-features {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.customer-register-features > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.customer-register-features span {
+  color: #769052;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.customer-register-features p {
+  margin: 0;
+
+  color: #68756d;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   DECORATIVE SHAPES
+========================================================= */
+
+.customer-register-shape {
+  position: absolute;
+
+  pointer-events: none;
+
+  border-radius:
+    48% 52% 58% 42%;
+}
+
+.register-shape-one {
+  width: 390px;
+  height: 480px;
+
+  top: -120px;
+  left: -150px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #9bad21,
+      #21613f
+    );
+
+  transform: rotate(-15deg);
+}
+
+.register-shape-one::after {
+  content: '';
+
+  position: absolute;
+
+  inset: 18px;
+
+  border: 10px solid rgba(255,255,255,0.68);
+
+  border-radius: inherit;
+}
+
+.register-shape-two {
+  width: 200px;
+  height: 200px;
+
+  right: -90px;
+  top: 80px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #b4c38b,
+      #71956c
+    );
+
+  opacity: 0.72;
+}
+
+.register-shape-three {
+  width: 230px;
+  height: 170px;
+
+  left: -90px;
+  bottom: -60px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #b1bf22,
+      #618e37
+    );
+
+  transform: rotate(20deg);
+}
+
+/* =========================================================
+   FORM AREA
+========================================================= */
+
+.customer-register-form-area {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 55px 50px;
+
+  background: #ffffff;
+}
+
+.customer-register-container {
+  width: min(100%, 460px);
+}
+
+/* =========================================================
+   MOBILE BRAND
+========================================================= */
+
+.customer-register-mobile-brand {
+  display: none;
+}
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.customer-register-heading {
+  margin-bottom: 26px;
+}
+
+.customer-register-heading > span {
+  display: block;
+
+  margin-bottom: 13px;
+
+  color: #78916d;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2em;
+}
+
+.customer-register-heading h2 {
+  margin: 0;
+
+  color: #29362e;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size:
+    clamp(39px, 3.8vw, 54px);
+
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.customer-register-heading h2 em {
+  display: block;
+
+  color: #689030;
+
+  font-weight: 400;
+}
+
+.customer-register-heading p {
+  margin: 17px 0 0;
+
+  color: #89928b;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   GOOGLE
+========================================================= */
+
+.customer-register-google {
+  width: 100%;
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  border: 1px solid #e0e5df;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #3d4740;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.customer-register-google:hover:not(:disabled) {
+  background: #fafcf9;
+
+  border-color: #cbd6c8;
+
+  box-shadow:
+    0 8px 22px rgba(40,60,40,0.06);
+}
+
+.customer-register-google:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+.customer-register-google > span {
+  color: #4285f4;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.customer-register-divider {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 21px 0;
+}
+
+.customer-register-divider span {
+  flex: 1;
+
+  height: 1px;
+
+  background: #e8ece7;
+}
+
+.customer-register-divider small {
+  color: #a0a8a2;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.customer-register-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.customer-register-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.customer-register-field label {
+  color: #39443d;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.customer-register-input {
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 14px;
+
+  border:
+    1px solid #dce2dc;
+
+  border-radius: 8px;
+
+  color: #89938c;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.customer-register-input:focus-within {
+  border-color: #789841;
+
+  box-shadow:
+    0 0 0 3px rgba(112,145,55,0.08);
+}
+
+.customer-register-input input {
+  width: 100%;
+
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #303b34;
+
+  font-size: 12px;
+}
+
+.customer-register-input input::placeholder {
+  color: #b1b8b2;
+}
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+.customer-register-password-toggle {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+  color: #7e8981;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.customer-register-error,
+.customer-register-success {
+  margin-bottom: 15px;
+
+  padding: 11px 13px;
+
+  border-radius: 8px;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+.customer-register-error {
+  border: 1px solid #edd7d4;
+
+  background: #fff7f6;
+
+  color: #a34840;
+}
+
+.customer-register-success {
+  border: 1px solid #d7e5d1;
+
+  background: #f4f9f1;
+
+  color: #4d733d;
+}
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+.customer-register-submit {
+  width: 100%;
+  height: 53px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 5px;
+
+  border: 0;
+
+  border-radius: 27px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #76982e,
+      #28643d
+    );
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 11px 24px rgba(64,102,48,0.15);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.customer-register-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 15px 28px rgba(64,102,48,0.2);
+}
+
+.customer-register-submit:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.customer-register-security {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 21px;
+
+  color: #8e9891;
+
+  font-size: 9px;
+}
+
+.customer-register-security svg {
+  color: #71953d;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.customer-register-login {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 18px;
+
+  color: #89928b;
+
+  font-size: 10px;
+}
+
+.customer-register-login a {
+  color: #557d35;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.customer-register-login a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .customer-register-page {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-register-intro {
+    display: none;
+  }
+
+  .customer-register-form-area {
+    min-height: 100vh;
+
+    padding:
+      80px 28px 40px;
+  }
+
+  .customer-register-mobile-brand {
+    display: block;
+
+    position: absolute;
+
+    top: 28px;
+    left: 28px;
+  }
+
+  .customer-register-mobile-brand a {
+    color: #426432;
+
+    font-family:
+      Georgia,
+      'Times New Roman',
+      serif;
+
+    font-size: 24px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  .customer-register-form-area {
+    padding:
+      80px 20px 30px;
+  }
+
+  .customer-register-mobile-brand {
+    top: 24px;
+    left: 20px;
+  }
+
+  .customer-register-heading h2 {
+    font-size: 41px;
+  }
+
+  .customer-register-input {
+    height: 51px;
+  }
+
+  .customer-register-submit {
+    height: 54px;
+  }
+}
