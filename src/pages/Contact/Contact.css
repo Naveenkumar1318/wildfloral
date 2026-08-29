@@ -1,0 +1,844 @@
+.contact-page {
+  width: 100%;
+  overflow: hidden;
+
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+/* =====================================================
+   COMMON
+===================================================== */
+
+.contact-page .contact-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--color-accent-dark);
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.contact-page .contact-eyebrow::before {
+  content: '';
+
+  width: 24px;
+  height: 1px;
+
+  background: var(--color-accent-dark);
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.contact-hero {
+  min-height: 650px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 90px 24px;
+
+  overflow: hidden;
+
+  background: var(--color-dark);
+
+  color: #fff;
+
+  text-align: center;
+}
+
+.contact-hero-background {
+  position: absolute;
+  inset: -20%;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(164, 105, 98, 0.27),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.05),
+      transparent 25%
+    );
+
+  pointer-events: none;
+}
+
+.contact-hero-background::before,
+.contact-hero-background::after {
+  content: '';
+
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  border-radius: 50%;
+}
+
+.contact-hero-background::before {
+  top: 5%;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+.contact-hero-background::after {
+  top: 15%;
+  left: 50%;
+
+  transform: translateX(-50%) scale(1.35);
+}
+
+.contact-hero-content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 900px;
+}
+
+.contact-hero-kicker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+
+  margin-bottom: 35px;
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.contact-hero-kicker span:first-child {
+  color: var(--color-accent-light);
+}
+
+.contact-hero .contact-eyebrow {
+  color: var(--color-accent-light);
+}
+
+.contact-hero .contact-eyebrow::before {
+  background: var(--color-accent-light);
+}
+
+.contact-hero h1 {
+  margin: 24px 0;
+
+  font-family: var(--font-display);
+  font-size: clamp(62px, 8vw, 110px);
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.065em;
+}
+
+.contact-hero h1 em {
+  display: block;
+
+  color: var(--color-accent-light);
+
+  font-style: italic;
+}
+
+.contact-hero-content > p {
+  max-width: 570px;
+
+  margin: 0 auto 35px;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.contact-hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.contact-primary-button,
+.contact-secondary-button {
+  min-height: 50px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 22px;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition:
+    background 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease;
+}
+
+.contact-primary-button {
+  gap: 22px;
+
+  background: #fff;
+
+  color: var(--color-dark);
+}
+
+.contact-primary-button:hover {
+  transform: translateY(-2px);
+
+  background: var(--color-accent-light);
+}
+
+.contact-primary-button span {
+  font-size: 14px;
+}
+
+.contact-secondary-button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  color: #fff;
+}
+
+.contact-secondary-button:hover {
+  border-color: #fff;
+
+  background: #fff;
+
+  color: var(--color-dark);
+}
+
+.contact-hero-mark {
+  position: absolute;
+
+  right: 30px;
+  bottom: 30px;
+
+  color: rgba(255, 255, 255, 0.18);
+
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 3px;
+
+  transform: rotate(-90deg);
+  transform-origin: right bottom;
+}
+
+/* =====================================================
+   INFORMATION
+===================================================== */
+
+.contact-information {
+  padding: 140px clamp(20px, 6vw, 90px);
+}
+
+.contact-information-inner {
+  width: min(1180px, 100%);
+
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+
+  gap: clamp(50px, 8vw, 110px);
+}
+
+/* =====================================================
+   LEFT HEADING
+===================================================== */
+
+.contact-section-heading h2 {
+  margin: 22px 0 22px;
+
+  font-family: var(--font-display);
+  font-size: clamp(56px, 6vw, 82px);
+  font-weight: 400;
+  line-height: 0.87;
+  letter-spacing: -0.06em;
+}
+
+.contact-section-heading h2 em {
+  display: block;
+
+  color: var(--color-accent-dark);
+
+  font-style: italic;
+}
+
+.contact-section-heading > p {
+  max-width: 500px;
+
+  margin: 0 0 55px;
+
+  color: var(--color-text-muted);
+
+  font-size: 11px;
+  line-height: 1.85;
+}
+
+/* =====================================================
+   DETAILS
+===================================================== */
+
+.contact-detail-list {
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-detail {
+  min-height: 120px;
+
+  display: grid;
+  grid-template-columns: 45px 1fr 35px;
+
+  align-items: center;
+
+  gap: 15px;
+
+  border-bottom: 1px solid var(--color-border);
+
+  color: inherit;
+
+  text-decoration: none;
+
+  transition:
+    padding 250ms ease,
+    background 250ms ease;
+}
+
+.contact-detail:hover {
+  padding-inline: 12px;
+
+  background: var(--color-surface-soft);
+}
+
+.contact-detail-number {
+  align-self: start;
+
+  padding-top: 23px;
+
+  color: var(--color-accent-dark);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.contact-detail-main {
+  padding: 22px 0;
+}
+
+.contact-detail-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--color-text-muted);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.contact-detail-main strong,
+.contact-detail-main address {
+  display: block;
+
+  margin: 0;
+
+  color: var(--color-text);
+
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.contact-detail-main p {
+  margin: 7px 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.contact-detail-arrow {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-border);
+
+  color: var(--color-text-muted);
+
+  font-size: 12px;
+
+  opacity: 0;
+
+  transform: translateX(-5px);
+
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.contact-detail:hover .contact-detail-arrow {
+  opacity: 1;
+
+  transform: translateX(0);
+}
+
+/* =====================================================
+   HOURS
+===================================================== */
+
+.contact-hours {
+  align-self: start;
+}
+
+.contact-hours-card {
+  padding: 40px;
+
+  background: var(--color-surface-soft);
+
+  border: 1px solid var(--color-border);
+}
+
+.contact-hours-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.contact-hours-status {
+  padding: 7px 10px;
+
+  border: 1px solid rgba(89, 118, 85, 0.3);
+
+  color: #597655;
+
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.contact-hours-card h2 {
+  margin: 30px 0 45px;
+
+  font-family: var(--font-display);
+  font-size: clamp(43px, 4vw, 58px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.contact-hours-card h2 em {
+  display: block;
+
+  color: var(--color-accent-dark);
+
+  font-style: italic;
+}
+
+.contact-hours-row {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.contact-hours-row span {
+  color: var(--color-text-muted);
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.contact-hours-row strong {
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 400;
+}
+
+.contact-hours-divider {
+  height: 1px;
+
+  margin: 30px 0;
+
+  background: var(--color-border);
+}
+
+.contact-hours-note > span {
+  color: var(--color-accent-dark);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.contact-hours-note p {
+  margin: 10px 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: 9px;
+  line-height: 1.75;
+}
+
+/* =====================================================
+   HOME SERVICE
+===================================================== */
+
+.contact-home-service {
+  margin-top: 18px;
+
+  padding: 32px;
+
+  background: var(--color-dark);
+
+  color: #fff;
+}
+
+.contact-home-label {
+  color: var(--color-accent-light);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.contact-home-service h3 {
+  margin: 18px 0;
+
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+.contact-home-service h3 em {
+  display: block;
+
+  color: var(--color-accent-light);
+
+  font-style: italic;
+}
+
+.contact-home-service p {
+  max-width: 380px;
+
+  margin: 0 0 25px;
+
+  color: rgba(255, 255, 255, 0.6);
+
+  font-size: 9px;
+  line-height: 1.75;
+}
+
+.contact-home-service a {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+
+  color: #fff;
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  text-decoration: none;
+}
+
+.contact-home-service a:hover {
+  color: var(--color-accent-light);
+}
+
+.contact-home-service a span {
+  font-size: 14px;
+}
+
+/* =====================================================
+   DIRECT BOOKING
+===================================================== */
+
+.contact-actions {
+  padding: 120px clamp(20px, 6vw, 90px);
+
+  background: var(--color-surface-soft);
+}
+
+.contact-actions-inner {
+  width: min(1180px, 100%);
+
+  margin: auto;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 60px;
+}
+
+.contact-actions-heading h2 {
+  margin: 20px 0;
+
+  font-family: var(--font-display);
+  font-size: clamp(54px, 6vw, 80px);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+}
+
+.contact-actions-heading h2 em {
+  display: block;
+
+  color: var(--color-accent-dark);
+
+  font-style: italic;
+}
+
+.contact-actions-heading p {
+  max-width: 470px;
+
+  margin: 0;
+
+  color: var(--color-text-muted);
+
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.contact-action-buttons {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  flex-shrink: 0;
+}
+
+.contact-action-primary,
+.contact-action-secondary {
+  min-height: 50px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 22px;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition:
+    background 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease;
+}
+
+.contact-action-primary {
+  gap: 20px;
+
+  background: var(--color-dark);
+
+  color: #fff;
+}
+
+.contact-action-primary:hover {
+  transform: translateY(-2px);
+
+  background: var(--color-accent-dark);
+}
+
+.contact-action-primary span {
+  font-size: 14px;
+}
+
+.contact-action-secondary {
+  border: 1px solid var(--color-border-strong);
+
+  color: var(--color-text);
+}
+
+.contact-action-secondary:hover {
+  border-color: var(--color-dark);
+
+  background: var(--color-dark);
+
+  color: #fff;
+}
+
+/* =====================================================
+   BRAND STRIP
+===================================================== */
+
+.contact-brand-strip {
+  min-height: 95px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 22px;
+
+  padding: 20px;
+
+  background: var(--color-dark);
+
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+}
+
+.contact-brand-strip i {
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: var(--color-accent-light);
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 950px) {
+  .contact-information-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-hours {
+    max-width: 650px;
+  }
+
+  .contact-actions-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+  .contact-hero {
+    min-height: 620px;
+
+    padding: 80px 20px;
+  }
+
+  .contact-hero h1 {
+    font-size: 59px;
+  }
+
+  .contact-hero-content > p {
+    font-size: 11px;
+  }
+
+  .contact-information {
+    padding: 90px 20px;
+  }
+
+  .contact-section-heading h2 {
+    font-size: 57px;
+  }
+
+  .contact-detail {
+    grid-template-columns: 32px 1fr;
+
+    min-height: 110px;
+  }
+
+  .contact-detail-arrow {
+    display: none;
+  }
+
+  .contact-detail-main strong,
+  .contact-detail-main address {
+    font-size: 20px;
+  }
+
+  .contact-hours-card {
+    padding: 28px 22px;
+  }
+
+  .contact-hours-card h2 {
+    font-size: 43px;
+  }
+
+  .contact-home-service {
+    padding: 28px 22px;
+  }
+
+  .contact-home-service h3 {
+    font-size: 35px;
+  }
+
+  .contact-actions {
+    padding: 90px 20px;
+  }
+
+  .contact-actions-heading h2 {
+    font-size: 57px;
+  }
+
+  .contact-action-buttons {
+    width: 100%;
+
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .contact-action-primary,
+  .contact-action-secondary {
+    width: 100%;
+  }
+
+  .contact-brand-strip {
+    gap: 10px;
+
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+}
