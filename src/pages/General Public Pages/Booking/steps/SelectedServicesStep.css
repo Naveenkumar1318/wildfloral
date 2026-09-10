@@ -1,0 +1,1795 @@
+/* =========================================================
+   SELECTED SERVICES
+   WILDFLORAL PREMIUM BOOKING UI
+========================================================= */
+
+.selected-services-panel {
+  width: 100%;
+  padding: 30px;
+
+  border: 1px solid #e7e1eb;
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fefcff 100%
+    );
+
+  box-shadow:
+    0 20px 55px rgba(54, 37, 77, 0.055);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.selected-services-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 30px;
+  margin-bottom: 27px;
+}
+
+.selected-services-heading {
+  min-width: 0;
+}
+
+.selected-services-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 10px;
+
+  color: #6846d9;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.2em;
+}
+
+.selected-services-eyebrow-line {
+  width: 25px;
+  height: 1px;
+
+  background: #6846d9;
+
+  opacity: 0.6;
+}
+
+.selected-services-eyebrow-dot {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #6846d9;
+
+  opacity: 0.5;
+}
+
+.selected-services-heading h2 {
+  margin: 0;
+
+  color: #1e2033;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 36px;
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.045em;
+}
+
+.selected-services-heading h2 em {
+  color: #6846d9;
+  font-style: normal;
+}
+
+.selected-services-heading p {
+  max-width: 470px;
+
+  margin: 10px 0 0;
+
+  color: #817b87;
+
+  font-size: 9px;
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   MINI SUMMARY
+========================================================= */
+
+.selected-services-mini-summary {
+  flex-shrink: 0;
+
+  min-width: 175px;
+
+  padding: 12px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  border: 1px solid #ebe6f1;
+  border-radius: 12px;
+
+  background: #fcfaff;
+}
+
+.selected-services-mini-item {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  text-align: center;
+}
+
+.selected-services-mini-item span {
+  color: #a29ba8;
+
+  font-size: 5.5px;
+  font-weight: 900;
+
+  letter-spacing: 0.13em;
+}
+
+.selected-services-mini-item strong {
+  color: #6846d9;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.selected-services-mini-divider {
+  width: 1px;
+  height: 27px;
+
+  background: #e7e1ec;
+}
+
+
+/* =========================================================
+   SERVICE LIST
+========================================================= */
+
+.selected-services-list {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+   DESKTOP = HORIZONTAL CARD
+========================================================= */
+
+.selected-service-card {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  min-height: 198px;
+
+  overflow: hidden;
+
+  display: grid;
+
+  grid-template-columns:
+    138px
+    minmax(
+      0,
+      1fr
+    );
+
+  border:
+    1px solid
+    #e4dfe8;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 28px
+    rgba(
+      52,
+      38,
+      70,
+      0.045
+    );
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.selected-service-card:hover {
+  border-color: #d9cfee;
+
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 18px 38px
+    rgba(
+      52,
+      38,
+      70,
+      0.09
+    );
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.selected-service-image {
+  position: relative;
+
+  width: 138px;
+  height: 198px;
+
+  min-width: 138px;
+  min-height: 198px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eee9ff,
+      #ddd5f7
+    );
+}
+
+.selected-service-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.45s ease;
+}
+
+.selected-service-card:hover
+.selected-service-image img {
+  transform:
+    scale(1.045);
+}
+
+.selected-service-image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+
+  place-items: center;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #ffffff,
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      #eee9ff,
+      #d8cef4
+    );
+}
+
+.selected-service-image-placeholder span {
+  color:
+    rgba(
+      104,
+      70,
+      217,
+      0.35
+    );
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 30px;
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+========================================================= */
+
+.selected-service-image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        23,
+        17,
+        31,
+        0.02
+      ) 35%,
+      rgba(
+        23,
+        17,
+        31,
+        0.48
+      ) 100%
+    );
+}
+
+
+/* =========================================================
+   IMAGE NUMBER
+========================================================= */
+
+.selected-service-number {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.4
+    );
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+  color: #ffffff;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+}
+
+
+/* =========================================================
+   IMAGE BRAND
+========================================================= */
+
+.selected-service-image-label {
+  position: absolute;
+
+  left: 12px;
+  bottom: 11px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.88
+    );
+
+  font-size: 5px;
+  font-weight: 900;
+
+  letter-spacing: 0.18em;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.selected-service-content {
+  min-width: 0;
+
+  padding:
+    17px 16px 14px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.selected-service-top {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 9px;
+}
+
+.selected-service-category {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #6846d9;
+
+  font-size: 6.5px;
+  font-weight: 900;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
+
+.selected-service-category-line {
+  width: 13px;
+  height: 1px;
+
+  flex-shrink: 0;
+
+  background: #6846d9;
+
+  opacity: 0.6;
+}
+
+
+/* =========================================================
+   REMOVE BUTTON
+========================================================= */
+
+.selected-service-remove {
+  width: 29px;
+  height: 29px;
+
+  flex:
+    0 0 29px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    #ece7ef;
+
+  border-radius: 50%;
+
+  background: #fbfafc;
+
+  color: #8d8790;
+
+  cursor: pointer;
+
+  transition:
+    0.2s ease;
+}
+
+.selected-service-remove:hover {
+  border-color: #e3bfd0;
+
+  background: #fff4f8;
+
+  color: #a44968;
+
+  transform:
+    rotate(8deg);
+}
+
+
+/* =========================================================
+   SERVICE MAIN CONTENT
+========================================================= */
+
+.selected-service-main {
+  min-width: 0;
+
+  margin-top: 14px;
+}
+
+.selected-service-main h3 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #202236;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  line-height: 1.08;
+
+  letter-spacing: -0.025em;
+
+  text-overflow: ellipsis;
+}
+
+.selected-service-main p {
+  display:
+    -webkit-box;
+
+  margin:
+    7px 0 0;
+
+  overflow: hidden;
+
+  color: #827c87;
+
+  font-size: 8px;
+
+  line-height: 1.6;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 3;
+}
+
+
+/* =========================================================
+   CARD BOTTOM
+========================================================= */
+
+.selected-service-bottom {
+  margin-top: auto;
+
+  padding-top: 14px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 8px;
+
+  border-top:
+    1px solid
+    #f0edf2;
+}
+
+
+/* =========================================================
+   DURATION
+========================================================= */
+
+.selected-service-duration {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.selected-service-meta-icon {
+  width: 27px;
+  height: 27px;
+
+  flex:
+    0 0 27px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: #f7f3ff;
+
+  color: #6846d9;
+}
+
+.selected-service-duration > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.selected-service-duration > div span {
+  color: #aaa3ae;
+
+  font-size: 5px;
+  font-weight: 900;
+
+  letter-spacing: 0.09em;
+}
+
+.selected-service-duration > div strong {
+  color: #55505a;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.selected-service-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.selected-service-price-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--booking-purple-light);
+  color: var(--booking-purple);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.selected-service-price-values {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.selected-service-original-price {
+  color: var(--booking-muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.selected-service-price strong {
+  color: var(--booking-purple);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   ADD SERVICE
+========================================================= */
+
+.selected-services-add {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 66px;
+
+  margin-top: 16px;
+
+  padding:
+    10px 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px dashed
+    #bca9ed;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #fcfaff,
+      #ffffff
+    );
+
+  color: #6846d9;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.selected-services-add:hover {
+  border-color: #6846d9;
+
+  background: #faf7ff;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 10px 24px
+    rgba(
+      104,
+      70,
+      217,
+      0.08
+    );
+}
+
+.selected-services-add-icon {
+  width: 35px;
+  height: 35px;
+
+  flex:
+    0 0 35px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    #e2d9f5;
+
+  border-radius: 10px;
+
+  background: #f5f0ff;
+
+  color: #6846d9;
+}
+
+.selected-services-add-copy {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.selected-services-add-copy strong {
+  color: #4d3991;
+
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.selected-services-add-copy small {
+  color: #938b9b;
+
+  font-size: 7px;
+}
+
+.selected-services-add-arrow {
+  margin-left: auto;
+
+  color: #8d77cc;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.selected-services-add:hover
+.selected-services-add-arrow {
+  transform:
+    translateX(4px);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.selected-services-footer {
+  margin-top: 15px;
+
+  padding:
+    13px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border:
+    1px solid
+    #ece7f0;
+
+  border-radius: 11px;
+
+  background: #fdfbff;
+}
+
+.selected-services-footer-copy,
+.selected-services-footer-total {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.selected-services-footer-copy span,
+.selected-services-footer-total span {
+  color: #aaa3ae;
+
+  font-size: 5.5px;
+  font-weight: 900;
+
+  letter-spacing: 0.12em;
+}
+
+.selected-services-footer-copy strong {
+  color: #55505b;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.selected-services-footer-total {
+  align-items: flex-end;
+}
+
+.selected-services-footer-total strong {
+  color: #6846d9;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.selected-services-loading {
+  min-height: 220px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 13px;
+
+  border:
+    1px dashed
+    #e2dce8;
+
+  border-radius: 15px;
+
+  background: #fdfbff;
+}
+
+.selected-services-loading > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.selected-services-loading strong {
+  color: #333044;
+
+  font-size: 10px;
+}
+
+.selected-services-loading span {
+  color: #96909c;
+
+  font-size: 7px;
+}
+
+.selected-services-spinner {
+  width: 28px;
+  height: 28px;
+
+  border:
+    2px solid
+    #e8e2f2;
+
+  border-top-color:
+    #6846d9;
+
+  border-radius: 50%;
+
+  animation:
+    selected-services-spin
+    0.75s
+    linear
+    infinite;
+}
+
+@keyframes selected-services-spin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.selected-services-empty {
+  min-height: 285px;
+
+  padding:
+    30px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  border:
+    1px dashed
+    #ded7e5;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fdfbff,
+      #ffffff
+    );
+}
+
+.selected-services-empty-icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    #e5dcf4;
+
+  border-radius: 50%;
+
+  background: #f6f1ff;
+
+  color: #6846d9;
+}
+
+.selected-services-empty h3 {
+  margin:
+    15px 0 0;
+
+  color: #28273a;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.selected-services-empty p {
+  max-width: 340px;
+
+  margin:
+    7px 0 17px;
+
+  color: #8b8590;
+
+  font-size: 8px;
+
+  line-height: 1.6;
+}
+
+.selected-services-empty-button {
+  min-height: 39px;
+
+  padding:
+    0 15px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  border:
+    1px solid
+    #6846d9;
+
+  border-radius: 8px;
+
+  background: #6846d9;
+
+  color: #ffffff;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 18px
+    rgba(
+      104,
+      70,
+      217,
+      0.17
+    );
+
+  transition:
+    0.2s ease;
+}
+
+.selected-services-empty-button:hover {
+  background: #5432c1;
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+  .selected-services-panel {
+    padding: 25px;
+  }
+
+  /*
+    One service card per row,
+    but card itself remains horizontal.
+  */
+
+  .selected-services-list {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-service-card {
+    grid-template-columns:
+      150px
+      minmax(
+        0,
+        1fr
+      );
+
+    min-height: 195px;
+  }
+
+  .selected-service-image {
+    width: 150px;
+    min-width: 150px;
+
+    height: 195px;
+    min-height: 195px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   IMPORTANT:
+   KEEP CARD HORIZONTAL
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .selected-services-panel {
+    padding:
+      20px 16px;
+
+    border-radius: 18px;
+  }
+
+
+  /* -----------------------------------------
+     HEADER
+  ----------------------------------------- */
+
+  .selected-services-header {
+    flex-direction: column;
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+  }
+
+  .selected-services-heading h2 {
+    font-size: 31px;
+
+    line-height: 1;
+  }
+
+  .selected-services-heading p {
+    max-width: 100%;
+
+    margin-top: 9px;
+
+    font-size: 8px;
+  }
+
+
+  /* -----------------------------------------
+     MINI SUMMARY
+  ----------------------------------------- */
+
+  .selected-services-mini-summary {
+    width: 100%;
+
+    min-width: 0;
+
+    padding:
+      11px 15px;
+
+    justify-content: center;
+  }
+
+
+  /* -----------------------------------------
+     ONE CARD PER ROW
+  ----------------------------------------- */
+
+  .selected-services-list {
+    width: 100%;
+
+    grid-template-columns: 1fr;
+
+    gap: 13px;
+  }
+
+
+  /* -----------------------------------------
+     IMPORTANT:
+     HORIZONTAL CARD
+  ----------------------------------------- */
+
+  .selected-service-card {
+
+    width: 100%;
+
+    min-height: 185px;
+
+    display: grid;
+
+    grid-template-columns:
+      118px
+      minmax(
+        0,
+        1fr
+      );
+
+    border-radius: 16px;
+
+    transform: none;
+  }
+
+
+  .selected-service-card:hover {
+    transform: none;
+  }
+
+
+  /* -----------------------------------------
+     FIXED MOBILE IMAGE
+  ----------------------------------------- */
+
+  .selected-service-image {
+
+    width: 118px;
+
+    min-width: 118px;
+
+    height: 185px;
+
+    min-height: 185px;
+
+    max-height: 185px;
+
+    overflow: hidden;
+  }
+
+
+  .selected-service-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 100%;
+
+    min-height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+  }
+
+
+  /* -----------------------------------------
+     MOBILE CONTENT
+  ----------------------------------------- */
+
+  .selected-service-content {
+
+    min-width: 0;
+
+    height: 185px;
+
+    padding:
+      14px 12px 12px;
+  }
+
+
+  .selected-service-top {
+
+    gap: 6px;
+  }
+
+
+  .selected-service-category {
+
+    min-width: 0;
+
+    max-width: calc(
+      100% - 35px
+    );
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+    font-size: 6px;
+  }
+
+
+  .selected-service-category-line {
+    width: 11px;
+  }
+
+
+  /* -----------------------------------------
+     REMOVE BUTTON
+  ----------------------------------------- */
+
+  .selected-service-remove {
+
+    width: 27px;
+    height: 27px;
+
+    flex-basis: 27px;
+  }
+
+
+  /* -----------------------------------------
+     SERVICE NAME
+  ----------------------------------------- */
+
+  .selected-service-main {
+
+    margin-top: 12px;
+  }
+
+  .selected-service-main h3 {
+
+    font-size: 18px;
+
+    line-height: 1.08;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+  }
+
+
+  /* -----------------------------------------
+     DESCRIPTION
+  ----------------------------------------- */
+
+  .selected-service-main p {
+
+    margin-top: 6px;
+
+    font-size: 7px;
+
+    line-height: 1.55;
+
+    -webkit-line-clamp: 3;
+  }
+
+
+  /* -----------------------------------------
+     BOTTOM
+  ----------------------------------------- */
+
+  .selected-service-bottom {
+
+    margin-top: auto;
+
+    padding-top: 11px;
+
+    gap: 5px;
+  }
+
+
+  /* -----------------------------------------
+     DURATION
+  ----------------------------------------- */
+
+  .selected-service-duration {
+
+    gap: 6px;
+
+    min-width: 0;
+  }
+
+  .selected-service-meta-icon {
+
+    width: 25px;
+    height: 25px;
+
+    flex-basis: 25px;
+  }
+
+  .selected-service-duration > div {
+
+    min-width: 0;
+  }
+
+  .selected-service-duration > div span {
+
+    font-size: 4.5px;
+  }
+
+  .selected-service-duration > div strong {
+
+    font-size: 7px;
+
+    white-space: nowrap;
+  }
+
+
+  /* -----------------------------------------
+     PRICE
+  ----------------------------------------- */
+
+  .selected-service-price {
+
+    flex-shrink: 0;
+  }
+
+  .selected-service-price span {
+
+    font-size: 4.5px;
+  }
+
+  .selected-service-price strong {
+
+    font-size: 16px;
+
+    white-space: nowrap;
+  }
+
+
+  /* -----------------------------------------
+     ADD SERVICE
+  ----------------------------------------- */
+
+  .selected-services-add {
+
+    min-height: 60px;
+
+    margin-top: 13px;
+
+    padding:
+      9px 11px;
+
+    border-radius: 11px;
+  }
+
+  .selected-services-add-icon {
+
+    width: 32px;
+    height: 32px;
+
+    flex-basis: 32px;
+
+    border-radius: 9px;
+  }
+
+  .selected-services-add-copy strong {
+
+    font-size: 8px;
+  }
+
+  .selected-services-add-copy small {
+
+    font-size: 6px;
+  }
+
+
+  /* -----------------------------------------
+     FOOTER
+  ----------------------------------------- */
+
+  .selected-services-footer {
+
+    margin-top: 12px;
+
+    padding:
+      11px 12px;
+
+    border-radius: 10px;
+  }
+
+  .selected-services-footer-copy span,
+  .selected-services-footer-total span {
+
+    font-size: 5px;
+  }
+
+  .selected-services-footer-copy strong {
+
+    font-size: 7px;
+  }
+
+  .selected-services-footer-total strong {
+
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   320px - 420px
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .selected-services-panel {
+    padding:
+      17px 11px;
+  }
+
+
+  .selected-services-heading h2 {
+    font-size: 28px;
+  }
+
+
+  /*
+    Still horizontal.
+    Just make the image slightly narrower.
+  */
+
+  .selected-service-card {
+
+    grid-template-columns:
+      105px
+      minmax(
+        0,
+        1fr
+      );
+
+    min-height: 175px;
+  }
+
+
+  .selected-service-image {
+
+    width: 105px;
+
+    min-width: 105px;
+
+    height: 175px;
+
+    min-height: 175px;
+
+    max-height: 175px;
+  }
+
+
+  .selected-service-content {
+
+    height: 175px;
+
+    padding:
+      12px 10px 10px;
+  }
+
+
+  .selected-service-number {
+
+    top: 9px;
+    left: 9px;
+
+    width: 24px;
+    height: 24px;
+
+    font-size: 6px;
+  }
+
+
+  .selected-service-image-label {
+
+    left: 9px;
+    bottom: 9px;
+
+    font-size: 4.5px;
+  }
+
+
+  .selected-service-main {
+
+    margin-top: 10px;
+  }
+
+
+  .selected-service-main h3 {
+
+    font-size: 16px;
+  }
+
+
+  .selected-service-main p {
+
+    font-size: 6.5px;
+
+    line-height: 1.5;
+
+    -webkit-line-clamp: 3;
+  }
+
+
+  .selected-service-remove {
+
+    width: 25px;
+    height: 25px;
+
+    flex-basis: 25px;
+  }
+
+
+  .selected-service-meta-icon {
+
+    width: 23px;
+    height: 23px;
+
+    flex-basis: 23px;
+  }
+
+
+  .selected-service-duration > div span {
+
+    font-size: 4px;
+  }
+
+
+  .selected-service-duration > div strong {
+
+    font-size: 6.5px;
+  }
+
+
+  .selected-service-price span {
+
+    font-size: 4px;
+  }
+
+
+  .selected-service-price strong {
+
+    font-size: 14px;
+  }
+
+
+  .selected-services-add {
+
+    min-height: 57px;
+  }
+
+
+  .selected-services-footer {
+
+    padding:
+      10px 11px;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONES
+   <= 360px
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .selected-services-panel {
+    padding:
+      15px 9px;
+  }
+
+
+  .selected-services-heading h2 {
+    font-size: 26px;
+  }
+
+
+  .selected-service-card {
+
+    grid-template-columns:
+      96px
+      minmax(
+        0,
+        1fr
+      );
+
+    min-height: 168px;
+  }
+
+
+  .selected-service-image {
+
+    width: 96px;
+
+    min-width: 96px;
+
+    height: 168px;
+
+    min-height: 168px;
+
+    max-height: 168px;
+  }
+
+
+  .selected-service-content {
+
+    height: 168px;
+
+    padding:
+      11px 9px;
+  }
+
+
+  .selected-service-main h3 {
+
+    font-size: 15px;
+  }
+
+
+  .selected-service-main p {
+
+    font-size: 6px;
+
+    -webkit-line-clamp: 3;
+  }
+
+
+  .selected-service-price strong {
+
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+
+  .selected-services-panel *,
+  .selected-services-panel *::before,
+  .selected-services-panel *::after {
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}

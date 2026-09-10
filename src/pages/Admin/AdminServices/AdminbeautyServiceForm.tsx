@@ -1,18 +1,20 @@
 import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import type {
   ChangeEvent,
   CSSProperties,
   FormEvent,
   PointerEvent,
   SyntheticEvent,
-  useEffect,
-  useRef,
-  useState,
 } from 'react'
 
 import {
   useNavigate,
   useParams,
-} from 'react-router'
+} from 'react-router-dom'
 
 import { supabase } from '../../../lib/supabase'
 
@@ -28,19 +30,6 @@ type Category = {
   is_active: boolean
 }
 
-type Offer = {
-  id: string
-  title: string
-  description: string
-  discount_type: 'percentage' | 'fixed'
-  discount_value: number
-  promo_code: string | null
-  starts_at: string
-  ends_at: string | null
-  service_id: string | null
-  category_id: string | null
-  is_active: boolean
-}
 
 type CropState = {
   zoom: number
@@ -69,15 +58,6 @@ type ServiceFormState = {
   duration: string
   imageUrl: string
   isActive: boolean
-
-  discountEnabled: boolean
-  discountType: 'percentage' | 'fixed'
-  discountValue: string
-  promoCode: string
-  offerTitle: string
-  offerDescription: string
-  startsAt: string
-  endsAt: string
 }
 
 /* =========================================================
@@ -102,15 +82,6 @@ const EMPTY_FORM: ServiceFormState = {
   duration: '60',
   imageUrl: '',
   isActive: true,
-
-  discountEnabled: false,
-  discountType: 'percentage',
-  discountValue: '',
-  promoCode: '',
-  offerTitle: '',
-  offerDescription: '',
-  startsAt: '',
-  endsAt: '',
 }
 
 /* =========================================================
@@ -152,73 +123,7 @@ function getStoragePath(
   )
 }
 
-function toLocalDateTimeValue(
-  value: string | null,
-) {
-  if (!value) {
-    return ''
-  }
 
-  const date = new Date(value)
-
-  if (Number.isNaN(date.getTime())) {
-    return ''
-  }
-
-  const year =
-    date.getFullYear()
-
-  const month =
-    String(
-      date.getMonth() + 1,
-    ).padStart(2, '0')
-
-  const day =
-    String(
-      date.getDate(),
-    ).padStart(2, '0')
-
-  const hours =
-    String(
-      date.getHours(),
-    ).padStart(2, '0')
-
-  const minutes =
-    String(
-      date.getMinutes(),
-    ).padStart(2, '0')
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`
-}
-
-function getDefaultStartDateTime() {
-  const now = new Date()
-
-  const year =
-    now.getFullYear()
-
-  const month =
-    String(
-      now.getMonth() + 1,
-    ).padStart(2, '0')
-
-  const day =
-    String(
-      now.getDate(),
-    ).padStart(2, '0')
-
-  const hours =
-    String(
-      now.getHours(),
-    ).padStart(2, '0')
-
-  const minutes =
-    String(
-      now.getMinutes(),
-    ).padStart(2, '0')
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`
-}
 
 function formatCurrency(
   value: number,
@@ -289,9 +194,6 @@ function AdminBeautyServiceForm() {
   const [categories, setCategories] =
     useState<Category[]>([])
 
-  const [existingOffer, setExistingOffer] =
-    useState<Offer | null>(null)
-
   /* =======================================================
      IMAGE
   ======================================================= */
@@ -347,12 +249,6 @@ function AdminBeautyServiceForm() {
 
     if (id) {
       void loadService(id)
-    } else {
-      setForm((current) => ({
-        ...current,
-        startsAt:
-          getDefaultStartDateTime(),
-      }))
     }
   }, [id])
 
@@ -460,62 +356,26 @@ function AdminBeautyServiceForm() {
     setLoading(true)
     setError('')
 
-    const [
-      serviceResult,
-      offerResult,
-    ] =
-      await Promise.all([
-        supabase
-          .from('services')
-          .select('*')
-          .eq(
-            'id',
-            serviceId,
-          )
-          .single(),
+    const {
+      data: service,
+      error: serviceError,
+    } =
+      await supabase
+        .from('services')
+        .select('*')
+        .eq(
+          'id',
+          serviceId,
+        )
+        .single()
 
-        supabase
-          .from('offers')
-          .select('*')
-          .eq(
-            'service_id',
-            serviceId,
-          )
-          .order(
-            'created_at',
-            {
-              ascending: false,
-            },
-          )
-          .limit(1)
-          .maybeSingle(),
-      ])
-
-    if (serviceResult.error) {
+    if (serviceError) {
       setError(
-        serviceResult.error.message,
+        serviceError.message,
       )
       setLoading(false)
       return
     }
-
-    if (offerResult.error) {
-      setError(
-        offerResult.error.message,
-      )
-      setLoading(false)
-      return
-    }
-
-    const service =
-      serviceResult.data
-
-    const offer =
-      offerResult.data as Offer | null
-
-    setExistingOffer(
-      offer,
-    )
 
     setForm({
       name:
@@ -549,49 +409,6 @@ function AdminBeautyServiceForm() {
       isActive:
         service.is_active ??
         true,
-
-      discountEnabled:
-        Boolean(
-          offer?.is_active,
-        ),
-
-      discountType:
-        offer?.discount_type ===
-        'fixed'
-          ? 'fixed'
-          : 'percentage',
-
-      discountValue:
-        offer
-          ? String(
-              offer.discount_value,
-            )
-          : '',
-
-      promoCode:
-        offer?.promo_code ??
-        '',
-
-      offerTitle:
-        offer?.title ??
-        '',
-
-      offerDescription:
-        offer?.description ??
-        '',
-
-      startsAt:
-        toLocalDateTimeValue(
-          offer?.starts_at ??
-            null,
-        ) ||
-        getDefaultStartDateTime(),
-
-      endsAt:
-        toLocalDateTimeValue(
-          offer?.ends_at ??
-            null,
-        ),
     })
 
     setImagePreview(
@@ -1287,268 +1104,6 @@ function AdminBeautyServiceForm() {
   }
 
   /* =========================================================
-     VALIDATE DISCOUNT
-  ========================================================= */
-
-  function validateDiscount() {
-    if (
-      !form.discountEnabled
-    ) {
-      return true
-    }
-
-    const discountValue =
-      Number(
-        form.discountValue,
-      )
-
-    if (
-      !Number.isFinite(
-        discountValue,
-      ) ||
-      discountValue <= 0
-    ) {
-      setError(
-        'Enter a valid discount value.',
-      )
-
-      return false
-    }
-
-    if (
-      form.discountType ===
-        'percentage' &&
-      discountValue > 100
-    ) {
-      setError(
-        'Percentage discount cannot be greater than 100%.',
-      )
-
-      return false
-    }
-
-    if (
-      !form.offerTitle.trim()
-    ) {
-      setError(
-        'Offer title is required when discount is enabled.',
-      )
-
-      return false
-    }
-
-    if (
-      !form.offerDescription.trim()
-    ) {
-      setError(
-        'Offer description is required when discount is enabled.',
-      )
-
-      return false
-    }
-
-    if (
-      !form.startsAt
-    ) {
-      setError(
-        'Offer start date is required.',
-      )
-
-      return false
-    }
-
-    if (
-      form.endsAt &&
-      new Date(
-        form.endsAt,
-      ) <=
-        new Date(
-          form.startsAt,
-        )
-    ) {
-      setError(
-        'Offer end date must be after the start date.',
-      )
-
-      return false
-    }
-
-    return true
-  }
-
-  /* =========================================================
-     SAVE OFFER
-  ========================================================= */
-
-  async function saveOffer(
-    serviceId: string,
-  ) {
-    if (
-      !form.discountEnabled
-    ) {
-      if (
-        existingOffer
-      ) {
-        const {
-          error: deactivateError,
-        } =
-          await supabase
-            .from(
-              'offers',
-            )
-            .update({
-              is_active:
-                false,
-            })
-            .eq(
-              'id',
-              existingOffer.id,
-            )
-
-        if (
-          deactivateError
-        ) {
-          const message =
-            deactivateError.message.toLowerCase()
-
-          if (
-            message.includes('row-level security') ||
-            message.includes('permission denied') ||
-            message.includes('403')
-          ) {
-            throw new Error(
-              'Offer could not be disabled because Supabase RLS is blocking UPDATE on offers. Add an admin UPDATE policy for authenticated administrators.',
-            )
-          }
-
-          throw new Error(
-            `Unable to disable offer: ${deactivateError.message}`,
-          )
-        }
-      }
-
-      return
-    }
-
-    const discountValue =
-      Number(
-        form.discountValue,
-      )
-
-    const offerData = {
-      title:
-        form.offerTitle.trim(),
-
-      description:
-        form.offerDescription.trim(),
-
-      discount_type:
-        form.discountType,
-
-      discount_value:
-        discountValue,
-
-      promo_code:
-        form.promoCode.trim()
-          ? form.promoCode
-              .trim()
-              .toUpperCase()
-          : null,
-
-      starts_at:
-        new Date(
-          form.startsAt,
-        ).toISOString(),
-
-      ends_at:
-        form.endsAt
-          ? new Date(
-              form.endsAt,
-            ).toISOString()
-          : null,
-
-      service_id:
-        serviceId,
-
-      category_id:
-        null,
-
-      is_active:
-        true,
-    }
-
-    if (
-      existingOffer
-    ) {
-      const {
-        error: updateError,
-      } =
-        await supabase
-          .from(
-            'offers',
-          )
-          .update(
-            offerData,
-          )
-          .eq(
-            'id',
-            existingOffer.id,
-          )
-
-      if (updateError) {
-        const message =
-          updateError.message.toLowerCase()
-
-        if (
-          message.includes('row-level security') ||
-          message.includes('permission denied') ||
-          message.includes('403')
-        ) {
-          throw new Error(
-            'Offer could not be updated because Supabase RLS is blocking UPDATE on offers. Add an admin UPDATE policy for authenticated administrators.',
-          )
-        }
-
-        throw new Error(
-          `Unable to update offer: ${updateError.message}`,
-        )
-      }
-
-      return
-    }
-
-    const {
-      error: insertError,
-    } =
-      await supabase
-        .from(
-          'offers',
-        )
-        .insert(
-          offerData,
-        )
-
-    if (insertError) {
-      const message =
-        insertError.message.toLowerCase()
-
-      if (
-        message.includes('row-level security') ||
-        message.includes('permission denied') ||
-        message.includes('403')
-      ) {
-        throw new Error(
-          'Offer could not be created because Supabase RLS is blocking INSERT on offers. Add an admin INSERT policy for authenticated administrators.',
-        )
-      }
-
-      throw new Error(
-        `Unable to create offer: ${insertError.message}`,
-      )
-    }
-  }
-
-  /* =========================================================
      SUBMIT
   ========================================================= */
 
@@ -1631,12 +1186,6 @@ function AdminBeautyServiceForm() {
       return
     }
 
-    if (
-      !validateDiscount()
-    ) {
-      return
-    }
-
     const selectedCategory =
       categories.find(
         (category) =>
@@ -1705,9 +1254,6 @@ function AdminBeautyServiceForm() {
           form.isActive,
       }
 
-      let serviceId =
-        id ?? ''
-
       if (
         isEdit &&
         id
@@ -1748,8 +1294,6 @@ function AdminBeautyServiceForm() {
           )
         }
 
-        serviceId =
-          id
       } else {
         const {
           data:
@@ -1791,13 +1335,7 @@ function AdminBeautyServiceForm() {
           )
         }
 
-        serviceId =
-          createdService.id
       }
-
-      await saveOffer(
-        serviceId,
-      )
 
       if (
         selectedImage &&
@@ -1863,36 +1401,6 @@ function AdminBeautyServiceForm() {
 
   const numericPrice =
     Number(form.price) || 0
-
-  const numericDiscount =
-    Number(
-      form.discountValue,
-    ) || 0
-
-  const previewDiscount =
-    form.discountEnabled
-      ? form.discountType ===
-        'percentage'
-        ? Math.min(
-            numericPrice,
-            Math.round(
-              numericPrice *
-                (numericDiscount /
-                  100),
-            ),
-          )
-        : Math.min(
-            numericPrice,
-            numericDiscount,
-          )
-      : 0
-
-  const previewFinalPrice =
-    Math.max(
-      0,
-      numericPrice -
-        previewDiscount,
-    )
 
   /* =========================================================
      LOADING
@@ -1966,7 +1474,7 @@ function AdminBeautyServiceForm() {
 
           <p>
             Configure the service image,
-            details, pricing, offers,
+            details, fixed pricing,
             duration, and customer visibility.
           </p>
 
@@ -2434,326 +1942,7 @@ function AdminBeautyServiceForm() {
               </section>
 
               {/* ===============================================
-                  04 DISCOUNT
-              =============================================== */}
-
-              <section className="admin-service-section">
-
-                <div className="admin-service-section-heading">
-
-                  <span>
-                    04
-                  </span>
-
-                  <div>
-                    <span>
-                      PROMOTION
-                    </span>
-
-                    <h2>
-                      Discount & Offer
-                    </h2>
-
-                    <p>
-                      Create an offer specifically for
-                      this service.
-                    </p>
-                  </div>
-
-                </div>
-
-                <label className="admin-service-check-row">
-
-                  <input
-                    type="checkbox"
-                    checked={
-                      form.discountEnabled
-                    }
-                    onChange={(
-                      event,
-                    ) =>
-                      updateForm(
-                        'discountEnabled',
-                        event.target.checked,
-                      )
-                    }
-                    disabled={
-                      saving
-                    }
-                  />
-
-                  <span className="admin-service-check-box">
-                    ✓
-                  </span>
-
-                  <span>
-                    <strong>
-                      Enable discount for this service
-                    </strong>
-
-                    <small>
-                      Customers will see the offer
-                      and can use the promotion when
-                      applicable.
-                    </small>
-                  </span>
-
-                </label>
-
-                {form.discountEnabled && (
-                  <div className="admin-service-discount-box">
-
-                    <div className="admin-service-fields-grid">
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="offer-title">
-                          Offer Title
-                        </label>
-
-                        <input
-                          id="offer-title"
-                          type="text"
-                          value={
-                            form.offerTitle
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'offerTitle',
-                              event.target.value,
-                            )
-                          }
-                          placeholder="e.g. Bridal Beauty Offer"
-                          maxLength={
-                            120
-                          }
-                          disabled={
-                            saving
-                          }
-                        />
-
-                      </div>
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="offer-promo">
-                          Promo Code
-                          <span>
-                            Optional
-                          </span>
-                        </label>
-
-                        <input
-                          id="offer-promo"
-                          type="text"
-                          value={
-                            form.promoCode
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'promoCode',
-                              event.target.value.toUpperCase(),
-                            )
-                          }
-                          placeholder="e.g. BRIDAL20"
-                          maxLength={
-                            40
-                          }
-                          disabled={
-                            saving
-                          }
-                        />
-
-                      </div>
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="discount-type">
-                          Discount Type
-                        </label>
-
-                        <select
-                          id="discount-type"
-                          value={
-                            form.discountType
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'discountType',
-                              event.target.value as
-                                | 'percentage'
-                                | 'fixed',
-                            )
-                          }
-                          disabled={
-                            saving
-                          }
-                        >
-
-                          <option value="percentage">
-                            Percentage
-                          </option>
-
-                          <option value="fixed">
-                            Fixed Amount
-                          </option>
-
-                        </select>
-
-                      </div>
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="discount-value">
-                          Discount Value
-                        </label>
-
-                        <div className="admin-service-input-prefix">
-
-                          <span>
-                            {form.discountType ===
-                            'percentage'
-                              ? '%'
-                              : '₹'}
-                          </span>
-
-                          <input
-                            id="discount-value"
-                            type="number"
-                            min="0.01"
-                            max={
-                              form.discountType ===
-                              'percentage'
-                                ? 100
-                                : undefined
-                            }
-                            step="0.01"
-                            value={
-                              form.discountValue
-                            }
-                            onChange={(
-                              event,
-                            ) =>
-                              updateForm(
-                                'discountValue',
-                                event.target.value,
-                              )
-                            }
-                            placeholder="10"
-                            disabled={
-                              saving
-                            }
-                          />
-
-                        </div>
-
-                      </div>
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="offer-start">
-                          Starts
-                        </label>
-
-                        <input
-                          id="offer-start"
-                          type="datetime-local"
-                          value={
-                            form.startsAt
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'startsAt',
-                              event.target.value,
-                            )
-                          }
-                          disabled={
-                            saving
-                          }
-                        />
-
-                      </div>
-
-                      <div className="admin-service-field">
-
-                        <label htmlFor="offer-end">
-                          Ends
-                          <span>
-                            Optional
-                          </span>
-                        </label>
-
-                        <input
-                          id="offer-end"
-                          type="datetime-local"
-                          value={
-                            form.endsAt
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'endsAt',
-                              event.target.value,
-                            )
-                          }
-                          disabled={
-                            saving
-                          }
-                        />
-
-                      </div>
-
-                      <div className="admin-service-field full">
-
-                        <label htmlFor="offer-description">
-                          Offer Description
-                        </label>
-
-                        <textarea
-                          id="offer-description"
-                          value={
-                            form.offerDescription
-                          }
-                          onChange={(
-                            event,
-                          ) =>
-                            updateForm(
-                              'offerDescription',
-                              event.target.value,
-                            )
-                          }
-                          placeholder="Describe this special offer..."
-                          rows={
-                            3
-                          }
-                          maxLength={
-                            500
-                          }
-                          disabled={
-                            saving
-                          }
-                        />
-
-                      </div>
-
-                    </div>
-
-                  </div>
-                )}
-
-              </section>
-
-              {/* ===============================================
-                  05 VISIBILITY
+                  04 VISIBILITY
               =============================================== */}
 
               <section className="admin-service-section last">
@@ -2907,41 +2096,16 @@ function AdminBeautyServiceForm() {
 
                     <div>
                       <span>
-                        Starting from
+                        Price
                       </span>
 
-                      {form.discountEnabled &&
-                      previewDiscount >
-                        0 ? (
-                        <div className="admin-service-preview-price">
-
-                          <strong>
-                            {
-                              formatCurrency(
-                                previewFinalPrice,
-                              )
-                            }
-                          </strong>
-
-                          <del>
-                            {
-                              formatCurrency(
-                                numericPrice,
-                              )
-                            }
-                          </del>
-
-                        </div>
-                      ) : (
-                        <strong>
-                          {
-                            formatCurrency(
-                              numericPrice,
-                            )
-                          }
-                        </strong>
-                      )}
-
+                      <strong>
+                        {
+                          formatCurrency(
+                            numericPrice,
+                          )
+                        }
+                      </strong>
                     </div>
 
                     <div className="admin-service-preview-duration">
@@ -2959,25 +2123,6 @@ function AdminBeautyServiceForm() {
                     </div>
 
                   </div>
-
-                  {form.discountEnabled &&
-                    previewDiscount >
-                      0 && (
-                      <div className="admin-service-preview-discount">
-
-                        <span>
-                          OFFER
-                        </span>
-
-                        <strong>
-                          {form.discountType ===
-                          'percentage'
-                            ? `${numericDiscount}% OFF`
-                            : `${formatCurrency(numericDiscount)} OFF`}
-                        </strong>
-
-                      </div>
-                    )}
 
                 </div>
 

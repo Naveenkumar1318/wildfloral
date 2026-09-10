@@ -1,0 +1,1824 @@
+/* =========================================================
+   BEAUTY ENQUIRIES
+   Production UI
+========================================================= */
+
+.beauty-enquiries,
+.beauty-enquiries * {
+  box-sizing: border-box;
+}
+
+.beauty-enquiries {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 42px 80px;
+  color: #26382f;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.beauty-enquiries-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 34px;
+}
+
+.beauty-enquiries-back-button {
+  appearance: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #dce5dc;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #5f7468;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.beauty-enquiries-back-button span {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.beauty-enquiries-back-button:hover {
+  border-color: #bfd0bd;
+  background: #f7faf6;
+  color: #3f604d;
+  box-shadow: 0 6px 16px rgba(42, 65, 50, 0.08);
+  transform: translateY(-1px);
+}
+
+.beauty-enquiries-back-button:hover span {
+  transform: translateX(-2px);
+}
+
+.beauty-enquiries-back-button:focus-visible {
+  outline: 3px solid rgba(95, 134, 57, 0.2);
+  outline-offset: 2px;
+}
+
+.beauty-enquiries-heading {
+  max-width: 760px;
+}
+
+.beauty-enquiries-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: #7f947f;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  line-height: 1.4;
+}
+
+.beauty-enquiries-heading h1 {
+  margin: 0;
+  color: #24382f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 4vw, 58px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -2px;
+}
+
+.beauty-enquiries-heading h1 span {
+  color: #70954a;
+  font-style: italic;
+}
+
+.beauty-enquiries-heading p {
+  max-width: 650px;
+  margin: 18px 0 0;
+  color: #75847b;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.beauty-enquiries-count {
+  flex: 0 0 116px;
+  min-height: 94px;
+  padding: 18px 14px;
+  border: 1px solid #dce5dc;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(42, 65, 50, 0.06);
+  text-align: center;
+}
+
+.beauty-enquiries-count span {
+  display: block;
+  color: #8b9a8f;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.beauty-enquiries-count strong {
+  display: block;
+  margin-top: 10px;
+  color: #75974c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 27px;
+  font-weight: 400;
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.beauty-enquiries-filters {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 24px;
+  border: 1px solid #dce5dc;
+  border-radius: 12px;
+  background: #ffffff;
+  scrollbar-width: thin;
+}
+
+.beauty-enquiries-filters button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 8px;
+  color: #728177;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.beauty-enquiries-filters button strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 20px;
+  background: #f0f4ee;
+  color: #78867c;
+  font-size: 8px;
+}
+
+.beauty-enquiries-filters button:hover {
+  background: #f3f6f1;
+}
+
+.beauty-enquiries-filters button:focus-visible {
+  outline: 3px solid rgba(95, 134, 57, 0.2);
+  outline-offset: 1px;
+}
+
+.beauty-enquiries-filters button.active {
+  background: #e9f0e5;
+  color: #5f8639;
+}
+
+.beauty-enquiries-filters button.active strong {
+  background: #dce9d5;
+  color: #5f8639;
+}
+
+/* =========================================================
+   STATES
+========================================================= */
+
+.beauty-enquiries-state,
+.beauty-enquiries-empty {
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 1px solid #dfe7df;
+  border-radius: 20px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.beauty-enquiries-state p,
+.beauty-enquiries-empty p {
+  margin: 12px 0 0;
+  color: #7d8b82;
+  font-size: 13px;
+}
+
+.beauty-enquiries-error {
+  border-color: #ead9d4;
+}
+
+.beauty-enquiries-error > span {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f7ebe8;
+  color: #a76b5d;
+  font-weight: 700;
+}
+
+.beauty-enquiries-error div {
+  margin-top: 12px;
+}
+
+.beauty-enquiries-error strong {
+  color: #7c5148;
+  font-size: 14px;
+}
+
+.beauty-enquiries-error p {
+  margin-top: 6px;
+}
+
+.beauty-enquiries-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #dfe8dd;
+  border-top-color: #70954a;
+  border-radius: 50%;
+  animation: beauty-enquiries-spin 0.8s linear infinite;
+}
+
+@keyframes beauty-enquiries-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.beauty-enquiries-empty-number {
+  color: #8ca27d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+}
+
+.beauty-enquiries-empty h2 {
+  margin: 12px 0 0;
+  color: #2d4036;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+/* =========================================================
+   ENQUIRY LIST
+========================================================= */
+
+.beauty-enquiries-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================================
+   ENQUIRY CARD
+========================================================= */
+
+.beauty-enquiry-card {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #dbe4db;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(44, 65, 52, 0.055);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.beauty-enquiry-card:hover {
+  border-color: #cbdacb;
+  box-shadow: 0 18px 38px rgba(44, 65, 52, 0.09);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.beauty-enquiry-card-header {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 22px;
+  border-bottom: 1px solid #e5ebe4;
+  background: #ffffff;
+}
+
+.beauty-enquiry-card-header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.beauty-enquiry-card-header > div > span {
+  color: #89988e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.beauty-enquiry-card-header > div > strong {
+  color: #294036;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.beauty-enquiry-status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 27px;
+  padding: 0 11px;
+  border-radius: 20px;
+  background: #eef5e9;
+  color: #6b913e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.beauty-enquiry-status i {
+  width: 5px;
+  height: 5px;
+  display: block;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.beauty-enquiry-status.status-new {
+  background: #edf5e9;
+  color: #719344;
+}
+
+.beauty-enquiry-status.status-contacted {
+  background: #edf2f1;
+  color: #617b72;
+}
+
+.beauty-enquiry-status.status-accepted {
+  background: #eaf3e5;
+  color: #56803b;
+}
+
+.beauty-enquiry-status.status-rejected {
+  background: #f8ecea;
+  color: #aa6c61;
+}
+
+.beauty-enquiry-status.status-converted {
+  background: #e6f2e7;
+  color: #438052;
+}
+
+.beauty-enquiry-status.status-closed,
+.beauty-enquiry-status.status-completed {
+  background: #eef1ee;
+  color: #6d786f;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.beauty-enquiry-card-body {
+  width: 100%;
+  padding: 20px 22px 22px;
+}
+
+.beauty-enquiry-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.beauty-enquiry-index {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dce6db;
+  border-radius: 8px;
+  background: #f4f7f2;
+  color: #71924d;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.beauty-enquiry-main h2 {
+  margin: 0;
+  color: #253a30;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.beauty-enquiry-main p {
+  margin: 5px 0 0;
+  color: #8a968e;
+  font-size: 10px;
+}
+
+/* =========================================================
+   NEW STATUS MESSAGE
+========================================================= */
+
+.beauty-enquiry-status-message {
+  margin-top: 18px;
+  padding: 13px 15px;
+  border: 1px solid #dfe7de;
+  border-radius: 11px;
+  background: #f8faf7;
+}
+
+.beauty-enquiry-status-message strong {
+  display: block;
+  color: #3b5144;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.beauty-enquiry-status-message p {
+  margin: 5px 0 0;
+  color: #77857c;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.status-message-new {
+  border-color: #dce8d7;
+  background: #f5f9f2;
+}
+
+.status-message-new strong {
+  color: #66873f;
+}
+
+.status-message-contacted {
+  border-color: #dce5e2;
+  background: #f5f8f7;
+}
+
+.status-message-contacted strong {
+  color: #58746b;
+}
+
+.status-message-accepted {
+  border-color: #cfdfc7;
+  background: #f2f8ef;
+}
+
+.status-message-accepted strong {
+  color: #56803b;
+}
+
+.status-message-rejected {
+  border-color: #ead9d4;
+  background: #fcf6f4;
+}
+
+.status-message-rejected strong {
+  color: #a3655b;
+}
+
+.status-message-converted {
+  border-color: #cfe2d1;
+  background: #f1f8f1;
+}
+
+.status-message-converted strong {
+  color: #438052;
+}
+
+.status-message-closed,
+.status-message-completed {
+  border-color: #dfe4df;
+  background: #f7f8f7;
+}
+
+.status-message-closed strong,
+.status-message-completed strong {
+  color: #69756c;
+}
+
+/* =========================================================
+   APPOINTMENT INFO
+========================================================= */
+
+.beauty-enquiry-info-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 20px;
+  overflow: hidden;
+  border: 1px solid #dfe7de;
+  border-radius: 13px;
+  background: #f8faf7;
+}
+
+.beauty-enquiry-info-card > div {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 13px 17px;
+  border-right: 1px solid #dfe7de;
+}
+
+.beauty-enquiry-info-card > div:last-child {
+  border-right: 0;
+}
+
+.beauty-enquiry-info-card span {
+  margin-bottom: 8px;
+  color: #8b998f;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.beauty-enquiry-info-card strong {
+  color: #294036;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.beauty-enquiry-total-value {
+  color: #70943e !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px !important;
+}
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.beauty-enquiry-card-footer {
+  min-height: 61px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 22px;
+  border-top: 1px solid #e4ebe3;
+  background: #fbfcfa;
+}
+
+.beauty-enquiry-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.beauty-enquiry-summary span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 0 11px;
+  border: 1px solid #e1e9df;
+  border-radius: 20px;
+  background: #f2f6f0;
+  color: #75857a;
+  font-size: 8px;
+}
+
+/* =========================================================
+   CARD ACTIONS
+========================================================= */
+
+.beauty-enquiry-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.beauty-enquiry-view-button,
+.beauty-enquiry-book-button {
+  appearance: none;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.beauty-enquiry-view-button {
+  border: 0;
+  background: #257457;
+  color: #ffffff;
+}
+
+.beauty-enquiry-view-button:hover {
+  background: #1d644a;
+  transform: translateY(-1px);
+}
+
+.beauty-enquiry-view-button span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.beauty-enquiry-book-button {
+  border: 1px solid #6f984e;
+  background: #eef6e9;
+  color: #537c38;
+}
+
+.beauty-enquiry-book-button:hover {
+  border-color: #5e883e;
+  background: #e3efdc;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.beauty-enquiry-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 28px;
+}
+
+.beauty-enquiry-pagination-button,
+.beauty-enquiry-pagination-pages button {
+  appearance: none;
+  min-width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dce5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #718077;
+  cursor: pointer;
+  font-size: 9px;
+}
+
+.beauty-enquiry-pagination-button:hover:not(:disabled),
+.beauty-enquiry-pagination-pages button:hover {
+  background: #f2f6f0;
+}
+
+.beauty-enquiry-pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.beauty-enquiry-pagination-pages {
+  display: flex;
+  gap: 5px;
+}
+
+.beauty-enquiry-pagination-pages button.active {
+  border-color: #267557;
+  background: #267557;
+  color: #ffffff;
+}
+
+/* =========================================================
+   MODAL BACKDROP
+========================================================= */
+
+.beauty-enquiry-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: rgba(34, 47, 40, 0.48);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.beauty-enquiry-modal {
+  position: relative;
+  width: min(1080px, 100%);
+  max-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #dce5db;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 35px 90px rgba(20, 36, 27, 0.22);
+}
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.beauty-enquiry-modal-header {
+  min-height: 88px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 18px 28px;
+  border-bottom: 1px solid #e1e8e0;
+  background: #ffffff;
+}
+
+.beauty-enquiry-modal-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.beauty-enquiry-modal-header > div:first-child > span {
+  color: #8a998e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.beauty-enquiry-modal-header h2 {
+  margin: 0;
+  color: #263b31;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.beauty-enquiry-modal-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.beauty-enquiry-modal-close {
+  appearance: none;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dbe4da;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #68766d;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.beauty-enquiry-modal-close:hover {
+  border-color: #c9d8c8;
+  background: #f1f6ef;
+  color: #315342;
+}
+
+/* =========================================================
+   MODAL CONTENT
+========================================================= */
+
+.beauty-enquiry-modal-content {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 28px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: #cad7c8 transparent;
+}
+
+.beauty-enquiry-modal-content::-webkit-scrollbar {
+  width: 7px;
+}
+
+.beauty-enquiry-modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.beauty-enquiry-modal-content::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #cad7c8;
+}
+
+/* =========================================================
+   MODAL CURRENT STATUS
+========================================================= */
+
+.beauty-enquiry-detail-status {
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  border: 1px solid #dfe7de;
+  border-radius: 13px;
+}
+
+.beauty-enquiry-detail-status > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #89988e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.beauty-enquiry-detail-status > strong {
+  display: block;
+  color: #33483c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.beauty-enquiry-detail-status > p {
+  margin: 6px 0 0;
+  color: #728178;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   MODAL TOP GRID
+========================================================= */
+
+.beauty-enquiry-modal-top-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.beauty-enquiry-modal-top-grid > div {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 13px 15px;
+  border: 1px solid #dfe8de;
+  border-radius: 13px;
+  background: #f8faf7;
+}
+
+.beauty-enquiry-modal-top-grid span {
+  margin-bottom: 8px;
+  color: #8b998f;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.beauty-enquiry-modal-top-grid strong {
+  color: #2e4338;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   PEOPLE SECTION
+========================================================= */
+
+.beauty-enquiry-people-section {
+  width: 100%;
+}
+
+.beauty-enquiry-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.beauty-enquiry-section-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.beauty-enquiry-section-heading span {
+  color: #89988e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.beauty-enquiry-section-heading h3 {
+  margin: 0;
+  color: #2c4036;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.beauty-enquiry-people-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================================
+   PERSON CARD
+========================================================= */
+
+.beauty-enquiry-person-card {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #dce6dc;
+  border-radius: 17px;
+  background: #f8faf7;
+}
+
+/* =========================================================
+   PERSON HEADER
+========================================================= */
+
+.beauty-enquiry-person-header {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 20px 17px;
+}
+
+.beauty-enquiry-person-number {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #2e4037;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.beauty-enquiry-person-details {
+  min-width: 0;
+}
+
+.beauty-enquiry-person-details > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #8c9b91;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.7px;
+}
+
+.beauty-enquiry-person-details h4 {
+  overflow: hidden;
+  margin: 0;
+  color: #263c31;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.beauty-enquiry-person-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 16px;
+  margin-top: 6px;
+}
+
+.beauty-enquiry-person-contact p {
+  margin: 0;
+  color: #7f8e85;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.beauty-enquiry-person-total {
+  color: #5f883c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   PERSON SERVICES
+========================================================= */
+
+.beauty-enquiry-person-services {
+  margin: 0 16px 16px;
+  padding: 17px;
+  border: 1px solid #dfe7de;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.beauty-enquiry-person-services-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 13px;
+}
+
+.beauty-enquiry-person-services-heading span {
+  color: #89988e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.beauty-enquiry-person-services-heading strong {
+  color: #75857a;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* =========================================================
+   SERVICE GRID
+========================================================= */
+
+.beauty-enquiry-service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+.beauty-enquiry-service-card {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dce5db;
+  border-radius: 12px;
+  background: #ffffff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.beauty-enquiry-service-card:hover {
+  border-color: #c9d8c7;
+  box-shadow: 0 8px 20px rgba(44, 65, 52, 0.07);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   SERVICE IMAGE
+========================================================= */
+
+.beauty-enquiry-service-image {
+  position: relative;
+  width: 100%;
+  height: 155px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e1e8df;
+  background: #f3f5f1;
+}
+
+.beauty-enquiry-service-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center center;
+  background: #f3f5f1;
+}
+
+.beauty-enquiry-service-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a9a8d;
+  background: #eef2ec;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+}
+
+.beauty-enquiry-service-image > span {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: rgba(39, 58, 48, 0.82);
+  color: #ffffff;
+  font-size: 7px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   SERVICE CONTENT
+========================================================= */
+
+.beauty-enquiry-service-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 13px 13px 14px;
+}
+
+.beauty-enquiry-service-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.beauty-enquiry-service-title-row h5 {
+  min-width: 0;
+  margin: 0;
+  color: #2b4035;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.beauty-enquiry-service-discount-label {
+  flex-shrink: 0;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: #edf5e9;
+  color: #64873e;
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.beauty-enquiry-service-duration {
+  margin-top: 6px;
+}
+
+.beauty-enquiry-service-duration span {
+  color: #89978f;
+  font-size: 8px;
+}
+
+/* =========================================================
+   SERVICE PRICING
+========================================================= */
+
+.beauty-enquiry-service-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #edf1ec;
+}
+
+.beauty-enquiry-service-pricing > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.beauty-enquiry-service-pricing span {
+  color: #8b968f;
+  font-size: 7px;
+}
+
+.beauty-enquiry-service-pricing strong {
+  color: #34483d;
+  font-size: 9px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.beauty-enquiry-original-price {
+  color: #9aa39d !important;
+  text-decoration: line-through;
+}
+
+.beauty-enquiry-discount-price {
+  color: #aa685d !important;
+}
+
+.beauty-enquiry-final-price-row {
+  margin-top: 3px;
+  padding-top: 7px;
+  border-top: 1px solid #edf1ec;
+}
+
+.beauty-enquiry-final-price-row span {
+  color: #65776b;
+  font-weight: 600;
+}
+
+.beauty-enquiry-final-price-row strong {
+  color: #5d8739;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+}
+
+/* =========================================================
+   NO SERVICES
+========================================================= */
+
+.beauty-enquiry-no-services {
+  padding: 16px;
+  border: 1px dashed #d9e3d8;
+  border-radius: 9px;
+  background: #fafcf9;
+  color: #87948c;
+  font-size: 9px;
+  text-align: center;
+}
+
+/* =========================================================
+   TOTALS
+========================================================= */
+
+.beauty-enquiry-totals {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 0;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #dfe7de;
+}
+
+.beauty-enquiry-totals > div {
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 22px;
+  border-right: 1px solid #dfe7de;
+}
+
+.beauty-enquiry-totals > div:first-child {
+  padding-left: 0;
+}
+
+.beauty-enquiry-totals > div:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.beauty-enquiry-totals span {
+  margin-bottom: 7px;
+  color: #8a998f;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.beauty-enquiry-totals strong {
+  color: #34483d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.beauty-enquiry-discount-total {
+  color: #a56b60 !important;
+}
+
+.beauty-enquiry-totals .grand-total strong {
+  color: #5e893d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.beauty-enquiry-notes {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px solid #dfe7de;
+  border-radius: 12px;
+  background: #f8faf7;
+}
+
+.beauty-enquiry-notes > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #89988e;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.beauty-enquiry-notes p {
+  margin: 0;
+  color: #5f7066;
+  font-size: 10px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.beauty-enquiry-modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 28px;
+  border-top: 1px solid #e1e8e0;
+  background: #ffffff;
+}
+
+.beauty-enquiry-modal-footer button {
+  appearance: none;
+  min-width: 92px;
+  height: 38px;
+  padding: 0 17px;
+  border: 1px solid #d8e2d7;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #526359;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.beauty-enquiry-modal-footer button:hover {
+  border-color: #c4d3c2;
+  background: #f2f6f0;
+}
+
+.beauty-enquiry-modal-footer
+  .beauty-enquiry-modal-book-button {
+  min-width: 220px;
+  border-color: #6f984e;
+  background: #257457;
+  color: #ffffff;
+}
+
+.beauty-enquiry-modal-footer
+  .beauty-enquiry-modal-book-button:hover {
+  border-color: #1d644a;
+  background: #1d644a;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+  .beauty-enquiries {
+    max-width: 1260px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .beauty-enquiry-service-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .beauty-enquiry-service-image {
+    height: 175px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+  .beauty-enquiries {
+    padding: 42px 26px 70px;
+  }
+
+  .beauty-enquiry-service-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .beauty-enquiry-service-image {
+    height: 150px;
+  }
+
+  .beauty-enquiry-modal {
+    width: min(940px, 100%);
+  }
+
+  .beauty-enquiry-modal-top-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 760px) {
+  .beauty-enquiries {
+    padding: 32px 18px 55px;
+  }
+
+  .beauty-enquiries-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .beauty-enquiries-count {
+    width: 110px;
+  }
+
+  .beauty-enquiries-heading h1 {
+    font-size: 40px;
+  }
+
+  .beauty-enquiry-info-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .beauty-enquiry-info-card > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .beauty-enquiry-info-card > div:nth-child(-n + 2) {
+    border-bottom: 1px solid #dfe7de;
+  }
+
+  .beauty-enquiry-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .beauty-enquiry-summary {
+    width: 100%;
+  }
+
+  .beauty-enquiry-card-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .beauty-enquiry-view-button,
+  .beauty-enquiry-book-button {
+    flex: 1;
+  }
+
+  .beauty-enquiry-modal-backdrop {
+    padding: 12px;
+  }
+
+  .beauty-enquiry-modal {
+    max-height: calc(100vh - 24px);
+    border-radius: 17px;
+  }
+
+  .beauty-enquiry-modal-header {
+    min-height: 76px;
+    padding: 15px 18px;
+  }
+
+  .beauty-enquiry-modal-content {
+    padding: 18px;
+  }
+
+  .beauty-enquiry-modal-footer {
+    padding: 12px 18px;
+  }
+
+  .beauty-enquiry-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+  .beauty-enquiries {
+    padding: 26px 14px 45px;
+  }
+
+  .beauty-enquiries-heading h1 {
+    font-size: 35px;
+    letter-spacing: -1.4px;
+  }
+
+  .beauty-enquiries-heading p {
+    font-size: 11px;
+  }
+
+  .beauty-enquiries-filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .beauty-enquiries-filters button {
+    justify-content: center;
+    padding: 0 5px;
+    font-size: 7px;
+  }
+
+  .beauty-enquiry-card-header {
+    min-height: 62px;
+    padding: 13px 15px;
+  }
+
+  .beauty-enquiry-card-body {
+    padding: 16px 15px;
+  }
+
+  .beauty-enquiry-main {
+    gap: 10px;
+  }
+
+  .beauty-enquiry-main h2 {
+    font-size: 18px;
+  }
+
+  .beauty-enquiry-info-card {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 15px;
+  }
+
+  .beauty-enquiry-info-card > div {
+    min-height: 65px;
+    padding: 10px 12px;
+  }
+
+  .beauty-enquiry-card-footer {
+    padding: 11px 15px;
+  }
+
+  .beauty-enquiry-summary {
+    width: 100%;
+  }
+
+  .beauty-enquiry-card-actions {
+    flex-direction: column;
+  }
+
+  .beauty-enquiry-view-button,
+  .beauty-enquiry-book-button {
+    width: 100%;
+    flex: none;
+  }
+
+  /* MODAL */
+
+  .beauty-enquiry-modal-header {
+    align-items: flex-start;
+  }
+
+  .beauty-enquiry-modal-header-right {
+    gap: 7px;
+  }
+
+  .beauty-enquiry-modal-header h2 {
+    font-size: 19px;
+  }
+
+  .beauty-enquiry-modal-close {
+    width: 34px;
+    height: 34px;
+  }
+
+  .beauty-enquiry-modal-top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beauty-enquiry-section-heading h3 {
+    font-size: 19px;
+  }
+
+  .beauty-enquiry-person-header {
+    grid-template-columns: 35px minmax(0, 1fr);
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .beauty-enquiry-person-number {
+    width: 32px;
+    height: 32px;
+  }
+
+  .beauty-enquiry-person-total {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: -4px;
+    font-size: 17px;
+  }
+
+  .beauty-enquiry-person-details h4 {
+    font-size: 17px;
+  }
+
+  .beauty-enquiry-person-services {
+    margin: 0 10px 10px;
+    padding: 12px;
+  }
+
+  .beauty-enquiry-person-services-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .beauty-enquiry-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beauty-enquiry-service-image {
+    height: 190px;
+  }
+
+  .beauty-enquiry-service-content {
+    padding: 12px;
+  }
+
+  .beauty-enquiry-totals {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .beauty-enquiry-totals > div,
+  .beauty-enquiry-totals > div:first-child,
+  .beauty-enquiry-totals > div:last-child {
+    min-height: 52px;
+    padding: 10px 0;
+    border-right: 0;
+    border-bottom: 1px solid #e0e7df;
+  }
+
+  .beauty-enquiry-totals > div:last-child {
+    border-bottom: 0;
+  }
+
+  .beauty-enquiry-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .beauty-enquiry-modal-footer button,
+  .beauty-enquiry-modal-footer
+    .beauty-enquiry-modal-book-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+  .beauty-enquiries-heading h1 {
+    font-size: 31px;
+  }
+
+  .beauty-enquiry-info-card {
+    grid-template-columns: 1fr;
+  }
+
+  .beauty-enquiry-info-card > div,
+  .beauty-enquiry-info-card > div:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid #dfe7de;
+  }
+
+  .beauty-enquiry-info-card > div:last-child {
+    border-bottom: 0;
+  }
+
+  .beauty-enquiry-status {
+    padding: 0 8px;
+    font-size: 6px;
+  }
+
+  .beauty-enquiry-modal-header {
+    padding: 13px 14px;
+  }
+
+  .beauty-enquiry-modal-content {
+    padding: 15px;
+  }
+
+  .beauty-enquiry-service-image {
+    height: 175px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.beauty-enquiries
+  button:focus-visible {
+  outline: 2px solid #6d9b7b;
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .beauty-enquiries *,
+  .beauty-enquiries *::before,
+  .beauty-enquiries *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

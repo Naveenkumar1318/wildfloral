@@ -3,40 +3,32 @@ import {
   NavLink,
   Outlet,
   useNavigate,
-} from 'react-router'
+} from 'react-router-dom'
+
+import { useState } from 'react'
 
 import { supabase } from '../../lib/supabase'
 
 import './AdminLayout.css'
 
-
 type IconType =
   | 'dashboard'
   | 'bookings'
+  | 'enquiries'
   | 'services'
+  | 'offers'
   | 'website'
   | 'logout'
   | 'logo'
-
 
 type IconProps = {
   type: IconType
 }
 
-
 function Icon({ type }: IconProps) {
-
   const icons = {
-
-    /* =====================================================
-       DASHBOARD
-    ===================================================== */
-
     dashboard: (
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect
           x="4"
           y="4"
@@ -83,16 +75,8 @@ function Icon({ type }: IconProps) {
       </svg>
     ),
 
-
-    /* =====================================================
-       BOOKINGS
-    ===================================================== */
-
     bookings: (
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect
           x="4"
           y="5"
@@ -122,16 +106,28 @@ function Icon({ type }: IconProps) {
       </svg>
     ),
 
+    enquiries: (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5v8A2.5 2.5 0 0 1 16.5 16H11l-4.5 4v-4.2A2.5 2.5 0 0 1 5 13.5v-8Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinejoin="round"
+    />
 
-    /* =====================================================
-       SERVICES
-    ===================================================== */
+    <path
+      d="M8 8h8M8 11.5h5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+),
 
     services: (
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M12 3 5 6v5c0 4.7 2.9 8.2 7 10 4.1-1.8 7-5.3 7-10V6l-7-3Z"
           fill="none"
@@ -151,16 +147,28 @@ function Icon({ type }: IconProps) {
       </svg>
     ),
 
+    offers: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20 12l-8 8-9-9V4h7l10 8Z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
 
-    /* =====================================================
-       WEBSITE
-    ===================================================== */
+        <circle
+          cx="7.5"
+          cy="7.5"
+          r="1.2"
+          fill="currentColor"
+        />
+      </svg>
+    ),
 
     website: (
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle
           cx="12"
           cy="12"
@@ -186,16 +194,8 @@ function Icon({ type }: IconProps) {
       </svg>
     ),
 
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
     logout: (
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="M10 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3"
           fill="none"
@@ -215,16 +215,8 @@ function Icon({ type }: IconProps) {
       </svg>
     ),
 
-
-    /* =====================================================
-       LOGO
-    ===================================================== */
-
     logo: (
-      <svg
-        viewBox="0 0 48 48"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 48 48" aria-hidden="true">
         <path
           d="M14 20V12h20v8"
           fill="none"
@@ -258,14 +250,16 @@ function Icon({ type }: IconProps) {
   return icons[type]
 }
 
-
 function AdminLayout() {
-
   const navigate = useNavigate()
 
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false)
+
+  const [openSection, setOpenSection] =
+    useState<string | null>(null)
 
   async function handleLogout() {
-
     await supabase.auth.signOut()
 
     navigate(
@@ -276,33 +270,101 @@ function AdminLayout() {
     )
   }
 
+  function toggleSection(section: string) {
+    setOpenSection((current) =>
+      current === section
+        ? null
+        : section,
+    )
+  }
+
+  function closeMobileMenu() {
+    setMobileMenuOpen(false)
+    setOpenSection(null)
+  }
 
   return (
-    <div className="admin-layout">
+    <div
+      className={`admin-layout ${
+        mobileMenuOpen
+          ? 'mobile-menu-open'
+          : ''
+      }`}
+    >
 
       {/* =================================================
-          FIXED SIDEBAR
+          MOBILE HEADER
+      ================================================= */}
+
+      <header className="admin-mobile-header">
+
+        <button
+          type="button"
+          className="admin-mobile-menu-button"
+          aria-label={
+            mobileMenuOpen
+              ? 'Close menu'
+              : 'Open menu'
+          }
+          aria-expanded={mobileMenuOpen}
+          onClick={() =>
+            setMobileMenuOpen(
+              (current) => !current,
+            )
+          }
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <Link
+          to="/admin"
+          className="admin-mobile-brand"
+          onClick={closeMobileMenu}
+        >
+          <span className="admin-mobile-brand-logo">
+            <Icon type="logo" />
+          </span>
+
+          <span>
+            WildFloral
+          </span>
+        </Link>
+
+      </header>
+
+
+      {/* =================================================
+          MOBILE OVERLAY
+      ================================================= */}
+
+      <button
+        type="button"
+        className="admin-mobile-overlay"
+        aria-label="Close navigation"
+        onClick={closeMobileMenu}
+      />
+
+
+      {/* =================================================
+          SIDEBAR
       ================================================= */}
 
       <aside className="admin-sidebar">
 
-
-        {/* =================================================
-            BRAND
-        ================================================= */}
+        {/* BRAND */}
 
         <Link
           to="/admin"
           className="admin-sidebar-brand"
+          onClick={closeMobileMenu}
         >
-
           <span className="admin-sidebar-logo">
             <Icon type="logo" />
           </span>
 
-
           <span className="admin-sidebar-brand-content">
-
             <strong>
               WildFloral
             </strong>
@@ -310,38 +372,30 @@ function AdminLayout() {
             <small>
               ADMINISTRATION
             </small>
-
           </span>
-
         </Link>
 
 
-        {/* =================================================
-            MENU TITLE
-        ================================================= */}
+        {/* MENU TITLE */}
 
         <div className="admin-sidebar-section-title">
           MENU
         </div>
 
 
-        {/* =================================================
-            NAVIGATION
-        ================================================= */}
+        {/* NAVIGATION */}
 
         <nav
           className="admin-sidebar-nav"
           aria-label="Admin navigation"
         >
 
-
-          {/* =================================================
-              DASHBOARD
-          ================================================= */}
+          {/* DASHBOARD */}
 
           <NavLink
             to="/admin"
             end
+            onClick={closeMobileMenu}
             className={({ isActive }) =>
               `admin-nav-item ${
                 isActive
@@ -350,7 +404,6 @@ function AdminLayout() {
               }`
             }
           >
-
             <span className="admin-nav-icon">
               <Icon type="dashboard" />
             </span>
@@ -358,7 +411,6 @@ function AdminLayout() {
             <span className="admin-nav-label">
               Dashboard
             </span>
-
           </NavLink>
 
 
@@ -366,10 +418,24 @@ function AdminLayout() {
               BOOKINGS
           ================================================= */}
 
-          <div className="admin-nav-group">
+          <div
+            className={`admin-nav-group ${
+              openSection === 'bookings'
+                ? 'open'
+                : ''
+            }`}
+          >
 
-            <div className="admin-nav-parent">
-
+            <button
+              type="button"
+              className="admin-nav-parent"
+              onClick={() =>
+                toggleSection('bookings')
+              }
+              aria-expanded={
+                openSection === 'bookings'
+              }
+            >
               <span className="admin-nav-icon">
                 <Icon type="bookings" />
               </span>
@@ -378,13 +444,16 @@ function AdminLayout() {
                 Bookings
               </span>
 
-            </div>
-
+              <span className="admin-nav-arrow">
+                ›
+              </span>
+            </button>
 
             <div className="admin-nav-submenu">
 
               <NavLink
                 to="/admin/bookings/beauty"
+                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -393,18 +462,16 @@ function AdminLayout() {
                   }`
                 }
               >
-
                 <span className="admin-subitem-dot" />
 
                 <span>
                   Beauty Services
                 </span>
-
               </NavLink>
-
 
               <NavLink
                 to="/admin/bookings/fashion"
+                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -413,28 +480,116 @@ function AdminLayout() {
                   }`
                 }
               >
-
                 <span className="admin-subitem-dot" />
 
                 <span>
                   Fashion Services
                 </span>
-
               </NavLink>
 
             </div>
 
           </div>
 
+{/* =================================================
+    ENQUIRIES
+================================================= */}
+
+<div
+  className={`admin-nav-group ${
+    openSection === 'enquiries'
+      ? 'open'
+      : ''
+  }`}
+>
+
+  <button
+    type="button"
+    className="admin-nav-parent"
+    onClick={() =>
+      toggleSection('enquiries')
+    }
+    aria-expanded={
+      openSection === 'enquiries'
+    }
+  >
+    <span className="admin-nav-icon">
+      <Icon type="enquiries" />
+    </span>
+
+    <span className="admin-nav-label">
+      Enquiries
+    </span>
+
+    <span className="admin-nav-arrow">
+      ›
+    </span>
+  </button>
+
+  <div className="admin-nav-submenu">
+
+    <NavLink
+      to="/admin/enquiries/beauty"
+      onClick={closeMobileMenu}
+      className={({ isActive }) =>
+        `admin-nav-subitem ${
+          isActive
+            ? 'active'
+            : ''
+        }`
+      }
+    >
+      <span className="admin-subitem-dot" />
+
+      <span>
+        Beauty Enquiries
+      </span>
+    </NavLink>
+
+    <NavLink
+      to="/admin/enquiries/fashion"
+      onClick={closeMobileMenu}
+      className={({ isActive }) =>
+        `admin-nav-subitem ${
+          isActive
+            ? 'active'
+            : ''
+        }`
+      }
+    >
+      <span className="admin-subitem-dot" />
+
+      <span>
+        Fashion Enquiries
+      </span>
+    </NavLink>
+
+  </div>
+
+</div>
 
           {/* =================================================
               SERVICES
           ================================================= */}
 
-          <div className="admin-nav-group">
+          <div
+            className={`admin-nav-group ${
+              openSection === 'services'
+                ? 'open'
+                : ''
+            }`}
+          >
 
-            <div className="admin-nav-parent">
-
+            <button
+              type="button"
+              className="admin-nav-parent"
+              onClick={() =>
+                toggleSection('services')
+              }
+              aria-expanded={
+                openSection === 'services'
+              }
+            >
               <span className="admin-nav-icon">
                 <Icon type="services" />
               </span>
@@ -443,18 +598,21 @@ function AdminLayout() {
                 Services
               </span>
 
-            </div>
-
+              <span className="admin-nav-arrow">
+                ›
+              </span>
+            </button>
 
             <div className="admin-nav-submenu">
 
-              {/* BEAUTY SERVICES */}
-
               <NavLink
                 to="/admin/services/beauty"
+                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
-                    isActive ? 'active' : ''
+                    isActive
+                      ? 'active'
+                      : ''
                   }`
                 }
               >
@@ -465,11 +623,9 @@ function AdminLayout() {
                 </span>
               </NavLink>
 
-
-              {/* FASHION SERVICES */}
-
               <NavLink
-                to=""
+                to="/admin/services/fashion"
+                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -478,13 +634,89 @@ function AdminLayout() {
                   }`
                 }
               >
-
                 <span className="admin-subitem-dot" />
 
                 <span>
                   Fashion Services
                 </span>
+              </NavLink>
 
+            </div>
+
+          </div>
+
+
+          {/* =================================================
+              OFFERS
+          ================================================= */}
+
+          <div
+            className={`admin-nav-group ${
+              openSection === 'offers'
+                ? 'open'
+                : ''
+            }`}
+          >
+
+            <button
+              type="button"
+              className="admin-nav-parent"
+              onClick={() =>
+                toggleSection('offers')
+              }
+              aria-expanded={
+                openSection === 'offers'
+              }
+            >
+              <span className="admin-nav-icon">
+                <Icon type="offers" />
+              </span>
+
+              <span className="admin-nav-label">
+                Offers
+              </span>
+
+              <span className="admin-nav-arrow">
+                ›
+              </span>
+            </button>
+
+            <div className="admin-nav-submenu">
+
+              <NavLink
+                to="/admin/offers/beauty"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `admin-nav-subitem ${
+                    isActive
+                      ? 'active'
+                      : ''
+                  }`
+                }
+              >
+                <span className="admin-subitem-dot" />
+
+                <span>
+                  Beauty Offers
+                </span>
+              </NavLink>
+
+              <NavLink
+                to="/admin/offers/fashion"
+                onClick={closeMobileMenu}
+                className={({ isActive }) =>
+                  `admin-nav-subitem ${
+                    isActive
+                      ? 'active'
+                      : ''
+                  }`
+                }
+              >
+                <span className="admin-subitem-dot" />
+
+                <span>
+                  Fashion Offers
+                </span>
               </NavLink>
 
             </div>
@@ -500,14 +732,11 @@ function AdminLayout() {
 
         <div className="admin-sidebar-bottom">
 
-
-          {/* WEBSITE */}
-
           <Link
             to="/"
             className="admin-bottom-item"
+            onClick={closeMobileMenu}
           >
-
             <span className="admin-bottom-icon">
               <Icon type="website" />
             </span>
@@ -515,11 +744,8 @@ function AdminLayout() {
             <span>
               View Website
             </span>
-
           </Link>
 
-
-          {/* LOGOUT */}
 
           <button
             type="button"
@@ -528,7 +754,6 @@ function AdminLayout() {
               void handleLogout()
             }
           >
-
             <span className="admin-bottom-icon">
               <Icon type="logout" />
             </span>
@@ -536,7 +761,6 @@ function AdminLayout() {
             <span>
               Logout
             </span>
-
           </button>
 
         </div>
@@ -559,6 +783,5 @@ function AdminLayout() {
     </div>
   )
 }
-
 
 export default AdminLayout

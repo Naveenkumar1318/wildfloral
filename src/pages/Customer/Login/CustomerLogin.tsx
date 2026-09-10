@@ -1,14 +1,14 @@
 import {
-  FormEvent,
   useEffect,
   useState,
 } from 'react'
+import type { FormEvent } from 'react'
 
 import {
   Link,
   useNavigate,
   useSearchParams,
-} from 'react-router'
+} from 'react-router-dom'
 
 import {
   Eye,
@@ -23,15 +23,18 @@ import { supabase } from '../../../lib/supabase'
 
 import './CustomerLogin.css'
 
-function Login() {
+function CustomerLogin() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
   const redirect =
     searchParams.get('redirect') || '/account'
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] =
+    useState('')
+
+  const [password, setPassword] =
+    useState('')
 
   const [showPassword, setShowPassword] =
     useState(false)
@@ -42,23 +45,191 @@ function Login() {
   const [googleLoading, setGoogleLoading] =
     useState(false)
 
-  const [error, setError] = useState('')
+  const [error, setError] =
+    useState('')
+
+  /* =========================================================
+     URL ERROR
+  ========================================================= */
 
   useEffect(() => {
-    async function checkExistingSession() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+    const urlError =
+      searchParams.get('error')
 
-      if (session) {
-        navigate(redirect, {
-          replace: true,
-        })
+    setError('')
+
+    switch (urlError) {
+      case 'account_not_found':
+        setError(
+          'No customer account found. Please create your account first.',
+        )
+        break
+
+      case 'account_exists':
+        setError(
+          'You already have an account. Please sign in.',
+        )
+        break
+
+      case 'admin_account':
+        setError(
+          'This is an admin account. Please use the admin login.',
+        )
+        break
+
+      case 'invalid_customer_account':
+        setError(
+          'This account cannot use customer login.',
+        )
+        break
+
+      case 'authentication_failed':
+        setError(
+          'Authentication failed. Please try again.',
+        )
+        break
+
+      case 'profile_check_failed':
+        setError(
+          'Unable to verify your customer account. Please try again.',
+        )
+        break
+
+      default:
+        break
+    }
+  }, [searchParams])
+
+  /* =========================================================
+     CHECK EXISTING SESSION
+  ========================================================= */
+
+  useEffect(() => {
+    let mounted = true
+
+    async function checkExistingSession() {
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } =
+          await supabase.auth.getSession()
+
+        if (!mounted) {
+          return
+        }
+
+        if (sessionError) {
+          console.error(
+            'Existing session error:',
+            sessionError,
+          )
+
+          return
+        }
+
+        if (!session?.user) {
+          return
+        }
+
+        const {
+          data: profile,
+          error: profileError,
+        } =
+          await supabase
+            .from('profiles')
+            .select(
+              'id, email, full_name, role',
+            )
+            .eq(
+              'id',
+              session.user.id,
+            )
+            .maybeSingle()
+
+        if (!mounted) {
+          return
+        }
+
+        if (profileError) {
+          console.error(
+            'Existing session profile error:',
+            profileError,
+          )
+
+          await supabase.auth.signOut()
+
+          setError(
+            'Unable to verify your customer account.',
+          )
+
+          return
+        }
+
+        /* CUSTOMER */
+
+        if (
+          profile?.role ===
+          'customer'
+        ) {
+          navigate(
+            redirect,
+            {
+              replace: true,
+            },
+          )
+
+          return
+        }
+
+        /* ADMIN */
+
+        if (
+          profile?.role ===
+          'admin'
+        ) {
+          await supabase.auth.signOut()
+
+          setError(
+            'This is an admin account. Please use the admin login.',
+          )
+
+          return
+        }
+
+        /*
+         * Auth user exists but customer profile
+         * does not exist.
+         *
+         * DO NOT create profile during login.
+         */
+
+        await supabase.auth.signOut()
+
+        setError(
+          'No customer account found. Please create your account first.',
+        )
+      } catch (error) {
+        console.error(
+          'Existing session check failed:',
+          error,
+        )
       }
     }
 
-    checkExistingSession()
-  }, [navigate, redirect])
+    void checkExistingSession()
+
+    return () => {
+      mounted = false
+    }
+  }, [
+    navigate,
+    redirect,
+  ])
+
+  /* =========================================================
+     EMAIL / PASSWORD LOGIN
+  ========================================================= */
 
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
@@ -67,9 +238,13 @@ function Login() {
 
     setError('')
 
-    const cleanEmail = email.trim()
+    const cleanEmail =
+      email.trim().toLowerCase()
 
-    if (!cleanEmail || !password) {
+    if (
+      !cleanEmail ||
+      !password
+    ) {
       setError(
         'Please enter your email and password.',
       )
@@ -89,18 +264,129 @@ function Login() {
           password,
         })
 
-      if (authError || !data.user) {
+      /* =====================================================
+         AUTHENTICATION FAILED
+      ===================================================== */
+
+      if (
+        authError ||
+        !data.user
+      ) {
+        if (
+          authError?.message
+            ?.toLowerCase()
+            .includes('email not confirmed')
+        ) {
+          setError(
+            'Please confirm your email address before signing in.',
+          )
+        } else {
+          setError(
+            'Invalid email or password.',
+          )
+        }
+
+        return
+      }
+
+      /* =====================================================
+         CHECK CUSTOMER PROFILE
+      ===================================================== */
+
+      const {
+        data: profile,
+        error: profileError,
+      } =
+        await supabase
+          .from('profiles')
+          .select(
+            'id, email, full_name, role',
+          )
+          .eq(
+            'id',
+            data.user.id,
+          )
+          .maybeSingle()
+
+      if (profileError) {
+        console.error(
+          'Customer profile lookup failed:',
+          profileError,
+        )
+
+        await supabase.auth.signOut()
+
         setError(
-          'Invalid email or password.',
+          'Unable to verify your customer account. Please try again.',
         )
 
         return
       }
 
-      navigate(redirect, {
-        replace: true,
-      })
-    } catch {
+      /*
+       * IMPORTANT:
+       *
+       * Login NEVER creates a profile.
+       */
+
+      if (!profile) {
+        await supabase.auth.signOut()
+
+        setError(
+          'No customer account found. Please create your account first.',
+        )
+
+        return
+      }
+
+      /* ADMIN */
+
+      if (
+        profile.role ===
+        'admin'
+      ) {
+        await supabase.auth.signOut()
+
+        setError(
+          'This is an admin account. Please use the admin login.',
+        )
+
+        return
+      }
+
+      /* INVALID ROLE */
+
+      if (
+        profile.role !==
+        'customer'
+      ) {
+        await supabase.auth.signOut()
+
+        setError(
+          'This account cannot use customer login.',
+        )
+
+        return
+      }
+
+      /* =====================================================
+         SUCCESS
+      ===================================================== */
+
+      navigate(
+        redirect,
+        {
+          replace: true,
+        },
+      )
+    } catch (error) {
+      console.error(
+        'Customer login error:',
+        error,
+      )
+
+      await supabase.auth.signOut()
+
       setError(
         'Unable to sign in. Please try again.',
       )
@@ -109,19 +395,32 @@ function Login() {
     }
   }
 
+  /* =========================================================
+     GOOGLE LOGIN
+  ========================================================= */
+
   async function handleGoogleLogin() {
     setError('')
     setGoogleLoading(true)
 
     try {
-      const callbackUrl = new URL(
-        '/auth/callback',
-        window.location.origin,
-      )
+      const callbackUrl =
+        new URL(
+          '/auth/callback',
+          window.location.origin,
+        )
 
       callbackUrl.searchParams.set(
         'redirect',
         redirect,
+      )
+
+      /*
+       * CUSTOMER LOGIN
+       */
+      callbackUrl.searchParams.set(
+        'auth_mode',
+        'login',
       )
 
       const {
@@ -129,17 +428,24 @@ function Login() {
       } =
         await supabase.auth.signInWithOAuth({
           provider: 'google',
+
           options: {
             redirectTo:
               callbackUrl.toString(),
 
             queryParams: {
-              prompt: 'select_account',
+              prompt:
+                'select_account',
             },
           },
         })
 
       if (googleError) {
+        console.error(
+          'Google login error:',
+          googleError,
+        )
+
         setError(
           googleError.message ||
             'Google sign in is unavailable.',
@@ -147,7 +453,12 @@ function Login() {
 
         setGoogleLoading(false)
       }
-    } catch {
+    } catch (error) {
+      console.error(
+        'Google login error:',
+        error,
+      )
+
       setError(
         'Unable to continue with Google.',
       )
@@ -166,7 +477,9 @@ function Login() {
       <section className="customer-auth-visual">
 
         <div className="customer-auth-shape customer-auth-shape-one" />
+
         <div className="customer-auth-shape customer-auth-shape-two" />
+
         <div className="customer-auth-shape customer-auth-shape-three" />
 
         <Link
@@ -196,24 +509,29 @@ function Login() {
         </div>
 
         <div className="customer-auth-visual-footer">
+
           <span />
+
           <small>
             WILDFLORAL STUDIO
           </small>
+
         </div>
 
       </section>
 
       {/* =====================================================
-          LOGIN
+          LOGIN FORM
       ===================================================== */}
 
       <section className="customer-auth-form-area">
 
         <div className="customer-auth-mobile-brand">
+
           <Link to="/">
             WildFloral
           </Link>
+
         </div>
 
         <div className="customer-auth-form-container">
@@ -241,7 +559,9 @@ function Login() {
           <button
             type="button"
             className="customer-google-button"
-            onClick={handleGoogleLogin}
+            onClick={
+              handleGoogleLogin
+            }
             disabled={
               loading ||
               googleLoading
@@ -258,25 +578,32 @@ function Login() {
             </span>
           </button>
 
-          {/* DIVIDER */}
-
           <div className="customer-auth-divider">
+
             <span />
-            <small>OR</small>
+
+            <small>
+              OR
+            </small>
+
             <span />
+
           </div>
 
           {/* FORM */}
 
           <form
             className="customer-auth-form"
-            onSubmit={handleSubmit}
+            onSubmit={
+              handleSubmit
+            }
           >
 
             {error && (
               <div
                 className="customer-auth-error"
                 role="alert"
+                aria-live="polite"
               >
                 {error}
               </div>
@@ -286,20 +613,19 @@ function Login() {
 
             <div className="customer-auth-field">
 
-              <label htmlFor="customer-email">
+              <label htmlFor="login-email">
                 Email address
               </label>
 
-              <div className="customer-auth-input-wrap">
+              <div className="customer-auth-input">
 
                 <Mail
                   size={18}
                   strokeWidth={1.6}
-                  aria-hidden="true"
                 />
 
                 <input
-                  id="customer-email"
+                  id="login-email"
                   type="email"
                   value={email}
                   onChange={(event) =>
@@ -326,26 +652,27 @@ function Login() {
 
               <div className="customer-auth-label-row">
 
-                <label htmlFor="customer-password">
+                <label htmlFor="login-password">
                   Password
                 </label>
 
-                <Link to="/forgot-password">
+                <Link
+                  to="/forgot-password"
+                >
                   Forgot password?
                 </Link>
 
               </div>
 
-              <div className="customer-auth-input-wrap">
+              <div className="customer-auth-input">
 
                 <LockKeyhole
                   size={18}
                   strokeWidth={1.6}
-                  aria-hidden="true"
                 />
 
                 <input
-                  id="customer-password"
+                  id="login-password"
                   type={
                     showPassword
                       ? 'text'
@@ -431,6 +758,7 @@ function Login() {
           {/* SECURITY */}
 
           <div className="customer-auth-security">
+
             <ShieldCheck
               size={15}
               strokeWidth={1.6}
@@ -439,11 +767,13 @@ function Login() {
             <span>
               Secure customer authentication
             </span>
+
           </div>
 
           {/* REGISTER */}
 
           <div className="customer-auth-switch">
+
             <span>
               Don't have an account?
             </span>
@@ -455,6 +785,7 @@ function Login() {
             >
               Create an account
             </Link>
+
           </div>
 
         </div>
@@ -465,4 +796,4 @@ function Login() {
   )
 }
 
-export default Login
+export default CustomerLogin

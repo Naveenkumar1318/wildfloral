@@ -5,12 +5,87 @@ export type BookingCartItem = {
   quantity: number
 }
 
-function isBrowser() {
+/* =========================================================
+   BROWSER CHECK
+========================================================= */
+
+function isBrowser(): boolean {
   return (
     typeof window !== 'undefined' &&
     typeof window.localStorage !== 'undefined'
   )
 }
+
+/* =========================================================
+   CLEAN SERVICE ID
+========================================================= */
+
+function cleanServiceId(
+  serviceId: string,
+): string {
+  return typeof serviceId === 'string'
+    ? serviceId.trim()
+    : ''
+}
+
+/* =========================================================
+   CLEAN CART
+========================================================= */
+
+function cleanCart(
+  cart: BookingCartItem[],
+): BookingCartItem[] {
+  const result: BookingCartItem[] = []
+
+  for (const item of cart) {
+    if (
+      !item ||
+      typeof item.serviceId !== 'string'
+    ) {
+      continue
+    }
+
+    const serviceId =
+      cleanServiceId(item.serviceId)
+
+    if (!serviceId) {
+      continue
+    }
+
+    const quantity = Math.floor(
+      Number(item.quantity),
+    )
+
+    if (
+      !Number.isFinite(quantity) ||
+      quantity <= 0
+    ) {
+      continue
+    }
+
+    const existing =
+      result.find(
+        (entry) =>
+          entry.serviceId ===
+          serviceId,
+      )
+
+    if (existing) {
+      existing.quantity += quantity
+    } else {
+      result.push({
+        serviceId,
+        quantity,
+      })
+    }
+  }
+
+  return result
+}
+
+/* =========================================================
+   GET CART
+========================================================= */
 
 export function getBookingCart(): BookingCartItem[] {
   if (!isBrowser()) {
@@ -27,43 +102,83 @@ export function getBookingCart(): BookingCartItem[] {
       return []
     }
 
-    const parsed =
+    const parsed: unknown =
       JSON.parse(stored)
 
     if (!Array.isArray(parsed)) {
       return []
     }
 
-    return parsed.filter(
-      (item) =>
-        item &&
-        typeof item.serviceId ===
-          'string' &&
-        typeof item.quantity ===
-          'number' &&
-        item.quantity > 0,
-    )
+    const validItems =
+      parsed.filter(
+        (
+          item,
+        ): item is BookingCartItem => {
+          if (
+            !item ||
+            typeof item !== 'object'
+          ) {
+            return false
+          }
+
+          const value =
+            item as Partial<BookingCartItem>
+
+          return (
+            typeof value.serviceId ===
+              'string' &&
+            value.serviceId.trim()
+              .length > 0 &&
+            typeof value.quantity ===
+              'number' &&
+            Number.isFinite(
+              value.quantity,
+            ) &&
+            value.quantity > 0
+          )
+        },
+      )
+
+    return cleanCart(validItems)
   } catch {
     return []
   }
 }
 
+/* =========================================================
+   SAVE CART
+========================================================= */
+
 export function saveBookingCart(
   cart: BookingCartItem[],
-) {
+): void {
   if (!isBrowser()) {
     return
   }
 
+  const cleaned =
+    cleanCart(cart)
+
   window.localStorage.setItem(
     CART_KEY,
-    JSON.stringify(cart),
+    JSON.stringify(cleaned),
   )
 }
 
+/* =========================================================
+   ADD SERVICE
+========================================================= */
+
 export function addToBookingCart(
   serviceId: string,
-) {
+): BookingCartItem[] {
+  const cleanId =
+    cleanServiceId(serviceId)
+
+  if (!cleanId) {
+    return getBookingCart()
+  }
+
   const cart =
     getBookingCart()
 
@@ -71,42 +186,63 @@ export function addToBookingCart(
     cart.find(
       (item) =>
         item.serviceId ===
-        serviceId,
+        cleanId,
     )
 
   if (existing) {
     existing.quantity += 1
   } else {
     cart.push({
-      serviceId,
+      serviceId: cleanId,
       quantity: 1,
     })
   }
 
   saveBookingCart(cart)
 
-  return cart
+  return getBookingCart()
 }
+
+/* =========================================================
+   REMOVE SERVICE
+========================================================= */
 
 export function removeFromBookingCart(
   serviceId: string,
-) {
+): BookingCartItem[] {
+  const cleanId =
+    cleanServiceId(serviceId)
+
+  if (!cleanId) {
+    return getBookingCart()
+  }
+
   const cart =
     getBookingCart().filter(
       (item) =>
-        item.serviceId !==
-        serviceId,
+        item.serviceId !== cleanId,
     )
 
   saveBookingCart(cart)
 
-  return cart
+  return getBookingCart()
 }
+
+/* =========================================================
+   UPDATE QUANTITY
+========================================================= */
 
 export function updateBookingCartQuantity(
   serviceId: string,
   quantity: number,
-) {
+): BookingCartItem[] {
+  const cleanId =
+    cleanServiceId(serviceId)
+
+  if (!cleanId) {
+    return getBookingCart()
+  }
+
   const cart =
     getBookingCart()
 
@@ -114,27 +250,106 @@ export function updateBookingCartQuantity(
     cart.find(
       (entry) =>
         entry.serviceId ===
-        serviceId,
+        cleanId,
     )
 
   if (!item) {
     return cart
   }
 
-  if (quantity <= 0) {
+  const nextQuantity =
+    Math.floor(
+      Number(quantity),
+    )
+
+  if (
+    !Number.isFinite(
+      nextQuantity,
+    ) ||
+    nextQuantity <= 0
+  ) {
     return removeFromBookingCart(
-      serviceId,
+      cleanId,
     )
   }
 
-  item.quantity = quantity
+  item.quantity =
+    nextQuantity
 
   saveBookingCart(cart)
 
-  return cart
+  return getBookingCart()
 }
 
-export function clearBookingCart() {
+/* =========================================================
+   INCREASE QUANTITY
+========================================================= */
+
+export function increaseBookingCartQuantity(
+  serviceId: string,
+): BookingCartItem[] {
+  const cleanId =
+    cleanServiceId(serviceId)
+
+  if (!cleanId) {
+    return getBookingCart()
+  }
+
+  const item =
+    getBookingCart().find(
+      (entry) =>
+        entry.serviceId ===
+        cleanId,
+    )
+
+  if (!item) {
+    return addToBookingCart(
+      cleanId,
+    )
+  }
+
+  return updateBookingCartQuantity(
+    cleanId,
+    item.quantity + 1,
+  )
+}
+
+/* =========================================================
+   DECREASE QUANTITY
+========================================================= */
+
+export function decreaseBookingCartQuantity(
+  serviceId: string,
+): BookingCartItem[] {
+  const cleanId =
+    cleanServiceId(serviceId)
+
+  if (!cleanId) {
+    return getBookingCart()
+  }
+
+  const item =
+    getBookingCart().find(
+      (entry) =>
+        entry.serviceId ===
+        cleanId,
+    )
+
+  if (!item) {
+    return getBookingCart()
+  }
+
+  return updateBookingCartQuantity(
+    cleanId,
+    item.quantity - 1,
+  )
+}
+
+/* =========================================================
+   CLEAR CART
+========================================================= */
+
+export function clearBookingCart(): void {
   if (!isBrowser()) {
     return
   }
@@ -144,7 +359,11 @@ export function clearBookingCart() {
   )
 }
 
-export function getBookingCartCount() {
+/* =========================================================
+   CART COUNT
+========================================================= */
+
+export function getBookingCartCount(): number {
   return getBookingCart().reduce(
     (total, item) =>
       total + item.quantity,
@@ -152,8 +371,25 @@ export function getBookingCartCount() {
   )
 }
 
-export function hasBookingCartItems() {
-  return (
-    getBookingCart().length > 0
-  )
+/* =========================================================
+   HAS ITEMS
+========================================================= */
+
+export function hasBookingCartItems(): boolean {
+  return getBookingCart().length > 0
+}
+
+/* =========================================================
+   SERVICE IDS
+========================================================= */
+
+export function getBookingCartServiceIds(): string[] {
+  return [
+    ...new Set(
+      getBookingCart().map(
+        (item) =>
+          item.serviceId,
+      ),
+    ),
+  ]
 }

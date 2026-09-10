@@ -1,8 +1,8 @@
 import {
-  FormEvent,
   useEffect,
   useState,
 } from 'react'
+import type { FormEvent } from 'react'
 
 import {
   ArrowRight,
@@ -15,7 +15,7 @@ import {
 import {
   Link,
   useNavigate,
-} from 'react-router'
+} from 'react-router-dom'
 
 import { supabase } from '../../../lib/supabase'
 

@@ -1,20 +1,21 @@
 import {
-  FormEvent,
+  useEffect,
   useState,
 } from 'react'
+import type { FormEvent } from 'react'
 
 import {
   Link,
   useNavigate,
   useSearchParams,
-} from 'react-router'
+} from 'react-router-dom'
 
 import {
   Eye,
   EyeOff,
   LockKeyhole,
   Mail,
-  User,
+  UserRound,
   ArrowRight,
   ShieldCheck,
 } from 'lucide-react'
@@ -23,9 +24,8 @@ import { supabase } from '../../../lib/supabase'
 
 import './CustomerRegister.css'
 
-function Register() {
+function CustomerRegister() {
   const navigate = useNavigate()
-
   const [searchParams] =
     useSearchParams()
 
@@ -48,8 +48,10 @@ function Register() {
   const [showPassword, setShowPassword] =
     useState(false)
 
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false)
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false)
 
   const [loading, setLoading] =
     useState(false)
@@ -60,8 +62,169 @@ function Register() {
   const [error, setError] =
     useState('')
 
-  const [message, setMessage] =
+  const [success, setSuccess] =
     useState('')
+
+  /* =========================================================
+     URL ERROR
+  ========================================================= */
+
+  useEffect(() => {
+    const urlError =
+      searchParams.get('error')
+
+    setError('')
+    setSuccess('')
+
+    switch (urlError) {
+      case 'account_not_found':
+        setError(
+          'No customer account found. Please create your account first.',
+        )
+        break
+
+      case 'account_exists':
+        setError(
+          'You already have an account. Please sign in instead.',
+        )
+        break
+
+      case 'admin_account':
+        setError(
+          'This is an admin account. Please use the admin login.',
+        )
+        break
+
+      case 'registration_failed':
+        setError(
+          'Unable to create your account. Please try again.',
+        )
+        break
+
+      case 'profile_check_failed':
+        setError(
+          'Unable to verify your customer account. Please try again.',
+        )
+        break
+
+      case 'invalid_customer_account':
+        setError(
+          'This account cannot be registered as a customer.',
+        )
+        break
+
+      default:
+        break
+    }
+  }, [searchParams])
+
+  /* =========================================================
+     CHECK CURRENT SESSION
+  ========================================================= */
+
+  useEffect(() => {
+    let mounted = true
+
+    async function checkSession() {
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } =
+          await supabase.auth.getSession()
+
+        if (!mounted) {
+          return
+        }
+
+        if (sessionError) {
+          console.error(
+            'Registration session error:',
+            sessionError,
+          )
+
+          return
+        }
+
+        if (!session?.user) {
+          return
+        }
+
+        const {
+          data: profile,
+          error: profileError,
+        } =
+          await supabase
+            .from('profiles')
+            .select('id, role')
+            .eq(
+              'id',
+              session.user.id,
+            )
+            .maybeSingle()
+
+        if (!mounted) {
+          return
+        }
+
+        if (profileError) {
+          console.error(
+            'Registration profile error:',
+            profileError,
+          )
+
+          return
+        }
+
+        if (
+          profile?.role ===
+          'customer'
+        ) {
+          navigate(
+            redirect,
+            {
+              replace: true,
+            },
+          )
+
+          return
+        }
+
+        if (
+          profile?.role ===
+          'admin'
+        ) {
+          await supabase.auth.signOut()
+
+          if (!mounted) {
+            return
+          }
+
+          setError(
+            'This is an admin account. Please use the admin login.',
+          )
+        }
+      } catch (error) {
+        console.error(
+          'Registration session check failed:',
+          error,
+        )
+      }
+    }
+
+    void checkSession()
+
+    return () => {
+      mounted = false
+    }
+  }, [
+    navigate,
+    redirect,
+  ])
+
+  /* =========================================================
+     MANUAL REGISTRATION
+  ========================================================= */
 
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
@@ -69,25 +232,22 @@ function Register() {
     event.preventDefault()
 
     setError('')
-    setMessage('')
+    setSuccess('')
 
-    const name =
+    const cleanName =
       fullName.trim()
 
     const cleanEmail =
-      email.trim()
+      email.trim().toLowerCase()
 
-    if (!name) {
+    if (
+      !cleanName ||
+      !cleanEmail ||
+      !password ||
+      !confirmPassword
+    ) {
       setError(
-        'Please enter your full name.',
-      )
-
-      return
-    }
-
-    if (!cleanEmail) {
-      setError(
-        'Please enter your email address.',
+        'Please complete all required fields.',
       )
 
       return
@@ -101,7 +261,10 @@ function Register() {
       return
     }
 
-    if (password !== confirmPassword) {
+    if (
+      password !==
+      confirmPassword
+    ) {
       setError(
         'Passwords do not match.',
       )
@@ -112,6 +275,10 @@ function Register() {
     setLoading(true)
 
     try {
+      /* =====================================================
+         CREATE AUTH USER
+      ===================================================== */
+
       const {
         data,
         error: signUpError,
@@ -122,25 +289,59 @@ function Register() {
 
           options: {
             data: {
-              full_name: name,
+              full_name:
+                cleanName,
+
+              registration_method:
+                'customer_email',
             },
+
+            /*
+             * After email confirmation, return
+             * to the application.
+             */
+            emailRedirectTo:
+              `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
+                redirect,
+              )}&auth_mode=login`,
           },
         })
 
+      /* =====================================================
+         SIGNUP ERROR
+      ===================================================== */
+
       if (signUpError) {
-        const normalized =
+        console.error(
+          'Customer signup error:',
+          signUpError,
+        )
+
+        const message =
           signUpError.message.toLowerCase()
 
-        if (
-          normalized.includes(
+        const duplicate =
+          message.includes(
             'already registered',
           ) ||
-          normalized.includes(
+          message.includes(
             'already exists',
+          ) ||
+          message.includes(
+            'user already registered',
+          ) ||
+          message.includes(
+            'already been registered',
           )
-        ) {
-          setError(
-            'An account with this email already exists. Please sign in.',
+
+        if (duplicate) {
+          navigate(
+            `/login?redirect=${encodeURIComponent(
+              redirect,
+            )}&error=account_exists`,
+            {
+              replace: true,
+            },
           )
 
           return
@@ -154,22 +355,126 @@ function Register() {
         return
       }
 
-      if (data.session) {
-        navigate(redirect, {
-          replace: true,
-        })
+      /* =====================================================
+         SAFETY CHECK
+      ===================================================== */
+
+      if (!data.user) {
+        setError(
+          'Account could not be created. Please try again.',
+        )
 
         return
       }
 
-      setMessage(
-        'Account created. Please check your email to confirm your account.',
+      /*
+       * IMPORTANT:
+       *
+       * We DO NOT insert into profiles here.
+       *
+       * The database trigger creates the profile
+       * for email/password registrations.
+       */
+
+      /* =====================================================
+         EXISTING ACCOUNT PROTECTION
+      ===================================================== */
+
+      const identities =
+        data.user.identities ?? []
+
+      if (
+        identities.length === 0
+      ) {
+        navigate(
+          `/login?redirect=${encodeURIComponent(
+            redirect,
+          )}&error=account_exists`,
+          {
+            replace: true,
+          },
+        )
+
+        return
+      }
+
+      /* =====================================================
+         EMAIL CONFIRMATION ENABLED
+      ===================================================== */
+
+      if (!data.session) {
+        setSuccess(
+          'Account created successfully. Please check your email to confirm your account, then sign in.',
+        )
+
+        setFullName('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+
+        return
+      }
+
+      /* =====================================================
+         EMAIL CONFIRMATION DISABLED
+      ===================================================== */
+
+      const {
+        data: profile,
+        error: profileError,
+      } =
+        await supabase
+          .from('profiles')
+          .select(
+            'id, email, full_name, role',
+          )
+          .eq(
+            'id',
+            data.user.id,
+          )
+          .maybeSingle()
+
+      if (profileError) {
+        console.error(
+          'Customer profile verification error:',
+          profileError,
+        )
+
+        await supabase.auth.signOut()
+
+        setError(
+          'Your account was created, but the customer profile could not be verified.',
+        )
+
+        return
+      }
+
+      if (
+        !profile ||
+        profile.role !==
+          'customer'
+      ) {
+        await supabase.auth.signOut()
+
+        setError(
+          'Customer account setup could not be completed.',
+        )
+
+        return
+      }
+
+      navigate(
+        redirect,
+        {
+          replace: true,
+        },
+      )
+    } catch (error) {
+      console.error(
+        'Customer registration failed:',
+        error,
       )
 
-      setEmail('')
-      setPassword('')
-      setConfirmPassword('')
-    } catch {
       setError(
         'Unable to create your account. Please try again.',
       )
@@ -178,8 +483,13 @@ function Register() {
     }
   }
 
+  /* =========================================================
+     GOOGLE REGISTRATION
+  ========================================================= */
+
   async function handleGoogleRegister() {
     setError('')
+    setSuccess('')
     setGoogleLoading(true)
 
     try {
@@ -192,6 +502,19 @@ function Register() {
       callbackUrl.searchParams.set(
         'redirect',
         redirect,
+      )
+
+      /*
+       * IMPORTANT:
+       *
+       * This is CUSTOMER REGISTRATION.
+       *
+       * AuthCallback will create the profile
+       * after Google authentication succeeds.
+       */
+      callbackUrl.searchParams.set(
+        'auth_mode',
+        'register',
       )
 
       const {
@@ -212,6 +535,11 @@ function Register() {
         })
 
       if (googleError) {
+        console.error(
+          'Google registration error:',
+          googleError,
+        )
+
         setError(
           googleError.message ||
             'Google registration is unavailable.',
@@ -219,7 +547,12 @@ function Register() {
 
         setGoogleLoading(false)
       }
-    } catch {
+    } catch (error) {
+      console.error(
+        'Google registration exception:',
+        error,
+      )
+
       setError(
         'Unable to continue with Google.',
       )
@@ -238,7 +571,9 @@ function Register() {
       <section className="customer-register-intro">
 
         <div className="customer-register-shape register-shape-one" />
+
         <div className="customer-register-shape register-shape-two" />
+
         <div className="customer-register-shape register-shape-three" />
 
         <Link
@@ -270,7 +605,9 @@ function Register() {
           <div className="customer-register-features">
 
             <div>
-              <span>01</span>
+              <span>
+                01
+              </span>
 
               <p>
                 Manage your appointments
@@ -278,7 +615,9 @@ function Register() {
             </div>
 
             <div>
-              <span>02</span>
+              <span>
+                02
+              </span>
 
               <p>
                 Discover beauty services
@@ -286,7 +625,9 @@ function Register() {
             </div>
 
             <div>
-              <span>03</span>
+              <span>
+                03
+              </span>
 
               <p>
                 Explore custom fashion
@@ -306,9 +647,11 @@ function Register() {
       <section className="customer-register-form-area">
 
         <div className="customer-register-mobile-brand">
+
           <Link to="/">
             WildFloral
           </Link>
+
         </div>
 
         <div className="customer-register-container">
@@ -335,17 +678,19 @@ function Register() {
             <div
               className="customer-register-error"
               role="alert"
+              aria-live="polite"
             >
               {error}
             </div>
           )}
 
-          {message && (
+          {success && (
             <div
               className="customer-register-success"
               role="status"
+              aria-live="polite"
             >
-              {message}
+              {success}
             </div>
           )}
 
@@ -372,16 +717,24 @@ function Register() {
           </button>
 
           <div className="customer-register-divider">
+
             <span />
-            <small>OR</small>
+
+            <small>
+              OR
+            </small>
+
             <span />
+
           </div>
 
           {/* FORM */}
 
           <form
             className="customer-register-form"
-            onSubmit={handleSubmit}
+            onSubmit={
+              handleSubmit
+            }
           >
 
             {/* NAME */}
@@ -394,7 +747,7 @@ function Register() {
 
               <div className="customer-register-input">
 
-                <User
+                <UserRound
                   size={17}
                   strokeWidth={1.6}
                 />
@@ -515,9 +868,13 @@ function Register() {
                   }
                 >
                   {showPassword ? (
-                    <EyeOff size={17} />
+                    <EyeOff
+                      size={17}
+                    />
                   ) : (
-                    <Eye size={17} />
+                    <Eye
+                      size={17}
+                    />
                   )}
                 </button>
 
@@ -584,9 +941,13 @@ function Register() {
                   }
                 >
                   {showConfirmPassword ? (
-                    <EyeOff size={17} />
+                    <EyeOff
+                      size={17}
+                    />
                   ) : (
-                    <Eye size={17} />
+                    <Eye
+                      size={17}
+                    />
                   )}
                 </button>
 
@@ -661,4 +1022,4 @@ function Register() {
   )
 }
 
-export default Register
+export default CustomerRegister

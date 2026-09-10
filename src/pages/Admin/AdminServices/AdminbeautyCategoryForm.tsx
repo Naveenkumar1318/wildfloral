@@ -10,7 +10,7 @@ import type {
   PointerEvent,
   SyntheticEvent,
 } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../../../lib/supabase'
 import './AdminbeautyCategoryForm.css'
 

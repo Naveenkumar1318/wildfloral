@@ -1,0 +1,665 @@
+.booking-location-options {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    minmax(0, 1fr)
+  );
+  gap: 16px;
+}
+
+.booking-location-option {
+  min-height: 105px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+
+  border: 1px solid
+    var(--booking-border);
+  border-radius: 15px;
+
+  background: #fff;
+  color: var(--booking-heading);
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.booking-location-option:hover {
+  transform: translateY(-1px);
+  border-color:
+    var(--booking-purple);
+}
+
+.booking-location-option.active {
+  border-color:
+    var(--booking-purple);
+
+  background:
+    var(--booking-purple-light);
+
+  box-shadow:
+    0 8px 24px
+      rgba(109, 73, 224, 0.08);
+}
+
+.booking-location-icon {
+  width: 46px;
+  height: 46px;
+
+  flex: 0 0 auto;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background: #fff;
+
+  color:
+    var(--booking-purple);
+}
+
+.booking-location-copy {
+  min-width: 0;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.booking-location-copy strong {
+  font-size: 14px;
+}
+
+.booking-location-copy small {
+  color: var(--booking-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.booking-location-option > svg {
+  flex: 0 0 auto;
+  color:
+    var(--booking-purple);
+}
+
+/* =========================================================
+   STUDIO
+========================================================= */
+
+.booking-studio-info {
+  margin-top: 20px;
+  padding: 20px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  border: 1px solid
+    var(--booking-border);
+
+  border-radius: 14px;
+
+  background: #faf8fb;
+
+  color:
+    var(--booking-purple);
+}
+
+.booking-studio-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.booking-studio-info strong {
+  color: var(--booking-heading);
+  font-size: 14px;
+}
+
+.booking-studio-info span {
+  color: var(--booking-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   HOME SERVICE
+========================================================= */
+
+.booking-home-address {
+  margin-top: 20px;
+  padding: 20px;
+
+  border: 1px solid
+    var(--booking-border);
+
+  border-radius: 16px;
+
+  background: #faf8fb;
+}
+
+.booking-location-form-heading {
+  margin-bottom: 16px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.booking-location-form-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.booking-location-form-heading strong {
+  color: var(--booking-heading);
+  font-size: 15px;
+}
+
+.booking-location-form-heading span {
+  color: var(--booking-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   CURRENT LOCATION BUTTON
+========================================================= */
+
+.booking-current-location-button {
+  min-height: 38px;
+
+  padding: 0 13px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  flex: 0 0 auto;
+
+  border: 1px solid
+    var(--booking-purple);
+
+  border-radius: 9px;
+
+  background: #fff;
+
+  color:
+    var(--booking-purple);
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.booking-current-location-button:hover:not(
+    :disabled
+  ) {
+  background:
+    var(--booking-purple);
+
+  color: #fff;
+
+  transform: translateY(-1px);
+}
+
+.booking-current-location-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.booking-map-wrapper {
+  position: relative;
+
+  width: 100%;
+  height: 360px;
+
+  overflow: hidden;
+
+  border: 1px solid
+    var(--booking-border);
+
+  border-radius: 14px;
+
+  background: #e8e5eb;
+}
+
+.booking-map {
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+}
+
+/*
+ * Leaflet's default controls are intentionally
+ * kept above the map.
+ */
+
+.booking-map .leaflet-control {
+  z-index: 500;
+}
+
+.booking-map .leaflet-control-zoom {
+  border: 0;
+  box-shadow:
+    0 4px 14px
+      rgba(31, 23, 44, 0.12);
+}
+
+.booking-map .leaflet-control-zoom a {
+  color:
+    var(--booking-heading);
+}
+
+.booking-map .leaflet-control-attribution {
+  font-size: 9px;
+}
+
+/* =========================================================
+   MAP OVERLAY
+========================================================= */
+
+.booking-map-overlay {
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  z-index: 500;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 8px 11px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.8);
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.94);
+
+  color:
+    var(--booking-heading);
+
+  font-size: 11px;
+  font-weight: 600;
+
+  box-shadow:
+    0 4px 15px
+      rgba(31, 23, 44, 0.12);
+
+  pointer-events: none;
+}
+
+.booking-map-overlay svg {
+  color:
+    var(--booking-purple);
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   CUSTOM MAP MARKER
+========================================================= */
+
+.booking-map-marker-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.booking-map-marker {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50% 50% 50% 0;
+
+  background:
+    var(--booking-purple);
+
+  border: 3px solid #fff;
+
+  box-shadow:
+    0 5px 16px
+      rgba(76, 44, 180, 0.3);
+
+  transform:
+    rotate(-45deg);
+}
+
+.booking-map-marker-dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  transform:
+    rotate(45deg);
+}
+
+/* =========================================================
+   MAP STATUS
+========================================================= */
+
+.booking-map-status {
+  margin-top: 9px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color:
+    var(--booking-purple);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.booking-map-error {
+  margin-top: 9px;
+  padding: 10px 12px;
+
+  border: 1px solid
+    rgba(190, 72, 72, 0.2);
+
+  border-radius: 9px;
+
+  background:
+    rgba(190, 72, 72, 0.06);
+
+  color: #9b4141;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   SELECTED LOCATION
+========================================================= */
+
+.booking-selected-location {
+  margin-top: 16px;
+
+  padding: 18px;
+
+  border: 1px solid
+    var(--booking-border);
+
+  border-radius: 14px;
+
+  background: #fff;
+}
+
+.booking-selected-location-heading {
+  margin-bottom: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.booking-selected-location-heading > div {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color:
+    var(--booking-purple);
+}
+
+.booking-selected-location-heading
+  > div
+  > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.booking-selected-location-heading
+  strong {
+  color: var(--booking-heading);
+  font-size: 14px;
+}
+
+.booking-selected-location-heading
+  span {
+  color: var(--booking-muted);
+  font-size: 11px;
+}
+
+.booking-location-selected-badge {
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  background:
+    var(--booking-purple-light);
+
+  color:
+    var(--booking-purple) !important;
+
+  font-size: 10px !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.booking-home-address label {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.booking-home-address label > span {
+  color: var(--booking-heading);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.booking-home-address textarea,
+.booking-home-address input {
+  width: 100%;
+
+  border: 1px solid
+    var(--booking-border);
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  color: var(--booking-heading);
+
+  outline: none;
+
+  font: inherit;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.booking-home-address textarea {
+  min-height: 115px;
+
+  padding: 13px;
+
+  resize: vertical;
+}
+
+.booking-home-address input {
+  height: 46px;
+
+  padding: 0 13px;
+}
+
+.booking-home-address textarea:focus,
+.booking-home-address input:focus {
+  border-color:
+    var(--booking-purple);
+
+  box-shadow:
+    0 0 0 3px
+      rgba(126, 82, 145, 0.1);
+}
+
+.booking-home-address
+  .booking-form-grid {
+  margin-top: 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 15px;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.booking-spin {
+  animation:
+    booking-spin 0.9s linear
+    infinite;
+}
+
+@keyframes booking-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+  .booking-map-wrapper {
+    height: 330px;
+  }
+
+  .booking-location-form-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .booking-current-location-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  .booking-location-options {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-home-address {
+    padding: 14px;
+  }
+
+  .booking-map-wrapper {
+    height: 300px;
+  }
+
+  .booking-map-overlay {
+    left: 8px;
+    right: 8px;
+
+    justify-content: center;
+
+    text-align: center;
+  }
+
+  .booking-selected-location {
+    padding: 14px;
+  }
+
+  .booking-selected-location-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .booking-location-selected-badge {
+    align-self: flex-start;
+  }
+
+  .booking-home-address
+    .booking-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-location-option {
+    min-height: 90px;
+    padding: 14px;
+  }
+
+  .booking-location-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .booking-map-wrapper {
+    height: 270px;
+  }
+}

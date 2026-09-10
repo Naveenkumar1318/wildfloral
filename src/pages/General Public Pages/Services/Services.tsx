@@ -9,18 +9,78 @@ import {
   Link,
   useNavigate,
   useSearchParams,
-} from 'react-router'
+} from 'react-router-dom'
 
 import { supabase } from '../../../lib/supabase'
 import { assets } from '../../../assets/assets'
 
 import {
-  addServiceToPerson,
   loadBookingFlow,
+  saveBookingFlow,
   setBookingMode,
+  setBookingStep,
+  setSelectedServices as saveSelectedServices,
+  setServicePrices,
+  type BookingFlowState,
 } from '../../../lib/bookingFlow'
 
+
+import {
+  getBookingCartServiceIds,
+  addToBookingCart,
+  clearBookingCart,
+  removeFromBookingCart,
+} from '../../../lib/bookingCart'
+
 import './Services.css'
+
+/* =========================================================
+   ENQUIRY FLOW STORAGE
+========================================================= */
+
+const ENQUIRY_FLOW_STORAGE_KEY =
+  'wildfloral_enquiry_flow'
+
+function loadEnquiryFlow():
+  BookingFlowState | null {
+  try {
+    const raw =
+      window.localStorage.getItem(
+        ENQUIRY_FLOW_STORAGE_KEY,
+      )
+
+    if (!raw) {
+      return null
+    }
+
+    const parsed =
+      JSON.parse(raw) as BookingFlowState
+
+    if (
+      !parsed ||
+      parsed.mode !== 'enquiry' ||
+      !Array.isArray(parsed.people)
+    ) {
+      return null
+    }
+
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+function saveEnquiryFlow(
+  flow: BookingFlowState,
+) {
+  window.localStorage.setItem(
+    ENQUIRY_FLOW_STORAGE_KEY,
+    JSON.stringify({
+      ...flow,
+      mode: 'enquiry',
+    }),
+  )
+}
 
 /* =========================================================
    TYPES
@@ -50,7 +110,7 @@ type CategoryRow = {
   name: string
   slug: string
   description: string | null
-  is_active: boolean
+  image_url: string | null
 }
 
 type ServiceRow = {
@@ -62,7 +122,6 @@ type ServiceRow = {
   duration_minutes: number | null
   price: number | string
   image_url: string | null
-  is_active: boolean
 }
 
 type Offer = {
@@ -75,8 +134,12 @@ type Offer = {
   imageUrl: string | null
   startsAt: string
   endsAt: string | null
-  serviceId: string | null
-  categoryId: string | null
+  priority: number
+  scopeType: 'service' | 'category' | 'all'
+  appliesToAll: boolean
+  serviceIds: string[]
+  categoryIds: string[]
+  createdAt: string
 }
 
 type OfferRow = {
@@ -91,6 +154,22 @@ type OfferRow = {
   ends_at: string | null
   service_id: string | null
   category_id: string | null
+  is_active: boolean
+  priority: number | string | null
+  scope_type: 'service' | 'category' | 'all'
+  service_group: 'beauty' | 'fashion'
+  applies_to_all: boolean
+  created_at: string
+}
+
+type ServiceLinkRow = {
+  offer_id: string
+  service_id: string
+}
+
+type CategoryLinkRow = {
+  offer_id: string
+  category_id: string
 }
 
 /* =========================================================
@@ -98,6 +177,20 @@ type OfferRow = {
 ========================================================= */
 
 const ITEMS_PER_PAGE = 6
+
+function currentServiceIds(
+  serviceIds: readonly string[],
+): string[] {
+  return [
+    ...new Set(
+      serviceIds.filter(
+        (serviceId) =>
+          typeof serviceId === 'string' &&
+          serviceId.trim().length > 0,
+      ),
+    ),
+  ]
+}
 
 const SORT_OPTIONS = [
   {
@@ -189,53 +282,293 @@ function ClockIcon() {
   )
 }
 
-function SparkleIcon() {
+/* =========================================================
+   OFFER HELPERS
+========================================================= */
+
+function matchesOfferToService(
+  offer: Offer,
+  service: Service,
+) {
+  if (
+    offer.scopeType === 'all' ||
+    offer.appliesToAll
+  ) {
+    return true
+  }
+
+  if (
+    offer.scopeType === 'service'
+  ) {
+    return offer.serviceIds.includes(
+      service.id,
+    )
+  }
+
+  if (
+    offer.scopeType === 'category'
+  ) {
+    return (
+      Boolean(service.categoryId) &&
+      offer.categoryIds.includes(
+        service.categoryId,
+      )
+    )
+  }
+
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path
-        d="m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
+    offer.serviceIds.includes(
+      service.id,
+    ) ||
+    (
+      Boolean(service.categoryId) &&
+      offer.categoryIds.includes(
+        service.categoryId,
+      )
+    ) ||
+    (
+      offer.serviceIds.length === 0 &&
+      offer.categoryIds.length === 0
+    )
   )
 }
 
-function HeartIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path
-        d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.6 4.6 0 0 1 12 6.2a4.6 4.6 0 0 1 8.8 2.6Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+function getOfferScopeRank(
+  offer: Offer,
+  service: Service,
+) {
+  if (
+    offer.scopeType === 'service' &&
+    offer.serviceIds.includes(
+      service.id,
+    )
+  ) {
+    return 3
+  }
+
+  if (
+    offer.scopeType === 'category' &&
+    offer.categoryIds.includes(
+      service.categoryId,
+    )
+  ) {
+    return 2
+  }
+
+  if (
+    offer.scopeType === 'all' ||
+    offer.appliesToAll
+  ) {
+    return 1
+  }
+
+  return 0
+}
+
+function getApplicableOffer(
+  service: Service,
+  offers: Offer[],
+): Offer | null {
+  const now = new Date()
+
+  const applicableOffers =
+    offers.filter((offer) => {
+      if (
+        !matchesOfferToService(
+          offer,
+          service,
+        )
+      ) {
+        return false
+      }
+
+      const startDate =
+        new Date(
+          offer.startsAt,
+        )
+
+      const endDate =
+        offer.endsAt
+          ? new Date(
+              offer.endsAt,
+            )
+          : null
+
+      if (now < startDate) {
+        return false
+      }
+
+      if (
+        endDate &&
+        now > endDate
+      ) {
+        return false
+      }
+
+      return true
+    })
+
+  if (
+    applicableOffers.length === 0
+  ) {
+    return null
+  }
+
+  return [
+    ...applicableOffers,
+  ].sort(
+    (a, b) => {
+      const priorityDifference =
+        b.priority -
+        a.priority
+
+      if (
+        priorityDifference !== 0
+      ) {
+        return priorityDifference
+      }
+
+      const scopeDifference =
+        getOfferScopeRank(
+          b,
+          service,
+        ) -
+        getOfferScopeRank(
+          a,
+          service,
+        )
+
+      if (
+        scopeDifference !== 0
+      ) {
+        return scopeDifference
+      }
+
+      return (
+        new Date(
+          b.createdAt,
+        ).getTime() -
+        new Date(
+          a.createdAt,
+        ).getTime()
+      )
+    },
+  )[0]
+}
+
+/* =========================================================
+   DISCOUNT
+========================================================= */
+
+function calculateDiscount(
+  price: number,
+  offer: Offer | null,
+) {
+  if (!offer) {
+    return {
+      originalPrice: price,
+      discountAmount: 0,
+      finalPrice: price,
+    }
+  }
+
+  let discountAmount = 0
+
+  if (
+    offer.discountType ===
+    'percentage'
+  ) {
+    discountAmount =
+      price *
+      (offer.discountValue / 100)
+  } else {
+    discountAmount =
+      offer.discountValue
+  }
+
+  discountAmount = Math.min(
+    Math.max(
+      discountAmount,
+      0,
+    ),
+    price,
+  )
+
+  return {
+    originalPrice: price,
+    discountAmount,
+    finalPrice: Math.max(
+      price - discountAmount,
+      0,
+    ),
+  }
+}
+
+function discountText(
+  offer: Offer,
+) {
+  if (
+    offer.discountType ===
+    'percentage'
+  ) {
+    return `${offer.discountValue}% OFF`
+  }
+
+  return `₹${Math.round(
+    offer.discountValue,
+  ).toLocaleString('en-IN')} OFF`
+}
+
+function formatPrice(
+  value: number,
+) {
+  return `₹${Math.round(
+    value,
+  ).toLocaleString('en-IN')}`
+}
+
+function formatOfferDate(
+  date: string | null,
+) {
+  if (!date) {
+    return null
+  }
+
+  const parsedDate =
+    new Date(date)
+
+  if (
+    Number.isNaN(
+      parsedDate.getTime(),
+    )
+  ) {
+    return null
+  }
+
+  return parsedDate.toLocaleDateString(
+    'en-IN',
+    {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    },
   )
 }
 
 /* =========================================================
-   SERVICES PAGE
+   MAIN COMPONENT
 ========================================================= */
 
 function Services() {
-  const navigate = useNavigate()
+  const navigate =
+    useNavigate()
 
   const [
     searchParams,
     setSearchParams,
   ] = useSearchParams()
 
+  
   const categoryParam =
     searchParams.get('category')
 
@@ -249,6 +582,10 @@ function Services() {
     modeParam === 'enquiry'
       ? 'enquiry'
       : 'booking'
+
+  /* =======================================================
+     STATE
+  ======================================================= */
 
   const [
     services,
@@ -306,10 +643,14 @@ function Services() {
   ] = useState(false)
 
   const sortRef =
-    useRef<HTMLDivElement | null>(null)
+    useRef<HTMLDivElement | null>(
+      null,
+    )
 
   const categoryScrollRef =
-    useRef<HTMLDivElement | null>(null)
+    useRef<HTMLDivElement | null>(
+      null,
+    )
 
   const [
     categoryCanScrollLeft,
@@ -346,7 +687,7 @@ function Services() {
               name,
               slug,
               description,
-              is_active
+              image_url
             `,
           )
           .eq('is_active', true)
@@ -365,8 +706,7 @@ function Services() {
               description,
               duration_minutes,
               price,
-              image_url,
-              is_active
+              image_url
             `,
           )
           .eq('is_active', true)
@@ -395,61 +735,74 @@ function Services() {
         (serviceResult.data ??
           []) as ServiceRow[]
 
-      const mappedServices =
-        serviceRows.map((row) => {
-          const category =
-            categoryRows.find(
-              (item) =>
-                item.id ===
-                row.category_id,
-            )
+      const categoryMap =
+        new Map(
+          categoryRows.map(
+            (row) => [
+              row.id,
+              row,
+            ],
+          ),
+        )
 
-          return {
-            id: row.id,
-            categoryId:
-              row.category_id ?? '',
-            category:
-              category?.name ??
-              row.category ??
-              'Beauty',
-            name: row.name,
-            description:
-              row.description ?? '',
-            duration:
-              row.duration_minutes
-                ? `${row.duration_minutes} min`
-                : 'By consultation',
-            price: Number(row.price),
-            image:
-              row.image_url ||
-              assets.hero,
-          }
-        })
-
-      const mappedCategories =
-        categoryRows.map((row) => {
-          const categoryService =
-            mappedServices.find(
-              (service) =>
-                service.categoryId ===
-                row.id,
-            )
-
-          return {
+      setCategories(
+        categoryRows.map(
+          (row) => ({
             id: row.id,
             name: row.name,
             slug: row.slug,
             description:
               row.description,
             image:
-              categoryService?.image ||
+              row.image_url ||
               assets.hero,
-          }
-        })
+          }),
+        ),
+      )
 
-      setServices(mappedServices)
-      setCategories(mappedCategories)
-    } catch (loadError) {
+      setServices(
+        serviceRows.map(
+          (row) => {
+            const category =
+              row.category_id
+                ? categoryMap.get(
+                    row.category_id,
+                  )
+                : undefined
+
+            return {
+              id: row.id,
+              categoryId:
+                row.category_id ??
+                '',
+              category:
+                category?.name ??
+                row.category ??
+                'Beauty',
+              name: row.name,
+              description:
+                row.description ??
+                '',
+              duration:
+                row.duration_minutes &&
+                row.duration_minutes >
+                  0
+                  ? `${row.duration_minutes} min`
+                  : 'By consultation',
+              price:
+                Number(
+                  row.price,
+                ) || 0,
+              image:
+                row.image_url ||
+                assets.hero,
+            }
+          },
+        ),
+      )
+    } catch (
+      loadError
+    ) {
       setError(
         loadError instanceof Error
           ? loadError.message
@@ -475,79 +828,229 @@ function Services() {
       const now =
         new Date().toISOString()
 
-      const {
-        data,
-        error: offerError,
-      } = await supabase
-        .from('offers')
-        .select(
-          `
-            id,
-            title,
-            description,
-            discount_type,
-            discount_value,
-            promo_code,
-            image_url,
-            starts_at,
-            ends_at,
-            service_id,
-            category_id
-          `,
-        )
-        .eq('is_active', true)
-        .lte('starts_at', now)
-        .or(
-          `ends_at.is.null,ends_at.gte.${now}`,
-        )
-        .order('created_at', {
-          ascending: false,
-        })
+      const [
+        offerResult,
+        serviceLinksResult,
+        categoryLinksResult,
+      ] = await Promise.all([
+        supabase
+          .from('offers')
+          .select(
+            `
+              id,
+              title,
+              description,
+              discount_type,
+              discount_value,
+              promo_code,
+              image_url,
+              starts_at,
+              ends_at,
+              service_id,
+              category_id,
+              is_active,
+              priority,
+              scope_type,
+              service_group,
+              applies_to_all,
+              created_at
+            `,
+          )
+          .eq('is_active', true)
+          .eq('service_group', 'beauty')
+          .lte('starts_at', now)
+          .or(
+            `ends_at.is.null,ends_at.gte.${now}`,
+          )
+          .order('priority', {
+            ascending: false,
+          })
+          .order('created_at', {
+            ascending: false,
+          }),
 
-      if (offerError) {
-        console.error(
-          'Offers:',
-          offerError.message,
+        supabase
+          .from('offer_services')
+          .select(
+            `
+              offer_id,
+              service_id
+            `,
+          ),
+
+        supabase
+          .from('offer_categories')
+          .select(
+            `
+              offer_id,
+              category_id
+            `,
+          ),
+      ])
+
+      if (offerResult.error) {
+        throw new Error(
+          offerResult.error.message,
         )
+      }
 
-        setOffers([])
+      if (
+        serviceLinksResult.error
+      ) {
+        throw new Error(
+          serviceLinksResult.error.message,
+        )
+      }
 
-        return
+      if (
+        categoryLinksResult.error
+      ) {
+        throw new Error(
+          categoryLinksResult.error.message,
+        )
       }
 
       const rows =
-        (data ?? []) as OfferRow[]
+        (offerResult.data ??
+          []) as OfferRow[]
+
+      const serviceLinks =
+        (serviceLinksResult.data ??
+          []) as ServiceLinkRow[]
+
+      const categoryLinks =
+        (categoryLinksResult.data ??
+          []) as CategoryLinkRow[]
 
       const mappedOffers =
-        rows.map((row) => ({
-          id: row.id,
-          title: row.title,
-          description:
-            row.description ?? '',
-          discountType:
-            row.discount_type,
-          discountValue: Number(
-            row.discount_value,
-          ),
-          promoCode:
-            row.promo_code,
-          imageUrl:
-            row.image_url,
-          startsAt:
-            row.starts_at,
-          endsAt:
-            row.ends_at,
-          serviceId:
-            row.service_id,
-          categoryId:
-            row.category_id,
-        }))
+        rows.map(
+          (row) => {
+            const serviceIds =
+              serviceLinks
+                .filter(
+                  (link) =>
+                    link.offer_id ===
+                    row.id,
+                )
+                .map(
+                  (link) =>
+                    link.service_id,
+                )
 
-      setOffers(mappedOffers)
-    } catch (offerError) {
+            const categoryIds =
+              categoryLinks
+                .filter(
+                  (link) =>
+                    link.offer_id ===
+                    row.id,
+                )
+                .map(
+                  (link) =>
+                    link.category_id,
+                )
+
+            if (
+              row.service_id &&
+              !serviceIds.includes(
+                row.service_id,
+              )
+            ) {
+              serviceIds.push(
+                row.service_id,
+              )
+            }
+
+            if (
+              row.category_id &&
+              !categoryIds.includes(
+                row.category_id,
+              )
+            ) {
+              categoryIds.push(
+                row.category_id,
+              )
+            }
+
+            return {
+              id: row.id,
+              title: row.title,
+              description:
+                row.description ??
+                '',
+              discountType:
+                row.discount_type,
+              discountValue:
+                Number(
+                  row.discount_value,
+                ) || 0,
+              promoCode:
+                row.promo_code,
+              imageUrl:
+                row.image_url,
+              startsAt:
+                row.starts_at,
+              endsAt:
+                row.ends_at,
+              priority:
+                Number(
+                  row.priority ??
+                    0,
+                ),
+              scopeType:
+                row.scope_type,
+              appliesToAll:
+                Boolean(
+                  row.applies_to_all,
+                ),
+              serviceIds: [
+                ...new Set(
+                  serviceIds,
+                ),
+              ],
+              categoryIds: [
+                ...new Set(
+                  categoryIds,
+                ),
+              ],
+              createdAt:
+                row.created_at,
+            }
+          },
+        )
+
+      mappedOffers.sort(
+        (a, b) => {
+          const priorityDifference =
+            b.priority -
+            a.priority
+
+          if (
+            priorityDifference !==
+            0
+          ) {
+            return priorityDifference
+          }
+
+          return (
+            new Date(
+              b.createdAt,
+            ).getTime() -
+            new Date(
+              a.createdAt,
+            ).getTime()
+          )
+        },
+      )
+
+      setOffers(
+        mappedOffers,
+      )
+    } catch (
+      loadError
+    ) {
       console.error(
         'Offers:',
-        offerError,
+        loadError,
       )
 
       setOffers([])
@@ -557,14 +1060,50 @@ function Services() {
   }
 
   /* =======================================================
-     LOAD PERSON SERVICES
+     LOAD ASSIGNED SERVICES
   ======================================================= */
 
-  useEffect(() => {
-    if (!assignTo) {
+  /* =======================================================
+   RESTORE SAVED SELECTION
+======================================================= */
+
+useEffect(() => {
+  /*
+   * ENQUIRY MODE
+   *
+   * Enquiry data lives in:
+   * wildfloral_enquiry_flow
+   */
+  if (mode === 'enquiry') {
+    const enquiry =
+      loadEnquiryFlow()
+
+    if (!enquiry) {
+      setSelectedServices([])
       return
     }
 
+    const targetPersonId =
+      assignTo ??
+      enquiry.people[0]?.id
+
+    const person =
+      enquiry.people.find(
+        (item) =>
+          item.id === targetPersonId,
+      )
+
+    setSelectedServices(
+      person?.serviceIds ?? [],
+    )
+
+    return
+  }
+
+  /*
+   * NORMAL BOOKING MODE
+   */
+  if (assignTo) {
     const booking =
       loadBookingFlow()
 
@@ -582,7 +1121,51 @@ function Services() {
     setSelectedServices(
       person?.serviceIds ?? [],
     )
-  }, [assignTo])
+
+    return
+  }
+
+  const savedServiceIds =
+    getBookingCartServiceIds()
+
+  setSelectedServices(
+    savedServiceIds,
+  )
+}, [
+  assignTo,
+  mode,
+])
+
+  /* =======================================================
+     SORT MENU
+  ======================================================= */
+
+  useEffect(() => {
+    function handleOutsideClick(
+      event: MouseEvent,
+    ) {
+      if (
+        sortRef.current &&
+        !sortRef.current.contains(
+          event.target as Node,
+        )
+      ) {
+        setSortOpen(false)
+      }
+    }
+
+    document.addEventListener(
+      'mousedown',
+      handleOutsideClick,
+    )
+
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        handleOutsideClick,
+      )
+    }
+  }, [])
 
   /* =======================================================
      ACTIVE CATEGORY
@@ -607,7 +1190,7 @@ function Services() {
     ])
 
   /* =======================================================
-     FILTER SERVICES
+     FILTER + SORT
   ======================================================= */
 
   const filteredServices =
@@ -619,24 +1202,72 @@ function Services() {
                 service.categoryId ===
                 activeCategory.id,
             )
-          : services
+          : [...services]
 
-      if (sortBy === 'price-low') {
-        result = [...result].sort(
-          (a, b) =>
-            a.price - b.price,
+      if (
+        sortBy === 'price-low'
+      ) {
+        result.sort(
+          (a, b) => {
+            const aPrice =
+              calculateDiscount(
+                a.price,
+                getApplicableOffer(
+                  a,
+                  offers,
+                ),
+              ).finalPrice
+
+            const bPrice =
+              calculateDiscount(
+                b.price,
+                getApplicableOffer(
+                  b,
+                  offers,
+                ),
+              ).finalPrice
+
+            return (
+              aPrice - bPrice
+            )
+          },
         )
       }
 
-      if (sortBy === 'price-high') {
-        result = [...result].sort(
-          (a, b) =>
-            b.price - a.price,
+      if (
+        sortBy === 'price-high'
+      ) {
+        result.sort(
+          (a, b) => {
+            const aPrice =
+              calculateDiscount(
+                a.price,
+                getApplicableOffer(
+                  a,
+                  offers,
+                ),
+              ).finalPrice
+
+            const bPrice =
+              calculateDiscount(
+                b.price,
+                getApplicableOffer(
+                  b,
+                  offers,
+                ),
+              ).finalPrice
+
+            return (
+              bPrice - aPrice
+            )
+          },
         )
       }
 
-      if (sortBy === 'name-az') {
-        result = [...result].sort(
+      if (
+        sortBy === 'name-az'
+      ) {
+        result.sort(
           (a, b) =>
             a.name.localeCompare(
               b.name,
@@ -644,8 +1275,10 @@ function Services() {
         )
       }
 
-      if (sortBy === 'name-za') {
-        result = [...result].sort(
+      if (
+        sortBy === 'name-za'
+      ) {
+        result.sort(
           (a, b) =>
             b.name.localeCompare(
               a.name,
@@ -658,6 +1291,7 @@ function Services() {
       services,
       activeCategory,
       sortBy,
+      offers,
     ])
 
   /* =======================================================
@@ -674,11 +1308,12 @@ function Services() {
     )
 
   useEffect(() => {
-    setCurrentPage((current) =>
-      Math.min(
-        current,
-        totalPages,
-      ),
+    setCurrentPage(
+      (current) =>
+        Math.min(
+          current,
+          totalPages,
+        ),
     )
   }, [totalPages])
 
@@ -697,7 +1332,8 @@ function Services() {
 
       return filteredServices.slice(
         start,
-        start + ITEMS_PER_PAGE,
+        start +
+          ITEMS_PER_PAGE,
       )
     }, [
       filteredServices,
@@ -705,16 +1341,17 @@ function Services() {
     ])
 
   /* =======================================================
-     SELECTED SERVICES
+     SELECTION
   ======================================================= */
 
   const selectedServiceObjects =
     useMemo(
       () =>
-        services.filter((service) =>
-          selectedServices.includes(
-            service.id,
-          ),
+        services.filter(
+          (service) =>
+            selectedServices.includes(
+              service.id,
+            ),
         ),
       [
         services,
@@ -724,9 +1361,60 @@ function Services() {
 
   const selectedTotal =
     selectedServiceObjects.reduce(
-      (total, service) =>
-        total + service.price,
+      (
+        total,
+        service,
+      ) => {
+        const offer =
+          getApplicableOffer(
+            service,
+            offers,
+          )
+
+        return (
+          total +
+          calculateDiscount(
+            service.price,
+            offer,
+          ).finalPrice
+        )
+      },
       0,
+    )
+
+  /* =======================================================
+     PROMOTIONS
+  ======================================================= */
+
+  const displayedOffers =
+    useMemo(
+      () =>
+        [...offers]
+          .sort(
+            (a, b) => {
+              const priorityDifference =
+                b.priority -
+                a.priority
+
+              if (
+                priorityDifference !==
+                0
+              ) {
+                return priorityDifference
+              }
+
+              return (
+                new Date(
+                  b.createdAt,
+                ).getTime() -
+                new Date(
+                  a.createdAt,
+                ).getTime()
+              )
+            },
+          )
+          .slice(0, 2),
+      [offers],
     )
 
   /* =======================================================
@@ -756,7 +1444,9 @@ function Services() {
   }
 
   function scrollCategories(
-    direction: 'left' | 'right',
+    direction:
+      | 'left'
+      | 'right',
   ) {
     const element =
       categoryScrollRef.current
@@ -767,8 +1457,9 @@ function Services() {
 
     const amount =
       Math.max(
-        element.clientWidth * 0.72,
-        360,
+        element.clientWidth *
+          0.72,
+        260,
       )
 
     element.scrollBy({
@@ -781,6 +1472,8 @@ function Services() {
   }
 
   useEffect(() => {
+    updateCategoryScrollState()
+
     const element =
       categoryScrollRef.current
 
@@ -792,11 +1485,10 @@ function Services() {
       () =>
         updateCategoryScrollState()
 
-    const handleResize =
-      () =>
-        updateCategoryScrollState()
-
-    updateCategoryScrollState()
+    window.addEventListener(
+      'resize',
+      updateCategoryScrollState,
+    )
 
     element.addEventListener(
       'scroll',
@@ -806,20 +1498,15 @@ function Services() {
       },
     )
 
-    window.addEventListener(
-      'resize',
-      handleResize,
-    )
-
     return () => {
+      window.removeEventListener(
+        'resize',
+        updateCategoryScrollState,
+      )
+
       element.removeEventListener(
         'scroll',
         handleScroll,
-      )
-
-      window.removeEventListener(
-        'resize',
-        handleResize,
       )
     }
   }, [
@@ -832,66 +1519,83 @@ function Services() {
   ======================================================= */
 
   function selectAllServices() {
-    const params: Record<
-      string,
-      string
-    > = {}
+    const params =
+      new URLSearchParams()
 
     if (assignTo) {
-      params.assignTo = assignTo
+      params.set(
+        'assignTo',
+        assignTo,
+      )
     }
 
     if (modeParam) {
-      params.mode = mode
+      params.set(
+        'mode',
+        mode,
+      )
     }
 
     setSearchParams(params)
-
     setCurrentPage(1)
 
-    document
-      .getElementById('service-list')
-      ?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
+    window.setTimeout(() => {
+      document
+        .getElementById(
+          'service-list',
+        )
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+    }, 0)
   }
 
   function selectCategory(
     category: Category,
   ) {
-    const params: Record<
-      string,
-      string
-    > = {
-      category: category.slug,
-    }
+    const params =
+      new URLSearchParams()
+
+    params.set(
+      'category',
+      category.slug,
+    )
 
     if (assignTo) {
-      params.assignTo = assignTo
+      params.set(
+        'assignTo',
+        assignTo,
+      )
     }
 
     if (modeParam) {
-      params.mode = mode
+      params.set(
+        'mode',
+        mode,
+      )
     }
 
     setSearchParams(params)
-
     setCurrentPage(1)
 
-    document
-      .getElementById('service-list')
-      ?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
+    window.setTimeout(() => {
+      document
+        .getElementById(
+          'service-list',
+        )
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+    }, 0)
   }
 
   /* =======================================================
-     SERVICE SELECTION
+     SERVICE ACTIONS
   ======================================================= */
 
-  function isServiceSelected(
+    function isServiceSelected(
     serviceId: string,
   ) {
     return selectedServices.includes(
@@ -899,198 +1603,586 @@ function Services() {
     )
   }
 
-  function toggleService(
-    serviceId: string,
-  ) {
-    setSelectedServices(
-      (current) =>
-        current.includes(serviceId)
-          ? current.filter(
-              (id) =>
-                id !== serviceId,
-            )
-          : [
-              ...current,
-              serviceId,
-            ],
+function saveServicePrice(
+  serviceId: string,
+) {
+  const service =
+    services.find(
+      (item) =>
+        item.id === serviceId,
     )
+
+  if (!service) {
+    return
   }
 
-  function clearSelection() {
-    setSelectedServices([])
+  const booking =
+    loadBookingFlow()
+
+  const offer =
+  getApplicableOffer(
+    service,
+    offers,
+  )
+
+  const pricing =
+    calculateDiscount(
+      service.price,
+      offer,
+    )
+
+  const currentPrices =
+    booking?.servicePrices ??
+    {}
+
+  setServicePrices({
+    ...currentPrices,
+    [serviceId]:
+      pricing.finalPrice,
+  })
+}
+
+function toggleService(
+  serviceId: string,
+) {
+  setError('')
+
+  /*
+   * =====================================================
+   * ENQUIRY SERVICE ASSIGNMENT
+   * =====================================================
+   */
+  if (mode === 'enquiry') {
+    const enquiry =
+      loadEnquiryFlow()
+
+    if (!enquiry) {
+      setError(
+        'Your enquiry session has expired. Please return to the enquiry.',
+      )
+
+      return
+    }
+
+    const targetPersonId =
+      assignTo ??
+      enquiry.people[0]?.id
+
+    if (!targetPersonId) {
+      setError(
+        'No enquiry person is available.',
+      )
+
+      return
+    }
+
+    const person =
+      enquiry.people.find(
+        (item) =>
+          item.id === targetPersonId,
+      )
+
+    if (!person) {
+      setError(
+        'The selected enquiry person could not be found.',
+      )
+
+      return
+    }
+
+    const currentIds =
+      currentServiceIds(
+        person.serviceIds ?? [],
+      )
+
+    const isSelected =
+      currentIds.includes(
+        serviceId,
+      )
+
+    const nextIds =
+      isSelected
+        ? currentIds.filter(
+            (id) =>
+              id !== serviceId,
+          )
+        : [
+            ...currentIds,
+            serviceId,
+          ]
+
+    const nextEnquiry: BookingFlowState = {
+      ...enquiry,
+      mode: 'enquiry',
+      people:
+        enquiry.people.map(
+          (item) =>
+            item.id === targetPersonId
+              ? {
+                  ...item,
+                  serviceIds: nextIds,
+                }
+              : item,
+        ),
+    }
+
+    saveEnquiryFlow(
+      nextEnquiry,
+    )
+
+    setSelectedServices(
+      nextIds,
+    )
+
+    return
   }
 
-  /* =======================================================
-     ASSIGN SERVICE TO PERSON
-  ======================================================= */
-
-  function addSelectedServiceToPerson(
-    serviceId: string,
-  ) {
-    setError('')
-
+  /*
+   * =====================================================
+   * NORMAL BOOKING PERSON ASSIGNMENT
+   * =====================================================
+   */
+  if (assignTo) {
     const booking =
       loadBookingFlow()
 
     if (!booking) {
       setError(
-        'Your booking session could not be found. Please start again from the booking page.',
+        'Your booking session has expired. Please return to your booking.',
       )
-
-      navigate('/booking')
 
       return
     }
 
-    if (!assignTo) {
-      toggleService(serviceId)
+    const targetPersonId =
+      assignTo ??
+      booking.people[0]?.id
+
+    if (!targetPersonId) {
+      setError(
+        'No person is available for service selection.',
+      )
+
       return
     }
 
     const person =
       booking.people.find(
         (item) =>
-          item.id === assignTo,
+          item.id ===
+          targetPersonId,
       )
 
     if (!person) {
       setError(
-        'The selected person could not be found. Please return to your booking.',
+        'The selected booking person could not be found.',
       )
 
       return
     }
 
-    const alreadyAdded =
-      person.serviceIds.includes(
+    const currentIds =
+      currentServiceIds(
+        person.serviceIds ?? [],
+      )
+
+    const isSelected =
+      currentIds.includes(
         serviceId,
       )
 
-    let nextBooking = booking
+    const nextIds =
+      isSelected
+        ? currentIds.filter(
+            (id) =>
+              id !== serviceId,
+          )
+        : [
+            ...currentIds,
+            serviceId,
+          ]
 
-    /*
-     * Clicking an already assigned service
-     * removes it from that person.
-     */
-    if (alreadyAdded) {
-      nextBooking = {
-        ...booking,
-        people:
-          booking.people.map(
-            (item) =>
-              item.id === assignTo
-                ? {
-                    ...item,
-                    serviceIds:
-                      item.serviceIds.filter(
-                        (id) =>
-                          id !==
-                          serviceId,
-                      ),
-                  }
-                : item,
-          ),
-      }
-
-      /*
-       * Save the updated state.
-       */
-      if (
-        typeof window !==
-        'undefined'
-      ) {
-        window.localStorage.setItem(
-          'wildfloral_booking_flow',
-          JSON.stringify(
-            nextBooking,
-          ),
-        )
-      }
-    } else {
-      /*
-       * Add service to this exact person.
-       */
-      nextBooking =
-        addServiceToPerson(
-          assignTo,
-          serviceId,
-        )
-    }
-
-    /*
-     * Keep booking/enquiry mode correct.
-     */
-    setBookingMode(mode)
-
-    const latestBooking =
-      loadBookingFlow()
-
-    if (latestBooking) {
-      nextBooking =
-        latestBooking
-    }
-
-    const updatedPerson =
-      nextBooking.people.find(
+    const nextPeople =
+      booking.people.map(
         (item) =>
-          item.id === assignTo,
+          item.id ===
+          targetPersonId
+            ? {
+                ...item,
+                serviceIds:
+                  nextIds,
+              }
+            : item,
       )
 
+    const nextBooking: BookingFlowState = {
+      ...booking,
+
+      mode: 'booking',
+
+      people:
+        nextPeople,
+    }
+
+    saveBookingFlow(
+      nextBooking,
+    )
+
     setSelectedServices(
-      updatedPerson?.serviceIds ?? [],
+      nextIds,
+    )
+
+    /*
+     * Recalculate price for the newly selected
+     * service without touching bookingCart.
+     */
+    if (!isSelected) {
+      saveServicePrice(
+        serviceId,
+      )
+    } else {
+      const currentPrices =
+        nextBooking.servicePrices ??
+        {}
+
+      const {
+        [serviceId]:
+          _removedPrice,
+        ...remainingPrices
+      } = currentPrices
+
+      setServicePrices(
+        remainingPrices,
+      )
+
+      saveBookingFlow({
+        ...nextBooking,
+        servicePrices:
+          remainingPrices,
+      })
+    }
+
+    return
+  }
+
+  /*
+   * =====================================================
+   * NORMAL PUBLIC BOOKING SELECTION
+   * =====================================================
+   *
+   * ONLY normal /services selection uses bookingCart.
+   */
+
+  const selectedCurrentServiceIds =
+    currentServiceIds(
+      getBookingCartServiceIds(),
+    )
+
+  const isSelected =
+    selectedCurrentServiceIds.includes(
+      serviceId,
+    )
+
+  if (isSelected) {
+    removeFromBookingCart(
+      serviceId,
+    )
+
+    const booking =
+      loadBookingFlow()
+
+    if (booking) {
+      const nextPeople =
+        booking.people.map(
+          (person) =>
+            person.id ===
+            booking.people[0]?.id
+              ? {
+                  ...person,
+                  serviceIds:
+                    person.serviceIds.filter(
+                      (id) =>
+                        id !==
+                        serviceId,
+                    ),
+                }
+              : person,
+        )
+
+      const currentPrices =
+        booking.servicePrices ??
+        {}
+
+      const {
+        [serviceId]:
+          _removedPrice,
+        ...remainingPrices
+      } = currentPrices
+
+      saveBookingFlow({
+        ...booking,
+        mode: 'booking',
+        people:
+          nextPeople,
+        servicePrices:
+          remainingPrices,
+      })
+
+      setServicePrices(
+        remainingPrices,
+      )
+    }
+
+    setSelectedServices(
+      selectedCurrentServiceIds.filter(
+        (id) =>
+          id !== serviceId,
+      ),
+    )
+
+    return
+  }
+
+  /*
+   * Add new service.
+   */
+
+  addToBookingCart(
+    serviceId,
+  )
+
+  saveServicePrice(
+    serviceId,
+  )
+
+  setSelectedServices([
+    ...selectedCurrentServiceIds,
+    serviceId,
+  ])
+}
+function clearSelection() {
+  /*
+   * =====================================================
+   * ENQUIRY
+   * =====================================================
+   */
+
+  if (mode === 'enquiry') {
+    const enquiry =
+      loadEnquiryFlow()
+
+    if (!enquiry) {
+      setSelectedServices([])
+      return
+    }
+
+    const targetPersonId =
+      assignTo ??
+      enquiry.people[0]?.id
+
+    const nextEnquiry: BookingFlowState = {
+      ...enquiry,
+      mode: 'enquiry',
+      people:
+        enquiry.people.map(
+          (person) =>
+            person.id === targetPersonId
+              ? {
+                  ...person,
+                  serviceIds: [],
+                }
+              : person,
+        ),
+    }
+
+    saveEnquiryFlow(
+      nextEnquiry,
+    )
+
+    setSelectedServices([])
+
+    return
+  }
+
+  /*
+   * =====================================================
+   * NORMAL BOOKING PERSON ASSIGNMENT
+   * =====================================================
+   */
+  if (assignTo) {
+    const booking =
+      loadBookingFlow()
+
+    if (!booking) {
+      setSelectedServices([])
+      setServicePrices({})
+      return
+    }
+
+    const targetPersonId =
+      assignTo ??
+      booking.people[0]?.id
+
+    const nextPeople =
+      booking.people.map(
+        (person) =>
+          person.id ===
+          targetPersonId
+            ? {
+                ...person,
+                serviceIds: [],
+              }
+            : person,
+      )
+
+    const nextBooking: BookingFlowState = {
+      ...booking,
+      mode: 'booking',
+
+      people:
+        nextPeople,
+
+      servicePrices: {},
+    }
+
+    saveBookingFlow(
+      nextBooking,
+    )
+
+    setSelectedServices([])
+
+    setServicePrices({})
+
+    return
+  }
+
+  /*
+   * =====================================================
+   * NORMAL BOOKING
+   * =====================================================
+   *
+   * Clear BOTH the public cart and Person 1's
+   * bookingFlow services.
+   *
+   * This prevents the old services from coming back
+   * when the user returns to /services.
+   */
+
+  clearBookingCart()
+
+  const booking =
+    loadBookingFlow()
+
+  if (booking) {
+    const nextBooking: BookingFlowState = {
+      ...booking,
+
+      mode: 'booking',
+
+      people:
+        booking.people.map(
+          (person, index) =>
+            index === 0
+              ? {
+                  ...person,
+                  serviceIds: [],
+                }
+              : person,
+        ),
+
+      servicePrices: {},
+    }
+
+    saveBookingFlow(
+      nextBooking,
     )
   }
 
-  /* =======================================================
-     CONTINUE
-  ======================================================= */
+  setSelectedServices([])
 
-  function continueAssignment() {
-    if (!assignTo) {
-      if (
-        selectedServices.length === 0
-      ) {
-        setError(
-          'Please select at least one service.',
-        )
+  setServicePrices({})
+}
 
-        return
-      }
-
-      const query =
-        selectedServices.length > 0
-          ? `?services=${encodeURIComponent(
-              selectedServices.join(
-                ',',
-              ),
-            )}`
-          : ''
-
-      navigate(
-        `/booking${query}`,
+async function continueAssignment() {
+  /*
+   * =====================================================
+   * ENQUIRY
+   * =====================================================
+   */
+  if (mode === 'enquiry') {
+    if (selectedServices.length === 0) {
+      setError(
+        assignTo
+          ? 'Please select at least one service for this person.'
+          : 'Please select at least one service.',
       )
 
       return
     }
 
-    if (
-      selectedServices.length === 0
-    ) {
+    navigate('/enquiry')
+
+    return
+  }
+
+  /*
+   * =====================================================
+   * NORMAL BOOKING
+   * =====================================================
+   */
+  if (!assignTo) {
+    if (selectedServices.length === 0) {
       setError(
-        'Please select at least one service for this person.',
+        'Please select at least one service.',
+      )
+
+      return
+    }
+
+    saveSelectedServices(
+      selectedServices,
+    )
+
+    setBookingMode('booking')
+    setBookingStep(1)
+
+    const {
+      data: {
+        user,
+      },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          '/booking',
+        )}`,
+        {
+          replace: true,
+        },
       )
 
       return
     }
 
     navigate('/booking')
+
+    return
   }
 
-  /* =======================================================
-     PAGINATION
-  ======================================================= */
+  if (selectedServices.length === 0) {
+    setError(
+      'Please select at least one service for this person.',
+    )
 
-  function goToPage(page: number) {
+    return
+  }
+
+  navigate('/booking')
+}
+  function goToPage(
+    page: number,
+  ) {
     const nextPage =
       Math.max(
         1,
@@ -1100,40 +2192,19 @@ function Services() {
         ),
       )
 
-    setCurrentPage(nextPage)
+    setCurrentPage(
+      nextPage,
+    )
 
     document
-      .getElementById('service-list')
+      .getElementById(
+        'service-list',
+      )
       ?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       })
   }
-
-  /* =======================================================
-     OFFERS
-  ======================================================= */
-
-  function discountText(
-    offer: Offer,
-  ) {
-    if (
-      offer.discountType ===
-      'percentage'
-    ) {
-      return `${offer.discountValue}% OFF`
-    }
-
-    return `₹${offer.discountValue.toLocaleString(
-      'en-IN',
-    )} OFF`
-  }
-
-  const leftOffer =
-    offers[0] ?? null
-
-  const rightOffer =
-    offers[1] ?? null
 
   /* =======================================================
      RENDER
@@ -1148,6 +2219,7 @@ function Services() {
 
       {assignTo && (
         <section className="services-assignment-banner">
+
           <div>
             <span>
               {mode === 'enquiry'
@@ -1157,12 +2229,14 @@ function Services() {
             </span>
 
             <h2>
-              Choose services for this person
+              Choose services
+              for this person
             </h2>
 
             <p>
-              Services selected here will
-              be added only to this person's
+              Services selected
+              here will be added
+              only to this person's
               booking card.
             </p>
           </div>
@@ -1176,6 +2250,7 @@ function Services() {
             <BackIcon />
             Back to Booking
           </button>
+
         </section>
       )}
 
@@ -1199,57 +2274,39 @@ function Services() {
           </h1>
 
           <p>
-            Premium beauty care and
-            styling created around your
-            look, occasion, and personal
+            Premium beauty care
+            and styling created
+            around your look,
+            occasion, and personal
             style.
           </p>
 
           <div className="services-hero-actions">
 
-            <Link
-              to="/booking"
-              className="services-primary-button"
-            >
-              {assignTo
-                ? 'Back to Booking'
-                : 'Book Appointment'}
+           <button
+  type="button"
+  className="services-primary-button"
+  onClick={() => {
+    if (assignTo) {
+      navigate('/booking')
+      return
+    }
 
-              <ArrowIcon />
-            </Link>
+    void continueAssignment()
+  }}
+>
+  {assignTo
+    ? 'Back to Booking'
+    : 'Book Appointment'}
 
+  <ArrowIcon />
+</button>
             <a
               href="#our-services"
               className="services-secondary-button"
             >
               Explore Services
-              <ArrowIcon />
             </a>
-
-          </div>
-
-          <div className="services-hero-benefits">
-
-            <div>
-              <SparkleIcon />
-              <span>
-                Professional Care
-              </span>
-            </div>
-
-            <div>
-              <SparkleIcon />
-              <span>
-                Personalised Styling
-              </span>
-            </div>
-
-            <div>
-              <SparkleIcon />
-              <span>
-                Premium Experience
-              </span>
-            </div>
 
           </div>
 
@@ -1257,103 +2314,17 @@ function Services() {
 
         <div className="services-hero-image">
 
-          <div className="services-hero-image-shape" />
-
           <img
             src={assets.hero}
-            alt="WildFloral beauty styling"
+            alt="Beauty and fashion styling"
           />
 
-          <div className="services-hero-floating-card">
-            <span>
-              WILDFLORAL
-            </span>
-
-            <strong>
-              Beauty,
-              <br />
-              made personal.
-            </strong>
-          </div>
-
         </div>
 
       </section>
 
       {/* =================================================
-          BENEFITS
-      ================================================= */}
-
-      <section className="services-benefits">
-
-        <div className="services-benefit">
-          <div className="services-benefit-icon">
-            <SparkleIcon />
-          </div>
-
-          <div>
-            <strong>
-              Expert Professionals
-            </strong>
-
-            <span>
-              Skilled beauty specialists
-            </span>
-          </div>
-        </div>
-
-        <div className="services-benefit">
-          <div className="services-benefit-icon">
-            <ClockIcon />
-          </div>
-
-          <div>
-            <strong>
-              Flexible Appointments
-            </strong>
-
-            <span>
-              Choose your preferred time
-            </span>
-          </div>
-        </div>
-
-        <div className="services-benefit">
-          <div className="services-benefit-icon">
-            <SparkleIcon />
-          </div>
-
-          <div>
-            <strong>
-              Premium Products
-            </strong>
-
-            <span>
-              Quality care and products
-            </span>
-          </div>
-        </div>
-
-        <div className="services-benefit">
-          <div className="services-benefit-icon">
-            <HeartIcon />
-          </div>
-
-          <div>
-            <strong>
-              Personalised Care
-            </strong>
-
-            <span>
-              Designed around you
-            </span>
-          </div>
-        </div>
-
-      </section>
-
-      {/* =================================================
-          CATEGORY
+          CATEGORY SECTION
       ================================================= */}
 
       <section
@@ -1361,150 +2332,165 @@ function Services() {
         id="our-services"
       >
 
-        <div className="services-centered-heading">
+        {/* CENTERED HEADING */}
 
-          <span className="services-section-label">
-            OUR SERVICES
-          </span>
+        <div className="services-category-heading">
 
-          <h2>
-            Choose your
+          <div>
+
             <span>
-              perfect experience.
+              EXPLORE
             </span>
-          </h2>
 
-          <p>
-            Explore our beauty services
-            and choose what feels right
-            for you.
-          </p>
+            <h2>
+              Find your perfect
+              <em>
+                beauty service.
+              </em>
+            </h2>
+
+            <p>
+              Browse our professional
+              beauty services by category.
+            </p>
+
+          </div>
 
         </div>
 
-        <div className="services-category-wrapper">
+        {/* =================================================
+            CATEGORY CAROUSEL
+        ================================================= */}
+
+        <div className="services-category-slider">
+
+          {/* LEFT ARROW */}
 
           <button
             type="button"
-            className="services-category-arrow services-category-arrow-left"
-            onClick={() =>
-              scrollCategories('left')
-            }
+            className="category-scroll-button category-scroll-button-left"
             disabled={
               !categoryCanScrollLeft
             }
-            aria-label="Previous service categories"
+            onClick={() =>
+              scrollCategories('left')
+            }
+            aria-label="Previous categories"
           >
             ←
           </button>
 
+          {/* CATEGORY LIST */}
+
           <div
-            ref={categoryScrollRef}
-            className="services-category-scroll"
-            role="tablist"
-            aria-label="Service categories"
+            className="services-category-list"
+            ref={
+              categoryScrollRef
+            }
           >
+
+            {/* ALL SERVICES */}
 
             <button
               type="button"
-              role="tab"
-              aria-selected={
-                !activeCategory
-              }
               className={
                 !activeCategory
-                  ? 'service-category-round active'
-                  : 'service-category-round'
+                  ? 'service-category-card active'
+                  : 'service-category-card'
               }
               onClick={
                 selectAllServices
               }
             >
-              <span className="service-category-round-image all-services-image">
-                <span>✦</span>
-              </span>
 
-              <span className="service-category-round-name">
-                All Services
-              </span>
+              <div className="service-category-image">
 
-              <span className="service-category-round-link">
-                View All
-                <ArrowIcon />
-              </span>
+                <img
+                  src={assets.hero}
+                  alt=""
+                />
+
+              </div>
+
+              <div>
+
+                <span>
+                  ALL SERVICES
+                </span>
+
+                <strong>
+                  All Beauty
+                </strong>
+
+              </div>
+
             </button>
 
-            {loading &&
-              Array.from({
-                length: 6,
-              }).map((_, index) => (
-                <div
-                  className="category-loading-item"
-                  key={index}
+            {/* DATABASE CATEGORIES */}
+
+            {categories.map(
+              (category) => (
+                <button
+                  type="button"
+                  key={category.id}
+                  className={
+                    activeCategory?.id ===
+                    category.id
+                      ? 'service-category-card active'
+                      : 'service-category-card'
+                  }
+                  onClick={() =>
+                    selectCategory(
+                      category,
+                    )
+                  }
                 >
-                  <div className="category-circle-skeleton" />
-                  <span />
-                </div>
-              ))}
 
-            {!loading &&
-              categories.map(
-                (category) => (
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={
-                      activeCategory?.id ===
-                      category.id
-                    }
-                    key={category.id}
-                    className={
-                      activeCategory?.id ===
-                      category.id
-                        ? 'service-category-round active'
-                        : 'service-category-round'
-                    }
-                    onClick={() =>
-                      selectCategory(
-                        category,
-                      )
-                    }
-                  >
-                    <span className="service-category-round-image">
-                      <img
-                        src={
-                          category.image ||
-                          assets.hero
-                        }
-                        alt=""
-                        loading="lazy"
-                      />
+                  <div className="service-category-image">
+
+                    <img
+                      src={
+                        category.image ||
+                        assets.hero
+                      }
+                      alt=""
+                      loading="lazy"
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <span>
+                      CATEGORY
                     </span>
 
-                    <span className="service-category-round-name">
-                      {category.name}
-                    </span>
+                    <strong>
+                      {
+                        category.name
+                      }
+                    </strong>
 
-                    <span className="service-category-round-link">
-                      View Services
-                      <ArrowIcon />
-                    </span>
-                  </button>
-                ),
-              )}
+                  </div>
+
+                </button>
+              ),
+            )}
 
           </div>
 
+          {/* RIGHT ARROW */}
+
           <button
             type="button"
-            className="services-category-arrow services-category-arrow-right"
-            onClick={() =>
-              scrollCategories('right')
-            }
+            className="category-scroll-button category-scroll-button-right"
             disabled={
               !categoryCanScrollRight
             }
-            aria-label="Next service categories"
+            onClick={() =>
+              scrollCategories('right')
+            }
+            aria-label="Next categories"
           >
             →
           </button>
@@ -1518,52 +2504,45 @@ function Services() {
       ================================================= */}
 
       <section
-        className="services-collection"
+        className="services-list-section"
         id="service-list"
       >
 
-        <div className="services-collection-heading">
+        <div className="services-list-heading">
 
           <div>
-            <div className="services-breadcrumb">
-              <Link to="/services">
-                Services
-              </Link>
-
-              {activeCategory && (
-                <>
-                  <span>›</span>
-                  <span>
-                    {activeCategory.name}
-                  </span>
-                </>
-              )}
-            </div>
 
             <span>
               {activeCategory
                 ? activeCategory.name
-                : 'ALL SERVICES'}
+                : 'ALL BEAUTY SERVICES'}
             </span>
 
             <h2>
-              Our signature services
+              {activeCategory
+                ? `${activeCategory.name} services`
+                : 'Our signature services'}
             </h2>
 
-            <p className="services-result-count">
+            <p>
               {filteredServices.length}{' '}
               {filteredServices.length ===
               1
                 ? 'service'
                 : 'services'}{' '}
               available
+              {categories.length >
+                0 &&
+                ` across ${categories.length} categories`}
             </p>
+
           </div>
 
           <div
             className="services-sort-wrapper"
             ref={sortRef}
           >
+
             <button
               type="button"
               className="services-sort-button"
@@ -1577,6 +2556,7 @@ function Services() {
                 sortOpen
               }
             >
+
               <span>
                 Sort by
               </span>
@@ -1584,8 +2564,8 @@ function Services() {
               <strong>
                 {
                   SORT_OPTIONS.find(
-                    (item) =>
-                      item.value ===
+                    (option) =>
+                      option.value ===
                       sortBy,
                   )?.label
                 }
@@ -1600,6 +2580,7 @@ function Services() {
               >
                 ↓
               </span>
+
             </button>
 
             {sortOpen && (
@@ -1628,6 +2609,7 @@ function Services() {
                         )
                       }}
                     >
+
                       <span>
                         {
                           option.label
@@ -1640,6 +2622,7 @@ function Services() {
                           ✓
                         </span>
                       )}
+
                     </button>
                   ),
                 )}
@@ -1655,53 +2638,64 @@ function Services() {
 
         {loading && (
           <div className="services-grid">
-            {Array.from({
-              length: 6,
-            }).map((_, index) => (
-              <div
-                className="service-skeleton"
-                key={index}
-              >
-                <div className="service-skeleton-image" />
 
-                <div className="service-skeleton-content">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
+            {Array.from({
+              length:
+                ITEMS_PER_PAGE,
+            }).map(
+              (_, index) => (
+                <div
+                  className="service-skeleton"
+                  key={index}
+                >
+
+                  <div className="service-skeleton-image" />
+
+                  <div className="service-skeleton-content">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+
                 </div>
-              </div>
-            ))}
+              ),
+            )}
+
           </div>
         )}
 
         {/* ERROR */}
 
-        {!loading && error && (
-          <div className="services-message">
+        {!loading &&
+          error && (
+            <div className="services-message">
 
-            <h3>
-              Something went
-              <span>
-                wrong.
-              </span>
-            </h3>
+              <h3>
+                Something went
+                <span>
+                  wrong.
+                </span>
+              </h3>
 
-            <p>{error}</p>
+              <p>
+                {error}
+              </p>
 
-            <button
-              type="button"
-              className="services-primary-button"
-              onClick={() =>
-                void loadServices()
-              }
-            >
-              Try Again
-              <ArrowIcon />
-            </button>
+              <button
+                type="button"
+                className="services-primary-button"
+                onClick={() => {
+                  void loadServices()
+                  void loadOffers()
+                }}
+              >
+                Try Again
+                <ArrowIcon />
+              </button>
 
-          </div>
-        )}
+            </div>
+          )}
 
         {/* SERVICES */}
 
@@ -1709,203 +2703,286 @@ function Services() {
           !error &&
           paginatedServices.length >
             0 && (
-            <div className="services-grid">
 
-              {paginatedServices.map(
-                (
-                  service,
-                  index,
-                ) => {
-                  const isSelected =
-                    isServiceSelected(
-                      service.id,
-                    )
+          <div className="services-grid">
 
-                  return (
-                    <article
-                      className={
-                        isSelected
-                          ? 'service-card selected'
-                          : 'service-card'
-                      }
-                      key={
-                        service.id
-                      }
-                    >
+            {paginatedServices.map(
+              (
+                service,
+                index,
+              ) => {
 
-                      <div className="service-card-image">
+                const isSelected =
+                  isServiceSelected(
+                    service.id,
+                  )
 
-                        <img
-                          src={
-                            service.image ||
-                            assets.hero
-                          }
-                          alt={
-                            service.name
-                          }
-                          loading={
-                            index < 3
-                              ? 'eager'
-                              : 'lazy'
-                          }
-                        />
+                const offer =
+                  getApplicableOffer(
+                    service,
+                    offers,
+                  )
 
-                        <span className="service-card-category-pill">
-                          {
-                            service.category
-                          }
-                        </span>
+                const pricing =
+                  calculateDiscount(
+                    service.price,
+                    offer,
+                  )
 
-                        <button
-                          type="button"
-                          className={
-                            isSelected
-                              ? 'service-card-select selected'
-                              : 'service-card-select'
-                          }
-                          onClick={() => {
-                            if (
-                              assignTo
-                            ) {
-                              addSelectedServiceToPerson(
-                                service.id,
+                const hasDiscount =
+                  Boolean(
+                    offer &&
+                    pricing.discountAmount >
+                      0,
+                  )
+
+                return (
+                  <article
+                    className={
+                      isSelected
+                        ? 'service-card selected'
+                        : 'service-card'
+                    }
+                    key={
+                      service.id
+                    }
+                  >
+
+                    <div className="service-card-image">
+
+                      <img
+                        src={
+                          service.image ||
+                          assets.hero
+                        }
+                        alt={
+                          service.name
+                        }
+                        loading={
+                          index < 3
+                            ? 'eager'
+                            : 'lazy'
+                        }
+                      />
+
+                      <span className="service-card-category-pill">
+                        {
+                          service.category
+                        }
+                      </span>
+
+                      {hasDiscount &&
+                        offer && (
+                          <span className="service-card-offer-pill">
+                            {
+                              discountText(
+                                offer,
                               )
-
-                              return
                             }
+                          </span>
+                        )}
 
-                            toggleService(
-                              service.id,
-                            )
-                          }}
-                          aria-label={
-                            isSelected
-                              ? `Remove ${service.name}`
-                              : `Add ${service.name}`
-                          }
-                        >
-                          {isSelected
-                            ? '✓'
-                            : '+'}
-                        </button>
+                      <button
+                        type="button"
+                        className={
+                          isSelected
+                            ? 'service-card-select selected'
+                            : 'service-card-select'
+                        }
+                        onClick={() =>
+                          toggleService(
+                            service.id,
+                          )
+                        }
+                        aria-label={
+                          isSelected
+                            ? `Remove ${service.name}`
+                            : `Add ${service.name}`
+                        }
+                      >
+                        {isSelected
+                          ? '✓'
+                          : '+'}
+                      </button>
 
-                      </div>
+                    </div>
 
-                      <div className="service-card-content">
+                    <div className="service-card-content">
 
-                        <h3>
-                          {
-                            service.name
-                          }
-                        </h3>
+                      <h3>
+                        {
+                          service.name
+                        }
+                      </h3>
 
-                        <p>
-                          {
-                            service.description
-                          }
-                        </p>
+                      <p>
+                        {
+                          service.description
+                        }
+                      </p>
 
-                        <div className="service-card-meta">
+                      <div className="service-card-meta">
 
-                          <div className="service-price">
+                        <div className="service-price">
 
-                            <span>
-                              Starting from
-                            </span>
+                          {hasDiscount &&
+                          offer ? (
+                            <>
+                              <span>
+                                Regular price
+                              </span>
 
-                            <strong>
-                              ₹
-                              {service.price.toLocaleString(
-                                'en-IN',
-                              )}
-                            </strong>
+                              <del>
+                                {formatPrice(
+                                  pricing.originalPrice,
+                                )}
+                              </del>
 
-                          </div>
+                              <strong className="service-offer-price">
+                                {formatPrice(
+                                  pricing.finalPrice,
+                                )}
+                              </strong>
 
-                          <div className="service-duration">
+                              <small>
+                                You save{' '}
+                                {formatPrice(
+                                  pricing.discountAmount,
+                                )}
+                              </small>
+                            </>
+                          ) : (
+                            <>
+                              <span>
+                                Starting from
+                              </span>
 
-                            <ClockIcon />
-
-                            <span>
-                              {
-                                service.duration
-                              }
-                            </span>
-
-                          </div>
+                              <strong>
+                                {formatPrice(
+                                  service.price,
+                                )}
+                              </strong>
+                            </>
+                          )}
 
                         </div>
 
-                        <button
-                          type="button"
-                          className={
-                            isSelected
-                              ? 'service-book-button selected'
-                              : 'service-book-button'
-                          }
-                          disabled={
+                        <div className="service-duration">
+
+                          <ClockIcon />
+
+                          <span>
+                            {
+                              service.duration
+                            }
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      {hasDiscount &&
+                        offer && (
+                          <div className="service-card-current-offer">
+
+                            <div>
+
+                              <span>
+                                CURRENT OFFER
+                              </span>
+
+                              <strong>
+                                {
+                                  offer.title
+                                }
+                              </strong>
+
+                            </div>
+
+                            {offer.endsAt && (
+                              <small>
+                                Ends{' '}
+                                {formatOfferDate(
+                                  offer.endsAt,
+                                )}
+                              </small>
+                            )}
+
+                          </div>
+                        )}
+
+                      <button
+                        type="button"
+                        className={
+                          isSelected
+                            ? 'service-book-button selected'
+                            : 'service-book-button'
+                        }
+                        disabled={
+                          addingService
+                        }
+                        onClick={() => {
+                          if (
                             addingService
+                          ) {
+                            return
                           }
-                          onClick={() => {
-                            if (
-                              addingService
-                            ) {
-                              return
-                            }
 
-                            if (
-                              assignTo
-                            ) {
-                              setAddingService(
-                                true,
-                              )
-
-                              addSelectedServiceToPerson(
-                                service.id,
-                              )
-
-                              window.setTimeout(
-                                () =>
-                                  setAddingService(
-                                    false,
-                                  ),
-                                200,
-                              )
-
-                              return
-                            }
+                          if (
+                            assignTo
+                          ) {
+                            setAddingService(
+                              true,
+                            )
 
                             toggleService(
                               service.id,
                             )
-                          }}
-                        >
-                          <span>
-                            {isSelected
-                              ? assignTo
-                                ? 'Remove from Person'
-                                : 'Added to Selection'
-                              : assignTo
-                                ? 'Add to Person'
-                                : 'Add to Selection'}
-                          </span>
 
-                          <span>
-                            {isSelected
-                              ? '✓'
-                              : '+'}
-                          </span>
-                        </button>
+                            window.setTimeout(
+                              () =>
+                                setAddingService(
+                                  false,
+                                ),
+                              200,
+                            )
 
-                      </div>
+                            return
+                          }
 
-                    </article>
-                  )
-                },
-              )}
+                          toggleService(
+                            service.id,
+                          )
+                        }}
+                      >
 
-            </div>
-          )}
+                        <span>
+                          {isSelected
+                            ? assignTo
+                              ? 'Remove from Person'
+                              : 'Added to Selection'
+                            : assignTo
+                              ? 'Add to Person'
+                              : 'Add to Selection'}
+                        </span>
+
+                        <span>
+                          {isSelected
+                            ? '✓'
+                            : '+'}
+                        </span>
+
+                      </button>
+
+                    </div>
+
+                  </article>
+                )
+              },
+            )}
+
+          </div>
+        )}
 
         {/* EMPTY */}
 
@@ -1913,36 +2990,36 @@ function Services() {
           !error &&
           paginatedServices.length ===
             0 && (
-            <div className="services-message">
+          <div className="services-message">
 
-              <h3>
-                No services
-                <span>
-                  available.
-                </span>
-              </h3>
+            <h3>
+              No services
+              <span>
+                available.
+              </span>
+            </h3>
 
-              <p>
-                There are no services
-                available in this category
-                yet.
-              </p>
+            <p>
+              There are no services
+              available in this category
+              yet.
+            </p>
 
-              {activeCategory && (
-                <button
-                  type="button"
-                  className="services-primary-button"
-                  onClick={
-                    selectAllServices
-                  }
-                >
-                  View All Services
-                  <ArrowIcon />
-                </button>
-              )}
+            {activeCategory && (
+              <button
+                type="button"
+                className="services-primary-button"
+                onClick={
+                  selectAllServices
+                }
+              >
+                View All Services
+                <ArrowIcon />
+              </button>
+            )}
 
-            </div>
-          )}
+          </div>
+        )}
 
         {/* PAGINATION */}
 
@@ -1959,36 +3036,38 @@ function Services() {
                   currentPage - 1,
                 )
               }
-              aria-label="Previous page"
             >
               ←
             </button>
 
-            {Array.from(
-              {
-                length:
-                  totalPages,
+            {Array.from({
+              length: totalPages,
+            }).map(
+              (_, index) => {
+                const page =
+                  index + 1
+
+                return (
+                  <button
+                    type="button"
+                    key={page}
+                    className={
+                      currentPage ===
+                      page
+                        ? 'active'
+                        : ''
+                    }
+                    onClick={() =>
+                      goToPage(
+                        page,
+                      )
+                    }
+                  >
+                    {page}
+                  </button>
+                )
               },
-              (_, index) =>
-                index + 1,
-            ).map((page) => (
-              <button
-                type="button"
-                key={page}
-                className={
-                  currentPage ===
-                  page
-                    ? 'active'
-                    : ''
-                }
-                onClick={() =>
-                  goToPage(page)
-                }
-                aria-label={`Page ${page}`}
-              >
-                {page}
-              </button>
-            ))}
+            )}
 
             <button
               type="button"
@@ -2001,7 +3080,6 @@ function Services() {
                   currentPage + 1,
                 )
               }
-              aria-label="Next page"
             >
               →
             </button>
@@ -2012,89 +3090,35 @@ function Services() {
       </section>
 
       {/* =================================================
-          OFFERS
+          PROMOTIONS
       ================================================= */}
 
       {!offerLoading &&
-        (leftOffer ||
-          rightOffer) && (
-          <section className="services-promo">
+        displayedOffers.length >
+          0 && (
+        <section className="services-promo">
 
-            {leftOffer && (
-              <article className="services-promo-card services-promo-exclusive">
-
-                <div className="services-promo-copy">
-
-                  <span className="services-promo-label">
-                    EXCLUSIVE OFFER
-                  </span>
-
-                  <h2>
-                    {
-                      leftOffer.title
-                    }
-                  </h2>
-
-                  <strong className="services-promo-discount">
-                    {
-                      discountText(
-                        leftOffer,
-                      )
-                    }
-                  </strong>
-
-                  <p>
-                    {
-                      leftOffer.description
-                    }
-                  </p>
-
-                  {leftOffer.promoCode && (
-                    <div className="services-promo-code">
-
-                      <span>
-                        USE CODE
-                      </span>
-
-                      <strong>
-                        {
-                          leftOffer.promoCode
-                        }
-                      </strong>
-
-                    </div>
-                  )}
-
-                  <Link
-                    to="/booking"
-                    className="services-promo-button"
-                  >
-                    {assignTo
-                      ? 'Back to Booking'
-                      : 'Book Now'}
-
-                    <ArrowIcon />
-                  </Link>
-
-                </div>
-
-                <div className="services-promo-art">
-                  <div className="promo-gift">
-                    <span>W</span>
-                  </div>
-                </div>
-
-              </article>
-            )}
-
-            {rightOffer && (
+          {displayedOffers.map(
+            (
+              offer,
+              index,
+            ) => (
               <DealOfDay
-                offer={rightOffer}
+                key={
+                  offer.id
+                }
+                offer={
+                  offer
+                }
+                featured={
+                  index === 0
+                }
               />
-            )}
+            ),
+          )}
 
-          </section>
-        )}
+        </section>
+      )}
 
       {/* =================================================
           SELECTION BAR
@@ -2115,7 +3139,6 @@ function Services() {
               </div>
 
               <div>
-
                 <strong>
                   {assignTo
                     ? 'Services for person'
@@ -2123,12 +3146,11 @@ function Services() {
                 </strong>
 
                 <span>
-                  Total ₹
-                  {selectedTotal.toLocaleString(
-                    'en-IN',
+                  Total{' '}
+                  {formatPrice(
+                    selectedTotal,
                   )}
                 </span>
-
               </div>
 
             </div>
@@ -2159,20 +3181,18 @@ function Services() {
               ) : (
                 <>
                   <button
-                    type="button"
-                    className="selection-enquiry"
-                    onClick={() =>
-                      navigate(
-                        `/booking?services=${encodeURIComponent(
-                          selectedServices.join(
-                            ',',
-                          ),
-                        )}&mode=enquiry`,
-                      )
-                    }
-                  >
-                    Enquire Now
-                  </button>
+  type="button"
+  className="selection-enquiry"
+  onClick={() =>
+    navigate(
+      `/enquiry?services=${encodeURIComponent(
+        selectedServices.join(','),
+      )}`,
+    )
+  }
+>
+  Enquire Now
+</button>
 
                   <button
                     type="button"
@@ -2201,38 +3221,40 @@ function Services() {
       {assignTo &&
         selectedServices.length >
           0 && (
-          <div className="services-assignment-footer">
+        <div className="services-assignment-footer">
 
-            <div>
-              <span>
-                READY
-              </span>
+          <div>
 
-              <strong>
-                {
-                  selectedServices.length
-                }{' '}
-                service
-                {selectedServices.length ===
-                1
-                  ? ''
-                  : 's'}{' '}
-                selected for this person
-              </strong>
-            </div>
+            <span>
+              READY
+            </span>
 
-            <button
-              type="button"
-              onClick={
-                continueAssignment
-              }
-            >
-              Continue to Booking
-              <ArrowIcon />
-            </button>
+            <strong>
+              {
+                selectedServices.length
+              }{' '}
+              service
+              {selectedServices.length ===
+              1
+                ? ''
+                : 's'}{' '}
+              selected for this person
+            </strong>
 
           </div>
-        )}
+
+          <button
+            type="button"
+            onClick={
+              continueAssignment
+            }
+          >
+            Continue to Booking
+            <ArrowIcon />
+          </button>
+
+        </div>
+      )}
 
       {/* =================================================
           FINAL CTA
@@ -2252,14 +3274,16 @@ function Services() {
             </em>
           </h2>
 
-          <Link
-            to="/booking"
-            className="services-final-button"
-          >
-            Book Appointment
-            <ArrowIcon />
-          </Link>
-
+<button
+  type="button"
+  className="services-final-button"
+  onClick={() => {
+    void continueAssignment()
+  }}
+>
+  Book Appointment
+  <ArrowIcon />
+</button>
         </section>
       )}
 
@@ -2273,8 +3297,10 @@ function Services() {
 
 function DealOfDay({
   offer,
+  featured,
 }: {
   offer: Offer
+  featured: boolean
 }) {
   const [
     remaining,
@@ -2291,45 +3317,109 @@ function DealOfDay({
     }
 
     const timer =
-      window.setInterval(() => {
-        setRemaining(
-          getRemaining(
-            offer.endsAt,
-          ),
-        )
-      }, 1000)
+      window.setInterval(
+        () => {
+          setRemaining(
+            getRemaining(
+              offer.endsAt,
+            ),
+          )
+        },
+        1000,
+      )
 
     return () =>
       window.clearInterval(
         timer,
       )
-  }, [offer.endsAt])
+  }, [
+    offer.endsAt,
+  ])
 
   return (
-    <article className="services-promo-card services-promo-deal">
+    <article
+      className={
+        featured
+          ? 'services-promo-card services-promo-exclusive'
+          : 'services-promo-card services-promo-deal'
+      }
+    >
 
-      <div className="services-deal-content">
+      <div className="services-promo-copy">
 
-        <span className="services-promo-deal-label">
-          DEAL OF THE DAY
+        <span className="services-promo-label">
+          {featured
+            ? 'EXCLUSIVE OFFER'
+            : 'DEAL OF THE DAY'}
         </span>
 
-        <h3>
-          {offer.title}
-        </h3>
+        <h2>
+          {
+            offer.title
+          }
+        </h2>
 
-        <p>
-          {offer.description}
-        </p>
+        <strong className="services-promo-discount">
+          {
+            discountText(
+              offer,
+            )
+          }
+        </strong>
+
+        {offer.description && (
+          <p>
+            {
+              offer.description
+            }
+          </p>
+        )}
+
+        {offer.promoCode && (
+          <div className="services-promo-code">
+
+            <span>
+              USE CODE
+            </span>
+
+            <strong>
+              {
+                offer.promoCode
+              }
+            </strong>
+
+          </div>
+        )}
 
         {remaining && (
           <div className="promo-countdown">
+
+            {remaining.days >
+              0 && (
+              <div>
+                <strong>
+                  {String(
+                    remaining.days,
+                  ).padStart(
+                    2,
+                    '0',
+                  )}
+                </strong>
+
+                <span>
+                  DAYS
+                </span>
+              </div>
+            )}
 
             <div>
               <strong>
                 {String(
                   remaining.hours,
-                ).padStart(2, '0')}
+                ).padStart(
+                  2,
+                  '0',
+                )}
               </strong>
 
               <span>
@@ -2341,7 +3431,10 @@ function DealOfDay({
               <strong>
                 {String(
                   remaining.minutes,
-                ).padStart(2, '0')}
+                ).padStart(
+                  2,
+                  '0',
+                )}
               </strong>
 
               <span>
@@ -2353,7 +3446,10 @@ function DealOfDay({
               <strong>
                 {String(
                   remaining.seconds,
-                ).padStart(2, '0')}
+                ).padStart(
+                  2,
+                  '0',
+                )}
               </strong>
 
               <span>
@@ -2364,9 +3460,18 @@ function DealOfDay({
           </div>
         )}
 
+        {offer.endsAt && (
+          <div className="services-promo-validity">
+            Valid until{' '}
+            {formatOfferDate(
+              offer.endsAt,
+            )}
+          </div>
+        )}
+
         <Link
           to="/booking"
-          className="services-deal-button"
+          className="services-promo-button"
         >
           Book Now
           <ArrowIcon />
@@ -2374,16 +3479,21 @@ function DealOfDay({
 
       </div>
 
-      <div className="services-promo-deal-image">
+      <div className="services-promo-art">
 
-        <img
-          src={
-            offer.imageUrl ||
-            assets.hero
-          }
-          alt=""
-          loading="lazy"
-        />
+        {offer.imageUrl ? (
+          <img
+            src={offer.imageUrl}
+            alt=""
+            loading="lazy"
+          />
+        ) : (
+          <div className="promo-gift">
+            <span>
+              W
+            </span>
+          </div>
+        )}
 
       </div>
 
@@ -2418,12 +3528,20 @@ function getRemaining(
     )
 
   return {
+    days: Math.floor(
+      totalSeconds /
+        86400,
+    ),
+
     hours: Math.floor(
-      totalSeconds / 3600,
+      (totalSeconds %
+        86400) /
+        3600,
     ),
 
     minutes: Math.floor(
-      (totalSeconds % 3600) /
+      (totalSeconds %
+        3600) /
         60,
     ),
 

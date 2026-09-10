@@ -1,1586 +1,2303 @@
 import {
-  FormEvent,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 
 import {
-  Link,
   useNavigate,
   useSearchParams,
-} from 'react-router'
+} from 'react-router-dom'
+
+import {
+  CalendarDays,
+  Check,
+  Clock3,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react'
+
+import {
+  createInitialBookingFlow,
+  setBookingStep,
+  type BookingFlowState,
+} from '../../../lib/bookingFlow'
+
+import {
+  clearBookingCart,
+} from '../../../lib/bookingCart'
+
+import {
+  createEnquiry,
+} from '../../../lib/enquiries'
+
+import {
+  getServices,
+  type Service,
+} from '../../../lib/services'
 
 import { supabase } from '../../../lib/supabase'
-import { assets } from '../../../assets/assets'
 
+import SelectedServicesStep from '../Booking/steps/SelectedServicesStep'
+
+import PeopleDetailsStep, {
+  type BookingPersonTotal,
+} from '../Booking/steps/PeopleDetailsStep'
+
+import DateTimeStep from '../Booking/steps/DateTimeStep'
+
+import ContactPreferenceStep from '../Booking/steps/ContactPreferenceStep'
+
+import ReviewStep from '../Booking/steps/ReviewStep'
+
+import type {
+  BookingPerson,
+  BookingService,
+} from '../Booking/Booking'
+
+import '../Booking/Booking.css'
 import './Enquiry.css'
 
-type Service = {
-  id: string
-  category: string | null
-  name: string
-  description: string | null
-  duration_minutes: number
-  price: number
-  image_url: string | null
-}
+/* =========================================================
+   TYPES
+========================================================= */
 
-type Profile = {
-  id: string
-  full_name: string | null
-  email: string | null
-}
+type EnquiryContactPreference =
+  | 'email'
+  | 'whatsapp'
+  | 'call'
+  | 'message'
+  | 'personal_home_enquiry'
+  | ''
 
-type Offer = {
-  id: string
-  title: string
-  discount_type: 'percentage' | 'fixed'
-  discount_value: number
-  promo_code: string | null
-  starts_at: string | null
-  ends_at: string | null
-  service_id: string | null
-  category_id: string | null
-}
-
-type BookingHistory = {
-  id: string
-  booking_date: string
-  booking_time: string
-  status: string
-  price: number
-  service_name: string
-}
-
-const TIME_SLOTS = [
-  '09:00',
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-]
-
-function getTodayKey() {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-
-function getDateKey(date: Date) {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-
-function formatDate(value: string) {
-  if (!value) return 'Not selected'
-
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-IN', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
-function formatShortDate(value: string) {
-  if (!value) return '—'
-
-  return new Date(`${value}T00:00:00`).toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-  })
-}
-
-function formatTime(value: string) {
-  const [hours, minutes] = value.split(':').map(Number)
-
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
-    return value
+type EnquiryState =
+  BookingFlowState & {
+    contactPreference:
+      EnquiryContactPreference
   }
 
-  const date = new Date()
-  date.setHours(hours, minutes, 0, 0)
+/* =========================================================
+   HELPERS
+========================================================= */
 
-  return date.toLocaleTimeString('en-IN', {
-    hour: 'numeric',
-    minute: '2-digit',
-  })
+function cleanServiceIds(
+  ids: string[],
+): string[] {
+  return [
+    ...new Set(
+      ids
+        .filter(
+          (
+            id,
+          ): id is string =>
+            typeof id === 'string',
+        )
+        .map(
+          (id) =>
+            id.trim(),
+        )
+        .filter(Boolean),
+    ),
+  ]
 }
 
-function formatRange(value: string) {
-  const [hours, minutes] = value.split(':').map(Number)
+const ENQUIRY_FLOW_STORAGE_KEY =
+  'wildfloral_enquiry_flow'
 
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
-    return value
+function createEnquiryFlow(): EnquiryState {
+  const flow =
+    createInitialBookingFlow(
+      'enquiry',
+    )
+
+  return {
+    ...flow,
+
+    mode: 'enquiry',
+
+    contactPreference: '',
   }
-
-  const start = new Date()
-  start.setHours(hours, minutes, 0, 0)
-
-  const end = new Date(start)
-  end.setHours(end.getHours() + 1)
-
-  return `${start.toLocaleTimeString('en-IN', {
-    hour: 'numeric',
-    minute: '2-digit',
-  })} – ${end.toLocaleTimeString('en-IN', {
-    hour: 'numeric',
-    minute: '2-digit',
-  })}`
 }
 
-function formatCurrency(value: number) {
-  return `₹${value.toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-  })}`
-}
+function loadEnquiryFlow(): EnquiryState | null {
+  try {
+    const raw =
+      window.localStorage.getItem(
+        ENQUIRY_FLOW_STORAGE_KEY,
+      )
 
-function titleCaseStatus(value: string) {
-  return value
-    .replace(/[_-]+/g, ' ')
-    .replace(/\b\w/g, (character) => character.toUpperCase())
-}
-
-function getStatusClass(status: string) {
-  const normalized = status.toLowerCase()
-
-  if (normalized === 'confirmed') return 'confirmed'
-  if (normalized === 'completed') return 'completed'
-  if (normalized === 'cancelled') return 'cancelled'
-  if (normalized === 'pending' || normalized === 'requested') {
-    return 'pending'
-  }
-
-  return 'pending'
-}
-
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M5 12h13M13 6l6 6-6 6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function BackIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M19 12H6m6-6-6 6 6 6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="m5 12 4 4L19 6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function CalendarIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect
-        x="3"
-        y="5"
-        width="18"
-        height="16"
-        rx="2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M7 3v4M17 3v4M3 10h18"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
-
-function ClockIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle
-        cx="12"
-        cy="12"
-        r="8.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M12 7v5l3 2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function UserIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle
-        cx="12"
-        cy="8"
-        r="3.2"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M5.5 20c.7-3.3 2.8-5 6.5-5s5.8 1.7 6.5 5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
-
-function TagIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="m20 13-7 7L4 11V4h7l9 9Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <circle
-        cx="8"
-        cy="8"
-        r="1"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function Enquiry() {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const firstFieldRef = useRef<HTMLInputElement | null>(null)
-  const serviceSectionRef = useRef<HTMLElement | null>(null)
-
-  const [services, setServices] = useState<Service[]>([])
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [offers, setOffers] = useState<Offer[]>([])
-  const [history, setHistory] = useState<BookingHistory[]>([])
-  const [profile, setProfile] = useState<Profile | null>(null)
-
-  const [date, setDate] = useState('')
-  const [time, setTime] = useState('')
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-  const [notes, setNotes] = useState('')
-  const [discountCode, setDiscountCode] = useState('')
-  const [appliedOffer, setAppliedOffer] = useState<Offer | null>(null)
-
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(true)
-  const [historyLoading, setHistoryLoading] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [discountMessage, setDiscountMessage] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [createdBookingId, setCreatedBookingId] = useState('')
-
-  const minDate = useMemo(() => getTodayKey(), [])
-
-  useEffect(() => {
-    const servicesParam = searchParams.get('services')
-    const serviceParam = searchParams.get('service')
-
-    let ids: string[] = []
-
-    if (servicesParam) {
-      ids = servicesParam.split(',').map((id) => id.trim()).filter(Boolean)
-    } else if (serviceParam) {
-      ids = [serviceParam]
+    if (!raw) {
+      return null
     }
 
-    setSelectedIds(Array.from(new Set(ids)))
-  }, [searchParams])
+    const parsed =
+      JSON.parse(raw) as EnquiryState
+
+    if (
+      !parsed ||
+      !Array.isArray(parsed.people)
+    ) {
+      return null
+    }
+
+    return {
+      ...parsed,
+
+      mode: 'enquiry',
+
+      contactPreference:
+        parsed.contactPreference ?? '',
+
+      people:
+        parsed.people.map(
+          (person) => ({
+            ...person,
+
+            serviceIds:
+              cleanServiceIds(
+                Array.isArray(
+                  person.serviceIds,
+                )
+                  ? person.serviceIds
+                  : [],
+              ),
+          }),
+        ),
+    }
+  } catch {
+    return null
+  }
+}
+
+function saveEnquiryFlow(
+  flow: EnquiryState,
+) {
+  window.localStorage.setItem(
+    ENQUIRY_FLOW_STORAGE_KEY,
+    JSON.stringify({
+      ...flow,
+
+      mode: 'enquiry',
+
+      people:
+        flow.people.map(
+          (person) => ({
+            ...person,
+
+            serviceIds:
+              cleanServiceIds(
+                person.serviceIds,
+              ),
+          }),
+        ),
+    }),
+  )
+}
+
+function getCurrentFlow(): EnquiryState {
+  const existing =
+    loadEnquiryFlow()
+
+  if (!existing) {
+    return createEnquiryFlow()
+  }
+
+  return {
+    ...existing,
+
+    mode: 'enquiry',
+
+    contactPreference:
+      existing.contactPreference ?? '',
+  }
+}
+
+/* =========================================================
+   SERVICE MAPPER
+========================================================= */
+
+function mapService(
+  service: Service,
+): BookingService {
+  const basePrice =
+    Number(
+      service.price,
+    ) || 0
+
+  const offerPrice =
+    Number(
+      service.offerPrice,
+    ) || basePrice
+
+  const originalPrice =
+    Number(
+      service.originalPrice,
+    ) || basePrice
+
+  const discountAmount =
+    Number(
+      service.discountAmount,
+    ) || Math.max(
+      originalPrice -
+        offerPrice,
+      0,
+    )
+
+  return {
+    id:
+      service.id,
+
+    category:
+      service.category ?? null,
+
+    name:
+      service.name,
+
+    description:
+      service.description ??
+      null,
+
+    durationMinutes:
+      Number(
+        service.durationMinutes,
+      ) || 0,
+
+    /*
+     * IMPORTANT:
+     *
+     * price is the effective price used
+     * throughout the booking flow.
+     */
+    price:
+      offerPrice,
+
+    originalPrice:
+      Math.max(
+        originalPrice,
+        offerPrice,
+      ),
+
+    offerPrice,
+
+    discountAmount,
+
+    discountLabel:
+      service.discountLabel ??
+      (
+        discountAmount > 0 &&
+        originalPrice > 0
+          ? `${Math.round(
+              (
+                discountAmount /
+                originalPrice
+              ) * 100,
+            )}% OFF`
+          : null
+      ),
+
+    imageUrl:
+      service.imageUrl ??
+      null,
+  }
+}
+
+/* =========================================================
+   COMPONENT
+========================================================= */
+
+function Enquiry() {
+  const navigate =
+    useNavigate()
+
+  const [
+    searchParams,
+  ] =
+    useSearchParams()
+
+  const [
+    flow,
+    setFlow,
+  ] =
+    useState<EnquiryState | null>(
+      null,
+    )
+
+  const [
+    services,
+    setServices,
+  ] =
+    useState<Service[]>([])
+
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(true)
+
+  const [
+    submitting,
+    setSubmitting,
+  ] =
+    useState(false)
+
+  const [
+    success,
+    setSuccess,
+  ] =
+    useState(false)
+
+  const [
+    createdEnquiryId,
+    setCreatedEnquiryId,
+  ] =
+    useState('')
+
+  const [
+    error,
+    setError,
+  ] =
+    useState('')
+
+  /* =======================================================
+     INITIALISE
+  ======================================================= */
 
   useEffect(() => {
-    let mounted = true
+    let cancelled = false
 
-    async function loadData() {
+    async function initialise() {
       setLoading(true)
       setError('')
 
-      const [{ data: userData }, serviceResult, offerResult] = await Promise.all([
-        supabase.auth.getUser(),
-        supabase
-          .from('services')
-          .select(`
-            id,
-            category,
-            name,
-            description,
-            duration_minutes,
-            price,
-            image_url
-          `)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('offers')
-          .select(`
-            id,
-            title,
-            discount_type,
-            discount_value,
-            promo_code,
-            starts_at,
-            ends_at,
-            service_id,
-            category_id
-          `)
-          .eq('is_active', true)
-          .lte('starts_at', new Date().toISOString())
-          .or(`ends_at.is.null,ends_at.gte.${new Date().toISOString()}`)
-          .order('created_at', { ascending: false }),
-      ])
+      try {
+        const singleService =
+  searchParams.get(
+    'service',
+  )
 
-      if (!mounted) return
+const servicesParam =
+  searchParams.get(
+    'services',
+  )
 
-      if (serviceResult.error) {
-        setError(serviceResult.error.message)
-        setLoading(false)
+const assignTo =
+  searchParams.get(
+    'assignTo',
+  )
+
+const hasNewService =
+  Boolean(
+    singleService ||
+    servicesParam,
+  )
+
+let current =
+  hasNewService && !assignTo
+    ? createEnquiryFlow()
+    : getCurrentFlow()
+
+        const queryIds =
+          servicesParam
+            ? cleanServiceIds(
+                servicesParam
+                  .split(',')
+                  .map(
+                    (id) =>
+                      id.trim(),
+                  ),
+              )
+            : singleService
+              ? cleanServiceIds([
+                  singleService,
+                ])
+              : []
+
+        /*
+         * ---------------------------------------------------
+         * SERVICE ASSIGNMENT
+         * ---------------------------------------------------
+         *
+         * Normal enquiry:
+         *   selected services -> person 1
+         *
+         * Person-specific selection:
+         *   assignTo=PERSON_ID
+         *   selected services -> that person
+         */
+        if (
+          queryIds.length > 0
+        ) {
+          const targetPersonIndex =
+            current.people.findIndex(
+              (
+                person,
+              ) =>
+                Boolean(
+                  assignTo &&
+                  person.id ===
+                    assignTo,
+                ),
+            )
+
+          const targetIndex =
+            targetPersonIndex >=
+            0
+              ? targetPersonIndex
+              : 0
+
+          const nextPeople =
+  current.people.map(
+    (
+      person,
+      index,
+    ) =>
+      index ===
+      targetIndex
+        ? {
+            ...person,
+
+            serviceIds:
+              cleanServiceIds([
+                ...person.serviceIds,
+                ...queryIds,
+              ]),
+          }
+        : person,
+  )
+
+          current = {
+            ...current,
+
+            people:
+              nextPeople,
+
+            step: 1,
+          }
+        }
+        /*
+ * The enquiry owns the selected services now.
+ * Clear the public Services-page cart so removed
+ * enquiry services cannot reappear when returning
+ * to /services.
+ */
+clearBookingCart()
+
+        current = {
+          ...current,
+
+          mode: 'enquiry',
+        }
+
+        saveEnquiryFlow(
+          current,
+        )
+
+        if (!cancelled) {
+          setFlow(current)
+        }
+      } catch (
+        initialiseError
+      ) {
+        if (!cancelled) {
+          setError(
+            initialiseError instanceof
+              Error
+              ? initialiseError.message
+              : 'Unable to prepare your enquiry.',
+          )
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    void initialise()
+
+    return () => {
+      cancelled = true
+    }
+  }, [searchParams])
+
+  /* =======================================================
+     LOAD SERVICES
+  ======================================================= */
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadEnquiryServices() {
+      try {
+        const result =
+          await getServices()
+
+        if (cancelled) {
+          return
+        }
+
+        setServices(
+          result,
+        )
+      } catch (
+        serviceError
+      ) {
+        if (!cancelled) {
+          setError(
+            serviceError instanceof
+              Error
+              ? serviceError.message
+              : 'Unable to load services.',
+          )
+        }
+      }
+    }
+
+    void loadEnquiryServices()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  /* =======================================================
+     BOOKING SERVICE CATALOGUE
+  ======================================================= */
+
+  const bookingServices =
+    useMemo(
+      () =>
+        services.map(
+          mapService,
+        ),
+      [services],
+    )
+
+  /* =======================================================
+     SERVICE MAP
+  ======================================================= */
+
+  const serviceMap =
+    useMemo(
+      () =>
+        new Map<
+          string,
+          BookingService
+        >(
+          bookingServices.map(
+            (
+              service,
+            ) => [
+              service.id,
+              service,
+            ],
+          ),
+        ),
+      [bookingServices],
+    )
+
+  /* =======================================================
+     PEOPLE TOTALS
+  ======================================================= */
+
+  const peopleTotals =
+    useMemo<
+      BookingPersonTotal[]
+    >(
+      () => {
+        if (!flow) {
+          return []
+        }
+
+        return flow.people.map(
+          (
+            person,
+          ) => {
+            const personServices =
+              cleanServiceIds(
+                person.serviceIds,
+              )
+                .map(
+                  (
+                    serviceId,
+                  ) =>
+                    serviceMap.get(
+                      serviceId,
+                    ),
+                )
+                .filter(
+                  (
+                    service,
+                  ): service is BookingService =>
+                    Boolean(service),
+                )
+
+            const personSubtotal =
+              personServices.reduce(
+                (
+                  totalValue,
+                  service,
+                ) =>
+                  totalValue +
+                  (
+                    Number(
+                      service.offerPrice,
+                    ) || 0
+                  ),
+                0,
+              )
+
+            return {
+              person:
+                person as BookingPerson,
+
+              services:
+                personServices,
+
+              subtotal:
+                personSubtotal,
+            }
+          },
+        )
+      },
+      [
+        flow,
+        serviceMap,
+      ],
+    )
+
+  /* =======================================================
+     TOTALS
+  ======================================================= */
+
+  const subtotal =
+    useMemo(
+      () =>
+        peopleTotals.reduce(
+          (
+            totalValue,
+            person,
+          ) =>
+            totalValue +
+            person.subtotal,
+          0,
+        ),
+      [peopleTotals],
+    )
+
+  const discountAmount =
+    useMemo(
+      () =>
+        Math.min(
+          Math.max(
+            Number(
+              flow?.discountAmount,
+            ) || 0,
+            0,
+          ),
+          subtotal,
+        ),
+      [
+        flow?.discountAmount,
+        subtotal,
+      ],
+    )
+
+  const total =
+    Math.max(
+      subtotal -
+        discountAmount,
+      0,
+    )
+
+  /* =======================================================
+     UPDATE FLOW
+  ======================================================= */
+
+ function updateFlow(
+  updates: Partial<EnquiryState>,
+) {
+  setFlow((current) => {
+    const base =
+      current ?? getCurrentFlow()
+
+    const next: EnquiryState = {
+      ...base,
+
+      ...updates,
+
+      mode: 'enquiry',
+    }
+
+    saveEnquiryFlow(next)
+
+    return next
+  })
+}
+
+
+  /* =======================================================
+     UPDATE PERSON
+  ======================================================= */
+
+  function handlePersonField(
+    personId: string,
+    field:
+      | 'name'
+      | 'phone'
+      | 'email',
+    value: string,
+  ) {
+    if (!flow) {
+      return
+    }
+
+    const nextPeople =
+      flow.people.map(
+        (
+          person,
+        ) =>
+          person.id ===
+          personId
+            ? {
+                ...person,
+                [field]:
+                  value,
+              }
+            : person,
+      )
+
+    updateFlow({
+      people:
+        nextPeople,
+    })
+  }
+
+  /* =======================================================
+     ADD PERSON
+  ======================================================= */
+
+  function handleAddPerson() {
+    if (!flow) {
+      return
+    }
+
+    const newPerson: BookingPerson = {
+      id:
+        crypto.randomUUID(),
+
+      name: '',
+
+      phone: '',
+
+      email: '',
+
+      serviceIds: [],
+    }
+
+    updateFlow({
+      people: [
+        ...flow.people,
+        newPerson,
+      ],
+    })
+  }
+
+  /* =======================================================
+     REMOVE PERSON
+  ======================================================= */
+
+  function handleRemovePerson(
+    personId: string,
+  ) {
+    if (!flow) {
+      return
+    }
+
+    let nextPeople =
+      flow.people.filter(
+        (
+          person,
+        ) =>
+          person.id !==
+          personId,
+      )
+
+    if (
+      nextPeople.length ===
+      0
+    ) {
+      nextPeople = [
+        {
+          id:
+            crypto.randomUUID(),
+
+          name: '',
+
+          phone: '',
+
+          email: '',
+
+          serviceIds: [],
+        },
+      ]
+    }
+
+    updateFlow({
+      people:
+        nextPeople,
+    })
+  }
+
+  /* =======================================================
+     REMOVE PERSON SERVICE
+  ======================================================= */
+
+  function handleRemovePersonService(
+    personId: string,
+    serviceId: string,
+  ) {
+    if (!flow) {
+      return
+    }
+
+    const nextPeople =
+      flow.people.map(
+        (
+          person,
+        ) =>
+          person.id ===
+          personId
+            ? {
+                ...person,
+
+                serviceIds:
+                  person.serviceIds.filter(
+                    (
+                      id,
+                    ) =>
+                      id !==
+                      serviceId,
+                  ),
+              }
+            : person,
+      )
+
+    updateFlow({
+      people:
+        nextPeople,
+    })
+  }
+
+  /* =======================================================
+     ADD SERVICE TO PERSON
+  ======================================================= */
+
+  function handleAddPersonService(
+    personId: string,
+  ) {
+    navigate(
+      `/services?assignTo=${encodeURIComponent(
+        personId,
+      )}&mode=enquiry`,
+    )
+  }
+
+  /* =======================================================
+     NEXT STEP
+  ======================================================= */
+
+  function goNext() {
+    if (!flow) {
+      return
+    }
+
+    setError('')
+
+    const currentStep =
+      Number(
+        flow.step,
+      ) || 1
+
+    /* STEP 1 */
+
+    if (
+      currentStep ===
+      1
+    ) {
+      const hasServices =
+        flow.people.some(
+          (
+            person,
+          ) =>
+            person.serviceIds.length >
+            0,
+        )
+
+      if (!hasServices) {
+        setError(
+          'Please select at least one beauty service.',
+        )
+
+        return
+      }
+    }
+
+    /* STEP 2 */
+
+    if (
+      currentStep ===
+      2
+    ) {
+      if (
+        flow.people.length ===
+        0
+      ) {
+        setError(
+          'Please add at least one person.',
+        )
+
         return
       }
 
-      setServices(
-        (serviceResult.data ?? []).map((row) => ({
-          id: row.id,
-          category: row.category,
-          name: row.name,
-          description: row.description,
-          duration_minutes: Number(row.duration_minutes),
-          price: Number(row.price),
-          image_url: row.image_url,
-        })),
-      )
+      for (
+        const person of flow.people
+      ) {
+        const name =
+          person.name.trim()
 
-      setOffers(
-        (offerResult.data ?? []).map((row) => ({
-          id: row.id,
-          title: row.title,
-          discount_type: row.discount_type,
-          discount_value: Number(row.discount_value),
-          promo_code: row.promo_code,
-          starts_at: row.starts_at,
-          ends_at: row.ends_at,
-          service_id: row.service_id,
-          category_id: row.category_id,
-        })),
-      )
+        const phone =
+          person.phone
+            .replace(
+              /\D/g,
+              '',
+            )
 
-      const user = userData.user
+        const email =
+          person.email.trim()
 
-      if (user) {
-        const { data: currentProfile } = await supabase
-          .from('profiles')
-          .select('id, full_name, email')
-          .eq('id', user.id)
-          .maybeSingle()
+        if (!name) {
+          setError(
+            'Please enter the name for every person.',
+          )
 
-        const nextProfile: Profile = currentProfile ?? {
-          id: user.id,
-          full_name: null,
-          email: user.email ?? null,
+          return
         }
 
-        setProfile(nextProfile)
-        setName(nextProfile.full_name ?? '')
-        setEmail(nextProfile.email ?? user.email ?? '')
-
-        setHistoryLoading(true)
-
-        const { data: bookingRows } = await supabase
-          .from('bookings')
-          .select(`
-            id,
-            booking_date,
-            booking_time,
-            status,
-            price,
-            services (
-              name
-            )
-          `)
-          .eq('customer_id', user.id)
-          .order('booking_date', { ascending: false })
-          .order('booking_time', { ascending: false })
-          .limit(5)
-
-        if (mounted) {
-          setHistory(
-            (bookingRows ?? []).map((row) => {
-              const serviceRelation = Array.isArray(row.services)
-                ? row.services[0]
-                : row.services
-
-              return {
-                id: row.id,
-                booking_date: row.booking_date,
-                booking_time: row.booking_time,
-                status: row.status,
-                price: Number(row.price),
-                service_name: serviceRelation?.name ?? 'Beauty service',
-              }
-            }),
+        if (
+          phone.length !==
+          10
+        ) {
+          setError(
+            `Please enter a valid phone number for ${name}.`,
           )
-          setHistoryLoading(false)
+
+          return
+        }
+
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            email,
+          )
+        ) {
+          setError(
+            `Please enter a valid email address for ${name}.`,
+          )
+
+          return
+        }
+
+        if (
+          person.serviceIds.length ===
+          0
+        ) {
+          setError(
+            `${name} must have at least one service.`,
+          )
+
+          return
         }
       }
-
-      setLoading(false)
     }
 
-    void loadData()
+    /* STEP 3 */
 
-    return () => {
-      mounted = false
+    if (
+      currentStep ===
+      3
+    ) {
+      if (!flow.date) {
+        setError(
+          'Please select your preferred date.',
+        )
+
+        return
+      }
+
+      if (!flow.time) {
+        setError(
+          'Please select your preferred time.',
+        )
+
+        return
+      }
     }
-  }, [])
 
-  const selectedServices = useMemo(
-    () =>
-      services.filter((service) => selectedIds.includes(service.id)),
-    [services, selectedIds],
-  )
+    /* STEP 4 */
 
-  const subtotal = useMemo(
-    () => selectedServices.reduce((total, service) => total + service.price, 0),
-    [selectedServices],
-  )
+    if (
+      currentStep ===
+      4
+    ) {
+      if (
+        !flow.contactPreference
+      ) {
+        setError(
+          'Please select your preferred contact method.',
+        )
 
-  const discountAmount = useMemo(() => {
-    if (!appliedOffer) return 0
+        return
+      }
+    }
 
-    if (appliedOffer.discount_type === 'percentage') {
-      return Math.min(
-        subtotal,
-        Math.round(subtotal * (appliedOffer.discount_value / 100)),
+    const nextStep =
+      Math.min(
+        currentStep + 1,
+        5,
       )
+
+    updateFlow({
+      step:
+        nextStep,
+    })
+
+    setBookingStep(
+      nextStep,
+    )
+  }
+
+  /* =======================================================
+     BACK
+  ======================================================= */
+
+  function goBack() {
+    if (!flow) {
+      return
     }
 
-    return Math.min(subtotal, appliedOffer.discount_value)
-  }, [appliedOffer, subtotal])
+    const previousStep =
+      Math.max(
+        flow.step - 1,
+        1,
+      )
 
-  const total = Math.max(0, subtotal - discountAmount)
+    updateFlow({
+      step:
+        previousStep,
+    })
 
-  const totalDuration = useMemo(
-    () =>
-      selectedServices.reduce(
-        (totalValue, service) => totalValue + service.duration_minutes,
-        0,
-      ),
-    [selectedServices],
-  )
+    setBookingStep(
+      previousStep,
+    )
+  }
 
-  const calendarDays = useMemo(() => {
-    const days: Date[] = []
+  /* =======================================================
+     SUBMIT ENQUIRY
+  ======================================================= */
 
-    for (let index = 0; index < 14; index += 1) {
-      const dateValue = new Date()
-      dateValue.setHours(0, 0, 0, 0)
-      dateValue.setDate(dateValue.getDate() + index)
-      days.push(dateValue)
+  async function submitEnquiry() {
+    if (!flow) {
+      return
     }
 
-    return days
-  }, [])
+    setError('')
 
-  function scrollToFirstMissing() {
-    window.setTimeout(() => {
-      firstFieldRef.current?.focus()
-      firstFieldRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+    if (
+      !flow.date ||
+      !flow.time
+    ) {
+      setError(
+        'Preferred date and time are required.',
+      )
+
+      updateFlow({
+        step: 3,
       })
-    }, 80)
-  }
 
-  function setSelectedService(serviceId: string) {
-    setError('')
-
-    setSelectedIds((current) =>
-      current.includes(serviceId)
-        ? current.filter((id) => id !== serviceId)
-        : [...current, serviceId],
-    )
-  }
-
-  function removeService(serviceId: string) {
-    setSelectedIds((current) => current.filter((id) => id !== serviceId))
-    setError('')
-  }
-
-  function applyDiscount() {
-    setDiscountMessage('')
-    setAppliedOffer(null)
-
-    const code = discountCode.trim().toLowerCase()
-
-    if (!code) {
-      setDiscountMessage('Enter a discount code first.')
       return
     }
 
-    const matched = offers.find(
-      (offer) => offer.promo_code?.trim().toLowerCase() === code,
-    )
+    if (
+      !flow.contactPreference
+    ) {
+      setError(
+        'Please select your preferred contact method.',
+      )
 
-    if (!matched) {
-      setDiscountMessage('This discount code is not valid or is no longer active.')
-      return
-    }
-
-    const serviceEligible =
-      !matched.service_id ||
-      selectedServices.some((service) => service.id === matched.service_id)
-
-    if (!serviceEligible) {
-      setDiscountMessage('This code does not apply to the selected service.')
-      return
-    }
-
-    setAppliedOffer(matched)
-    setDiscountMessage(
-      matched.discount_type === 'percentage'
-        ? `${matched.discount_value}% discount applied.`
-        : `${formatCurrency(matched.discount_value)} discount applied.`,
-    )
-  }
-
-  function validateStepOne() {
-    if (selectedServices.length === 0) {
-      setError('Please select at least one service.')
-      serviceSectionRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+      updateFlow({
+        step: 4,
       })
-      return false
-    }
 
-    if (!date) {
-      setError('Please select your preferred date.')
-      setStep(1)
-      return false
-    }
-
-    if (!time) {
-      setError('Please select your preferred time slot.')
-      setStep(1)
-      return false
-    }
-
-    return true
-  }
-
-  function continueFromStepOne() {
-    setError('')
-
-    if (!validateStepOne()) return
-
-    setStep(2)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  function continueFromStepTwo() {
-    setError('')
-
-    if (!name.trim()) {
-      setError('Please enter your full name.')
-      scrollToFirstMissing()
       return
     }
 
-    if (!phone.trim()) {
-      setError('Please enter your mobile number.')
-      scrollToFirstMissing()
+    const selectedPeople =
+      flow.people.filter(
+        (
+          person,
+        ) =>
+          person.serviceIds.length >
+          0,
+      )
+
+    if (
+      selectedPeople.length ===
+      0
+    ) {
+      setError(
+        'Please select at least one beauty service.',
+      )
+
+      updateFlow({
+        step: 1,
+      })
+
       return
     }
 
-    if (!/^[0-9+\-\s()]{8,20}$/.test(phone.trim())) {
-      setError('Please enter a valid mobile number.')
-      scrollToFirstMissing()
-      return
-    }
+    for (
+      const person of selectedPeople
+    ) {
+      if (
+        !person.name.trim()
+      ) {
+        setError(
+          'Please enter the name for every person.',
+        )
 
-    if (!email.trim()) {
-      setError('Please enter your email address.')
-      scrollToFirstMissing()
-      return
-    }
+        updateFlow({
+          step: 2,
+        })
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError('Please enter a valid email address.')
-      scrollToFirstMissing()
-      return
-    }
+        return
+      }
 
-    setStep(3)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+      const phone =
+        person.phone.replace(
+          /\D/g,
+          '',
+        )
 
-  function continueFromStepThree() {
-    setError('')
+      if (
+        phone.length !==
+        10
+      ) {
+        setError(
+          `Please enter a valid phone number for ${person.name}.`,
+        )
 
-    if (!validateStepOne()) return
+        updateFlow({
+          step: 2,
+        })
 
-    if (!name.trim() || !phone.trim() || !email.trim()) {
-      setStep(2)
-      setError('Please complete your required contact details.')
-      return
-    }
+        return
+      }
 
-    setStep(4)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+      if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+          person.email.trim(),
+        )
+      ) {
+        setError(
+          `Please enter a valid email address for ${person.name}.`,
+        )
 
-  async function confirmEnquiry(event?: FormEvent) {
-    event?.preventDefault()
-    setError('')
+        updateFlow({
+          step: 2,
+        })
 
-    if (!profile) {
-      const redirect = `${window.location.pathname}${window.location.search}`
-      navigate(`/login?redirect=${encodeURIComponent(redirect)}`)
-      return
-    }
+        return
+      }
 
-    if (!validateStepOne()) return
+      if (
+        person.serviceIds.length ===
+        0
+      ) {
+        setError(
+          `${person.name} must have at least one service.`,
+        )
 
-    if (!name.trim() || !phone.trim() || !email.trim()) {
-      setStep(2)
-      setError('Please complete your required contact details.')
-      return
+        updateFlow({
+          step: 2,
+        })
+
+        return
+      }
     }
 
     setSubmitting(true)
 
     try {
-      const { data: existingBookings, error: availabilityError } = await supabase
-        .from('bookings')
-        .select('id')
-        .eq('booking_date', date)
-        .eq('booking_time', time)
-        .in('status', ['pending', 'confirmed'])
-        .limit(1)
+      const {
+        data: {
+          user,
+        },
+      } =
+        await supabase.auth.getUser()
 
-      if (availabilityError) {
-        setError(availabilityError.message)
+      if (!user) {
+        navigate(
+          `/login?redirect=${encodeURIComponent(
+            '/enquiry',
+          )}`,
+          {
+            replace: true,
+          },
+        )
+
         return
       }
 
-      if ((existingBookings ?? []).length > 0) {
-        setStep(1)
-        setError('That time slot is no longer available. Please choose another slot.')
-        return
+      /*
+       * Build the exact service IDs that actually
+       * exist in the current catalogue.
+       */
+      const enquiryPeople =
+        selectedPeople.map(
+          (
+            person,
+          ) => ({
+            name:
+              person.name.trim(),
+
+            phone:
+              person.phone.trim(),
+
+            email:
+              person.email.trim(),
+
+            serviceIds:
+              cleanServiceIds(
+                person.serviceIds,
+              ).filter(
+                (
+                  serviceId,
+                ) =>
+                  serviceMap.has(
+                    serviceId,
+                  ),
+              ),
+          }),
+        )
+
+      const validPeople =
+        enquiryPeople.filter(
+          (
+            person,
+          ) =>
+            person.serviceIds.length >
+            0,
+        )
+
+      if (
+        validPeople.length ===
+        0
+      ) {
+        throw new Error(
+          'None of the selected services are currently available.',
+        )
       }
 
-      const notesWithEnquiry = [
-        'ENQUIRY REQUEST',
-        appliedOffer
-          ? `DISCOUNT CODE: ${appliedOffer.promo_code ?? discountCode.trim()}`
-          : '',
-        `DISCOUNT AMOUNT: ${formatCurrency(discountAmount)}`,
-        notes.trim() ? `CUSTOMER REQUIREMENTS:\n${notes.trim()}` : '',
-      ]
-        .filter(Boolean)
-        .join('\n\n')
+      /*
+       * Recalculate from the same service map used
+       * by the ReviewStep.
+       */
+      const finalSubtotal =
+        validPeople.reduce(
+          (
+            peopleTotal,
+            person,
+          ) =>
+            peopleTotal +
+            person.serviceIds.reduce(
+              (
+                personTotal,
+                serviceId,
+              ) => {
+                const service =
+                  serviceMap.get(
+                    serviceId,
+                  )
 
-      const firstService = selectedServices[0]
+                return (
+                  personTotal +
+                  (
+                    Number(
+                      service?.offerPrice,
+                    ) || 0
+                  )
+                )
+              },
+              0,
+            ),
+          0,
+        )
 
-      const { data: booking, error: bookingError } = await supabase
-        .from('bookings')
-        .insert({
-          customer_id: profile.id,
-          service_id: firstService.id,
-          booking_date: date,
-          booking_time: time,
-          customer_name: name.trim(),
-          customer_email: email.trim(),
-          customer_phone: phone.trim(),
-          notes: notesWithEnquiry,
-          price: total,
-          status: 'pending',
+      const finalDiscount =
+        Math.min(
+          Math.max(
+            Number(
+              flow.discountAmount,
+            ) || 0,
+            0,
+          ),
+          finalSubtotal,
+        )
+
+      const finalTotal =
+        Math.max(
+          finalSubtotal -
+            finalDiscount,
+          0,
+        )
+
+      const created =
+        await createEnquiry({
+          customerId:
+            user.id,
+
+          preferredDate:
+            flow.date,
+
+          preferredTime:
+            flow.time,
+
+          contactPreference:
+            flow.contactPreference,
+
+          notes:
+            flow.notes?.trim() ||
+            '',
+
+          subtotal:
+            finalSubtotal,
+
+          discountAmount:
+            finalDiscount,
+
+          totalAmount:
+            finalTotal,
+
+          people:
+            validPeople,
         })
-        .select('id')
-        .single()
 
-      if (bookingError || !booking) {
-        setError(
-          bookingError?.message ??
-            'Unable to submit your enquiry. Please try again.',
-        )
-        return
-      }
+      setCreatedEnquiryId(
+        created.id,
+      )
 
-      const { error: itemError } = await supabase
-        .from('booking_items')
-        .insert(
-          selectedServices.map((service) => ({
-            booking_id: booking.id,
-            service_id: service.id,
-            service_name: service.name,
-            price: service.price,
-            duration_minutes: service.duration_minutes,
-          })),
-        )
+      /*
+       * Do not leave the submitted enquiry as an
+       * unfinished booking draft.
+       */
+ window.localStorage.removeItem(
+  'wildfloral_enquiry_flow',
+)
 
-      if (itemError) {
-        setError(
-          'Your enquiry was created, but the service details could not be saved. Please contact the studio.',
-        )
-        return
-      }
+setSuccess(true)
 
-      setCreatedBookingId(booking.id)
-      setSuccess(true)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    } catch (submitError) {
-      console.error('Enquiry submission error:', submitError)
-      setError('Something went wrong while submitting your enquiry.')
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+    } catch (
+      submitError
+    ) {
+      console.error(
+        'Enquiry submission error:',
+        submitError,
+      )
+
+      setError(
+        submitError instanceof
+          Error
+          ? submitError.message
+          : 'Unable to submit your enquiry. Please try again.',
+      )
     } finally {
       setSubmitting(false)
     }
   }
 
-  function resetEnquiry() {
-    setSelectedIds([])
-    setDate('')
-    setTime('')
-    setAppliedOffer(null)
-    setDiscountCode('')
-    setDiscountMessage('')
-    setNotes('')
-    setStep(1)
-    setSuccess(false)
-    setCreatedBookingId('')
-    navigate('/enquiry', { replace: true })
-  }
+  /* =======================================================
+     LOADING
+  ======================================================= */
 
-  function goBack() {
-    setError('')
-    setStep((current) => Math.max(1, current - 1))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  if (loading) {
+  if (
+    loading ||
+    !flow
+  ) {
     return (
       <main className="enquiry-page">
         <div className="enquiry-loading">
-          <span />
-          <strong>Preparing your experience</strong>
-          <small>Loading services and availability</small>
+          <span>
+            Preparing your enquiry...
+          </span>
         </div>
       </main>
     )
   }
+
+  /* =======================================================
+     SUCCESS
+  ======================================================= */
 
   if (success) {
     return (
       <main className="enquiry-page enquiry-success-page">
         <section className="enquiry-success-card">
+
           <div className="enquiry-success-icon">
-            <CheckIcon />
+            ✓
           </div>
 
-          <span className="enquiry-eyebrow">ENQUIRY RECEIVED</span>
+          <span className="enquiry-success-eyebrow">
+            ENQUIRY RECEIVED
+          </span>
 
           <h1>
-            Your experience is
-            <span>on its way.</span>
+            Thank you for
+            <span>
+              choosing WildFloral.
+            </span>
           </h1>
 
           <p>
-            Your request has been sent to WildFloral. We will review the
-            details and update your appointment status.
+            Your beauty service enquiry
+            has been successfully submitted.
+            Our team will review your request
+            and contact you through your
+            selected preference.
           </p>
 
-          <div className="enquiry-success-grid">
-            <div>
-              <span>Reference</span>
-              <strong>{createdBookingId.slice(0, 8).toUpperCase()}</strong>
-            </div>
-            <div>
-              <span>Date</span>
-              <strong>{formatShortDate(date)}</strong>
-            </div>
-            <div>
-              <span>Time</span>
-              <strong>{formatRange(time)}</strong>
-            </div>
-            <div>
-              <span>Total</span>
-              <strong>{formatCurrency(total)}</strong>
-            </div>
+          <div className="enquiry-success-reference">
+            <span>
+              Reference
+            </span>
+
+            <strong>
+              {createdEnquiryId
+                .slice(
+                  0,
+                  8,
+                )
+                .toUpperCase()}
+            </strong>
           </div>
 
-          <div className="enquiry-success-actions">
-            <Link to="/account/bookings" className="enquiry-primary-button">
-              View My Appointments
-              <ArrowIcon />
-            </Link>
+          <button
+            type="button"
+            className="enquiry-primary-button"
+            onClick={() =>
+              navigate(
+                '/services',
+              )
+            }
+          >
+            Explore Services
+          </button>
 
-            <button
-              type="button"
-              className="enquiry-outline-button"
-              onClick={resetEnquiry}
-            >
-              Send Another Enquiry
-            </button>
-          </div>
         </section>
       </main>
     )
   }
 
-  return (
-    <main className="enquiry-page">
-      <header className="enquiry-header">
-        <span className="enquiry-eyebrow">WILDFLORAL ENQUIRY</span>
-        <h1>
-          Your experience,
-          <span>designed around you.</span>
-        </h1>
-        <p>
-          Tell us what you have in mind. Select your services, choose a
-          preferred date and time, add your requirements, and review everything
-          before sending your request.
-        </p>
-      </header>
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
-      <nav className="enquiry-progress" aria-label="Enquiry progress">
-        {[
-          ['01', 'Experience'],
-          ['02', 'Your details'],
-          ['03', 'Discount'],
-          ['04', 'Preview'],
-        ].map(([number, label], index) => (
-          <button
-            type="button"
-            key={number}
-            className={step >= index + 1 ? 'active' : ''}
-            onClick={() => {
-              if (index + 1 < step) {
-                setStep(index + 1)
-                setError('')
-              }
-            }}
-            disabled={index + 1 >= step}
-          >
-            <span>{number}</span>
-            <strong>{label}</strong>
-          </button>
-        ))}
-      </nav>
+ return (
+  <main className="booking-page enquiry-page">
+
+    {/* =================================================
+        TOP BAR
+    ================================================= */}
+
+    <header className="booking-topbar">
+
+      <div className="booking-topbar-inner">
+
+        <div className="booking-top-brand">
+
+          <div className="booking-brand-mark">
+            W
+          </div>
+
+          <div className="booking-brand-copy">
+
+            <strong>
+              WildFloral
+            </strong>
+
+            <span>
+              BEAUTY & FASHION STUDIO
+            </span>
+
+          </div>
+
+        </div>
+
+        <div className="booking-top-center">
+          <span>
+            BEAUTY · FASHION · YOU
+          </span>
+        </div>
+
+        <div className="booking-top-right">
+
+          <Sparkles
+            size={15}
+          />
+
+          <span>
+            PERSONALIZED EXPERIENCE
+          </span>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    {/* =================================================
+        HERO
+    ================================================= */}
+
+    <section className="booking-hero">
+
+      <div className="booking-hero-glow booking-hero-glow-one" />
+
+      <div className="booking-hero-glow booking-hero-glow-two" />
+
+      <div className="booking-container">
+
+        <div className="booking-hero-grid">
+
+          <div className="booking-hero-copy">
+
+            <div className="booking-hero-kicker">
+
+              <span />
+
+              WILDFLORAL BEAUTY
+
+              <span />
+
+            </div>
+
+            <h1>
+              Share your
+              <em>
+                enquiry.
+              </em>
+            </h1>
+
+            <p>
+              Tell us what you are looking for
+              and our team will create a
+              personalized beauty experience
+              around your needs.
+            </p>
+
+            <div className="booking-hero-benefits">
+
+              <div className="booking-hero-benefit">
+
+                <span>
+                  <ShieldCheck size={17} />
+                </span>
+
+                <div>
+                  <strong>
+                    Trusted
+                  </strong>
+
+                  <small>
+                    Professionals
+                  </small>
+                </div>
+
+              </div>
+
+              <div className="booking-hero-benefit">
+
+                <span>
+                  <Sparkles size={17} />
+                </span>
+
+                <div>
+                  <strong>
+                    Premium
+                  </strong>
+
+                  <small>
+                    Experience
+                  </small>
+                </div>
+
+              </div>
+
+              <div className="booking-hero-benefit">
+
+                <span>
+                  <Clock3 size={17} />
+                </span>
+
+                <div>
+                  <strong>
+                    Easy
+                  </strong>
+
+                  <small>
+                    Enquiry
+                  </small>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div className="booking-hero-visual">
+
+            <div className="booking-calendar-card">
+
+              <div className="booking-calendar-top">
+
+                <span>
+                  YOUR EXPERIENCE
+                </span>
+
+                <CalendarDays
+                  size={17}
+                />
+
+              </div>
+
+              <div className="booking-calendar-title">
+
+                <strong>
+                  Your time,
+                </strong>
+
+                <em>
+                  your style.
+                </em>
+
+              </div>
+
+              <div className="booking-calendar-grid">
+
+                {[
+                  'M',
+                  'T',
+                  'W',
+                  'T',
+                  'F',
+                  'S',
+                  'S',
+                ].map(
+                  (
+                    day,
+                    index,
+                  ) => (
+                    <span
+                      key={`week-${index}`}
+                      className="calendar-weekday"
+                    >
+                      {day}
+                    </span>
+                  ),
+                )}
+
+                {[
+                  '1',
+                  '2',
+                  '3',
+                  '4',
+                  '5',
+                  '6',
+                  '7',
+                  '8',
+                  '9',
+                  '10',
+                  '11',
+                  '12',
+                  '13',
+                  '14',
+                ].map(
+                  (
+                    day,
+                    index,
+                  ) => (
+                    <span
+                      key={day}
+                      className={
+                        index === 8
+                          ? 'selected'
+                          : ''
+                      }
+                    >
+                      {index === 8 ? (
+                        <Check
+                          size={13}
+                        />
+                      ) : (
+                        day
+                      )}
+                    </span>
+                  ),
+                )}
+
+              </div>
+
+              <div className="booking-calendar-footer">
+
+                <Clock3
+                  size={14}
+                />
+
+                <span>
+                  Flexible enquiry
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="booking-hero-orbit booking-hero-orbit-one" />
+
+            <div className="booking-hero-orbit booking-hero-orbit-two" />
+
+            <div className="booking-hero-flower">
+              ✦
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    {/* =================================================
+        TRUST STRIP
+    ================================================= */}
+
+    <section className="booking-trust-strip">
+
+      <div className="booking-container">
+
+        <div className="booking-trust-grid">
+
+          <div className="booking-trust-item">
+
+            <span>
+              <ShieldCheck size={16} />
+            </span>
+
+            <div>
+              <strong>
+                Personalized
+              </strong>
+
+              <small>
+                Designed for you
+              </small>
+            </div>
+
+          </div>
+
+          <div className="booking-trust-item">
+
+            <span>
+              <Sparkles size={16} />
+            </span>
+
+            <div>
+              <strong>
+                Premium Quality
+              </strong>
+
+              <small>
+                Carefully selected
+              </small>
+            </div>
+
+          </div>
+
+          <div className="booking-trust-item">
+
+            <span>
+              <Clock3 size={16} />
+            </span>
+
+            <div>
+              <strong>
+                Save Your Time
+              </strong>
+
+              <small>
+                Simple enquiry
+              </small>
+            </div>
+
+          </div>
+
+          <div className="booking-trust-item">
+
+            <span>
+              <ShieldCheck size={16} />
+            </span>
+
+            <div>
+              <strong>
+                Secure & Safe
+              </strong>
+
+              <small>
+                Your details protected
+              </small>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    {/* =================================================
+        STEP HEADER
+    ================================================= */}
+
+    <section className="booking-step-header">
+
+      <div className="booking-container">
+
+        <button
+          type="button"
+          className="booking-step-back"
+          onClick={goBack}
+          disabled={submitting}
+        >
+          <span>
+            ←
+          </span>
+
+          Back
+        </button>
+
+        <div className="booking-step-heading">
+
+          <span>
+            YOUR ENQUIRY
+          </span>
+
+          <strong>
+            STEP {flow.step}
+
+            <small>
+              / 5
+            </small>
+          </strong>
+
+          <em>
+            {
+              [
+                'Selected Services',
+                'People Details',
+                'Date & Time',
+                'Contact Preference',
+                'Review & Submit',
+              ][flow.step - 1]
+            }
+          </em>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    {/* =================================================
+        PROGRESS
+    ================================================= */}
+
+    <section className="booking-progress-section">
+
+      <div className="booking-container">
+
+        <div className="booking-progress">
+
+          <div className="booking-progress-inner">
+
+            {[
+              'Services',
+              'People',
+              'Date & Time',
+              'Contact',
+              'Review',
+            ].map(
+              (
+                label,
+                index,
+              ) => {
+
+                const stepNumber =
+                  index + 1
+
+                const completed =
+                  flow.step >
+                  stepNumber
+
+                const active =
+                  flow.step ===
+                  stepNumber
+
+                return (
+                  <div
+                    key={label}
+                    className={[
+                      'booking-progress-step',
+                      completed
+                        ? 'completed'
+                        : '',
+                      active
+                        ? 'active'
+                        : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+
+                    <span>
+                      {completed
+                        ? '✓'
+                        : stepNumber}
+                    </span>
+
+                    <small>
+                      {label}
+                    </small>
+
+                  </div>
+                )
+              },
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+      {/* =================================================
+          ERROR
+      ================================================= */}
 
       {error && (
-        <div className="enquiry-error" role="alert">
+        <div
+          className="enquiry-error"
+          role="alert"
+        >
           {error}
         </div>
       )}
 
-      <div className="enquiry-layout">
-        <div className="enquiry-main">
-          {step === 1 && (
-            <>
-              <section className="enquiry-panel" ref={serviceSectionRef}>
-                <div className="enquiry-panel-heading">
-                  <span className="enquiry-number">01</span>
-                  <div>
-                    <span>YOUR EXPERIENCE</span>
-                    <h2>Choose your services</h2>
-                    <p>Select only the services you want included in this enquiry.</p>
-                  </div>
-                </div>
+      {/* =================================================
+          MAIN FLOW
+      ================================================= */}
 
-                <div className="enquiry-service-grid">
-                  {services.map((service) => {
-                    const selected = selectedIds.includes(service.id)
+      <section className="enquiry-flow">
 
-                    return (
-                      <button
-                        type="button"
-                        key={service.id}
-                        className={
-                          selected
-                            ? 'enquiry-service-card selected'
-                            : 'enquiry-service-card'
-                        }
-                        onClick={() => setSelectedService(service.id)}
-                      >
-                        <div className="enquiry-service-image">
-                          <img
-                            src={service.image_url || assets.hero}
-                            alt=""
-                          />
-                          <span className="enquiry-service-check">
-                            {selected ? <CheckIcon /> : '+'}
-                          </span>
-                        </div>
+        {/* STEP 1 */}
 
-                        <div className="enquiry-service-content">
-                          <span>{service.category || 'Beauty'}</span>
-                          <strong>{service.name}</strong>
-                          <small>
-                            {service.duration_minutes} min · {formatCurrency(service.price)}
-                          </small>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-              </section>
+        {flow.step === 1 && (
+  <SelectedServicesStep
+    loading={loading}
+    selectedServiceIds={
+      flow.people[0]
+        ?.serviceIds ?? []
+    }
+    serviceMap={
+      new Map(
+        services.map(
+          (service) => [
+            service.id,
+            service,
+          ],
+        ),
+      )
+    }
+    onRemoveService={(
+  serviceId,
+) => {
+  const firstPerson =
+    flow.people[0]
 
-              <section className="enquiry-panel">
-                <div className="enquiry-panel-heading">
-                  <span className="enquiry-number">02</span>
-                  <div>
-                    <span>WHEN</span>
-                    <h2>Choose a preferred date</h2>
-                    <p>You can select another date later if the studio suggests a different slot.</p>
-                  </div>
-                </div>
+  if (!firstPerson) {
+    return
+  }
 
-                <div className="enquiry-calendar-toolbar">
-                  <label htmlFor="enquiry-date">
-                    <CalendarIcon />
-                    <span>Calendar date</span>
-                  </label>
-                  <input
-                    id="enquiry-date"
-                    type="date"
-                    min={minDate}
-                    value={date}
-                    onChange={(event) => {
-                      setDate(event.target.value)
-                      setTime('')
-                      setError('')
-                    }}
-                  />
-                </div>
+  const nextFlow = {
+    ...flow,
 
-                <div className="enquiry-date-strip">
-                  {calendarDays.map((day) => {
-                    const value = getDateKey(day)
-                    const active = date === value
+    people: [
+      {
+        ...firstPerson,
+        serviceIds:
+          firstPerson.serviceIds.filter(
+            (id) =>
+              id !== serviceId,
+          ),
+      },
+      ...flow.people.slice(1),
+    ],
+  }
 
-                    return (
-                      <button
-                        type="button"
-                        key={value}
-                        className={active ? 'active' : ''}
-                        onClick={() => {
-                          setDate(value)
-                          setTime('')
-                          setError('')
-                        }}
-                      >
-                        <span>
-                          {day.toLocaleDateString('en-IN', {
-                            weekday: 'short',
-                          })}
-                        </span>
-                        <strong>{day.getDate()}</strong>
-                        <small>
-                          {day.toLocaleDateString('en-IN', {
-                            month: 'short',
-                          })}
-                        </small>
-                      </button>
-                    )
-                  })}
-                </div>
-              </section>
+  saveEnquiryFlow(
+    nextFlow,
+  )
 
-              <section className="enquiry-panel">
-                <div className="enquiry-panel-heading">
-                  <span className="enquiry-number">03</span>
-                  <div>
-                    <span>WHEN</span>
-                    <h2>Choose a time range</h2>
-                    <p>Select a one-hour preferred slot for your request.</p>
-                  </div>
-                </div>
+  setFlow(
+    nextFlow,
+  )
 
-                <div className="enquiry-time-grid">
-                  {TIME_SLOTS.map((slot) => (
-                    <button
-                      type="button"
-                      key={slot}
-                      className={time === slot ? 'active' : ''}
-                      onClick={() => {
-                        setTime(slot)
-                        setError('')
-                      }}
-                    >
-                      <ClockIcon />
-                      <span>{formatRange(slot)}</span>
-                      {time === slot && <CheckIcon />}
-                    </button>
-                  ))}
-                </div>
-              </section>
+  clearBookingCart()
+}}
+    onAddService={() => {
+      clearBookingCart()
 
-              <button
-                type="button"
-                className="enquiry-primary-button enquiry-next-button"
-                onClick={continueFromStepOne}
-              >
-                Continue to your details
-                <ArrowIcon />
-              </button>
-            </>
-          )}
+ navigate('/services?mode=enquiry')
+    }}
+  />
+)}
 
-          {step === 2 && (
-            <section className="enquiry-panel">
-              <div className="enquiry-panel-heading">
-                <span className="enquiry-number">04</span>
-                <div>
-                  <span>YOUR DETAILS</span>
-                  <h2>Tell us about you</h2>
-                  <p>Your account information is used automatically when available.</p>
-                </div>
-              </div>
+        {/* STEP 2 */}
 
-              <form
-                className="enquiry-form"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  continueFromStepTwo()
-                }}
-              >
-                <div className="enquiry-account-note">
-                  <UserIcon />
-                  <div>
-                    <strong>
-                      {profile
-                        ? 'Your account is connected'
-                        : 'Sign in before confirming'}
-                    </strong>
-                    <span>
-                      {profile
-                        ? 'Your saved name and email have been filled in for you.'
-                        : 'You can prepare the enquiry now. Login or registration is required before confirmation.'}
-                    </span>
-                  </div>
-                </div>
+        {flow.step === 2 && (
+          <PeopleDetailsStep
+            people={
+              peopleTotals
+            }
 
-                <div className="enquiry-form-grid">
-                  <div className="enquiry-field">
-                    <label htmlFor="enquiry-name">Full name *</label>
-                    <input
-                      ref={firstFieldRef}
-                      id="enquiry-name"
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
-                      placeholder="Your full name"
-                      autoComplete="name"
-                    />
-                  </div>
+            onAddPerson={
+              handleAddPerson
+            }
 
-                  <div className="enquiry-field">
-                    <label htmlFor="enquiry-phone">Mobile number *</label>
-                    <input
-                      id="enquiry-phone"
-                      type="tel"
-                      value={phone}
-                      onChange={(event) => setPhone(event.target.value)}
-                      placeholder="+91 98765 43210"
-                      autoComplete="tel"
-                    />
-                  </div>
-                </div>
+            onRemovePerson={
+              handleRemovePerson
+            }
 
-                <div className="enquiry-field">
-                  <label htmlFor="enquiry-email">Email address *</label>
-                  <input
-                    id="enquiry-email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                  />
-                </div>
+            onPersonField={
+              handlePersonField
+            }
 
-                <div className="enquiry-field">
-                  <label htmlFor="enquiry-notes">Your requirements</label>
-                  <textarea
-                    id="enquiry-notes"
-                    rows={6}
-                    value={notes}
-                    onChange={(event) => setNotes(event.target.value)}
-                    placeholder="Tell us about the occasion, preferred style, custom requirements, or anything our team should know."
-                  />
-                </div>
+            onRemoveService={
+              handleRemovePersonService
+            }
 
-                <div className="enquiry-form-actions">
-                  <button
-                    type="button"
-                    className="enquiry-outline-button"
-                    onClick={goBack}
-                  >
-                    <BackIcon />
-                    Back
-                  </button>
+            onAddService={
+              handleAddPersonService
+            }
+          />
+        )}
 
-                  <button type="submit" className="enquiry-primary-button">
-                    Continue
-                    <ArrowIcon />
-                  </button>
-                </div>
-              </form>
-            </section>
-          )}
+        {/* STEP 3 */}
 
-          {step === 3 && (
-            <section className="enquiry-panel">
-              <div className="enquiry-panel-heading">
-                <span className="enquiry-number">05</span>
-                <div>
-                  <span>SAVINGS</span>
-                  <h2>Apply a discount code</h2>
-                  <p>Use an active WildFloral promotion to reduce your total.</p>
-                </div>
-              </div>
+        {flow.step === 3 && (
+          <DateTimeStep
+            date={
+              flow.date
+            }
 
-              <div className="enquiry-discount-box">
-                <div className="enquiry-discount-input">
-                  <TagIcon />
-                  <input
-                    value={discountCode}
-                    onChange={(event) => {
-                      setDiscountCode(event.target.value)
-                      setDiscountMessage('')
-                    }}
-                    placeholder="Enter promo code"
-                    autoCapitalize="characters"
-                  />
-                  <button type="button" onClick={applyDiscount}>
-                    Apply
-                  </button>
-                </div>
+            time={
+              flow.time
+            }
 
-                {discountMessage && (
-                  <p
-                    className={
-                      appliedOffer
-                        ? 'enquiry-discount-message success'
-                        : 'enquiry-discount-message'
-                    }
-                  >
-                    {discountMessage}
-                  </p>
-                )}
-              </div>
+            onChangeDate={(
+              date,
+            ) =>
+              updateFlow({
+                date,
+              })
+            }
 
-              {offers.filter((offer) => offer.promo_code).length > 0 && (
-                <div className="enquiry-offer-list">
-                  <span>AVAILABLE OFFERS</span>
-                  <div>
-                    {offers
-                      .filter((offer) => offer.promo_code)
-                      .slice(0, 4)
-                      .map((offer) => (
-                        <button
-                          type="button"
-                          key={offer.id}
-                          onClick={() => {
-                            setDiscountCode(offer.promo_code ?? '')
-                            setDiscountMessage('')
-                          }}
-                        >
-                          <strong>{offer.promo_code}</strong>
-                          <small>
-                            {offer.discount_type === 'percentage'
-                              ? `${offer.discount_value}% off`
-                              : `${formatCurrency(offer.discount_value)} off`}
-                          </small>
-                        </button>
-                      ))}
-                  </div>
-                </div>
-              )}
+            onChangeTime={(
+              time,
+            ) =>
+              updateFlow({
+                time,
+              })
+            }
+          />
+        )}
 
-              <div className="enquiry-pricing-breakdown">
-                <div>
-                  <span>Services subtotal</span>
-                  <strong>{formatCurrency(subtotal)}</strong>
-                </div>
-                <div className="discount-row">
-                  <span>Discount</span>
-                  <strong>
-                    {discountAmount > 0
-                      ? `− ${formatCurrency(discountAmount)}`
-                      : formatCurrency(0)}
-                  </strong>
-                </div>
-                <div className="total-row">
-                  <span>Estimated total</span>
-                  <strong>{formatCurrency(total)}</strong>
-                </div>
-              </div>
+        {/* STEP 4 */}
 
-              <div className="enquiry-form-actions">
-                <button
-                  type="button"
-                  className="enquiry-outline-button"
-                  onClick={goBack}
-                >
-                  <BackIcon />
-                  Back
-                </button>
+        {flow.step === 4 && (
+          <ContactPreferenceStep
+            value={
+              flow.contactPreference
+            }
 
-                <button
-                  type="button"
-                  className="enquiry-primary-button"
-                  onClick={continueFromStepThree}
-                >
-                  Preview request
-                  <ArrowIcon />
-                </button>
-              </div>
-            </section>
-          )}
+            onChange={(
+              contactPreference,
+            ) =>
+              updateFlow({
+                contactPreference,
+              })
+            }
+          />
+        )}
 
-          {step === 4 && (
-            <section className="enquiry-panel">
-              <div className="enquiry-panel-heading">
-                <span className="enquiry-number">06</span>
-                <div>
-                  <span>FINAL REVIEW</span>
-                  <h2>Preview your enquiry</h2>
-                  <p>Check everything once before sending your request.</p>
-                </div>
-              </div>
+        {/* STEP 5 */}
 
-              <div className="enquiry-preview">
-                <div className="enquiry-preview-section">
-                  <div>
-                    <span>YOUR SERVICES</span>
-                    <button
-                      type="button"
-                      onClick={() => setStep(1)}
-                    >
-                      Edit
-                    </button>
-                  </div>
+        {flow.step === 5 && (
+          <ReviewStep
+            mode="enquiry"
 
-                  {selectedServices.map((service) => (
-                    <article key={service.id}>
-                      <div className="enquiry-preview-image">
-                        <img
-                          src={service.image_url || assets.hero}
-                          alt=""
-                        />
-                      </div>
-                      <div>
-                        <strong>{service.name}</strong>
-                        <span>
-                          {service.duration_minutes} min · {formatCurrency(service.price)}
-                        </span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
+            people={
+              peopleTotals
+            }
 
-                <div className="enquiry-preview-grid">
-                  <div>
-                    <span>Date</span>
-                    <strong>{formatDate(date)}</strong>
-                  </div>
-                  <div>
-                    <span>Preferred time</span>
-                    <strong>{formatRange(time)}</strong>
-                  </div>
-                  <div>
-                    <span>Customer</span>
-                    <strong>{name}</strong>
-                  </div>
-                  <div>
-                    <span>Mobile</span>
-                    <strong>{phone}</strong>
-                  </div>
-                  <div>
-                    <span>Email</span>
-                    <strong>{email}</strong>
-                  </div>
-                  <div>
-                    <span>Duration</span>
-                    <strong>{totalDuration} min</strong>
-                  </div>
-                </div>
+            date={
+              flow.date
+            }
 
-                {notes.trim() && (
-                  <div className="enquiry-preview-notes">
-                    <span>REQUIREMENTS</span>
-                    <p>{notes}</p>
-                  </div>
-                )}
+            time={
+              flow.time
+            }
 
-                <div className="enquiry-preview-price">
-                  <div>
-                    <span>Subtotal</span>
-                    <strong>{formatCurrency(subtotal)}</strong>
-                  </div>
-                  <div>
-                    <span>Discount</span>
-                    <strong>− {formatCurrency(discountAmount)}</strong>
-                  </div>
-                  <div>
-                    <span>Total</span>
-                    <strong>{formatCurrency(total)}</strong>
-                  </div>
-                </div>
-              </div>
+            location={
+              flow.location
+            }
 
-              <div className="enquiry-login-warning">
-                <UserIcon />
-                <div>
-                  <strong>
-                    {profile
-                      ? 'Ready to send your enquiry'
-                      : 'Login or register to confirm'}
-                  </strong>
-                  <span>
-                    {profile
-                      ? 'Your request will start as Pending and can later move to Confirmed and Completed.'
-                      : 'Your selected services and enquiry details are preserved. After login or registration you will return here to confirm.'}
-                  </span>
-                </div>
-              </div>
+            address={
+              flow.address
+            }
 
-              <form
-                className="enquiry-form-actions"
-                onSubmit={confirmEnquiry}
-              >
-                <button
-                  type="button"
-                  className="enquiry-outline-button"
-                  disabled={submitting}
-                  onClick={goBack}
-                >
-                  <BackIcon />
-                  Edit
-                </button>
+            city={
+              flow.city
+            }
 
-                <button
-                  type="submit"
-                  className="enquiry-primary-button"
-                  disabled={submitting}
-                >
-                  {submitting ? 'Sending...' : 'Confirm Enquiry'}
-                  {!submitting && <CheckIcon />}
-                </button>
-              </form>
-            </section>
-          )}
-        </div>
+            pincode={
+              flow.pincode
+            }
 
-        <aside className="enquiry-sidebar">
-          <div className="enquiry-summary-card">
-            <div className="enquiry-summary-heading">
-              <div>
-                <span>YOUR EXPERIENCE</span>
-                <h2>Selected services</h2>
-              </div>
-              <span className="enquiry-summary-count">
-                {selectedServices.length}
-              </span>
-            </div>
+            contactPreference={
+              flow.contactPreference ||
+              undefined
+            }
 
-            {selectedServices.length === 0 ? (
-              <div className="enquiry-summary-empty">
-                <strong>Your selection is empty</strong>
-                <span>Add a service to start your enquiry.</span>
-              </div>
-            ) : (
-              <div className="enquiry-summary-services">
-                {selectedServices.map((service) => (
-                  <article key={service.id}>
-                    <div className="enquiry-summary-image">
-                      <img
-                        src={service.image_url || assets.hero}
-                        alt=""
-                      />
-                    </div>
-                    <div>
-                      <strong>{service.name}</strong>
-                      <span>
-                        {service.duration_minutes} min · {formatCurrency(service.price)}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeService(service.id)}
-                      aria-label={`Remove ${service.name}`}
-                    >
-                      ×
-                    </button>
-                  </article>
-                ))}
-              </div>
-            )}
+            subtotal={
+              subtotal
+            }
 
-            <div className="enquiry-summary-divider" />
+            discountAmount={
+              discountAmount
+            }
 
-            <div className="enquiry-summary-meta">
-              <div>
-                <CalendarIcon />
-                <span>
-                  {date ? formatShortDate(date) : 'Choose date'}
-                </span>
-              </div>
-              <div>
-                <ClockIcon />
-                <span>
-                  {time ? formatRange(time) : 'Choose time'}
-                </span>
-              </div>
-            </div>
+            total={
+              total
+            }
 
-            <div className="enquiry-summary-total">
-              <span>Estimated total</span>
-              <strong>{formatCurrency(total)}</strong>
-            </div>
+            onEditStep={(
+              step,
+            ) => {
+              updateFlow({
+                step,
+              })
 
-            {appliedOffer && (
-              <div className="enquiry-applied-discount">
-                <TagIcon />
-                <span>
-                  {appliedOffer.promo_code} · {formatCurrency(discountAmount)} saved
-                </span>
-              </div>
-            )}
+              setBookingStep(
+                step,
+              )
 
-            <button
-              type="button"
-              className="enquiry-sidebar-button"
-              onClick={() => {
-                if (selectedServices.length === 0) {
-                  setStep(1)
-                  serviceSectionRef.current?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                  })
-                  return
-                }
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+              })
+            }}
+          />
+        )}
 
-                setStep(Math.min(step + 1, 4))
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
-            >
-              {step === 4 ? 'Review complete' : 'Continue'}
-              <ArrowIcon />
-            </button>
-          </div>
+      </section>
 
-          <div className="enquiry-history-card">
-            <div>
-              <span>YOUR JOURNEY</span>
-              <h3>Previous appointments</h3>
-            </div>
+      {/* =================================================
+          NAVIGATION
+      ================================================= */}
 
-            {!profile ? (
-              <div className="enquiry-history-empty">
-                <span>Sign in to view your appointment history.</span>
-                <Link to="/login">Login</Link>
-              </div>
-            ) : historyLoading ? (
-              <div className="enquiry-history-empty">
-                <span>Loading your appointments...</span>
-              </div>
-            ) : history.length === 0 ? (
-              <div className="enquiry-history-empty">
-                <span>No previous appointments yet.</span>
-                <Link to="/services">Explore services</Link>
-              </div>
-            ) : (
-              <div className="enquiry-history-list">
-                {history.map((booking) => (
-                  <article key={booking.id}>
-                    <div>
-                      <strong>{booking.service_name}</strong>
-                      <span>
-                        {formatShortDate(booking.booking_date)} ·{' '}
-                        {formatTime(booking.booking_time)}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={`enquiry-status ${getStatusClass(booking.status)}`}>
-                        {booking.status.toLowerCase() === 'pending'
-                          ? 'Requested'
-                          : titleCaseStatus(booking.status)}
-                      </span>
-                      <strong>{formatCurrency(booking.price)}</strong>
-                    </div>
-                  </article>
-                ))}
+      <div className="enquiry-navigation">
+  <button
+    type="button"
+    className="enquiry-secondary-button"
+    onClick={() => {
+      if (flow.step === 1) {
+        navigate('/services')
+        return
+      }
 
-                <Link
-                  to="/account/bookings"
-                  className="enquiry-history-link"
-                >
-                  View all appointments
-                  <ArrowIcon />
-                </Link>
-              </div>
-            )}
-          </div>
-        </aside>
+      goBack()
+    }}
+    disabled={submitting}
+  >
+    <span>←</span>
+    Back
+  </button>
+
+  {flow.step < 5 ? (
+          <button
+            type="button"
+            className="enquiry-primary-button"
+            onClick={
+              goNext
+            }
+            disabled={
+              submitting
+            }
+          >
+            Continue
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="enquiry-primary-button"
+            onClick={() =>
+              void submitEnquiry()
+            }
+            disabled={
+              submitting
+            }
+          >
+            {submitting
+              ? 'Submitting Enquiry...'
+              : 'Submit Enquiry'}
+          </button>
+        )}
+
       </div>
+
     </main>
   )
 }

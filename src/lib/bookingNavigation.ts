@@ -1,33 +1,72 @@
-import {
-  BookingMode,
-  setBookingMode,
-  setSelectedServices,
-} from './bookingFlow'
+export type BookingMode =
+  | 'booking'
+  | 'enquiry'
 
-export function getAuthRedirect(
-  mode: BookingMode,
-) {
-  return mode === 'booking'
-    ? '/booking'
-    : '/enquiry'
-}
+export type BookingStep =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
 
 export function startBookingFlow(
+  mode: BookingMode = 'booking',
+): void {
+  sessionStorage.setItem(
+    'booking_mode',
+    mode,
+  )
+
+  sessionStorage.setItem(
+    'booking_step',
+    '1',
+  )
+}
+
+export function setBookingMode(
   mode: BookingMode,
-  serviceIds: string[],
-  isAuthenticated: boolean,
-) {
-  setBookingMode(mode)
-  setSelectedServices(serviceIds)
+): void {
+  sessionStorage.setItem(
+    'booking_mode',
+    mode,
+  )
+}
 
-  const destination =
-    getAuthRedirect(mode)
+export function getBookingMode(): BookingMode {
+  const value =
+    sessionStorage.getItem(
+      'booking_mode',
+    )
 
-  if (isAuthenticated) {
-    return destination
+  return value === 'enquiry'
+    ? 'enquiry'
+    : 'booking'
+}
+
+export function setBookingStep(
+  step: BookingStep,
+): void {
+  sessionStorage.setItem(
+    'booking_step',
+    String(step),
+  )
+}
+
+export function getBookingStep(): BookingStep {
+  const value = Number(
+    sessionStorage.getItem(
+      'booking_step',
+    ),
+  )
+
+  if (
+    value === 2 ||
+    value === 3 ||
+    value === 4 ||
+    value === 5
+  ) {
+    return value
   }
 
-  return `/login?redirect=${encodeURIComponent(
-    destination,
-  )}`
+  return 1
 }

@@ -406,7 +406,7 @@
 
 .header-login-link {
   min-height:
-    38px;
+    40px;
 
   display:
     inline-flex;
@@ -418,7 +418,17 @@
     center;
 
   padding:
-    0 10px;
+    0 18px;
+
+  border:
+    1px solid
+    var(--nav-text);
+
+  border-radius:
+    4px;
+
+  background:
+    transparent;
 
   color:
     var(--nav-text);
@@ -431,7 +441,84 @@
     8px;
 
   font-weight:
-    700;
+    800;
+
+  letter-spacing:
+    0.09em;
+
+  text-decoration:
+    none;
+
+  text-transform:
+    uppercase;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.header-login-link:hover {
+  border-color:
+    var(--nav-purple);
+
+  background:
+    var(--nav-purple);
+
+  color:
+    #ffffff;
+
+  transform:
+    translateY(-1px);
+}
+.header-dashboard-link {
+  min-height:
+    40px;
+
+  display:
+    inline-flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    3px;
+
+  min-width:
+    78px;
+
+  padding:
+    4px 12px;
+
+  border:
+    1px solid
+    var(--nav-text);
+
+  border-radius:
+    4px;
+
+  background:
+    transparent;
+
+  color:
+    var(--nav-text);
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size:
+    7px;
+
+  font-weight:
+    800;
 
   letter-spacing:
     0.08em;
@@ -443,12 +530,29 @@
     uppercase;
 
   transition:
-    color 160ms ease;
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 }
 
-.header-login-link:hover {
-  color:
+.header-dashboard-link svg {
+  display:
+    block;
+}
+
+.header-dashboard-link:hover {
+  border-color:
     var(--nav-purple);
+
+  background:
+    var(--nav-purple);
+
+  color:
+    #ffffff;
+
+  transform:
+    translateY(-1px);
 }
 
 /* =========================================================
@@ -654,7 +758,7 @@
 .header-icon-button:focus-visible,
 .header-book-button:focus-visible,
 .header-login-link:focus-visible,
-.main-navigation a:focus-visible,
+.header-dashboard-link:focus-visible,
 .brand:focus-visible {
   outline:
     3px solid

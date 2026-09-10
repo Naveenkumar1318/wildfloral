@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { MapPin, Phone } from 'lucide-react'
 
 import './Footer.css'

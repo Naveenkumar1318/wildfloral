@@ -1,7 +1,7 @@
 import {
   Navigate,
   useLocation,
-} from 'react-router'
+} from 'react-router-dom'
 
 import {
   useEffect,
@@ -20,23 +20,88 @@ function CustomerProtectedRoute({
   const location = useLocation()
 
   const [loading, setLoading] = useState(true)
-  const [authenticated, setAuthenticated] =
-    useState(false)
+  const [customer, setCustomer] = useState(false)
+  const [admin, setAdmin] = useState(false)
 
   useEffect(() => {
     let mounted = true
 
     async function checkCustomerSession() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
 
-      if (!mounted) {
-        return
+        if (!mounted) {
+          return
+        }
+
+        if (
+          sessionError ||
+          !session?.user
+        ) {
+          setCustomer(false)
+          setAdmin(false)
+          setLoading(false)
+
+          return
+        }
+
+        const {
+          data: profile,
+          error: profileError,
+        } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .maybeSingle()
+
+        if (!mounted) {
+          return
+        }
+
+        if (profileError) {
+          console.error(
+            'Customer route profile error:',
+            profileError,
+          )
+
+          setCustomer(false)
+          setAdmin(false)
+          setLoading(false)
+
+          return
+        }
+
+        if (profile?.role === 'customer') {
+          setCustomer(true)
+          setAdmin(false)
+        } else if (
+          profile?.role === 'admin'
+        ) {
+          setCustomer(false)
+          setAdmin(true)
+        } else {
+          setCustomer(false)
+          setAdmin(false)
+        }
+
+        setLoading(false)
+      } catch (error) {
+        console.error(
+          'Customer route error:',
+          error,
+        )
+
+        if (!mounted) {
+          return
+        }
+
+        setCustomer(false)
+        setAdmin(false)
+        setLoading(false)
       }
-
-      setAuthenticated(Boolean(session))
-      setLoading(false)
     }
 
     void checkCustomerSession()
@@ -62,13 +127,35 @@ function CustomerProtectedRoute({
     )
   }
 
-  if (!authenticated) {
+  /*
+   * Admin must never enter customer application.
+   */
+  if (admin) {
+  return (
+    <Navigate
+      to="/login"
+      replace
+      state={{
+        from: location.pathname,
+        message:
+          'Admin accounts cannot access the customer dashboard.',
+      }}
+    />
+  )
+}
+
+  /*
+   * No valid customer account.
+   */
+  if (!customer) {
     return (
       <Navigate
         to="/login"
         replace
         state={{
           from: location.pathname,
+          message:
+            'Please sign in with a customer account.',
         }}
       />
     )

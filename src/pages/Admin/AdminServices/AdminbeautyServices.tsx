@@ -8,12 +8,15 @@ import {
 import {
   Link,
   useNavigate,
-} from 'react-router'
+} from 'react-router-dom'
 
 import { supabase } from '../../../lib/supabase'
 
 import './AdminbeautyServices.css'
 
+/* =========================================================
+   TYPES
+========================================================= */
 
 type Category = {
   id: string
@@ -22,7 +25,6 @@ type Category = {
   image_url: string | null
   is_active: boolean
 }
-
 
 type Service = {
   id: string
@@ -36,8 +38,12 @@ type Service = {
 }
 
 
+
 const SERVICES_PER_PAGE = 10
 
+/* =========================================================
+   COMPONENT
+========================================================= */
 
 function AdminBeautyServices() {
   const navigate = useNavigate()
@@ -45,11 +51,16 @@ function AdminBeautyServices() {
   const dropdownRef =
     useRef<HTMLDivElement>(null)
 
+  /* =======================================================
+     STATE
+  ======================================================= */
+
   const [categories, setCategories] =
     useState<Category[]>([])
 
   const [services, setServices] =
     useState<Service[]>([])
+
 
   const [loading, setLoading] =
     useState(true)
@@ -69,15 +80,13 @@ function AdminBeautyServices() {
   const [currentPage, setCurrentPage] =
     useState(1)
 
-
-  /* =====================================================
+  /* =======================================================
      LOAD DATA
-  ===================================================== */
+  ======================================================= */
 
   useEffect(() => {
     void loadData()
   }, [])
-
 
   async function loadData() {
     setLoading(true)
@@ -87,14 +96,28 @@ function AdminBeautyServices() {
       categoriesResponse,
       servicesResponse,
     ] = await Promise.all([
+      /* -----------------------------------------------------
+         CATEGORIES
+      ----------------------------------------------------- */
+
       supabase
         .from('service_categories')
         .select(
-          'id, name, description, image_url, is_active',
+          `
+          id,
+          name,
+          description,
+          image_url,
+          is_active
+          `,
         )
         .order('name', {
           ascending: true,
         }),
+
+      /* -----------------------------------------------------
+         SERVICES
+      ----------------------------------------------------- */
 
       supabase
         .from('services')
@@ -113,8 +136,12 @@ function AdminBeautyServices() {
         .order('created_at', {
           ascending: false,
         }),
+
     ])
 
+    /* =====================================================
+       CATEGORY ERROR
+    ===================================================== */
 
     if (categoriesResponse.error) {
       setError(
@@ -126,6 +153,9 @@ function AdminBeautyServices() {
       return
     }
 
+    /* =====================================================
+       SERVICE ERROR
+    ===================================================== */
 
     if (servicesResponse.error) {
       setError(
@@ -138,25 +168,27 @@ function AdminBeautyServices() {
     }
 
 
+
+    /* =====================================================
+       SET DATA
+    ===================================================== */
+
     setCategories(
       (categoriesResponse.data ??
         []) as Category[],
     )
-
 
     setServices(
       (servicesResponse.data ??
         []) as Service[],
     )
 
-
     setLoading(false)
   }
 
-
-  /* =====================================================
+  /* =======================================================
      CLOSE DROPDOWN
-  ===================================================== */
+  ======================================================= */
 
   useEffect(() => {
     function handleOutsideClick(
@@ -172,12 +204,10 @@ function AdminBeautyServices() {
       }
     }
 
-
     document.addEventListener(
       'mousedown',
       handleOutsideClick,
     )
-
 
     return () => {
       document.removeEventListener(
@@ -187,10 +217,9 @@ function AdminBeautyServices() {
     }
   }, [])
 
-
-  /* =====================================================
-     COUNTS
-  ===================================================== */
+  /* =======================================================
+     ACTIVE CATEGORIES
+  ======================================================= */
 
   const activeCategories =
     useMemo(
@@ -202,6 +231,9 @@ function AdminBeautyServices() {
       [categories],
     )
 
+  /* =======================================================
+     ACTIVE SERVICES COUNT
+  ======================================================= */
 
   const activeServices =
     useMemo(
@@ -213,10 +245,9 @@ function AdminBeautyServices() {
       [services],
     )
 
-
-  /* =====================================================
+  /* =======================================================
      CATEGORY NAME
-  ===================================================== */
+  ======================================================= */
 
   function getCategoryName(
     categoryId: string | null,
@@ -224,7 +255,6 @@ function AdminBeautyServices() {
     if (!categoryId) {
       return 'Uncategorized'
     }
-
 
     return (
       categories.find(
@@ -235,10 +265,9 @@ function AdminBeautyServices() {
     )
   }
 
-
-  /* =====================================================
+  /* =======================================================
      CATEGORY SERVICE COUNT
-  ===================================================== */
+  ======================================================= */
 
   function getCategoryServiceCount(
     categoryId: string,
@@ -250,35 +279,31 @@ function AdminBeautyServices() {
     ).length
   }
 
-
-  /* =====================================================
+ 
+  /* =======================================================
      FILTER SERVICES
-  ===================================================== */
+  ======================================================= */
 
   const filteredServices =
     useMemo(() => {
       const query =
         search.trim().toLowerCase()
 
-
       return services.filter(
         (service) => {
           const serviceName =
             service.name.toLowerCase()
-
 
           const categoryName =
             getCategoryName(
               service.category_id,
             ).toLowerCase()
 
-
           const description =
             (
               service.description ??
               ''
             ).toLowerCase()
-
 
           const matchesSearch =
             !query ||
@@ -292,13 +317,11 @@ function AdminBeautyServices() {
               query,
             )
 
-
           const matchesCategory =
             categoryFilter ===
               'all' ||
             service.category_id ===
               categoryFilter
-
 
           return (
             matchesSearch &&
@@ -313,10 +336,9 @@ function AdminBeautyServices() {
       categoryFilter,
     ])
 
-
-  /* =====================================================
+  /* =======================================================
      PAGINATION
-  ===================================================== */
+  ======================================================= */
 
   const totalPages =
     Math.max(
@@ -327,18 +349,15 @@ function AdminBeautyServices() {
       ),
     )
 
-
   const safePage =
     Math.min(
       currentPage,
       totalPages,
     )
 
-
   const startIndex =
     (safePage - 1) *
     SERVICES_PER_PAGE
-
 
   const visibleServices =
     filteredServices.slice(
@@ -347,12 +366,10 @@ function AdminBeautyServices() {
         SERVICES_PER_PAGE,
     )
 
-
   const firstItem =
     filteredServices.length === 0
       ? 0
       : startIndex + 1
-
 
   const lastItem =
     Math.min(
@@ -361,6 +378,9 @@ function AdminBeautyServices() {
       filteredServices.length,
     )
 
+  /* =======================================================
+     RESET PAGE WHEN FILTER CHANGES
+  ======================================================= */
 
   useEffect(() => {
     setCurrentPage(1)
@@ -369,10 +389,9 @@ function AdminBeautyServices() {
     categoryFilter,
   ])
 
-
-  /* =====================================================
+  /* =======================================================
      CATEGORY FILTER LABEL
-  ===================================================== */
+  ======================================================= */
 
   const selectedCategoryName =
     categoryFilter === 'all'
@@ -384,10 +403,9 @@ function AdminBeautyServices() {
         )?.name ??
         'All Categories'
 
-
-  /* =====================================================
-     CATEGORY SELECT
-  ===================================================== */
+  /* =======================================================
+     SELECT CATEGORY
+  ======================================================= */
 
   function selectCategory(
     categoryId: string,
@@ -397,10 +415,9 @@ function AdminBeautyServices() {
     setCurrentPage(1)
   }
 
-
-  /* =====================================================
+  /* =======================================================
      CATEGORY CARD CLICK
-  ===================================================== */
+  ======================================================= */
 
   function handleCategoryCard(
     categoryId: string,
@@ -420,10 +437,9 @@ function AdminBeautyServices() {
     }, 50)
   }
 
-
-  /* =====================================================
+  /* =======================================================
      TOGGLE SERVICE
-  ===================================================== */
+  ======================================================= */
 
   async function toggleService(
     service: Service,
@@ -433,7 +449,6 @@ function AdminBeautyServices() {
     const nextStatus =
       !service.is_active
 
-
     const { error } =
       await supabase
         .from('services')
@@ -442,13 +457,11 @@ function AdminBeautyServices() {
         })
         .eq('id', service.id)
 
-
     if (error) {
       setError(error.message)
 
       return
     }
-
 
     setServices((current) =>
       current.map((item) =>
@@ -463,10 +476,9 @@ function AdminBeautyServices() {
     )
   }
 
-
-  /* =====================================================
+  /* =======================================================
      DELETE SERVICE
-  ===================================================== */
+  ======================================================= */
 
   async function deleteService(
     service: Service,
@@ -476,14 +488,11 @@ function AdminBeautyServices() {
         `Delete "${service.name}"?`,
       )
 
-
     if (!confirmed) {
       return
     }
 
-
     setError('')
-
 
     const { error } =
       await supabase
@@ -491,13 +500,11 @@ function AdminBeautyServices() {
         .delete()
         .eq('id', service.id)
 
-
     if (error) {
       setError(error.message)
 
       return
     }
-
 
     setServices((current) =>
       current.filter(
@@ -507,10 +514,9 @@ function AdminBeautyServices() {
     )
   }
 
-
-  /* =====================================================
+  /* =======================================================
      PAGINATION
-  ===================================================== */
+  ======================================================= */
 
   function goToPage(
     page: number,
@@ -522,9 +528,7 @@ function AdminBeautyServices() {
       return
     }
 
-
     setCurrentPage(page)
-
 
     window.setTimeout(() => {
       document
@@ -538,10 +542,9 @@ function AdminBeautyServices() {
     }, 50)
   }
 
-
-  /* =====================================================
+  /* =======================================================
      RENDER
-  ===================================================== */
+  ======================================================= */
 
   return (
     <main className="beauty-services-page">
@@ -566,21 +569,21 @@ function AdminBeautyServices() {
               ← Back to Dashboard
             </button>
 
-
             <span className="beauty-services-eyebrow">
-              BUAUTY SERVICES / CATALOGUE
+              BEAUTY SERVICES / CATALOGUE
             </span>
-
 
             <h1>
               Services Management
             </h1>
 
-
-            <p></p>
+            <p>
+              Manage beauty categories,
+              services, pricing, offers,
+              and customer visibility.
+            </p>
 
           </div>
-
 
           <div className="beauty-services-header-actions">
 
@@ -600,7 +603,6 @@ function AdminBeautyServices() {
                 </small>
               </div>
             </Link>
-
 
             <Link
               to="/admin/services/new"
@@ -623,7 +625,6 @@ function AdminBeautyServices() {
 
         </header>
 
-
         {/* =================================================
             ERROR
         ================================================= */}
@@ -633,7 +634,6 @@ function AdminBeautyServices() {
             {error}
           </div>
         )}
-
 
         {/* =================================================
             STATISTICS
@@ -663,7 +663,6 @@ function AdminBeautyServices() {
 
           </article>
 
-
           <article className="beauty-stat green">
 
             <div className="beauty-stat-icon">
@@ -685,7 +684,6 @@ function AdminBeautyServices() {
             </div>
 
           </article>
-
 
           <article className="beauty-stat purple">
 
@@ -709,13 +707,9 @@ function AdminBeautyServices() {
 
           </article>
 
-          
-
         </section>
 
-
         {/* =================================================
-            BEAUTY SERVICE CATALOGUE
             ACTIVE CATEGORIES
         ================================================= */}
 
@@ -733,10 +727,11 @@ function AdminBeautyServices() {
                 Active Categories
               </h2>
 
-              <p></p>
+              <p>
+                Browse services by category.
+              </p>
 
             </div>
-
 
             <Link
               to="/admin/services/categories"
@@ -746,7 +741,6 @@ function AdminBeautyServices() {
             </Link>
 
           </div>
-
 
           {loading ? (
 
@@ -812,10 +806,6 @@ function AdminBeautyServices() {
                     tabIndex={0}
                   >
 
-                    {/* =================================
-                        IMAGE
-                    ================================= */}
-
                     <div className="beauty-category-image">
 
                       {category.image_url ? (
@@ -843,9 +833,6 @@ function AdminBeautyServices() {
 
                       )}
 
-
-                      {/* ACTIVE BADGE */}
-
                       <span className="beauty-category-status">
 
                         <span className="beauty-category-status-dot" />
@@ -856,17 +843,11 @@ function AdminBeautyServices() {
 
                     </div>
 
-
-                    {/* =================================
-                        CARD CONTENT
-                    ================================= */}
-
                     <div className="beauty-category-content">
 
                       <span className="beauty-category-label">
                         CATEGORY
                       </span>
-
 
                       <h3 className="beauty-category-title">
                         {
@@ -874,14 +855,12 @@ function AdminBeautyServices() {
                         }
                       </h3>
 
-
                       <p className="beauty-category-description">
                         {
                           category.description ||
                           'No description provided for this category.'
                         }
                       </p>
-
 
                       <div className="beauty-category-bottom">
 
@@ -912,10 +891,8 @@ function AdminBeautyServices() {
 
         </section>
 
-
         {/* =================================================
             ALL SERVICES
-            THIS SECTION IS NOT CHANGED
         ================================================= */}
 
         <section
@@ -935,10 +912,12 @@ function AdminBeautyServices() {
                 Manage Beauty Services
               </h2>
 
-              <p></p>
+              <p>
+                Search, filter, edit, and
+                manage your services.
+              </p>
 
             </div>
-
 
             <Link
               to="/admin/services/new"
@@ -949,8 +928,9 @@ function AdminBeautyServices() {
 
           </div>
 
-
-          {/* FILTER BAR */}
+          {/* =================================================
+              FILTER BAR
+          ================================================= */}
 
           <div className="beauty-filter-bar">
 
@@ -980,7 +960,6 @@ function AdminBeautyServices() {
 
               </svg>
 
-
               <input
                 type="search"
                 value={search}
@@ -993,7 +972,6 @@ function AdminBeautyServices() {
               />
 
             </div>
-
 
             <div
               ref={dropdownRef}
@@ -1029,7 +1007,6 @@ function AdminBeautyServices() {
 
               </button>
 
-
               {dropdownOpen && (
 
                 <div className="beauty-dropdown-menu">
@@ -1061,7 +1038,6 @@ function AdminBeautyServices() {
                     )}
 
                   </button>
-
 
                   {activeCategories.map(
                     (category) => (
@@ -1106,8 +1082,9 @@ function AdminBeautyServices() {
 
           </div>
 
-
-          {/* SERVICE TABLE */}
+          {/* =================================================
+              SERVICE TABLE
+          ================================================= */}
 
           {loading ? (
 
@@ -1168,163 +1145,167 @@ function AdminBeautyServices() {
 
                 </thead>
 
-
                 <tbody>
 
                   {visibleServices.map(
-                    (service) => (
+                    (service) => {
+                      return (
+                        <tr
+                          key={service.id}
+                        >
 
-                      <tr
-                        key={service.id}
-                      >
+                          {/* SERVICE */}
 
-                        <td>
+                          <td>
 
-                          <div className="beauty-service-name">
+                            <div className="beauty-service-name">
 
-                            <div className="beauty-service-image">
+                              <div className="beauty-service-image">
 
-                              {service.image_url ? (
+                                {service.image_url ? (
 
-                                <img
-                                  src={
-                                    service.image_url
+                                  <img
+                                    src={
+                                      service.image_url
+                                    }
+                                    alt=""
+                                  />
+
+                                ) : (
+
+                                  <span>
+                                    WF
+                                  </span>
+
+                                )}
+
+                              </div>
+
+                              <div>
+
+                                <strong>
+                                  {
+                                    service.name
                                   }
-                                  alt=""
-                                />
+                                </strong>
 
-                              ) : (
+                                <small>
+                                  {
+                                    service.description ||
+                                    'No description'
+                                  }
+                                </small>
 
-                                <span>
-                                  WF
-                                </span>
+                              </div>
 
+                            </div>
+
+                          </td>
+
+                          {/* CATEGORY */}
+
+                          <td>
+
+                            <span className="beauty-category-badge">
+                              {getCategoryName(
+                                service.category_id,
                               )}
+                            </span>
 
-                            </div>
+                          </td>
 
+                          {/* PRICE */}
 
-                            <div>
+                          <td>
 
-                              <strong>
-                                {
-                                  service.name
-                                }
-                              </strong>
+                            <strong className="beauty-price">
+                              ₹
+                              {Number(
+                                service.price,
+                              ).toLocaleString(
+                                'en-IN',
+                              )}
+                            </strong>
 
-                              <small>
-                                {
-                                  service.description ||
-                                  'No description'
-                                }
-                              </small>
+                          </td>
 
-                            </div>
+                          {/* DURATION */}
 
-                          </div>
+                          <td>
 
-                        </td>
+                            <span className="beauty-duration">
+                              {
+                                service.duration_minutes
+                              }{' '}
+                              min
+                            </span>
 
+                          </td>
 
-                        <td>
+                          {/* STATUS */}
 
-                          <span className="beauty-category-badge">
-                            {getCategoryName(
-                              service.category_id,
-                            )}
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          <strong className="beauty-price">
-                            ₹
-                            {Number(
-                              service.price,
-                            ).toLocaleString(
-                              'en-IN',
-                            )}
-                          </strong>
-
-                        </td>
-
-
-                        <td>
-
-                          <span className="beauty-duration">
-                            {
-                              service.duration_minutes
-                            }{' '}
-                            min
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          <button
-                            type="button"
-                            className={`beauty-status ${
-                              service.is_active
-                                ? 'active'
-                                : 'hidden'
-                            }`}
-                            onClick={() =>
-                              void toggleService(
-                                service,
-                              )
-                            }
-                          >
-
-                            <i />
-
-                            {service.is_active
-                              ? 'Active'
-                              : 'Hidden'}
-
-                          </button>
-
-                        </td>
-
-
-                        <td>
-
-                          <div className="beauty-service-actions">
+                          <td>
 
                             <button
                               type="button"
+                              className={`beauty-status ${
+                                service.is_active
+                                  ? 'active'
+                                  : 'hidden'
+                              }`}
                               onClick={() =>
-                                navigate(
-                                  `/admin/services/${service.id}/edit`,
-                                )
-                              }
-                            >
-                              Edit
-                            </button>
-
-
-                            <button
-                              type="button"
-                              className="delete"
-                              onClick={() =>
-                                void deleteService(
+                                void toggleService(
                                   service,
                                 )
                               }
                             >
-                              Delete
+
+                              <i />
+
+                              {service.is_active
+                                ? 'Active'
+                                : 'Hidden'}
+
                             </button>
 
-                          </div>
+                          </td>
 
-                        </td>
+                          {/* ACTIONS */}
 
-                      </tr>
+                          <td>
 
-                    ),
+                            <div className="beauty-service-actions">
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  navigate(
+                                    `/admin/services/${service.id}/edit`,
+                                  )
+                                }
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                type="button"
+                                className="delete"
+                                onClick={() =>
+                                  void deleteService(
+                                    service,
+                                  )
+                                }
+                              >
+                                Delete
+                              </button>
+
+                            </div>
+
+                          </td>
+
+                        </tr>
+                      )
+                    },
                   )}
 
                 </tbody>
@@ -1335,8 +1316,9 @@ function AdminBeautyServices() {
 
           )}
 
-
-          {/* PAGINATION */}
+          {/* =================================================
+              PAGINATION
+          ================================================= */}
 
           {!loading &&
             filteredServices.length > 0 && (
@@ -1369,7 +1351,6 @@ function AdminBeautyServices() {
 
                 </span>
 
-
                 <div className="beauty-pagination-buttons">
 
                   <button
@@ -1385,7 +1366,6 @@ function AdminBeautyServices() {
                   >
                     ‹
                   </button>
-
 
                   {Array.from(
                     {
@@ -1415,7 +1395,6 @@ function AdminBeautyServices() {
                     ),
                   )}
 
-
                   <button
                     type="button"
                     disabled={
@@ -1444,6 +1423,5 @@ function AdminBeautyServices() {
     </main>
   )
 }
-
 
 export default AdminBeautyServices

@@ -3,7 +3,7 @@ import {
   Link,
   NavLink,
   useLocation,
-} from 'react-router'
+} from 'react-router-dom'
 import {
   Menu,
   UserRound,
@@ -245,18 +245,17 @@ function Navbar() {
           <div className="header-actions">
 
             {isLoggedIn ? (
-              <Link
-                to="/account"
-                className="header-icon-button"
-                aria-label="My account"
-                title="My account"
-              >
-                <UserRound
-                  size={18}
-                  strokeWidth={1.5}
-                />
-              </Link>
-            ) : (
+  <Link
+    to="/account"
+    className="header-dashboard-link"
+    aria-label="Dashboard"
+    title="Dashboard"
+  >
+   
+    <span>MY Dashboard  → </span>
+    
+  </Link>
+) : (
               <Link
                 to="/login"
                 className="header-login-link"
