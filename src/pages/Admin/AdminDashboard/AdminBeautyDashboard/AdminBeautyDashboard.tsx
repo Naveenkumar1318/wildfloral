@@ -633,30 +633,9 @@ function AdminBeautyDashboard() {
   >([])
 
   const [
-    bookingItems,
-    setBookingItems,
-  ] = useState<
-    BookingItemRow[]
-  >([])
-
-  const [
     services,
     setServices,
   ] = useState<Service[]>([])
-
-  const [
-    opCustomers,
-    setOPCustomers,
-  ] = useState<
-    OPRevenueRow[]
-  >([])
-
-  const [
-    opServices,
-    setOPServices,
-  ] = useState<
-    OPServiceRow[]
-  >([])
 
   const [
     enquiries,
@@ -1552,18 +1531,6 @@ function AdminBeautyDashboard() {
 
           setBookings(
             beautyBookings,
-          )
-
-          setBookingItems(
-            loadedBookingItems,
-          )
-
-          setOPCustomers(
-            loadedOPCustomers,
-          )
-
-          setOPServices(
-            loadedOPServices,
           )
 
           setEnquiries(
