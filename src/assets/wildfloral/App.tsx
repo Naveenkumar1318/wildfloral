@@ -48,7 +48,8 @@ import AdminbeautyEnquiries from './pages/Admin/AdminEnquiries/AdminbeautyEnquir
 import AdminBeautyDashboard
   from './pages/Admin/AdminDashboard/AdminBeautyDashboard/AdminBeautyDashboard'
 
-
+import AdminFashionDashboard
+  from './pages/Admin/AdminDashboard/AdminFashionDashboard'
 
 /* =========================================================
    ADMIN SERVICES
@@ -272,7 +273,10 @@ function App() {
     FASHION ADMIN DASHBOARD
 =================================================== */}
 
-
+<Route
+  path="/admin/fashion"
+  element={<AdminFashionDashboard />}
+/>
         {/* ===================================================
             BEAUTY ENQUIRIES
         =================================================== */}

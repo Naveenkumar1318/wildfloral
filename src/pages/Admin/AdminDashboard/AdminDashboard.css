@@ -1,410 +1,692 @@
 /* =========================================================
    ADMIN DASHBOARD
-========================================================= */
+   ========================================================= */
 
 .admin-dashboard {
   width: 100%;
   min-height: 100%;
-  padding: 48px 52px 70px;
   box-sizing: border-box;
+  padding: 38px 42px 42px;
+  background: #f8faf6;
+  color: #20352a;
 }
+
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .admin-dashboard-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 40px;
-  margin-bottom: 42px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 30px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  align-items: end;
+  gap: 45px;
+}
+
+.admin-dashboard-header-content {
+  min-width: 0;
 }
 
 .admin-dashboard-eyebrow {
   display: block;
-  margin-bottom: 12px;
-  color: #6c8430;
-  font-size: 11px;
+  margin-bottom: 10px;
+
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.18em;
-  line-height: 1.4;
+  letter-spacing: 4px;
+  color: #648e43;
 }
 
 .admin-dashboard-header h1 {
   margin: 0;
-  color: #1e2920;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(42px, 4vw, 64px);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(46px, 5vw, 68px);
   font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  line-height: 0.92;
+  letter-spacing: -3px;
+
+  color: #20352a;
 }
 
 .admin-dashboard-header h1 span {
-  display: inline;
-  color: #54782d;
+  display: inline-block;
+  margin-left: 12px;
+
+  color: #6f9d48;
+  font-style: italic;
 }
 
-.admin-dashboard-header p {
-  max-width: 560px;
-  margin: 20px 0 0;
-  color: #718075;
-  font-size: 15px;
-  line-height: 1.8;
+.admin-dashboard-intro {
+  max-width: 400px;
+  margin: 0 0 3px;
+
+  font-size: 13px;
+  line-height: 1.75;
+  color: #718078;
 }
 
-.admin-dashboard-website-button {
-  flex-shrink: 0;
-  display: inline-flex;
+
+/* =========================================================
+   ADMIN AREAS
+   ========================================================= */
+
+.admin-dashboard-areas {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+
+/* =========================================================
+   AREA CARD
+   ========================================================= */
+
+.admin-area-card {
+  position: relative;
+
+  width: 100%;
+  height: min(455px, calc(100vh - 310px));
+  min-height: 390px;
+
+  display: block;
+
+  overflow: hidden;
+  box-sizing: border-box;
+
+  text-decoration: none;
+
+  background: #dfe7dc;
+  border: 1px solid #dbe4d8;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.admin-area-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #a9c094;
+
+  box-shadow:
+    0 18px 40px rgba(35, 65, 43, 0.14);
+}
+
+
+/* =========================================================
+   IMAGE WRAPPER
+   ========================================================= */
+
+.admin-area-image-wrapper {
+  position: absolute;
+  inset: 0;
+
+  z-index: -2;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.admin-area-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  object-fit: contain;
+  object-position: center center;
+
+  background: #e8ece5;
+
+  transition: transform 0.6s ease;
+}
+
+.admin-area-card:hover .admin-area-image {
+  transform: scale(1.035);
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+   ========================================================= */
+.admin-area-image-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(20, 38, 27, 0.02) 0%,
+      rgba(20, 38, 27, 0.01) 40%,
+      rgba(15, 31, 22, 0.18) 70%,
+      rgba(15, 31, 22, 0.65) 100%
+    );
+}
+
+
+/* =========================================================
+   TOP CONTENT
+   ========================================================= */
+
+.admin-area-top {
+  position: absolute;
+
+  top: 22px;
+  left: 22px;
+  right: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   NUMBER
+   ========================================================= */
+
+.admin-area-number {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 24px;
-  border: 1px solid #d9e1d4;
-  border-radius: 999px;
-  background: #ffffff;
-  color: #355526;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
-}
 
-.admin-dashboard-website-button:hover {
-  border-color: #54782d;
-  background: #f4f7ef;
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   STATISTICS
-========================================================= */
-
-.admin-dashboard-stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 58px;
-}
-
-.admin-dashboard-stat-card {
-  min-height: 165px;
-  padding: 25px;
   box-sizing: border-box;
-  border: 1px solid #e4e9e1;
-  border-radius: 18px;
-  background: #ffffff;
-}
 
-.admin-dashboard-stat-label {
-  display: block;
-  margin-bottom: 20px;
-  color: #819080;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 2px;
+
+  color: #9e057d;
 }
 
-.admin-dashboard-stat-card strong {
-  display: block;
-  color: #263327;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 38px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.admin-dashboard-stat-card p {
-  margin: 10px 0 0;
-  color: #778279;
-  font-size: 13px;
-  line-height: 1.5;
-}
 
 /* =========================================================
-   SECTIONS
-========================================================= */
+   CATEGORY
+   ========================================================= */
 
-.admin-dashboard-section {
-  margin-bottom: 58px;
+.admin-area-category {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+
+  color: #810f6c;
 }
 
-.admin-dashboard-section-heading {
+
+/* =========================================================
+   BOTTOM CONTENT
+   ========================================================= */
+
+.admin-area-bottom {
+  position: absolute;
+
+  left: 24px;
+  right: 24px;
+  bottom: 23px;
+
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
-  margin-bottom: 24px;
+
+  gap: 18px;
+
+  z-index: 2;
 }
 
-.admin-dashboard-section-heading h2 {
-  margin: 0;
-  color: #202b22;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(32px, 3vw, 44px);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.03em;
+.admin-area-content {
+  min-width: 0;
+  max-width: calc(100% - 65px);
 }
 
-.admin-dashboard-section-heading h2 span {
-  color: #5d7c34;
-}
-
-.admin-dashboard-view-link {
-  color: #496c2d;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.admin-dashboard-view-link:hover {
-  text-decoration: underline;
-}
 
 /* =========================================================
-   QUICK ACTIONS
-========================================================= */
+   BOTTOM EYEBROW
+   ========================================================= */
 
-.admin-dashboard-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
+.admin-area-eyebrow {
+  display: block;
 
-.admin-dashboard-action-card {
-  position: relative;
-  display: flex;
-  min-height: 190px;
-  padding: 25px;
-  box-sizing: border-box;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid #e1e7dd;
-  border-radius: 18px;
-  background: #ffffff;
-  color: inherit;
-  text-decoration: none;
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
+  margin-bottom: 6px;
 
-.admin-dashboard-action-card:hover {
-  border-color: #b8c8ac;
-  box-shadow: 0 12px 30px rgba(42, 59, 40, 0.07);
-  transform: translateY(-3px);
-}
-
-.admin-dashboard-action-number {
-  color: #8ca078;
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 2.5px;
+
+  color: rgba(9, 0, 4, 0.999);
 }
 
-.admin-dashboard-action-card h3 {
-  margin: 28px 0 8px;
-  color: #263327;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 23px;
-  font-weight: 400;
-}
-
-.admin-dashboard-action-card p {
-  max-width: 310px;
-  margin: 0;
-  color: #788178;
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-.admin-dashboard-action-arrow {
-  position: absolute;
-  right: 24px;
-  bottom: 23px;
-  color: #54782d;
-  font-size: 21px;
-}
 
 /* =========================================================
-   APPOINTMENTS
-========================================================= */
+   TITLE
+   ========================================================= */
 
-.admin-dashboard-appointment-list {
-  overflow: hidden;
-  border: 1px solid #e2e7df;
-  border-radius: 18px;
-  background: #ffffff;
-}
-
-.admin-dashboard-appointment {
-  display: grid;
-  grid-template-columns: 76px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 24px;
-  min-height: 100px;
-  padding: 18px 24px;
-  box-sizing: border-box;
-}
-
-.admin-dashboard-appointment + .admin-dashboard-appointment {
-  border-top: 1px solid #edf0eb;
-}
-
-.admin-dashboard-appointment-date {
-  display: flex;
-  width: 58px;
-  height: 58px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: #f1f5ed;
-}
-
-.admin-dashboard-appointment-date strong {
-  color: #33422f;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 23px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.admin-dashboard-appointment-date span {
-  margin-top: 4px;
-  color: #72806e;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-}
-
-.admin-dashboard-appointment-info h3 {
-  margin: 0 0 6px;
-  color: #29352b;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 19px;
-  font-weight: 400;
-}
-
-.admin-dashboard-appointment-info p {
+.admin-area-content h2 {
   margin: 0;
-  color: #7c857d;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(38px, 4vw, 52px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -1.8px;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.admin-area-content p {
+  max-width: 340px;
+
+  margin: 10px 0 0;
+
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.6;
+
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.admin-dashboard-status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 82px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.admin-dashboard-status.confirmed {
-  background: #edf5e8;
-  color: #52752d;
-}
-
-.admin-dashboard-status.pending {
-  background: #f7f1e5;
-  color: #97703a;
-}
 
 /* =========================================================
-   RESPONSIVE
-========================================================= */
+   ARROW
+   ========================================================= */
 
-@media (max-width: 1100px) {
-  .admin-dashboard {
-    padding: 40px 32px 60px;
-  }
+.admin-area-arrow {
+  flex: 0 0 auto;
 
-  .admin-dashboard-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  width: 46px;
+  height: 46px;
 
-  .admin-dashboard-actions {
-    grid-template-columns: 1fr;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background: #79aa4b;
+  border: 1px solid #79aa4b;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  color: #ffffff;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
-@media (max-width: 760px) {
+.admin-area-card:hover .admin-area-arrow {
+  background: #ffffff;
+  border-color: #ffffff;
+
+  color: #41652f;
+
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1400px) {
   .admin-dashboard {
-    padding: 30px 20px 50px;
+    padding: 42px 52px 45px;
   }
 
   .admin-dashboard-header {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-bottom: 32px;
+    margin-bottom: 34px;
   }
 
-  .admin-dashboard-website-button {
-    width: 100%;
+  .admin-area-card {
+    height: min(490px, calc(100vh - 315px));
   }
 
-  .admin-dashboard-stats {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 44px;
+  .admin-area-top {
+    top: 25px;
+    left: 25px;
+    right: 25px;
   }
 
-  .admin-dashboard-stat-card {
-    min-height: 140px;
-  }
-
-  .admin-dashboard-section {
-    margin-bottom: 44px;
-  }
-
-  .admin-dashboard-section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .admin-dashboard-appointments-heading {
-    align-items: flex-start;
-  }
-
-  .admin-dashboard-appointment {
-    grid-template-columns: 58px minmax(0, 1fr);
-    gap: 16px;
-    padding: 18px;
-  }
-
-  .admin-dashboard-status {
-    grid-column: 2;
-    justify-self: start;
+  .admin-area-bottom {
+    left: 28px;
+    right: 28px;
+    bottom: 27px;
   }
 }
 
-@media (max-width: 480px) {
-  .admin-dashboard-header h1 {
-    font-size: 43px;
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+   ========================================================= */
+
+@media (max-width: 1050px) {
+  .admin-dashboard {
+    padding: 32px 28px 36px;
   }
 
-  .admin-dashboard-section-heading h2 {
+  .admin-dashboard-header {
+    gap: 30px;
+    margin-bottom: 27px;
+  }
+
+  .admin-dashboard-header h1 {
+    font-size: 52px;
+    letter-spacing: -2.2px;
+  }
+
+  .admin-dashboard-intro {
+    font-size: 12px;
+  }
+
+  .admin-dashboard-areas {
+    gap: 18px;
+  }
+
+  .admin-area-card {
+    height: 410px;
+    min-height: 360px;
+  }
+
+  .admin-area-top {
+    top: 19px;
+    left: 19px;
+    right: 19px;
+  }
+
+  .admin-area-number {
+    width: 42px;
+    height: 42px;
+  }
+
+  .admin-area-bottom {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .admin-area-content h2 {
+    font-size: 42px;
+  }
+
+  .admin-area-content p {
+    font-size: 11px;
+  }
+
+  .admin-area-arrow {
+    width: 43px;
+    height: 43px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .admin-dashboard {
+    width: 100%;
+    min-height: 100%;
+
+    padding: 28px 18px 35px;
+  }
+
+  /* Header becomes vertical */
+  .admin-dashboard-header {
+    display: block;
+
+    margin-bottom: 24px;
+  }
+
+  .admin-dashboard-eyebrow {
+    margin-bottom: 9px;
+
+    font-size: 8px;
+    letter-spacing: 3px;
+  }
+
+  .admin-dashboard-header h1 {
+    font-size: 40px;
+    line-height: 0.98;
+    letter-spacing: -1.5px;
+  }
+
+  .admin-dashboard-header h1 span {
+    display: block;
+
+    margin: 3px 0 0;
+  }
+
+  .admin-dashboard-intro {
+    max-width: 480px;
+
+    margin-top: 14px;
+
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+
+  /* One card per row */
+  .admin-dashboard-areas {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+
+  /* Medium mobile card */
+  .admin-area-card {
+    width: 100%;
+    height: 390px;
+    min-height: 0;
+  }
+
+
+  .admin-area-top {
+    top: 18px;
+    left: 18px;
+    right: 18px;
+  }
+
+  .admin-area-number {
+    width: 41px;
+    height: 41px;
+
+    font-size: 9px;
+  }
+
+  .admin-area-category {
+    font-size: 8px;
+    letter-spacing: 2.5px;
+  }
+
+
+  .admin-area-bottom {
+    left: 19px;
+    right: 19px;
+    bottom: 19px;
+
+    gap: 14px;
+  }
+
+  .admin-area-content {
+    max-width: calc(100% - 58px);
+  }
+
+  .admin-area-eyebrow {
+    margin-bottom: 6px;
+
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+
+  .admin-area-content h2 {
+    font-size: 38px;
+    letter-spacing: -1.2px;
+  }
+
+  .admin-area-content p {
+    margin-top: 8px;
+
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .admin-area-arrow {
+    width: 42px;
+    height: 42px;
+
+    font-size: 18px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .admin-dashboard {
+    padding: 24px 14px 30px;
+  }
+
+  .admin-dashboard-header {
+    margin-bottom: 20px;
+  }
+
+  .admin-dashboard-header h1 {
+    font-size: 35px;
+    letter-spacing: -1.2px;
+  }
+
+  .admin-dashboard-intro {
+    margin-top: 12px;
+
+    font-size: 11px;
+  }
+
+  .admin-dashboard-areas {
+    gap: 13px;
+  }
+
+  .admin-area-card {
+    height: 350px;
+  }
+
+  .admin-area-top {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+  }
+
+  .admin-area-number {
+    width: 38px;
+    height: 38px;
+  }
+
+  .admin-area-category {
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+
+  .admin-area-bottom {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .admin-area-content h2 {
     font-size: 34px;
   }
 
-  .admin-dashboard-action-card {
-    min-height: 180px;
+  .admin-area-content p {
+    font-size: 10px;
   }
 
-  .admin-dashboard-appointment-info h3 {
+  .admin-area-arrow {
+    width: 39px;
+    height: 39px;
+
     font-size: 17px;
+  }
+}
+
+
+/* =========================================================
+   VERY SHORT DESKTOP SCREENS
+   Prevent oversized cards from causing unnecessary scroll
+   ========================================================= */
+
+@media (min-width: 761px) and (max-height: 760px) {
+  .admin-dashboard {
+    padding-top: 26px;
+    padding-bottom: 28px;
+  }
+
+  .admin-dashboard-header {
+    margin-bottom: 22px;
+  }
+
+  .admin-dashboard-header h1 {
+    font-size: 48px;
+  }
+
+  .admin-area-card {
+    height: 360px;
+    min-height: 0;
+  }
+
+  .admin-area-top {
+    top: 17px;
+  }
+
+  .admin-area-bottom {
+    bottom: 18px;
+  }
+
+  .admin-area-content h2 {
+    font-size: 38px;
   }
 }

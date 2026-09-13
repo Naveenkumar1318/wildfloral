@@ -17,6 +17,7 @@ type IconType =
   | 'enquiries'
   | 'services'
   | 'offers'
+  | 'customers'
   | 'website'
   | 'logout'
   | 'logo'
@@ -146,7 +147,46 @@ function Icon({ type }: IconProps) {
         />
       </svg>
     ),
+customers: (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
 
+    <circle
+      cx="9"
+      cy="7"
+      r="4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+    />
+
+    <path
+      d="M22 21v-2a4 4 0 0 0-3-3.87"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+
+    <path
+      d="M16 3.13a4 4 0 0 1 0 7.75"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+  </svg>
+),
     offers: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -720,10 +760,95 @@ function AdminLayout() {
               </NavLink>
 
             </div>
+{/* =================================================
+    OP CUSTOMERS
+================================================= */}
 
+<div
+  className={`admin-nav-group ${
+    openSection === 'op-customers'
+      ? 'open'
+      : ''
+  }`}
+>
+
+  <button
+    type="button"
+    className="admin-nav-parent"
+    onClick={() =>
+      toggleSection('op-customers')
+    }
+    aria-expanded={
+      openSection === 'op-customers'
+    }
+  >
+
+    <span className="admin-nav-icon">
+      <Icon type="customers" />
+    </span>
+
+    <span className="admin-nav-label">
+      OP Customers
+    </span>
+
+    <span className="admin-nav-arrow">
+      ›
+    </span>
+
+  </button>
+
+
+  <div className="admin-nav-submenu">
+
+    <NavLink
+      to="/admin/op-customers/beauty"
+      onClick={closeMobileMenu}
+      className={({ isActive }) =>
+        `admin-nav-subitem ${
+          isActive
+            ? 'active'
+            : ''
+        }`
+      }
+    >
+
+      <span className="admin-subitem-dot" />
+
+      <span>
+        Beauty Customers
+      </span>
+
+    </NavLink>
+
+
+    <NavLink
+      to="/admin/op-customers/fashion"
+      onClick={closeMobileMenu}
+      className={({ isActive }) =>
+        `admin-nav-subitem ${
+          isActive
+            ? 'active'
+            : ''
+        }`
+      }
+    >
+
+      <span className="admin-subitem-dot" />
+
+      <span>
+        Fashion Customers
+      </span>
+
+    </NavLink>
+
+  </div>
+
+</div>
           </div>
 
         </nav>
+
+        
 
 
         {/* =================================================

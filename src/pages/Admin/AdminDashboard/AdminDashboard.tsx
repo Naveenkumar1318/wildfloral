@@ -1,4 +1,8 @@
 import { Link } from 'react-router-dom'
+
+import beautyImage from '../../../assets/wildfloral/beauty.png'
+import fashionImage from '../../../assets/wildfloral/fashion.png'
+
 import './AdminDashboard.css'
 
 function AdminDashboard() {
@@ -10,275 +14,168 @@ function AdminDashboard() {
       ===================================================== */}
 
       <section className="admin-dashboard-header">
-        <div>
+
+        <div className="admin-dashboard-header-content">
+
           <span className="admin-dashboard-eyebrow">
-            WILDFLORAL ADMINISTRATION
+            WILDFLORAL
           </span>
 
           <h1>
-            Welcome
-            <span>back.</span>
+            Manage your
+            <span>business.</span>
           </h1>
 
-          <p>
-            Manage your beauty and fashion services,
-            bookings, and customer experience from one place.
-          </p>
         </div>
+
+        <p className="admin-dashboard-intro">
+          Select an area to manage bookings, enquiries,
+          services, customers, and business activity.
+        </p>
+
+      </section>
+
+
+      {/* =====================================================
+          ADMIN AREAS
+      ===================================================== */}
+
+      <section className="admin-dashboard-areas">
+
+        {/* =================================================
+            BEAUTY
+        ================================================= */}
 
         <Link
-          to="/"
-          className="admin-dashboard-website-button"
+          to="/admin/beauty"
+          className="admin-area-card"
         >
-          View Website
-        </Link>
-      </section>
 
-      {/* =====================================================
-          STATISTICS
-      ===================================================== */}
+          <div className="admin-area-image-wrapper">
 
-      <section className="admin-dashboard-stats">
+            <img
+              src={beautyImage}
+              alt="Beauty administration"
+              className="admin-area-image"
+            />
 
-        <article className="admin-dashboard-stat-card">
-          <span className="admin-dashboard-stat-label">
-            TODAY
-          </span>
+            <div className="admin-area-image-overlay" />
 
-          <strong>04</strong>
-
-          <p>
-            Upcoming appointments
-          </p>
-        </article>
-
-        <article className="admin-dashboard-stat-card">
-          <span className="admin-dashboard-stat-label">
-            BOOKINGS
-          </span>
-
-          <strong>12</strong>
-
-          <p>
-            Total bookings
-          </p>
-        </article>
-
-        <article className="admin-dashboard-stat-card">
-          <span className="admin-dashboard-stat-label">
-            PENDING
-          </span>
-
-          <strong>03</strong>
-
-          <p>
-            Awaiting confirmation
-          </p>
-        </article>
-
-        <article className="admin-dashboard-stat-card">
-          <span className="admin-dashboard-stat-label">
-            CUSTOMERS
-          </span>
-
-          <strong>28</strong>
-
-          <p>
-            Registered customers
-          </p>
-        </article>
-
-      </section>
-
-      {/* =====================================================
-          QUICK ACTIONS
-      ===================================================== */}
-
-      <section className="admin-dashboard-section">
-
-        <div className="admin-dashboard-section-heading">
-          <div>
-            <span className="admin-dashboard-eyebrow">
-              QUICK ACTIONS
-            </span>
-
-            <h2>
-              Manage your
-              <span>studio.</span>
-            </h2>
           </div>
-        </div>
 
-        <div className="admin-dashboard-actions">
 
-          <Link
-            to="/admin/services"
-            className="admin-dashboard-action-card"
-          >
-            <span className="admin-dashboard-action-number">
+          {/* TOP */}
+
+          <div className="admin-area-top">
+
+            <span className="admin-area-number">
               01
             </span>
 
-            <div>
-              <h3>
-                Manage Services
-              </h3>
+            <span className="admin-area-category">
+              BEAUTY
+            </span>
+
+          </div>
+
+
+          {/* BOTTOM */}
+
+          <div className="admin-area-bottom">
+
+            <div className="admin-area-content">
+
+              <span className="admin-area-eyebrow">
+                ADMIN AREA
+              </span>
+
+              <h2>
+                Beauty
+              </h2>
 
               <p>
-                Add, edit, and manage your beauty
-                and fashion services.
+                Manage beauty services, bookings,
+                enquiries, offers, and customers.
               </p>
+
             </div>
 
-            <span className="admin-dashboard-action-arrow">
+
+            <span className="admin-area-arrow">
               →
             </span>
-          </Link>
 
-          <Link
-            to="/admin/bookings"
-            className="admin-dashboard-action-card"
-          >
-            <span className="admin-dashboard-action-number">
+          </div>
+
+        </Link>
+
+
+        {/* =================================================
+            FASHION
+        ================================================= */}
+
+        <Link
+          to="/admin/fashion"
+          className="admin-area-card"
+        >
+
+          <div className="admin-area-image-wrapper">
+
+            <img
+              src={fashionImage}
+              alt="Fashion administration"
+              className="admin-area-image"
+            />
+
+            <div className="admin-area-image-overlay" />
+
+          </div>
+
+
+          {/* TOP */}
+
+          <div className="admin-area-top">
+
+            <span className="admin-area-number">
               02
             </span>
 
-            <div>
-              <h3>
-                Manage Bookings
-              </h3>
-
-              <p>
-                Review upcoming appointments and
-                booking requests.
-              </p>
-            </div>
-
-            <span className="admin-dashboard-action-arrow">
-              →
-            </span>
-          </Link>
-
-          <Link
-            to="/admin/customers"
-            className="admin-dashboard-action-card"
-          >
-            <span className="admin-dashboard-action-number">
-              03
+            <span className="admin-area-category">
+              FASHION
             </span>
 
-            <div>
-              <h3>
-                View Customers
-              </h3>
-
-              <p>
-                View customer information and
-                appointment history.
-              </p>
-            </div>
-
-            <span className="admin-dashboard-action-arrow">
-              →
-            </span>
-          </Link>
-
-        </div>
-
-      </section>
-
-      {/* =====================================================
-          UPCOMING APPOINTMENTS
-      ===================================================== */}
-
-      <section className="admin-dashboard-section">
-
-        <div className="admin-dashboard-section-heading admin-dashboard-appointments-heading">
-          <div>
-            <span className="admin-dashboard-eyebrow">
-              NEXT EXPERIENCE
-            </span>
-
-            <h2>
-              Upcoming
-              <span>appointments.</span>
-            </h2>
           </div>
 
-          <Link
-            to="/admin/bookings"
-            className="admin-dashboard-view-link"
-          >
-            View all bookings →
-          </Link>
-        </div>
 
-        <div className="admin-dashboard-appointment-list">
+          {/* BOTTOM */}
 
-          <article className="admin-dashboard-appointment">
-            <div className="admin-dashboard-appointment-date">
-              <strong>28</strong>
-              <span>AUG</span>
-            </div>
+          <div className="admin-area-bottom">
 
-            <div className="admin-dashboard-appointment-info">
-              <h3>
-                Bridal Makeup
-              </h3>
+            <div className="admin-area-content">
+
+              <span className="admin-area-eyebrow">
+                ADMIN AREA
+              </span>
+
+              <h2>
+                Fashion
+              </h2>
 
               <p>
-                Customer appointment · 10:00 AM
+                Manage fashion designs, orders,
+                enquiries, measurements, and activity.
               </p>
+
             </div>
 
-            <span className="admin-dashboard-status confirmed">
-              Confirmed
+
+            <span className="admin-area-arrow">
+              →
             </span>
-          </article>
 
-          <article className="admin-dashboard-appointment">
-            <div className="admin-dashboard-appointment-date">
-              <strong>29</strong>
-              <span>AUG</span>
-            </div>
+          </div>
 
-            <div className="admin-dashboard-appointment-info">
-              <h3>
-                Hair Styling
-              </h3>
-
-              <p>
-                Customer appointment · 02:30 PM
-              </p>
-            </div>
-
-            <span className="admin-dashboard-status pending">
-              Pending
-            </span>
-          </article>
-
-          <article className="admin-dashboard-appointment">
-            <div className="admin-dashboard-appointment-date">
-              <strong>30</strong>
-              <span>AUG</span>
-            </div>
-
-            <div className="admin-dashboard-appointment-info">
-              <h3>
-                Custom Fashion Design
-              </h3>
-
-              <p>
-                Consultation · 11:00 AM
-              </p>
-            </div>
-
-            <span className="admin-dashboard-status confirmed">
-              Confirmed
-            </span>
-          </article>
-
-        </div>
+        </Link>
 
       </section>
 

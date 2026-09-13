@@ -32,6 +32,11 @@ import {
   removeFromBookingCart,
 } from '../../../lib/bookingCart'
 
+import {
+  loadOPFlow,
+  toggleOPService,
+} from '../../../lib/opCustomerFlow'
+
 import './Services.css'
 
 /* =========================================================
@@ -574,6 +579,14 @@ function Services() {
 
   const assignTo =
     searchParams.get('assignTo')
+
+  const opCustomer =
+  searchParams.get(
+    'opCustomer',
+  )
+
+const isOPCustomer =
+  opCustomer === 'true'
 
   const modeParam =
     searchParams.get('mode')
@@ -1647,6 +1660,58 @@ function toggleService(
 ) {
   setError('')
 
+    /*
+   * =====================================================
+   * ADMIN OP CUSTOMER
+   * =====================================================
+   *
+   * OP customers use a completely separate temporary
+   * flow. This branch executes before enquiry and normal
+   * booking logic.
+   */
+
+  if (isOPCustomer) {
+    const opFlow =
+      loadOPFlow()
+
+    if (!opFlow) {
+      setError(
+        'OP customer session has expired. Please return to OP Customers.',
+      )
+
+      return
+    }
+
+    const targetPersonId =
+      opFlow.selectedPersonId
+
+    if (!targetPersonId) {
+      setError(
+        'Please select a person before choosing services.',
+      )
+
+      return
+    }
+
+    toggleOPService(
+      targetPersonId,
+      serviceId,
+    )
+
+    const updatedFlow =
+      loadOPFlow()
+
+    setSelectedServices(
+      updatedFlow?.people.find(
+        (person) =>
+          person.id ===
+          targetPersonId,
+      )?.serviceIds ?? [],
+    )
+
+    return
+  }
+
   /*
    * =====================================================
    * ENQUIRY SERVICE ASSIGNMENT
@@ -2103,7 +2168,59 @@ function clearSelection() {
   setServicePrices({})
 }
 
+
 async function continueAssignment() {
+
+    /*
+   * =====================================================
+   * ADMIN OP CUSTOMER
+   * =====================================================
+   */
+
+  if (isOPCustomer) {
+    const opFlow =
+      loadOPFlow()
+
+    if (!opFlow) {
+      setError(
+        'OP customer session has expired.',
+      )
+
+      return
+    }
+
+    const person =
+      opFlow.people.find(
+        (item) =>
+          item.id ===
+          opFlow.selectedPersonId,
+      )
+
+    if (!person) {
+      setError(
+        'Please select a person.',
+      )
+
+      return
+    }
+
+    if (
+      person.serviceIds.length ===
+      0
+    ) {
+      setError(
+        'Please select at least one service for this person.',
+      )
+
+      return
+    }
+
+    navigate(
+      '/admin/op-customers/beauty',
+    )
+
+    return
+  }
   /*
    * =====================================================
    * ENQUIRY
@@ -3140,11 +3257,12 @@ async function continueAssignment() {
 
               <div>
                 <strong>
-                  {assignTo
-                    ? 'Services for person'
-                    : 'Services selected'}
-                </strong>
-
+                    {isOPCustomer
+                      ? 'Services for person'
+                      : assignTo
+                        ? 'Services for person'
+                        : 'Services selected'}
+                  </strong>
                 <span>
                   Total{' '}
                   {formatPrice(
@@ -3167,7 +3285,16 @@ async function continueAssignment() {
                 Clear
               </button>
 
-              {assignTo ? (
+              {isOPCustomer ? (
+  <button
+    type="button"
+    className="selection-book"
+    onClick={continueAssignment}
+  >
+    Done
+    <ArrowIcon />
+  </button>
+) : assignTo ? (
                 <button
                   type="button"
                   className="selection-book"

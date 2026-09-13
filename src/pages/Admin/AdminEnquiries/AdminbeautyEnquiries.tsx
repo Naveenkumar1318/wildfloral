@@ -431,18 +431,12 @@ function AdminbeautyEnquiries() {
         )
 
         try {
-          /* -----------------------------------------------
-             PEOPLE
-          ------------------------------------------------ */
-
-          const {
-            data: peopleData,
-            error: peopleError,
-          } =
-            await supabase
-              .from(
-                'enquiry_people',
-              )
+          const [
+            peopleResponse,
+            itemsResponse,
+          ] = await Promise.all([
+            supabase
+              .from('enquiry_people')
               .select(
                 `
                   id,
@@ -460,27 +454,11 @@ function AdminbeautyEnquiries() {
               .order(
                 'created_at',
                 {
-                  ascending:
-                    true,
+                  ascending: true,
                 },
-              )
-
-          if (peopleError) {
-            throw peopleError
-          }
-
-          /* -----------------------------------------------
-             ITEMS
-          ------------------------------------------------ */
-
-          const {
-            data: itemsData,
-            error: itemsError,
-          } =
-            await supabase
-              .from(
-                'enquiry_items',
-              )
+              ),
+            supabase
+              .from('enquiry_items')
               .select(
                 `
                   id,
@@ -503,21 +481,25 @@ function AdminbeautyEnquiries() {
               .order(
                 'created_at',
                 {
-                  ascending:
-                    true,
+                  ascending: true,
                 },
-              )
+              ),
+          ])
 
-          if (itemsError) {
-            throw itemsError
+          if (peopleResponse.error) {
+            throw peopleResponse.error
+          }
+
+          if (itemsResponse.error) {
+            throw itemsResponse.error
           }
 
           const people =
-            (peopleData ??
+            (peopleResponse.data ??
               []) as EnquiryPerson[]
 
           const items =
-            (itemsData ??
+            (itemsResponse.data ??
               []) as EnquiryItem[]
 
           /* -----------------------------------------------
@@ -561,7 +543,6 @@ function AdminbeautyEnquiries() {
                 .select(
                   `
                     id,
-                    name,
                     image_url
                   `,
                 )
@@ -2130,7 +2111,7 @@ await loadEnquiries()
                                                   alt={
                                                     item.service_name
                                                   }
-                                                  loading="lazy"
+                                                  decoding="async"
                                                 />
 
                                               ) : (

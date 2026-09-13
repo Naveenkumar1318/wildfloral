@@ -1,73 +1,194 @@
+import { Link } from 'react-router-dom'
+import beautyImage from '../../../assets/wildfloral/beauty.png'
+import fashionImage from '../../../assets/wildfloral/fashion.png'
 import './CustomerDashboard.css'
 
-function Dashboard() {
+function CustomerDashboard() {
   return (
     <main className="customer-dashboard">
-      <section className="customer-dashboard-welcome">
-        <span className="customer-dashboard-eyebrow">
-          WILDFLORAL
-        </span>
 
-        <h1>
-          Welcome to your
-          <span>account.</span>
-        </h1>
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-        <p>
-          Manage your appointments, bookings,
-          and personal details from your
-          WildFloral account.
+      <section className="customer-dashboard-header">
+
+        <div className="customer-dashboard-header-content">
+
+          <span className="customer-dashboard-eyebrow">
+            WILDFLORAL
+          </span>
+
+          <h1>
+            Your personal
+            <span>experience.</span>
+          </h1>
+
+        </div>
+
+        <p className="customer-dashboard-header-description">
+          Choose your experience and manage everything
+          from one place.
         </p>
+
       </section>
 
-      <section className="customer-dashboard-cards">
-        <article className="customer-dashboard-card">
-          <span className="customer-dashboard-card-number">
-            01
-          </span>
 
-          <h2>
-            My Bookings
-          </h2>
+      {/* =====================================================
+          EXPERIENCE CARDS
+      ===================================================== */}
 
-          <p>
-            View and manage your upcoming
-            beauty and fashion appointments.
-          </p>
-        </article>
+      <section className="customer-dashboard-experiences">
 
-        <article className="customer-dashboard-card">
-          <span className="customer-dashboard-card-number">
-            02
-          </span>
+        {/* =================================================
+            BEAUTY CARD
+        ================================================= */}
 
-          <h2>
-            Profile
-          </h2>
+        <Link
+          to="/customer/beauty"
+          className="customer-experience-card"
+        >
 
-          <p>
-            Manage your personal information
-            and account details.
-          </p>
-        </article>
+          <div className="customer-experience-image-wrapper">
 
-        <article className="customer-dashboard-card">
-          <span className="customer-dashboard-card-number">
-            03
-          </span>
+            <img
+              src={beautyImage}
+              alt="WildFloral beauty services"
+              className="customer-experience-image"
+            />
 
-          <h2>
-            Need Help?
-          </h2>
+          </div>
 
-          <p>
-            Contact WildFloral for assistance
-            with your appointments or services.
-          </p>
-        </article>
+          <div className="customer-experience-overlay"></div>
+
+
+          {/* TOP */}
+
+          <div className="customer-experience-top">
+
+            <span className="customer-experience-number">
+              01
+            </span>
+
+            <span className="customer-experience-label">
+              BEAUTY
+            </span>
+
+          </div>
+
+
+          {/* CENTER */}
+
+          <div className="customer-experience-center">
+
+            <span className="customer-experience-category">
+              CUSTOMER AREA
+            </span>
+
+            <h2>
+              Beauty
+            </h2>
+
+            <p>
+              Services & Appointments
+            </p>
+
+          </div>
+
+
+          {/* BOTTOM */}
+
+          <div className="customer-experience-bottom">
+
+            <span>
+              Explore beauty
+            </span>
+
+            <span className="customer-experience-arrow">
+              →
+            </span>
+
+          </div>
+
+        </Link>
+
+
+        {/* =================================================
+            FASHION CARD
+        ================================================= */}
+
+        <Link
+          to="/customer/fashion"
+          className="customer-experience-card"
+        >
+
+          <div className="customer-experience-image-wrapper">
+
+            <img
+              src={fashionImage}
+              alt="WildFloral fashion design services"
+              className="customer-experience-image"
+            />
+
+          </div>
+
+          <div className="customer-experience-overlay"></div>
+
+
+          {/* TOP */}
+
+          <div className="customer-experience-top">
+
+            <span className="customer-experience-number">
+              02
+            </span>
+
+            <span className="customer-experience-label">
+              FASHION
+            </span>
+
+          </div>
+
+
+          {/* CENTER */}
+
+          <div className="customer-experience-center">
+
+            <span className="customer-experience-category">
+              CUSTOMER AREA
+            </span>
+
+            <h2>
+              Fashion
+            </h2>
+
+            <p>
+              Designs & Orders
+            </p>
+
+          </div>
+
+
+          {/* BOTTOM */}
+
+          <div className="customer-experience-bottom">
+
+            <span>
+              Explore fashion
+            </span>
+
+            <span className="customer-experience-arrow">
+              →
+            </span>
+
+          </div>
+
+        </Link>
+
       </section>
+
     </main>
   )
 }
 
-export default Dashboard
+export default CustomerDashboard

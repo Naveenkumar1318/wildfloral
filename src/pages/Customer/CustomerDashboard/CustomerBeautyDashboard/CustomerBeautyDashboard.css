@@ -1,0 +1,3592 @@
+/* =========================================================
+   WILDFLORAL
+   CUSTOMER BEAUTY DASHBOARD
+   GREEN LUXURY CARD SYSTEM
+========================================================= */
+
+.customer-beauty-dashboard {
+  --green-950: #183b2a;
+  --green-900: #234d35;
+  --green-800: #2f6040;
+  --green-700: #47754f;
+  --green-600: #5d895d;
+  --green-500: #739d6c;
+
+  --green-300: #b9cfb8;
+  --green-200: #d8e5d5;
+  --green-150: #e4ece1;
+  --green-100: #edf3eb;
+  --green-050: #f6f9f5;
+
+  --text-main: #24382b;
+  --text-soft: #63756a;
+  --text-muted: #87958c;
+
+  --border: #d9e5d7;
+  --border-light: #e8eee6;
+
+  --white: #ffffff;
+  --page: #f7f9f6;
+
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 0 auto;
+  padding: 42px 42px 70px;
+
+  color: var(--text-main);
+  background: var(--page);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+.customer-beauty-dashboard *,
+.customer-beauty-dashboard *::before,
+.customer-beauty-dashboard *::after {
+  box-sizing: border-box;
+}
+
+.customer-beauty-dashboard h1,
+.customer-beauty-dashboard h2,
+.customer-beauty-dashboard h3,
+.customer-beauty-dashboard h4,
+.customer-beauty-dashboard h5,
+.customer-beauty-dashboard p {
+  margin-top: 0;
+}
+
+.customer-beauty-dashboard a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.customer-beauty-dashboard button,
+.customer-beauty-dashboard select {
+  font: inherit;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.customer-beauty-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 40px;
+
+  margin-bottom: 38px;
+}
+
+.customer-beauty-header > div {
+  min-width: 0;
+}
+
+.customer-beauty-eyebrow {
+  display: block;
+
+  margin-bottom: 14px;
+
+  color: var(--green-700);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  line-height: 1.3;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-header h1 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(46px, 5vw, 68px);
+  font-weight: 400;
+
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.customer-beauty-header h1 span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: var(--green-600);
+
+  font-style: italic;
+}
+
+.customer-beauty-header p {
+  max-width: 680px;
+
+  margin: 20px 0 0;
+
+  color: var(--text-soft);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   BOOK BUTTON
+========================================================= */
+
+.customer-beauty-book-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex: 0 0 auto;
+
+  min-width: 190px;
+  min-height: 52px;
+
+  padding: 0 20px;
+
+  color: var(--white);
+  background: var(--green-800);
+
+  border: 1px solid var(--green-800);
+  border-radius: 5px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-beauty-book-button span {
+  margin-left: 20px;
+
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.customer-beauty-book-button:hover {
+  background: var(--green-950);
+  border-color: var(--green-950);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.customer-beauty-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 32px;
+}
+
+.customer-beauty-summary-card {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  min-width: 0;
+  min-height: 175px;
+
+  padding: 25px 27px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  box-shadow:
+    0 8px 25px rgba(36, 56, 43, 0.035);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-beauty-summary-card:hover {
+  border-color: var(--green-300);
+
+  box-shadow:
+    0 12px 32px rgba(36, 56, 43, 0.06);
+
+  transform: translateY(-2px);
+}
+
+.customer-beauty-summary-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 50px;
+
+  width: 50px;
+  height: 50px;
+
+  color: var(--green-700);
+
+  background: var(--green-050);
+
+  border: 1px solid var(--green-200);
+  border-radius: 50%;
+}
+
+.customer-beauty-summary-card > div:last-child {
+  min-width: 0;
+}
+
+.customer-beauty-summary-card small {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--green-700);
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-summary-card strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: var(--green-800);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.customer-beauty-summary-card h2 {
+  margin: 0 0 8px;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 23px;
+  font-weight: 400;
+
+  line-height: 1.15;
+}
+
+.customer-beauty-summary-card p {
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   MAIN ACTIVITY OUTER CARD
+========================================================= */
+
+.customer-beauty-overview {
+  width: 100%;
+
+  margin-bottom: 34px;
+
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  box-shadow:
+    0 8px 28px rgba(36, 56, 43, 0.035);
+}
+
+
+/* =========================================================
+   MAIN ACTIVITY HEADER
+========================================================= */
+
+.customer-beauty-main-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 27px 30px;
+
+  background: var(--green-050);
+
+  border-bottom: 1px solid var(--border);
+}
+
+.customer-beauty-main-card-header > div {
+  min-width: 0;
+}
+
+.customer-beauty-main-card-header small {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--green-700);
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-main-card-header h2 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 29px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+
+/* =========================================================
+   UPCOMING / COMPLETED
+   50 / 50 HORIZONTAL
+========================================================= */
+
+.customer-beauty-overview-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  width: 100%;
+}
+
+
+/* =========================================================
+   COLUMNS
+========================================================= */
+
+.customer-beauty-overview-column {
+  min-width: 0;
+
+  padding: 27px;
+}
+
+.customer-beauty-overview-column + .customer-beauty-overview-column {
+  border-left: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   COLUMN HEADER
+========================================================= */
+
+.customer-beauty-column-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-column-heading > div {
+  min-width: 0;
+}
+
+.customer-beauty-column-heading small {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-column-heading h3 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+.customer-beauty-column-heading > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  min-width: 38px;
+  height: 38px;
+
+  padding: 0 9px;
+
+  color: var(--green-700);
+  background: var(--green-050);
+
+  border: 1px solid var(--green-200);
+  border-radius: 7px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SUB CARDS
+========================================================= */
+
+.customer-beauty-sub-card {
+  width: 100%;
+
+  margin-bottom: 18px;
+
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 15px rgba(36, 56, 43, 0.025);
+}
+
+.customer-beauty-sub-card:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   SUB CARD HEADER
+========================================================= */
+
+.customer-beauty-sub-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  min-width: 0;
+
+  padding: 18px 19px;
+
+  background: var(--green-050);
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-sub-card-title {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+
+  color: var(--green-700);
+}
+
+.customer-beauty-sub-card-title > div {
+  min-width: 0;
+}
+
+.customer-beauty-sub-card-title small {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-sub-card-title h4 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1.2;
+}
+
+.customer-beauty-sub-card-header > strong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  min-width: 31px;
+  height: 31px;
+
+  color: var(--green-700);
+
+  background: var(--white);
+
+  border: 1px solid var(--green-200);
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SUB LIST
+========================================================= */
+
+.customer-beauty-sub-list {
+  padding: 4px 18px 0;
+}
+
+
+/* =========================================================
+   RECORD
+========================================================= */
+
+.customer-beauty-record {
+  display: grid;
+
+  grid-template-columns:
+    50px
+    minmax(0, 1fr);
+
+  gap: 14px;
+
+  min-width: 0;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-record:last-child {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   RECORD DATE
+========================================================= */
+
+.customer-beauty-record-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 50px;
+  height: 50px;
+
+  background: var(--green-050);
+
+  border: 1px solid var(--green-200);
+  border-radius: 7px;
+}
+
+.customer-beauty-record-date strong {
+  color: var(--green-800);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.customer-beauty-record-date span {
+  margin-top: 4px;
+
+  color: var(--green-600);
+
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+
+/* COMPLETED DATE */
+
+.customer-beauty-record-date.completed {
+  background: #f1f5ef;
+
+  border-color: var(--green-200);
+}
+
+
+/* =========================================================
+   RECORD CONTENT
+========================================================= */
+
+.customer-beauty-record-content {
+  min-width: 0;
+}
+
+.customer-beauty-record-content h5 {
+  margin: 1px 0 5px;
+
+  overflow: hidden;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+  font-weight: 400;
+
+  line-height: 1.25;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-beauty-record-content > p {
+  margin: 0 0 8px;
+
+  overflow: hidden;
+
+  color: var(--text-soft);
+
+  font-size: 10px;
+  line-height: 1.5;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   RECORD META
+========================================================= */
+
+.customer-beauty-record-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 6px 12px;
+}
+
+.customer-beauty-record-meta span {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.customer-beauty-record-meta svg {
+  flex: 0 0 auto;
+
+  color: var(--green-600);
+}
+
+
+/* =========================================================
+   SUB CARD LINK
+========================================================= */
+
+.customer-beauty-sub-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 47px;
+
+  padding: 0 18px;
+
+  color: var(--green-700);
+
+  background: var(--green-050);
+
+  border-top: 1px solid var(--border-light);
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.customer-beauty-sub-link span {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.customer-beauty-sub-link:hover {
+  color: var(--green-950);
+
+  background: var(--green-100);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.customer-beauty-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  min-height: 145px;
+
+  padding: 25px 15px;
+
+  color: var(--text-muted);
+
+  text-align: center;
+}
+
+.customer-beauty-empty svg {
+  margin-bottom: 4px;
+
+  color: var(--green-600);
+}
+
+.customer-beauty-empty strong {
+  color: var(--green-800);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.customer-beauty-empty span,
+.customer-beauty-empty p {
+  max-width: 240px;
+
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   MONTHLY ACTIVITY OUTER CARD
+========================================================= */
+
+.customer-beauty-monthly {
+  width: 100%;
+
+  margin-bottom: 34px;
+
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  box-shadow:
+    0 8px 28px rgba(36, 56, 43, 0.035);
+}
+
+
+/* =========================================================
+   MONTHLY HEADER
+========================================================= */
+
+.customer-beauty-monthly > .customer-beauty-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 27px 30px;
+
+  background: var(--green-050);
+
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.customer-beauty-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.customer-beauty-section-title {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  min-width: 0;
+}
+
+.customer-beauty-section-title > span,
+.customer-beauty-section-heading > div:first-child > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 34px;
+  height: 34px;
+
+  color: var(--green-700);
+
+  background: var(--white);
+
+  border: 1px solid var(--green-200);
+  border-radius: 7px;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.customer-beauty-section-heading small {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-section-heading h2 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 29px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+
+/* =========================================================
+   MONTH SELECT
+========================================================= */
+
+.customer-beauty-month-select {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex: 0 0 auto;
+}
+
+.customer-beauty-month-select label {
+  color: var(--green-700);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-month-select select {
+  min-width: 175px;
+  height: 43px;
+
+  padding: 0 35px 0 13px;
+
+  color: var(--green-900);
+  background-color: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  outline: none;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.customer-beauty-month-select select:focus {
+  border-color: var(--green-500);
+
+  box-shadow:
+    0 0 0 3px rgba(115, 157, 108, 0.1);
+}
+
+
+/* =========================================================
+   MONTHLY GRID
+========================================================= */
+
+.customer-beauty-monthly-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 18px;
+
+  padding: 22px;
+}
+
+
+/* =========================================================
+   MONTH CARD
+========================================================= */
+
+.customer-beauty-month-card,
+.customer-beauty-month-sub-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  box-shadow:
+    0 4px 15px rgba(36, 56, 43, 0.025);
+}
+
+
+/* =========================================================
+   MONTH CARD HEADER
+========================================================= */
+
+.customer-beauty-month-card-header,
+.customer-beauty-month-sub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  min-width: 0;
+
+  padding: 19px 20px;
+
+  background: var(--green-050);
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-month-card-header > div,
+.customer-beauty-month-sub-header > div {
+  min-width: 0;
+}
+
+.customer-beauty-month-card-header small,
+.customer-beauty-month-sub-header small {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-month-card-header h3,
+.customer-beauty-month-sub-header h3 {
+  margin: 0;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 22px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+.customer-beauty-month-card-header > strong,
+.customer-beauty-month-sub-header > strong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  min-width: 42px;
+  height: 42px;
+
+  color: var(--green-700);
+
+  background: var(--white);
+
+  border: 1px solid var(--green-200);
+  border-radius: 7px;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   MONTH LIST
+========================================================= */
+
+.customer-beauty-month-list {
+  padding: 0 20px;
+}
+
+
+/* =========================================================
+   MONTH RECORD
+========================================================= */
+
+.customer-beauty-month-record,
+.customer-beauty-month-item {
+  display: grid;
+
+  grid-template-columns:
+    50px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-month-record:last-child,
+.customer-beauty-month-item:last-child {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   MONTH DATE
+========================================================= */
+
+.customer-beauty-month-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 50px;
+  height: 50px;
+
+  background: var(--green-050);
+
+  border: 1px solid var(--green-200);
+  border-radius: 7px;
+}
+
+.customer-beauty-month-date strong {
+  color: var(--green-800);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.customer-beauty-month-date span {
+  margin-top: 4px;
+
+  color: var(--green-600);
+
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   MONTH INFO
+========================================================= */
+
+.customer-beauty-month-info {
+  min-width: 0;
+}
+
+.customer-beauty-month-info strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  overflow: hidden;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  line-height: 1.25;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-beauty-month-info > span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  overflow: hidden;
+
+  color: var(--text-soft);
+
+  font-size: 9px;
+  line-height: 1.4;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-beauty-month-info small {
+  display: block;
+
+  overflow: hidden;
+
+  color: var(--text-muted);
+
+  font-size: 8px;
+  line-height: 1.4;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   MONTH STATUS
+========================================================= */
+
+.customer-beauty-status,
+.customer-beauty-month-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 25px;
+
+  padding: 0 9px;
+
+  border-radius: 5px;
+
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.customer-beauty-status.upcoming,
+.customer-beauty-month-status.upcoming {
+  color: var(--green-700);
+
+  background: var(--green-100);
+
+  border: 1px solid var(--green-200);
+}
+
+.customer-beauty-status.completed,
+.customer-beauty-month-status.completed {
+  color: #607466;
+
+  background: #f1f4ef;
+
+  border: 1px solid #dce5da;
+}
+
+
+/* =========================================================
+   MONTH EMPTY
+========================================================= */
+
+.customer-beauty-month-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 130px;
+
+  padding: 25px;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   RECENT ACTIVITIES
+========================================================= */
+
+.customer-beauty-recent,
+.customer-beauty-recent-card {
+  width: 100%;
+
+  margin-bottom: 30px;
+
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  box-shadow:
+    0 8px 28px rgba(36, 56, 43, 0.035);
+}
+
+
+/* =========================================================
+   RECENT HEADER
+========================================================= */
+
+.customer-beauty-recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 27px 30px;
+
+  background: var(--green-050);
+
+  border-bottom: 1px solid var(--border);
+}
+
+.customer-beauty-recent-header > div {
+  min-width: 0;
+}
+
+.customer-beauty-recent-header > div > span,
+.customer-beauty-recent-header > div > small {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-recent-header h2 {
+  margin: 0 0 6px;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 29px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+.customer-beauty-recent-header p {
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.customer-beauty-recent-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  min-height: 34px;
+
+  padding: 0 13px;
+
+  color: var(--green-700);
+
+  background: var(--white);
+
+  border: 1px solid var(--green-200);
+  border-radius: 6px;
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   ACTIVITY LIST
+========================================================= */
+
+.customer-beauty-activity-list {
+  padding: 0 30px;
+}
+
+
+/* =========================================================
+   ACTIVITY ITEM
+========================================================= */
+
+.customer-beauty-activity-item {
+  display: grid;
+
+  grid-template-columns:
+    28px
+    42px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+
+  min-height: 76px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.customer-beauty-activity-item:last-child {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   ACTIVITY NUMBER
+========================================================= */
+
+.customer-beauty-activity-number {
+  color: var(--green-600);
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   ACTIVITY ICON
+========================================================= */
+
+.customer-beauty-activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  color: var(--green-700);
+
+  background: var(--green-050);
+
+  border: 1px solid var(--green-200);
+  border-radius: 9px;
+}
+
+
+/* =========================================================
+   ACTIVITY CONTENT
+========================================================= */
+
+.customer-beauty-activity-content {
+  min-width: 0;
+}
+
+.customer-beauty-activity-content small {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--green-600);
+
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-activity-content h3 {
+  margin: 0 0 3px;
+
+  overflow: hidden;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+  font-weight: 400;
+
+  line-height: 1.25;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-beauty-activity-content p {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: var(--text-soft);
+
+  font-size: 10px;
+  line-height: 1.4;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACTIVITY DATE
+========================================================= */
+
+.customer-beauty-activity-item time {
+  flex: 0 0 auto;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.customer-beauty-back {
+  padding-top: 2px;
+}
+
+.customer-beauty-back a {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 42px;
+
+  padding: 0 2px;
+
+  color: var(--green-700);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  transition: color 0.2s ease;
+}
+
+.customer-beauty-back a:hover {
+  color: var(--green-950);
+}
+
+
+/* =========================================================
+   LOADING / ERROR STATE
+========================================================= */
+
+.customer-beauty-state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 400px;
+
+  padding: 50px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  text-align: center;
+
+  box-shadow:
+    0 8px 28px rgba(36, 56, 43, 0.035);
+}
+
+.customer-beauty-state-card h2 {
+  margin: 18px 0 8px;
+
+  color: var(--green-950);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.customer-beauty-state-card p {
+  max-width: 450px;
+
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.customer-beauty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  color: var(--green-700);
+
+  background: var(--green-100);
+
+  border: 1px solid var(--green-200);
+  border-radius: 50%;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.customer-beauty-spin {
+  color: var(--green-700);
+
+  animation: customer-beauty-spin 1s linear infinite;
+}
+
+@keyframes customer-beauty-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+.customer-beauty-retry {
+  min-height: 43px;
+
+  margin-top: 20px;
+
+  padding: 0 20px;
+
+  color: var(--white);
+  background: var(--green-800);
+
+  border: 1px solid var(--green-800);
+  border-radius: 6px;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+}
+
+.customer-beauty-retry:hover {
+  background: var(--green-950);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .customer-beauty-dashboard {
+    padding: 34px 25px 55px;
+  }
+
+  .customer-beauty-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    margin-bottom: 30px;
+  }
+
+  .customer-beauty-book-button {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .customer-beauty-summary {
+    gap: 14px;
+  }
+
+  .customer-beauty-summary-card {
+    min-height: 155px;
+    padding: 21px;
+  }
+
+  .customer-beauty-summary-card h2 {
+    font-size: 20px;
+  }
+
+  .customer-beauty-overview-column {
+    padding: 20px;
+  }
+
+  .customer-beauty-monthly > .customer-beauty-section-heading,
+  .customer-beauty-recent-header,
+  .customer-beauty-main-card-header {
+    padding: 23px;
+  }
+
+  .customer-beauty-monthly-grid {
+    padding: 18px;
+  }
+
+  .customer-beauty-month-list {
+    padding: 0 15px;
+  }
+
+  .customer-beauty-month-record,
+  .customer-beauty-month-item {
+    grid-template-columns:
+      46px
+      minmax(0, 1fr)
+      auto;
+
+    gap: 11px;
+  }
+
+  .customer-beauty-month-date {
+    width: 46px;
+    height: 46px;
+  }
+
+  .customer-beauty-month-status {
+    padding: 0 7px;
+  }
+
+  .customer-beauty-activity-list {
+    padding: 0 23px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .customer-beauty-dashboard {
+    padding: 25px 16px 45px;
+  }
+
+
+  /* HEADER */
+
+  .customer-beauty-header {
+    gap: 22px;
+
+    margin-bottom: 25px;
+  }
+
+  .customer-beauty-eyebrow {
+    margin-bottom: 10px;
+
+    font-size: 8px;
+  }
+
+  .customer-beauty-header h1 {
+    font-size: 40px;
+  }
+
+  .customer-beauty-header p {
+    margin-top: 15px;
+
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .customer-beauty-book-button {
+    max-width: none;
+
+    min-height: 47px;
+  }
+
+
+  /* SUMMARY */
+
+  .customer-beauty-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+  }
+
+  .customer-beauty-summary-card {
+    display: block;
+
+    min-height: 145px;
+
+    padding: 15px;
+  }
+
+  .customer-beauty-summary-icon {
+    width: 39px;
+    height: 39px;
+
+    margin-bottom: 11px;
+  }
+
+  .customer-beauty-summary-card small {
+    margin-bottom: 5px;
+
+    font-size: 7px;
+  }
+
+  .customer-beauty-summary-card strong {
+    font-size: 27px;
+  }
+
+  .customer-beauty-summary-card h2 {
+    margin-bottom: 0;
+
+    font-size: 14px;
+  }
+
+  .customer-beauty-summary-card p {
+    display: none;
+  }
+
+
+  /* MAIN OUTER CARD */
+
+  .customer-beauty-overview {
+    margin-bottom: 22px;
+
+    border-radius: 11px;
+  }
+
+  .customer-beauty-main-card-header {
+    padding: 19px;
+  }
+
+  .customer-beauty-main-card-header h2 {
+    font-size: 23px;
+  }
+
+
+  /* UPCOMING / COMPLETED */
+
+  .customer-beauty-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-beauty-overview-column {
+    padding: 17px;
+  }
+
+  .customer-beauty-overview-column + .customer-beauty-overview-column {
+    border-top: 1px solid var(--border);
+    border-left: 0;
+  }
+
+  .customer-beauty-column-heading {
+    margin-bottom: 13px;
+    padding-bottom: 13px;
+  }
+
+  .customer-beauty-column-heading h3 {
+    font-size: 21px;
+  }
+
+  .customer-beauty-column-heading > span {
+    min-width: 34px;
+    height: 34px;
+  }
+
+
+  /* SUB CARD */
+
+  .customer-beauty-sub-card {
+    margin-bottom: 13px;
+
+    border-radius: 9px;
+  }
+
+  .customer-beauty-sub-card-header {
+    padding: 14px;
+  }
+
+  .customer-beauty-sub-card-title {
+    gap: 9px;
+  }
+
+  .customer-beauty-sub-card-title h4 {
+    font-size: 16px;
+  }
+
+  .customer-beauty-sub-list {
+    padding: 0 13px;
+  }
+
+
+  /* RECORD */
+
+  .customer-beauty-record {
+    grid-template-columns:
+      43px
+      minmax(0, 1fr);
+
+    gap: 10px;
+
+    padding: 13px 0;
+  }
+
+  .customer-beauty-record-date {
+    width: 43px;
+    height: 43px;
+  }
+
+  .customer-beauty-record-date strong {
+    font-size: 16px;
+  }
+
+  .customer-beauty-record-content h5 {
+    font-size: 13px;
+  }
+
+  .customer-beauty-record-content > p {
+    font-size: 9px;
+  }
+
+  .customer-beauty-record-meta span {
+    font-size: 7px;
+  }
+
+
+  /* MONTHLY */
+
+  .customer-beauty-monthly {
+    margin-bottom: 22px;
+
+    border-radius: 11px;
+  }
+
+  .customer-beauty-monthly > .customer-beauty-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+
+    padding: 19px;
+
+    gap: 15px;
+  }
+
+  .customer-beauty-section-heading h2 {
+    font-size: 23px;
+  }
+
+  .customer-beauty-month-select {
+    width: 100%;
+
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .customer-beauty-month-select label {
+    font-size: 7px;
+  }
+
+  .customer-beauty-month-select select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .customer-beauty-monthly-grid {
+    grid-template-columns: 1fr;
+
+    gap: 13px;
+
+    padding: 13px;
+  }
+
+  .customer-beauty-month-card-header,
+  .customer-beauty-month-sub-header {
+    padding: 15px;
+  }
+
+  .customer-beauty-month-card-header h3,
+  .customer-beauty-month-sub-header h3 {
+    font-size: 18px;
+  }
+
+  .customer-beauty-month-list {
+    padding: 0 13px;
+  }
+
+  .customer-beauty-month-record,
+  .customer-beauty-month-item {
+    grid-template-columns:
+      43px
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 10px;
+
+    padding: 13px 0;
+  }
+
+  .customer-beauty-month-date {
+    width: 43px;
+    height: 43px;
+  }
+
+  .customer-beauty-month-date strong {
+    font-size: 16px;
+  }
+
+  .customer-beauty-month-info strong {
+    font-size: 12px;
+  }
+
+  .customer-beauty-month-info > span {
+    font-size: 8px;
+  }
+
+  .customer-beauty-month-info small {
+    font-size: 7px;
+  }
+
+  .customer-beauty-status,
+  .customer-beauty-month-status {
+    grid-column: 2;
+
+    justify-self: start;
+
+    margin-top: -4px;
+
+    min-height: 23px;
+
+    font-size: 6px;
+  }
+
+
+  /* RECENT */
+
+  .customer-beauty-recent,
+  .customer-beauty-recent-card {
+    margin-bottom: 22px;
+
+    border-radius: 11px;
+  }
+
+  .customer-beauty-recent-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 19px;
+  }
+
+  .customer-beauty-recent-header h2 {
+    font-size: 23px;
+  }
+
+  .customer-beauty-recent-header p {
+    font-size: 9px;
+  }
+
+  .customer-beauty-recent-count {
+    min-height: 29px;
+  }
+
+  .customer-beauty-activity-list {
+    padding: 0 15px;
+  }
+
+  .customer-beauty-activity-item {
+    grid-template-columns:
+      23px
+      37px
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 9px;
+
+    min-height: 0;
+
+    padding: 13px 0;
+  }
+
+  .customer-beauty-activity-icon {
+    width: 37px;
+    height: 37px;
+  }
+
+  .customer-beauty-activity-content small {
+    font-size: 6px;
+  }
+
+  .customer-beauty-activity-content h3 {
+    font-size: 12px;
+  }
+
+  .customer-beauty-activity-content p {
+    font-size: 8px;
+  }
+
+  .customer-beauty-activity-item time {
+    grid-column: 3;
+
+    margin-top: -4px;
+
+    font-size: 7px;
+  }
+
+
+  /* BACK */
+
+  .customer-beauty-back a {
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .customer-beauty-dashboard {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .customer-beauty-header h1 {
+    font-size: 35px;
+  }
+
+  .customer-beauty-header p {
+    font-size: 10px;
+  }
+
+
+  /* SUMMARY — 2 CARDS PER ROW */
+
+  .customer-beauty-summary {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+  }
+
+  .customer-beauty-summary-card {
+    min-height: 130px;
+
+    padding: 12px;
+  }
+
+  .customer-beauty-summary-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .customer-beauty-summary-card strong {
+    font-size: 24px;
+  }
+
+  .customer-beauty-summary-card h2 {
+    font-size: 12px;
+  }
+
+
+  /* MAIN */
+
+  .customer-beauty-main-card-header,
+  .customer-beauty-monthly > .customer-beauty-section-heading,
+  .customer-beauty-recent-header {
+    padding: 16px;
+  }
+
+  .customer-beauty-main-card-header h2,
+  .customer-beauty-section-heading h2,
+  .customer-beauty-recent-header h2 {
+    font-size: 20px;
+  }
+
+  .customer-beauty-overview-column {
+    padding: 14px;
+  }
+
+  .customer-beauty-column-heading h3 {
+    font-size: 19px;
+  }
+
+
+  /* SUB CARD */
+
+  .customer-beauty-sub-card-title h4 {
+    font-size: 14px;
+  }
+
+  .customer-beauty-sub-card-header {
+    padding: 12px;
+  }
+
+  .customer-beauty-sub-list {
+    padding: 0 11px;
+  }
+
+
+  /* MONTH */
+
+  .customer-beauty-monthly-grid {
+    padding: 10px;
+  }
+
+  .customer-beauty-month-list {
+    padding: 0 11px;
+  }
+
+  .customer-beauty-month-card-header,
+  .customer-beauty-month-sub-header {
+    padding: 13px;
+  }
+
+  .customer-beauty-month-card-header h3,
+  .customer-beauty-month-sub-header h3 {
+    font-size: 16px;
+  }
+
+
+  /* RECENT */
+
+  .customer-beauty-activity-list {
+    padding: 0 12px;
+  }
+
+  .customer-beauty-activity-item {
+    grid-template-columns:
+      20px
+      34px
+      minmax(0, 1fr);
+
+    gap: 8px;
+  }
+
+  .customer-beauty-activity-icon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .customer-beauty-dashboard {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .customer-beauty-summary-card {
+    min-height: 120px;
+  }
+
+  .customer-beauty-summary-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .customer-beauty-summary-card strong {
+    font-size: 22px;
+  }
+
+  .customer-beauty-summary-card h2 {
+    font-size: 11px;
+  }
+
+  .customer-beauty-header h1 {
+    font-size: 32px;
+  }
+
+  .customer-beauty-record-meta {
+    gap: 4px 8px;
+  }
+
+  .customer-beauty-record-meta span {
+    font-size: 6px;
+  }
+
+  .customer-beauty-month-info small {
+    font-size: 6px;
+  }
+}
+/* =========================================================
+   MONTHLY ACTIVITY — FINAL LAYOUT OVERRIDE
+========================================================= */
+
+.customer-beauty-monthly-card {
+  width: 100%;
+  margin: 0 0 40px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7dc;
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MONTHLY HEADER
+========================================================= */
+
+.customer-beauty-monthly-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding: 32px 32px 28px;
+
+  background: #f7faf6;
+
+  border-bottom: 1px solid #dce7dc;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-monthly-header > div:first-child {
+  min-width: 0;
+}
+
+.customer-beauty-monthly-header > div:first-child > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #5d875e;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.customer-beauty-monthly-header h2 {
+  margin: 0;
+
+  color: #26382d;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 34px;
+  font-weight: 400;
+
+  line-height: 1.1;
+}
+
+.customer-beauty-monthly-header p {
+  margin: 7px 0 0;
+
+  color: #78867d;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   MONTH CONTROLS
+========================================================= */
+
+.customer-beauty-month-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  flex-shrink: 0;
+}
+
+.customer-beauty-month-controls select {
+  width: 285px;
+  height: 52px;
+
+  padding: 0 42px 0 16px;
+
+  background: #ffffff;
+
+  border: 1px solid #d7e2d6;
+  border-radius: 8px;
+
+  color: #304338;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-month-controls select:focus {
+  border-color: #557d59;
+
+  box-shadow:
+    0 0 0 3px rgba(85, 125, 89, 0.10);
+}
+
+.customer-beauty-month-view-all {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  min-width: 95px;
+  height: 52px;
+
+  padding: 0 18px;
+
+  background: #3f6f47;
+
+  border: 1px solid #3f6f47;
+  border-radius: 7px;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-beauty-month-view-all span {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.customer-beauty-month-view-all:hover {
+  background: #315b39;
+  border-color: #315b39;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MONTHLY SUMMARY
+========================================================= */
+
+.customer-beauty-month-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 0;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e2e9e1;
+}
+
+.customer-beauty-month-summary > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 76px;
+
+  padding: 18px 25px;
+
+  box-sizing: border-box;
+
+  border-right: 1px solid #e2e9e1;
+}
+
+.customer-beauty-month-summary > div:last-child {
+  border-right: 0;
+}
+
+.customer-beauty-month-summary svg {
+  flex-shrink: 0;
+
+  color: #47744e;
+}
+
+.customer-beauty-month-summary span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #627168;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.customer-beauty-month-summary strong {
+  color: #294034;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 24px;
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   MONTHLY GRID
+========================================================= */
+
+.customer-beauty-monthly-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+
+  padding: 22px;
+
+  background: #f8faf7;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MONTH SUB CARDS
+========================================================= */
+
+.customer-beauty-month-sub-card,
+.customer-beauty-month-card {
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7dc;
+  border-radius: 13px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SUB CARD HEADER
+========================================================= */
+
+.customer-beauty-month-sub-header,
+.customer-beauty-month-card-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5ebe4;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-month-sub-header small,
+.customer-beauty-month-card-header small {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #60855f;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.customer-beauty-month-sub-header h3,
+.customer-beauty-month-card-header h3 {
+  margin: 0;
+
+  color: #293c31;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 22px;
+  font-weight: 400;
+
+  line-height: 1.2;
+}
+
+.customer-beauty-month-sub-header > strong,
+.customer-beauty-month-card-header > strong {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 46px;
+  height: 46px;
+
+  padding: 0 10px;
+
+  background: #f4f8f3;
+
+  border: 1px solid #d8e4d7;
+  border-radius: 8px;
+
+  color: #527b55;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MONTH LIST
+========================================================= */
+
+.customer-beauty-month-list {
+  padding: 0 24px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MONTH RECORD
+========================================================= */
+
+.customer-beauty-month-record,
+.customer-beauty-month-item {
+  display: grid;
+
+  grid-template-columns:
+    52px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-height: 82px;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid #edf1ec;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-month-record:last-child,
+.customer-beauty-month-item:last-child {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   DATE BOX
+========================================================= */
+
+.customer-beauty-month-date {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 55px;
+
+  background: #f5f8f4;
+
+  border: 1px solid #dce7db;
+  border-radius: 8px;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-month-date strong {
+  color: #304536;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.customer-beauty-month-date span {
+  margin-top: 5px;
+
+  color: #668069;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   MONTH INFORMATION
+========================================================= */
+
+.customer-beauty-month-info {
+  min-width: 0;
+}
+
+.customer-beauty-month-info > strong {
+  display: block;
+
+  overflow: hidden;
+
+  color: #304238;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  line-height: 1.35;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.customer-beauty-month-info > span {
+  display: block;
+
+  margin-top: 5px;
+
+  overflow: hidden;
+
+  color: #68766e;
+
+  font-size: 9px;
+
+  line-height: 1.45;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.customer-beauty-month-info > small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #87938c;
+
+  font-size: 8px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.customer-beauty-month-status,
+.customer-beauty-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 27px;
+
+  padding: 0 10px;
+
+  border-radius: 6px;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-month-status.upcoming,
+.customer-beauty-status.upcoming {
+  background: #edf6ed;
+
+  border: 1px solid #d3e4d2;
+
+  color: #4c7651;
+}
+
+.customer-beauty-month-status.completed,
+.customer-beauty-status.completed {
+  background: #f0f4ef;
+
+  border: 1px solid #dce5da;
+
+  color: #617366;
+}
+
+.customer-beauty-status.replied {
+  background: #eef6f0;
+
+  border: 1px solid #d4e4d6;
+
+  color: #4f7656;
+}
+
+.customer-beauty-status.pending {
+  background: #f7f8f2;
+
+  border: 1px solid #e2e5d9;
+
+  color: #78806e;
+}
+
+
+/* =========================================================
+   EMPTY MONTH STATE
+========================================================= */
+
+.customer-beauty-month-empty {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 150px;
+
+  padding: 25px;
+
+  color: #8a958d;
+
+  font-size: 11px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RECENT ACTIVITIES — CARD STYLE
+========================================================= */
+
+.customer-beauty-recent-card,
+.customer-beauty-recent {
+  width: 100%;
+
+  margin-bottom: 40px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7dc;
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-recent-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 28px 30px;
+
+  background: #f7faf6;
+
+  border-bottom: 1px solid #dce7dc;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-recent-header > div > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #60855f;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-recent-header h2 {
+  margin: 0;
+
+  color: #293c31;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.customer-beauty-recent-header p {
+  margin: 7px 0 0;
+
+  color: #7a867f;
+
+  font-size: 12px;
+}
+
+.customer-beauty-recent-count {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 34px;
+
+  padding: 0 13px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7dc;
+  border-radius: 6px;
+
+  color: #527558;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   RECENT ACTIVITY LIST
+========================================================= */
+
+.customer-beauty-activity-list {
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-activity-item {
+  display: grid;
+
+  grid-template-columns:
+    30px
+    42px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 15px;
+
+  min-height: 78px;
+
+  padding: 16px 28px;
+
+  border-bottom: 1px solid #edf1ec;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-activity-item:last-child {
+  border-bottom: 0;
+}
+
+.customer-beauty-activity-number {
+  color: #a0afa3;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.customer-beauty-activity-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  background: #f3f7f2;
+
+  border: 1px solid #dce7db;
+  border-radius: 10px;
+
+  color: #4d7652;
+
+  box-sizing: border-box;
+}
+
+.customer-beauty-activity-content {
+  min-width: 0;
+}
+
+.customer-beauty-activity-content small {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #638363;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+
+  text-transform: uppercase;
+}
+
+.customer-beauty-activity-content h3 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #33453a;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.customer-beauty-activity-content p {
+  margin: 4px 0 0;
+
+  overflow: hidden;
+
+  color: #7b8780;
+
+  font-size: 9px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.customer-beauty-activity-item time {
+  color: #819087;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.customer-beauty-back {
+  margin: 0 0 35px;
+}
+
+.customer-beauty-back a {
+  color: #4e7653;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.customer-beauty-back a:hover {
+  color: #315b39;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .customer-beauty-monthly-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding: 26px;
+  }
+
+  .customer-beauty-month-controls {
+    width: 100%;
+  }
+
+  .customer-beauty-month-controls select {
+    flex: 1;
+
+    width: auto;
+  }
+
+  .customer-beauty-month-view-all {
+    min-width: 110px;
+  }
+
+  .customer-beauty-monthly-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .customer-beauty-monthly-card {
+    margin-bottom: 25px;
+
+    border-radius: 14px;
+  }
+
+  .customer-beauty-monthly-header {
+    gap: 18px;
+
+    padding: 22px 18px;
+  }
+
+  .customer-beauty-monthly-header h2 {
+    font-size: 27px;
+  }
+
+  .customer-beauty-monthly-header p {
+    font-size: 11px;
+  }
+
+
+  /* CONTROLS */
+
+  .customer-beauty-month-controls {
+    width: 100%;
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 9px;
+  }
+
+  .customer-beauty-month-controls select,
+  .customer-beauty-month-view-all {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  /* SUMMARY */
+
+  .customer-beauty-month-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-beauty-month-summary > div {
+    min-height: 58px;
+
+    padding: 13px 18px;
+
+    border-right: 0;
+
+    border-bottom: 1px solid #e2e9e1;
+  }
+
+  .customer-beauty-month-summary > div:last-child {
+    border-bottom: 0;
+  }
+
+  .customer-beauty-month-summary strong {
+    font-size: 21px;
+  }
+
+
+  /* GRID */
+
+  .customer-beauty-monthly-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    padding: 12px;
+  }
+
+
+  /* SUB CARDS */
+
+  .customer-beauty-month-sub-header,
+  .customer-beauty-month-card-header {
+    padding: 18px;
+  }
+
+  .customer-beauty-month-sub-header h3,
+  .customer-beauty-month-card-header h3 {
+    font-size: 19px;
+  }
+
+  .customer-beauty-month-sub-header > strong,
+  .customer-beauty-month-card-header > strong {
+    min-width: 40px;
+    height: 40px;
+
+    font-size: 17px;
+  }
+
+
+  /* MONTH LIST */
+
+  .customer-beauty-month-list {
+    padding: 0 16px;
+  }
+
+  .customer-beauty-month-record,
+  .customer-beauty-month-item {
+    grid-template-columns:
+      45px
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 11px;
+
+    min-height: 75px;
+
+    padding: 13px 0;
+  }
+
+  .customer-beauty-month-date {
+    width: 45px;
+    height: 49px;
+  }
+
+  .customer-beauty-month-date strong {
+    font-size: 18px;
+  }
+
+  .customer-beauty-month-info > strong {
+    font-size: 11px;
+  }
+
+  .customer-beauty-month-info > span {
+    font-size: 8px;
+  }
+
+  .customer-beauty-month-info > small {
+    font-size: 7px;
+  }
+
+  .customer-beauty-month-status,
+  .customer-beauty-status {
+    grid-column: 2;
+
+    justify-self: start;
+
+    min-height: 24px;
+
+    margin-top: -3px;
+
+    padding: 0 8px;
+
+    font-size: 6px;
+  }
+
+
+  /* RECENT */
+
+  .customer-beauty-recent-card,
+  .customer-beauty-recent {
+    margin-bottom: 25px;
+
+    border-radius: 14px;
+  }
+
+  .customer-beauty-recent-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 21px 18px;
+  }
+
+  .customer-beauty-recent-header h2 {
+    font-size: 25px;
+  }
+
+  .customer-beauty-recent-header p {
+    font-size: 10px;
+  }
+
+  .customer-beauty-activity-item {
+    grid-template-columns:
+      28px
+      38px
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 10px;
+
+    padding: 14px 16px;
+  }
+
+  .customer-beauty-activity-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .customer-beauty-activity-content h3 {
+    font-size: 11px;
+  }
+
+  .customer-beauty-activity-content p {
+    font-size: 8px;
+  }
+
+  .customer-beauty-activity-item time {
+    grid-column: 3;
+
+    margin-top: -5px;
+
+    font-size: 7px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .customer-beauty-monthly-header h2 {
+    font-size: 24px;
+  }
+
+  .customer-beauty-monthly-header p {
+    font-size: 10px;
+  }
+
+  .customer-beauty-monthly-grid {
+    padding: 8px;
+  }
+
+  .customer-beauty-month-sub-header,
+  .customer-beauty-month-card-header {
+    padding: 15px;
+  }
+
+  .customer-beauty-month-sub-header h3,
+  .customer-beauty-month-card-header h3 {
+    font-size: 17px;
+  }
+
+  .customer-beauty-month-list {
+    padding: 0 13px;
+  }
+
+  .customer-beauty-month-record,
+  .customer-beauty-month-item {
+    grid-template-columns:
+      40px
+      minmax(0, 1fr);
+
+    gap: 9px;
+  }
+
+  .customer-beauty-month-date {
+    width: 40px;
+    height: 44px;
+  }
+
+  .customer-beauty-month-date strong {
+    font-size: 16px;
+  }
+
+  .customer-beauty-month-info > strong {
+    font-size: 10px;
+  }
+
+  .customer-beauty-month-info > span {
+    font-size: 7px;
+  }
+
+  .customer-beauty-month-info > small {
+    font-size: 6px;
+  }
+
+  .customer-beauty-recent-header h2 {
+    font-size: 22px;
+  }
+
+}

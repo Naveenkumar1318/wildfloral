@@ -1,180 +1,764 @@
+/* =========================================================
+   CUSTOMER DASHBOARD
+   ========================================================= */
+
 .customer-dashboard {
   width: 100%;
   min-height: 100vh;
-
-  padding: 56px;
-
   box-sizing: border-box;
 
-  background: #f8faf6;
+  padding: 58px 6% 70px;
+
+  background: #fafcf9;
+  color: #20352a;
+
+  overflow-x: hidden;
 }
+
 
 /* =========================================================
-   WELCOME
-========================================================= */
+   HEADER
+   ========================================================= */
 
-.customer-dashboard-welcome {
-  max-width: 760px;
+.customer-dashboard-header {
+  width: 100%;
+  max-width: 1180px;
 
-  margin-bottom: 42px;
+  margin: 0 auto 42px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+
+  align-items: end;
+
+  column-gap: 70px;
 }
+
+
+.customer-dashboard-header-content {
+  min-width: 0;
+}
+
 
 .customer-dashboard-eyebrow {
   display: block;
 
-  margin-bottom: 12px;
-
-  color: #78966c;
+  margin-bottom: 14px;
 
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
 
-  letter-spacing: 0.18em;
+  letter-spacing: 3.5px;
+
+  color: #6d963f;
 }
 
-.customer-dashboard-welcome h1 {
+
+.customer-dashboard-header h1 {
   margin: 0;
 
-  color: #29362d;
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
+  font-size: clamp(48px, 5.2vw, 72px);
 
-  font-size: clamp(42px, 5vw, 64px);
   font-weight: 400;
-  line-height: 1;
+
+  line-height: 0.98;
+
+  letter-spacing: -2.5px;
+
+  color: #20352a;
 }
 
-.customer-dashboard-welcome h1 span {
-  display: block;
 
-  color: #6d913e;
+.customer-dashboard-header h1 span {
+  display: inline-block;
+
+  margin-left: 14px;
+
+  color: #719a42;
 
   font-style: italic;
 }
 
-.customer-dashboard-welcome p {
-  max-width: 580px;
 
-  margin: 22px 0 0;
+.customer-dashboard-header-description {
+  margin: 0 0 7px;
 
-  color: #7e887f;
+  max-width: 300px;
 
   font-size: 14px;
-  line-height: 1.8;
+
+  line-height: 1.75;
+
+  color: #718078;
 }
 
-/* =========================================================
-   CARDS
-========================================================= */
 
-.customer-dashboard-cards {
+/* =========================================================
+   EXPERIENCE GRID
+   ========================================================= */
+
+.customer-dashboard-experiences {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(2, minmax(0, 1fr));
 
-  gap: 20px;
-
-  max-width: 1100px;
+  gap: 28px;
 }
 
-.customer-dashboard-card {
-  min-height: 210px;
 
-  padding: 28px;
+/* =========================================================
+   EXPERIENCE CARD
+   ========================================================= */
 
-  background: #ffffff;
+.customer-experience-card {
+  position: relative;
 
-  border: 1px solid #e4e9e2;
-  border-radius: 18px;
-
-  box-sizing: border-box;
-}
-
-.customer-dashboard-card-number {
   display: block;
 
-  margin-bottom: 28px;
+  width: 100%;
 
-  color: #8aa17f;
+  height: clamp(440px, 55vh, 560px);
+
+  min-height: 440px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d8e2d7;
+
+  background: #edf2eb;
+
+  text-decoration: none;
+
+  color: #ffffff;
+
+  isolation: isolate;
+
+  box-shadow:
+    0 8px 28px rgba(38, 67, 47, 0.05);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+
+.customer-experience-card:hover {
+  transform: translateY(-5px);
+
+  border-color: #a8bd9e;
+
+  box-shadow:
+    0 20px 45px rgba(38, 67, 47, 0.13);
+}
+
+
+/* =========================================================
+   IMAGE WRAPPER
+   ========================================================= */
+
+.customer-experience-image-wrapper {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -3;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #eef2ed;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.customer-experience-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  /*
+    contain keeps the complete portrait image visible.
+    This prevents important parts of the fashion/beauty
+    image from being cropped.
+  */
+
+  object-fit: contain;
+
+  object-position: center;
+
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+}
+
+
+.customer-experience-card:hover
+.customer-experience-image {
+  transform: scale(1.035);
+
+  filter: brightness(0.94);
+}
+
+
+/* =========================================================
+   IMAGE BACKGROUND
+   ========================================================= */
+
+.customer-experience-image-wrapper::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 43, 31, 0.18) 0%,
+      rgba(20, 43, 31, 0.02) 38%,
+      rgba(20, 43, 31, 0.12) 60%,
+      rgba(16, 38, 27, 0.72) 100%
+    );
+
+  z-index: 1;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CARD OVERLAY
+   ========================================================= */
+
+.customer-experience-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 42, 30, 0.12) 0%,
+      rgba(20, 42, 30, 0) 35%,
+      rgba(20, 42, 30, 0.08) 52%,
+      rgba(17, 40, 28, 0.68) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   TOP AREA
+   ========================================================= */
+
+.customer-experience-top {
+  position: absolute;
+
+  top: 24px;
+  left: 24px;
+  right: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  z-index: 3;
+}
+
+
+/* =========================================================
+   NUMBER
+   ========================================================= */
+
+.customer-experience-number {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.65);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 
   font-size: 10px;
-  font-weight: 600;
 
-  letter-spacing: 0.12em;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: #ce0795;
 }
 
-.customer-dashboard-card h2 {
-  margin: 0 0 10px;
 
-  color: #344037;
+/* =========================================================
+   LABEL
+   ========================================================= */
 
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
+.customer-experience-label {
+  padding: 8px 12px;
 
-  font-size: 22px;
-  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+
+  color: #f10a6a;
 }
 
-.customer-dashboard-card p {
+
+/* =========================================================
+   CENTER CONTENT
+   ========================================================= */
+
+.customer-experience-center {
+  position: absolute;
+
+  left: 32px;
+  right: 32px;
+
+  bottom: 105px;
+
+  z-index: 3;
+}
+
+
+.customer-experience-category {
+  display: block;
+
+  margin-bottom: 12px;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+
+  color: rgb(255, 255, 255);
+}
+
+
+.customer-experience-center h2 {
   margin: 0;
 
-  color: #89928b;
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: clamp(38px, 4vw, 54px);
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -1.5px;
+
+  color: #ffffff;
 }
+
+
+.customer-experience-center p {
+  margin: 12px 0 0;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: rgba(255, 255, 255, 0.82);
+}
+
+
+/* =========================================================
+   BOTTOM ACTION
+   ========================================================= */
+
+.customer-experience-bottom {
+  position: absolute;
+
+  left: 32px;
+  right: 32px;
+  bottom: 28px;
+
+  z-index: 4;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding-top: 17px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.customer-experience-arrow {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  font-size: 18px;
+
+  font-weight: 400;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.customer-experience-card:hover
+.customer-experience-arrow {
+  background: #719a42;
+
+  border-color: #719a42;
+
+  color: #ffffff;
+
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   LARGE LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .customer-dashboard {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .customer-dashboard-header,
+  .customer-dashboard-experiences {
+    max-width: 1050px;
+  }
+
+  .customer-dashboard-header {
+    column-gap: 45px;
+  }
+
+  .customer-experience-card {
+    height: 500px;
+  }
+
+}
+
 
 /* =========================================================
    TABLET
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 900px) {
+
   .customer-dashboard {
-    padding: 40px 32px;
+    padding: 45px 32px 60px;
   }
 
-  .customer-dashboard-cards {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+  .customer-dashboard-header {
+    grid-template-columns: 1fr;
+
+    row-gap: 16px;
+
+    margin-bottom: 32px;
   }
+
+  .customer-dashboard-header h1 {
+    font-size: clamp(44px, 7vw, 60px);
+  }
+
+  .customer-dashboard-header-description {
+    max-width: 520px;
+
+    margin: 0;
+  }
+
+  .customer-dashboard-experiences {
+    gap: 20px;
+  }
+
+  .customer-experience-card {
+    height: 450px;
+    min-height: 450px;
+  }
+
+  .customer-experience-center {
+    left: 25px;
+    right: 25px;
+    bottom: 95px;
+  }
+
+  .customer-experience-bottom {
+    left: 25px;
+    right: 25px;
+    bottom: 22px;
+  }
+
 }
+
 
 /* =========================================================
    MOBILE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+
   .customer-dashboard {
-    padding: 32px 18px;
-  }
-
-  .customer-dashboard-welcome {
-    margin-bottom: 30px;
-  }
-
-  .customer-dashboard-welcome h1 {
-    font-size: 42px;
-  }
-
-  .customer-dashboard-welcome p {
-    font-size: 13px;
-  }
-
-  .customer-dashboard-cards {
-    grid-template-columns: 1fr;
-
-    gap: 14px;
-  }
-
-  .customer-dashboard-card {
     min-height: auto;
 
-    padding: 24px;
+    padding: 35px 18px 50px;
   }
+
+
+  /* HEADER */
+
+  .customer-dashboard-header {
+    margin-bottom: 28px;
+
+    row-gap: 13px;
+  }
+
+  .customer-dashboard-eyebrow {
+    margin-bottom: 10px;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+  }
+
+  .customer-dashboard-header h1 {
+    font-size: 43px;
+
+    line-height: 1;
+
+    letter-spacing: -1.5px;
+  }
+
+  .customer-dashboard-header h1 span {
+    display: block;
+
+    margin-left: 0;
+
+    margin-top: 3px;
+  }
+
+  .customer-dashboard-header-description {
+    max-width: 430px;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+  }
+
+
+  /* CARDS */
+
+  .customer-dashboard-experiences {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+
+  .customer-experience-card {
+    height: 455px;
+
+    min-height: 455px;
+  }
+
+
+  /* TOP */
+
+  .customer-experience-top {
+    top: 18px;
+    left: 18px;
+    right: 18px;
+  }
+
+  .customer-experience-number {
+    width: 43px;
+    height: 43px;
+  }
+
+  .customer-experience-label {
+    padding: 7px 10px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+  }
+
+
+  /* CENTER */
+
+  .customer-experience-center {
+    left: 22px;
+    right: 22px;
+
+    bottom: 92px;
+  }
+
+  .customer-experience-category {
+    margin-bottom: 9px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+  }
+
+  .customer-experience-center h2 {
+    font-size: 40px;
+  }
+
+  .customer-experience-center p {
+    margin-top: 9px;
+
+    font-size: 12px;
+  }
+
+
+  /* BOTTOM */
+
+  .customer-experience-bottom {
+    left: 22px;
+    right: 22px;
+
+    bottom: 20px;
+
+    padding-top: 14px;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+  }
+
+  .customer-experience-arrow {
+    width: 38px;
+    height: 38px;
+
+    font-size: 16px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+  .customer-dashboard {
+    padding: 30px 14px 42px;
+  }
+
+  .customer-dashboard-header {
+    margin-bottom: 23px;
+  }
+
+  .customer-dashboard-header h1 {
+    font-size: 38px;
+  }
+
+  .customer-dashboard-header-description {
+    font-size: 12px;
+  }
+
+  .customer-dashboard-experiences {
+    gap: 15px;
+  }
+
+  .customer-experience-card {
+    height: 420px;
+
+    min-height: 420px;
+  }
+
+  .customer-experience-center {
+    bottom: 85px;
+  }
+
+  .customer-experience-center h2 {
+    font-size: 36px;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .customer-experience-card,
+  .customer-experience-image,
+  .customer-experience-arrow {
+    transition: none;
+  }
+
 }
