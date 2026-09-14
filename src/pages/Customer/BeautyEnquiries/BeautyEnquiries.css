@@ -11,9 +11,11 @@
 .beauty-enquiries {
   width: 100%;
   max-width: 1180px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 56px 42px 80px;
   color: #26382f;
+  background: #f3f7ef;
 }
 
 /* =========================================================

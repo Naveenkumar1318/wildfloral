@@ -218,6 +218,11 @@ function Booking() {
   ] = useState(false)
 
   const [
+    bookedTimes,
+    setBookedTimes,
+  ] = useState<string[]>([])
+
+  const [
     error,
     setError,
   ] = useState('')
@@ -1963,12 +1968,32 @@ if (
         .single()
 
       if (
-        bookingError ||
-        !booking
+        bookingError
       ) {
+        if (
+          bookingError.code ===
+            '23505' &&
+          bookingError.message.includes(
+            'bookings_unique_active_slot_idx',
+          )
+        ) {
+          changeStep(3)
+
+          setError(
+            'This appointment slot was just booked by another customer. Please choose another slot.',
+          )
+
+          return
+        }
+
         throw new Error(
-          bookingError?.message ??
-            'Unable to create your appointment.',
+          `Unable to create your appointment: ${bookingError.message}`,
+        )
+      }
+
+      if (!booking) {
+        throw new Error(
+          'Unable to create your appointment.',
         )
       }
 
@@ -2247,6 +2272,69 @@ window.scrollTo({
     }
   }
 
+  async function loadBookedTimes(
+    bookingDate: string,
+  ) {
+    if (!bookingDate) {
+      setBookedTimes([])
+      return
+    }
+
+    try {
+      const {
+        data,
+        error: availabilityError,
+      } = await supabase
+        .from('bookings')
+        .select('booking_time')
+        .eq(
+          'booking_date',
+          bookingDate,
+        )
+        .in(
+          'status',
+          [
+            'pending',
+            'confirmed',
+          ],
+        )
+
+      if (availabilityError) {
+        throw availabilityError
+      }
+
+      const times = Array.from(
+        new Set(
+          (data ?? [])
+            .map(
+              (booking) =>
+                String(
+                  booking.booking_time ?? '',
+                ).slice(0, 5),
+            )
+            .filter(Boolean),
+        ),
+      )
+
+      setBookedTimes(times)
+    } catch (
+      availabilityError
+    ) {
+      console.error(
+        'Failed to load booked appointment slots:',
+        availabilityError,
+      )
+
+      setBookedTimes([])
+    }
+  }
+
+  useEffect(() => {
+    void loadBookedTimes(
+      flow.date,
+    )
+  }, [flow.date])
+
   /* =======================================================
      RENDER STEP
   ======================================================= */
@@ -2320,6 +2408,9 @@ window.scrollTo({
             }
             totalDuration={
               totalDuration
+            }
+            bookedTimes={
+              bookedTimes
             }
             onChangeDate={(
               date,

@@ -904,6 +904,9 @@ function DateTimeStep({
                     (slot) =>
                       !isSlotInPast(
                         slot.value,
+                      ) &&
+                      !isSlotBooked(
+                        slot.value,
                       ),
                   )
 

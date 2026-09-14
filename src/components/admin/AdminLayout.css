@@ -97,13 +97,22 @@
 }
 
 .admin-sidebar-brand-content {
+  flex: 1 1 auto;
+
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  min-width: 0;
+  overflow: visible;
 }
 
 .admin-sidebar-brand-content strong {
+  display: block;
+
+  width: max-content;
+  max-width: 100%;
+
   color: #17233f;
 
   font-family:
@@ -115,9 +124,16 @@
   font-weight: 600;
 
   line-height: 1;
+
+  white-space: nowrap;
 }
 
 .admin-sidebar-brand-content small {
+  display: block;
+
+  width: max-content;
+  max-width: 100%;
+
   margin-top: 5px;
 
   color: #98a2b1;
@@ -125,7 +141,11 @@
   font-size: 7px;
   font-weight: 800;
 
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
+
+  line-height: 1;
+
+  white-space: nowrap;
 }
 
 
@@ -311,7 +331,7 @@
 }
 
 .admin-nav-submenu {
-  display: flex;
+  display: none;
 
   width: calc(100% - 30px);
 
@@ -330,6 +350,11 @@
     #dfe7dd;
 
   box-sizing: border-box;
+}
+
+.admin-nav-group.open
+.admin-nav-submenu {
+  display: flex;
 }
 
 .admin-nav-subitem {

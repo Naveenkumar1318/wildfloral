@@ -303,8 +303,31 @@
 
   color: #66726a;
 
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+
   font-size: 14px;
   font-weight: 500;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.customer-nav-parent:hover {
+  background: #f5f7f2;
+  color: #36553d;
+}
+
+.customer-nav-chevron {
+  margin-left: auto;
+  flex: 0 0 auto;
+  color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.customer-nav-parent.open .customer-nav-chevron {
+  transform: rotate(180deg);
 }
 
 
@@ -859,6 +882,10 @@
     gap: 11px;
   }
 
+  .customer-nav-chevron {
+    margin-left: auto;
+  }
+
   .customer-nav-icon {
     width: 21px;
     height: 21px;
@@ -1038,6 +1065,7 @@
 ========================================================= */
 
 .customer-nav-item:focus-visible,
+.customer-nav-parent:focus-visible,
 .customer-nav-subitem:focus-visible,
 .customer-bottom-item:focus-visible,
 .customer-sidebar-brand:focus-visible,

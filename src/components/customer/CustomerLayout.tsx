@@ -4,10 +4,12 @@ import {
   Link,
   NavLink,
   Outlet,
+  useLocation,
 } from 'react-router-dom'
 import {
   Menu,
   X,
+  ChevronDown,
 } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase'
@@ -190,6 +192,17 @@ function Icon({ type }: IconProps) {
 function CustomerSidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false)
+  const [openGroup, setOpenGroup] =
+    useState<'bookings' | 'enquiries' | null>('bookings')
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/account/enquiries/')) {
+      setOpenGroup('enquiries')
+    } else if (location.pathname.startsWith('/account/bookings/')) {
+      setOpenGroup('bookings')
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -209,6 +222,14 @@ function CustomerSidebar() {
 
   function closeMobileMenu() {
     setMobileMenuOpen(false)
+  }
+
+  function toggleGroup(
+    group: 'bookings' | 'enquiries',
+  ) {
+    setOpenGroup((current) =>
+      current === group ? null : group,
+    )
   }
 
   async function handleLogout() {
@@ -374,7 +395,23 @@ function CustomerSidebar() {
 
           <div className="customer-nav-group">
 
-            <div className="customer-nav-parent">
+            <button
+              type="button"
+              className={[
+                'customer-nav-parent',
+                openGroup === 'bookings'
+                  ? 'open'
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              onClick={() =>
+                toggleGroup('bookings')
+              }
+              aria-expanded={
+                openGroup === 'bookings'
+              }
+            >
               <span className="customer-nav-icon">
                 <Icon type="bookings" />
               </span>
@@ -382,99 +419,132 @@ function CustomerSidebar() {
               <span className="customer-nav-label">
                 Bookings
               </span>
-            </div>
+
+              <ChevronDown
+                className="customer-nav-chevron"
+                size={17}
+                strokeWidth={1.6}
+                aria-hidden="true"
+              />
+            </button>
+
+            {openGroup === 'bookings' && (
+              <div className="customer-nav-submenu">
+
+                <NavLink
+                  to="/account/bookings/beauty"
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `customer-nav-subitem ${
+                      isActive ? 'active' : ''
+                    }`
+                  }
+                >
+                  <span className="customer-subitem-dot" />
+
+                  <span>
+                    Beauty Services
+                  </span>
+                </NavLink>
 
 
-            <div className="customer-nav-submenu">
+                <NavLink
+                  to="/account/bookings/fashion"
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `customer-nav-subitem ${
+                      isActive ? 'active' : ''
+                    }`
+                  }
+                >
+                  <span className="customer-subitem-dot" />
 
-              <NavLink
-                to="/account/bookings/beauty"
-                onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `customer-nav-subitem ${
-                    isActive ? 'active' : ''
-                  }`
-                }
-              >
-                <span className="customer-subitem-dot" />
+                  <span>
+                    Fashion Services
+                  </span>
+                </NavLink>
 
-                <span>
-                  Beauty Services
-                </span>
-              </NavLink>
-
-
-              <NavLink
-                to="/account/bookings/fashion"
-                onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `customer-nav-subitem ${
-                    isActive ? 'active' : ''
-                  }`
-                }
-              >
-                <span className="customer-subitem-dot" />
-
-                <span>
-                  Fashion Services
-                </span>
-              </NavLink>
-
-            </div>
+              </div>
+            )}
 
           </div>
 
-{/* ENQUIRIES */}
+          {/* ENQUIRIES */}
 
-<div className="customer-nav-group">
+          <div className="customer-nav-group">
 
-  <div className="customer-nav-parent">
-    <span className="customer-nav-icon">
-      <Icon type="enquiries" />
-    </span>
+            <button
+              type="button"
+              className={[
+                'customer-nav-parent',
+                openGroup === 'enquiries'
+                  ? 'open'
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              onClick={() =>
+                toggleGroup('enquiries')
+              }
+              aria-expanded={
+                openGroup === 'enquiries'
+              }
+            >
+              <span className="customer-nav-icon">
+                <Icon type="enquiries" />
+              </span>
 
-    <span className="customer-nav-label">
-      Enquiries
-    </span>
-  </div>
+              <span className="customer-nav-label">
+                Enquiries
+              </span>
 
-  <div className="customer-nav-submenu">
+              <ChevronDown
+                className="customer-nav-chevron"
+                size={17}
+                strokeWidth={1.6}
+                aria-hidden="true"
+              />
+            </button>
 
-    <NavLink
-      to="/account/enquiries/beauty"
-      onClick={closeMobileMenu}
-      className={({ isActive }) =>
-        `customer-nav-subitem ${
-          isActive ? 'active' : ''
-        }`
-      }
-    >
-      <span className="customer-subitem-dot" />
+            {openGroup === 'enquiries' && (
+              <div className="customer-nav-submenu">
 
-      <span>
-        Beauty Services
-      </span>
-    </NavLink>
+                <NavLink
+                  to="/account/enquiries/beauty"
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `customer-nav-subitem ${
+                      isActive ? 'active' : ''
+                    }`
+                  }
+                >
+                  <span className="customer-subitem-dot" />
 
-    <NavLink
-      to="/account/enquiries/fashion"
-      onClick={closeMobileMenu}
-      className={({ isActive }) =>
-        `customer-nav-subitem ${
-          isActive ? 'active' : ''
-        }`
-      }
-    >
-      <span className="customer-subitem-dot" />
+                  <span>
+                    Beauty Services
+                  </span>
+                </NavLink>
 
-      <span>
-        Fashion Services
-      </span>
-    </NavLink>
+                <NavLink
+                  to="/account/enquiries/fashion"
+                  onClick={closeMobileMenu}
+                  className={({ isActive }) =>
+                    `customer-nav-subitem ${
+                      isActive ? 'active' : ''
+                    }`
+                  }
+                >
+                  <span className="customer-subitem-dot" />
 
-  </div>
+                  <span>
+                    Fashion Services
+                  </span>
+                </NavLink>
 
-</div>
+              </div>
+            )}
+
+          </div>
 
           {/* PROFILE */}
 

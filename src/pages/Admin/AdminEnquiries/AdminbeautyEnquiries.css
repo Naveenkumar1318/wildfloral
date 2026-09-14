@@ -4,26 +4,26 @@
 ========================================================= */
 
 .admin-enquiries {
-  --admin-bg: #f5f7fa;
+  --admin-bg: #f4f8f1;
   --admin-surface: #ffffff;
-  --admin-surface-soft: #fafbf9;
+  --admin-surface-soft: #f8fbf6;
 
-  --admin-text: #302824;
-  --admin-text-soft: #716861;
-  --admin-text-muted: #9a918a;
+  --admin-text: #20352a;
+  --admin-text-soft: #65766b;
+  --admin-text-muted: #8a998f;
 
-  --admin-green: #527c3e;
+  --admin-green: #668f45;
   --admin-green-dark: #3f6530;
   --admin-green-soft: #edf5e9;
 
-  --admin-border: #e5ddd6;
-  --admin-border-soft: #eee8e3;
+  --admin-border: #dce7d8;
+  --admin-border-soft: #e8efe5;
 
   --admin-danger: #a45f55;
   --admin-danger-soft: #faeeee;
 
-  --admin-warning: #9b7740;
-  --admin-warning-soft: #faf4e7;
+  --admin-warning: #718b45;
+  --admin-warning-soft: #f1f6e9;
 
   --admin-blue: #58718c;
   --admin-blue-soft: #eef3f8;
@@ -80,7 +80,7 @@
 
   margin-bottom: 10px;
 
-  color: #92705e;
+  color: #668f45;
 
   font-size: 10px;
   line-height: 1;
@@ -242,7 +242,7 @@
 .admin-enquiry-stat span {
   display: block;
 
-  color: #927c70;
+  color: #708070;
 
   font-size: 9px;
   line-height: 1;
@@ -256,7 +256,7 @@
 .admin-enquiry-stat strong {
   display: block;
 
-  color: #2f2925;
+  color: #20352a;
 
   font-family:
     Georgia,
@@ -302,7 +302,7 @@
 .admin-enquiries-filter > label {
   margin-bottom: 9px;
 
-  color: #806d62;
+  color: #708070;
 
   font-size: 9px;
   line-height: 1;
@@ -339,7 +339,7 @@
 }
 
 .admin-enquiries-search input::placeholder {
-  color: #b6ada7;
+  color: #829187;
 }
 
 .admin-enquiries-search input:focus,
@@ -461,7 +461,7 @@
 
   margin-bottom: 7px;
 
-  color: #92796b;
+  color: #708070;
 
   font-size: 8px;
   line-height: 1;
@@ -475,7 +475,7 @@
 .admin-enquiries-card-heading h2 {
   margin: 0;
 
-  color: #342c27;
+  color: #20352a;
 
   font-family:
     Georgia,
@@ -551,9 +551,9 @@
 
   border-bottom: 1px solid var(--admin-border-soft);
 
-  background: #fcfbfa;
+  background: #f8fbf6;
 
-  color: #8d7d73;
+  color: #708070;
 
   font-size: 8px;
   line-height: 1;
@@ -575,7 +575,7 @@
 
   border-bottom: 1px solid #f0ebe7;
 
-  color: #4d4540;
+  color: #405247;
 
   font-size: 11px;
 
@@ -611,7 +611,7 @@
 .admin-enquiry-table-id strong {
   overflow: hidden;
 
-  color: #3c332e;
+  color: #20352a;
 
   font-size: 11px;
   font-weight: 700;
@@ -621,7 +621,7 @@
 }
 
 .admin-enquiry-table-id span {
-  color: #a19690;
+  color: #829187;
 
   font-size: 9px;
 }
@@ -640,7 +640,7 @@
 }
 
 .admin-enquiry-table-customer strong {
-  color: #4b433e;
+  color: #405247;
 
   font-size: 10px;
   font-weight: 600;
@@ -649,7 +649,7 @@
 .admin-enquiry-table-customer span {
   overflow: hidden;
 
-  color: #9a918b;
+  color: #829187;
 
   font-size: 9px;
 
@@ -672,8 +672,8 @@
 /* Keep generic status styling scoped by table/drawer usage */
 .admin-enquiries-table .status-new,
 .admin-enquiry-status.status-new {
-  color: #8c6c32;
-  background: #fbf5e9;
+  color: #52783f;
+  background: #edf5e9;
 }
 
 .admin-enquiries-table .status-contacted,
@@ -696,14 +696,14 @@
 
 .admin-enquiries-table .status-converted,
 .admin-enquiry-status.status-converted {
-  color: #65754a;
-  background: #f1f4e9;
+  color: #52783f;
+  background: #edf5e9;
 }
 
 .admin-enquiries-table .status-closed,
 .admin-enquiry-status.status-closed {
-  color: #6f6863;
-  background: #f2f0ee;
+  color: #607466;
+  background: #f1f4ef;
 }
 
 
@@ -721,11 +721,11 @@
 
   padding: 0 12px;
 
-  border: 1px solid #ddd4ce;
+  border: 1px solid #dce7d8;
   border-radius: 7px;
 
   background: #fff;
-  color: #4d4139;
+  color: #405247;
 
   font-size: 10px;
   font-weight: 600;
@@ -760,14 +760,14 @@
 
   border-top: 1px solid var(--admin-border-soft);
 
-  background: #fcfbfa;
+  background: #f8fbf6;
 }
 
 .admin-enquiries-pagination > p,
 .admin-enquiries-pagination > span {
   margin: 0;
 
-  color: #9b918b;
+  color: #829187;
 
   font-size: 10px;
 }
@@ -965,7 +965,7 @@
 
   background: #fff;
 
-  border-left: 1px solid #ddd4ce;
+  border-left: 1px solid #dce7d8;
 
   box-shadow:
     -18px 0 60px rgba(30, 24, 21, 0.15);
@@ -1013,7 +1013,7 @@
     linear-gradient(
       180deg,
       #ffffff 0%,
-      #fcfbfa 100%
+      #f8fbf6 100%
     );
 }
 
@@ -1026,7 +1026,7 @@
 
   margin-bottom: 7px;
 
-  color: #957c6e;
+  color: #668f45;
 
   font-size: 8px;
   line-height: 1;
@@ -1040,7 +1040,7 @@
 .admin-enquiry-drawer-header h2 {
   margin: 0;
 
-  color: #302925;
+  color: #20352a;
 
   font-family:
     Georgia,
@@ -1069,7 +1069,7 @@
   border-radius: 50%;
 
   background: #fff;
-  color: #5d514a;
+  color: #405247;
 
   font-size: 22px;
   line-height: 1;
@@ -1084,9 +1084,9 @@
 }
 
 .admin-enquiry-close:hover:not(:disabled) {
-  border-color: #c9bbb2;
-  background: #f8f5f3;
-  color: #302925;
+  border-color: #c9d9c4;
+  background: #f8fbf6;
+  color: #20352a;
 
   transform: rotate(90deg);
 }
@@ -1113,11 +1113,11 @@
     linear-gradient(
       180deg,
       #ffffff 0%,
-      #fbfaf9 100%
+      #f8fbf6 100%
     );
 
   scrollbar-width: thin;
-  scrollbar-color: #d5ccc6 transparent;
+  scrollbar-color: #c9d9c4 transparent;
 }
 
 .admin-enquiry-drawer-body::-webkit-scrollbar {
@@ -1130,7 +1130,7 @@
 
 .admin-enquiry-drawer-body::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: #d7cec8;
+  background: #c9d9c4;
 }
 
 
@@ -1155,7 +1155,7 @@
 
   margin-bottom: 6px;
 
-  color: #957c6e;
+  color: #668f45;
 
   font-size: 8px;
   line-height: 1;
@@ -1169,7 +1169,7 @@
 .admin-enquiry-section-title h3 {
   margin: 0;
 
-  color: #342c27;
+  color: #20352a;
 
   font-family:
     Georgia,
@@ -1256,7 +1256,7 @@
 .admin-enquiry-info-grid > div > span {
   margin-bottom: 7px;
 
-  color: #9b8f88;
+  color: #819187;
 
   font-size: 8px;
 
@@ -1269,7 +1269,7 @@
 .admin-enquiry-info-grid > div > strong {
   overflow: hidden;
 
-  color: #403731;
+  color: #405247;
 
   font-size: 11px;
   line-height: 1.4;
@@ -1318,7 +1318,7 @@
 
   border-bottom: 1px solid var(--admin-border-soft);
 
-  background: #fcfbfa;
+  background: #f8fbf6;
 }
 
 .admin-enquiry-person-number {
@@ -1410,7 +1410,7 @@
 }
 
 .admin-enquiry-service-card:hover {
-  border-color: #d8cec7;
+  border-color: #d8e4d4;
 
   box-shadow:
     0 9px 24px rgba(52, 43, 37, 0.07);
@@ -1426,7 +1426,7 @@
 
   border-right: 1px solid var(--admin-border);
 
-  background: #f2eee9;
+  background: #f1f7ee;
 }
 
 .admin-enquiry-service-image img {
@@ -1451,7 +1451,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #b0a49c;
+  color: #9aaa9f;
 
   font-size: 10px;
 }
@@ -1467,7 +1467,7 @@
 
   margin-bottom: 7px;
 
-  color: #9a897e;
+  color: #829187;
 
   font-size: 8px;
 
@@ -1481,7 +1481,7 @@
 .admin-enquiry-service-content h4 {
   margin: 0;
 
-  color: #3c332e;
+  color: #20352a;
 
   font-family:
     Georgia,
@@ -1504,7 +1504,7 @@
 }
 
 .admin-enquiry-service-duration span {
-  color: #8f8580;
+  color: #829187;
 
   font-size: 9px;
 }
@@ -1535,13 +1535,13 @@
 }
 
 .admin-enquiry-service-pricing span {
-  color: #978c85;
+  color: #829187;
 
   font-size: 9px;
 }
 
 .admin-enquiry-service-pricing strong {
-  color: #4b4039;
+  color: #405247;
 
   font-size: 10px;
   font-weight: 600;
@@ -1550,7 +1550,7 @@
 }
 
 .admin-enquiry-original-price {
-  color: #aaa09a !important;
+  color: #9aaa9f !important;
 
   text-decoration: line-through;
 }
@@ -1567,7 +1567,7 @@
 }
 
 .admin-enquiry-final-price-row span {
-  color: #6e625b;
+  color: #607466;
 
   font-weight: 600;
 }
@@ -1591,12 +1591,12 @@
 .admin-enquiry-no-services {
   padding: 18px;
 
-  border: 1px dashed #dcd3cc;
+  border: 1px dashed #dce7d8;
   border-radius: 10px;
 
-  background: #fcfbfa;
+  background: #f8fbf6;
 
-  color: #978d86;
+  color: #829187;
 
   font-size: 10px;
 
@@ -1637,13 +1637,13 @@
 }
 
 .admin-enquiry-pricing span {
-  color: #81766f;
+  color: #708070;
 
   font-size: 10px;
 }
 
 .admin-enquiry-pricing strong {
-  color: #443a34;
+  color: #405247;
 
   font-size: 11px;
   font-weight: 600;
@@ -1685,12 +1685,12 @@
 .admin-enquiry-note {
   padding: 16px;
 
-  border: 1px solid #e7ddd5;
+  border: 1px solid #dce7d8;
   border-radius: 11px;
 
-  background: #fcfaf8;
+  background: #f8fbf6;
 
-  color: #665b54;
+  color: #405247;
 
   font-size: 11px;
   line-height: 1.75;
@@ -1707,15 +1707,15 @@
 .admin-enquiry-management {
   padding: 20px;
 
-  border: 1px solid #e0e6dc;
+  border: 1px solid #dce7d8;
 
   border-radius: 13px;
 
   background:
     linear-gradient(
       145deg,
-      #f9fbf7 0%,
-      #f4f8f1 100%
+      #f9fcf7 0%,
+      #f1f7ee 100%
     );
 }
 
@@ -1737,7 +1737,7 @@
 
   margin-bottom: 8px;
 
-  color: #756960;
+  color: #66805f;
 
   font-size: 9px;
 
@@ -1752,13 +1752,13 @@
 .admin-enquiry-field textarea {
   width: 100%;
 
-  border: 1px solid #dcd5cf;
+  border: 1px solid #d8e4d4;
   border-radius: 9px;
 
   outline: none;
 
   background: #fff;
-  color: #433a34;
+  color: #405247;
 
   transition:
     border-color 0.2s ease,
@@ -1787,12 +1787,12 @@
 }
 
 .admin-enquiry-field textarea::placeholder {
-  color: #aaa09a;
+  color: #9aaa9f;
 }
 
 .admin-enquiry-field select:focus,
 .admin-enquiry-field textarea:focus {
-  border-color: #a9bca1;
+  border-color: #8faf7e;
 
   box-shadow:
     0 0 0 3px rgba(82, 124, 62, 0.08);
@@ -1849,7 +1849,7 @@
 .admin-enquiry-muted {
   margin: 0;
 
-  color: #978c85;
+  color: #829187;
 
   font-size: 10px;
   line-height: 1.6;
@@ -2147,7 +2147,7 @@
     border-right: 0;
     border-bottom: 1px solid var(--admin-border);
 
-    background: #f4f1ee;
+    background: #f1f7ee;
   }
 
   .admin-enquiry-service-image img {
@@ -2297,11 +2297,11 @@
   height: 40px;
   padding: 0 15px;
 
-  border: 1px solid #ded5ce;
+  border: 1px solid #dce7d8;
   border-radius: 9px;
 
   background: #ffffff;
-  color: #554942;
+  color: #405247;
 
   font-family: inherit;
   font-size: 11px;
@@ -2328,9 +2328,9 @@
 }
 
 .admin-enquiries-back-button:hover {
-  border-color: #bca99d;
-  background: #fcfaf8;
-  color: #342b26;
+  border-color: #8faf7e;
+  background: #f8fbf6;
+  color: #20352a;
 
   box-shadow:
     0 6px 18px rgba(55, 43, 36, 0.07);
@@ -2370,7 +2370,7 @@
   -webkit-overflow-scrolling: touch;
 
   scrollbar-width: thin;
-  scrollbar-color: #d4c8c0 transparent;
+  scrollbar-color: #c9d9c4 transparent;
 }
 
 .admin-enquiries-table-wrap::-webkit-scrollbar {
@@ -2383,7 +2383,7 @@
 
 .admin-enquiries-table-wrap::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: #d4c8c0;
+  background: #c9d9c4;
 }
 
 .admin-enquiries-table {
@@ -2561,7 +2561,7 @@
     overscroll-behavior-x: contain;
 
     scrollbar-width: thin;
-    scrollbar-color: #d4c8c0 transparent;
+    scrollbar-color: #c9d9c4 transparent;
 
     box-sizing: border-box;
 
@@ -2574,13 +2574,13 @@
   }
 
   .admin-enquiries-table-wrap::-webkit-scrollbar-track {
-    background: #f7f5f3;
+    background: #f8fbf6;
   }
 
   .admin-enquiries-table-wrap::-webkit-scrollbar-thumb {
     border-radius: 999px;
 
-    background: #d4c8c0;
+    background: #c9d9c4;
   }
 
 

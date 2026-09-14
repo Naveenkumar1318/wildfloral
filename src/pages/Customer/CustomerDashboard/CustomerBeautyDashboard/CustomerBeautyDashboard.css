@@ -2018,34 +2018,92 @@
   /* RECORD */
 
   .customer-beauty-record {
+    align-items: start;
+
     grid-template-columns:
-      43px
+      48px
       minmax(0, 1fr);
 
-    gap: 10px;
+    gap: 12px;
 
-    padding: 13px 0;
+    min-width: 0;
+
+    padding: 15px 0;
   }
 
   .customer-beauty-record-date {
-    width: 43px;
-    height: 43px;
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
   }
 
   .customer-beauty-record-date strong {
-    font-size: 16px;
+    font-size: 18px;
+  }
+
+  .customer-beauty-record-date span {
+    margin-top: 4px;
+
+    font-size: 7px;
   }
 
   .customer-beauty-record-content h5 {
-    font-size: 13px;
+    display: block;
+
+    width: 100%;
+
+    margin: 1px 0 5px;
+
+    overflow: hidden;
+
+    font-size: 15px;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .customer-beauty-record-content > p {
+    display: block;
+
+    width: 100%;
+
+    margin: 0 0 8px;
+
+    overflow: hidden;
+
     font-size: 9px;
+
+    line-height: 1.45;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .customer-beauty-record-content {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .customer-beauty-record-meta {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 5px 9px;
+
+    width: 100%;
   }
 
   .customer-beauty-record-meta span {
     font-size: 7px;
+
+    white-space: nowrap;
   }
 
 
@@ -2246,8 +2304,8 @@
 @media (max-width: 430px) {
 
   .customer-beauty-dashboard {
-    padding-left: 11px;
-    padding-right: 11px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .customer-beauty-header h1 {
@@ -2323,6 +2381,35 @@
 
   .customer-beauty-sub-list {
     padding: 0 11px;
+  }
+
+  .customer-beauty-record {
+    grid-template-columns:
+      46px
+      minmax(0, 1fr);
+
+    gap: 10px;
+  }
+
+  .customer-beauty-record-date {
+    width: 46px;
+    height: 46px;
+  }
+
+  .customer-beauty-record-date strong {
+    font-size: 17px;
+  }
+
+  .customer-beauty-record-content h5 {
+    font-size: 14px;
+  }
+
+  .customer-beauty-record-content > p {
+    font-size: 8px;
+  }
+
+  .customer-beauty-record-meta span {
+    font-size: 6.5px;
   }
 
 
@@ -2411,6 +2498,39 @@
 
   .customer-beauty-month-info small {
     font-size: 6px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .customer-beauty-dashboard {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .customer-beauty-record {
+    grid-template-columns:
+      43px
+      minmax(0, 1fr);
+
+    gap: 9px;
+  }
+
+  .customer-beauty-record-date {
+    width: 43px;
+    height: 43px;
+  }
+
+  .customer-beauty-record-date strong {
+    font-size: 16px;
+  }
+
+  .customer-beauty-record-content h5 {
+    font-size: 13px;
   }
 }
 /* =========================================================
