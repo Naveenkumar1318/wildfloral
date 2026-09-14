@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /account
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /auth
+
+Sitemap: https://wildfloral.vercel.app/sitemap.xml
