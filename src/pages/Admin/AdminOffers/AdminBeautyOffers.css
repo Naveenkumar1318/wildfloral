@@ -3340,3 +3340,65 @@ a:focus-visible {
     padding: 12px;
   }
 }
+/* =========================================================
+   FINAL MOBILE SELECTION GRID OVERFLOW FIX
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .admin-beauty-offers-selection {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+  .admin-beauty-offers-selection-grid {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    /*
+      6 rows × 58px
+      5 gaps × 10px
+      = 398px total
+    */
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 58px);
+
+    height: 398px;
+    min-height: 398px;
+    max-height: 398px;
+
+    gap: 10px;
+
+    overflow: hidden;
+  }
+
+  .admin-beauty-offers-selection-grid label {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    height: 58px;
+    min-height: 58px;
+    max-height: 58px;
+
+    padding: 10px 13px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .admin-beauty-offers-selection-grid
+  label > span:last-child {
+    min-width: 0;
+    max-width: 100%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
