@@ -1,0 +1,2671 @@
+/* =========================================================
+   ADMIN FASHION BOOKINGS
+========================================================= */
+
+:root {
+  --team-deep: #263d31;
+  --team-primary: #496957;
+  --team-mid: #72917e;
+  --team-soft: #edf5ef;
+  --team-wash: #f7fbf8;
+  --team-line: #dfe8e2;
+
+  --text-main: #30473a;
+  --text-muted: #87948d;
+  --text-light: #9da8a2;
+
+  --danger: #a84e48;
+  --warning: #9a701d;
+  --success: #2d7049;
+
+  --shadow-soft:
+    0 10px 30px
+    rgba(30, 48, 39, 0.07);
+
+  --shadow-card:
+    0 18px 45px
+    rgba(30, 48, 39, 0.08);
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.admin-fashion-bookings {
+  min-height: 100%;
+  padding: 34px 28px 55px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbf9 0%,
+      #f4f8f5 100%
+    );
+
+  color: var(--text-main);
+}
+
+.admin-fashion-bookings-container {
+  width: min(
+    1320px,
+    100%
+  );
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-fashion-bookings-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 30px;
+}
+
+.admin-fashion-eyebrow {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--team-primary);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-fashion-bookings-header h1 {
+  margin: 0;
+
+  color: var(--team-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(
+    34px,
+    4vw,
+    52px
+  );
+
+  font-weight: 500;
+
+  letter-spacing: -0.025em;
+}
+
+.admin-fashion-bookings-header p {
+  max-width: 550px;
+
+  margin: 9px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.admin-fashion-refresh-button {
+  min-height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: var(--team-primary);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.admin-fashion-refresh-button:hover {
+  border-color: #a9c3b2;
+  background: var(--team-wash);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.admin-fashion-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+
+  padding: 13px 16px;
+
+  border: 1px solid #efd0ce;
+  border-radius: 11px;
+
+  background: #fff6f5;
+
+  color: #9a514c;
+
+  font-size: 12px;
+}
+
+.admin-fashion-error button {
+  width: 27px;
+  height: 27px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: inherit;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.admin-fashion-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      7,
+      minmax(0, 1fr)
+    );
+
+  gap: 9px;
+
+  margin-bottom: 22px;
+}
+
+.admin-fashion-stat-card {
+  min-height: 92px;
+
+  padding: 15px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.admin-fashion-stat-card:hover {
+  border-color: #b4cbbd;
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-fashion-stat-card.active {
+  border-color: var(--team-primary);
+
+  background:
+    linear-gradient(
+      145deg,
+      #eef6f0,
+      #ffffff
+    );
+
+  box-shadow:
+    0 7px 22px
+    rgba(56, 89, 70, 0.08);
+}
+
+.admin-fashion-stat-card span {
+  display: block;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+}
+
+.admin-fashion-stat-card strong {
+  display: block;
+
+  margin-top: 13px;
+
+  color: var(--team-deep);
+
+  font-size: 25px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.admin-fashion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 12px;
+}
+
+.admin-fashion-search {
+  display: flex;
+  align-items: center;
+
+  width: min(
+    560px,
+    100%
+  );
+
+  min-height: 48px;
+
+  padding: 0 15px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.admin-fashion-search:focus-within {
+  border-color: #94b29f;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(73, 105, 87, 0.08);
+}
+
+.admin-fashion-search span {
+  margin-right: 9px;
+
+  color: #8c9992;
+
+  font-size: 20px;
+}
+
+.admin-fashion-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--text-main);
+
+  font: inherit;
+
+  font-size: 12px;
+}
+
+.admin-fashion-search input::placeholder {
+  color: #a1aaa5;
+}
+
+.admin-fashion-sort {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.admin-fashion-sort span {
+  color: var(--text-muted);
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.admin-fashion-sort select {
+  min-height: 43px;
+
+  padding: 0 12px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 9px;
+
+  outline: 0;
+
+  background: #ffffff;
+
+  color: var(--text-main);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   STATUS FILTERS
+========================================================= */
+
+.admin-fashion-status-filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-bottom: 20px;
+}
+
+.admin-fashion-status-filters button {
+  min-height: 34px;
+
+  padding: 0 13px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 999px;
+
+  background: #ffffff;
+
+  color: #728078;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.admin-fashion-status-filters button:hover {
+  border-color: #b1c8b9;
+  color: var(--team-primary);
+}
+
+.admin-fashion-status-filters button.active {
+  border-color: var(--team-primary);
+
+  background: var(--team-primary);
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   ORDER LIST
+========================================================= */
+
+.admin-fashion-orders {
+  display: grid;
+
+  gap: 14px;
+}
+
+.admin-fashion-order-card {
+  overflow: hidden;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 17px;
+
+  background: #ffffff;
+
+  box-shadow: var(--shadow-soft);
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-fashion-order-card:hover {
+  border-color: #cbd9d0;
+
+  box-shadow: var(--shadow-card);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   ORDER CARD TOP
+========================================================= */
+
+.admin-fashion-order-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 21px 23px 18px;
+
+  border-bottom: 1px solid
+    #edf1ee;
+}
+
+.admin-fashion-order-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #94a19a;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 0.15em;
+}
+
+.admin-fashion-order-main h2 {
+  margin: 0;
+
+  color: var(--team-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.admin-fashion-order-main p {
+  margin: 5px 0 3px;
+
+  color: #53665b;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-fashion-order-main small {
+  color: #9aa49f;
+
+  font-size: 9px;
+}
+
+.admin-fashion-order-total {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.admin-fashion-order-total > strong {
+  color: var(--team-deep);
+
+  font-size: 20px;
+  font-weight: 900;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.admin-fashion-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  min-height: 25px;
+
+  padding: 0 9px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.admin-fashion-status i {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+.admin-fashion-status.pending {
+  background: #fff4d9;
+  color: #9b741c;
+}
+
+.admin-fashion-status.confirmed {
+  background: #eaf3ff;
+  color: #416d9b;
+}
+
+.admin-fashion-status.processing {
+  background: #eeeaff;
+  color: #6756a0;
+}
+
+.admin-fashion-status.ready {
+  background: #e8f7f0;
+  color: #327452;
+}
+
+.admin-fashion-status.completed {
+  background: #e4f5e9;
+  color: #2e7047;
+}
+
+.admin-fashion-status.cancelled {
+  background: #fae7e6;
+  color: #ae4d48;
+}
+
+/* =========================================================
+   ORDER CARD MIDDLE
+========================================================= */
+
+.admin-fashion-order-card-middle {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  border-bottom: 1px solid
+    #edf1ee;
+}
+
+.admin-fashion-order-card-middle > div {
+  padding: 15px 18px;
+
+  border-right: 1px solid
+    #edf1ee;
+}
+
+.admin-fashion-order-card-middle > div:last-child {
+  border-right: 0;
+}
+
+.admin-fashion-order-card-middle span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #9aa49f;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.admin-fashion-order-card-middle strong {
+  color: #405449;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.admin-fashion-order-card-middle strong.discount {
+  color: #b14e47;
+}
+
+.admin-fashion-payment-inline.pending {
+  color: #9b741c;
+}
+
+.admin-fashion-payment-inline.submitted {
+  color: #a56e27;
+}
+
+.admin-fashion-payment-inline.verified {
+  color: #2d7049;
+}
+
+.admin-fashion-payment-inline.rejected {
+  color: #ae4d48;
+}
+
+/* =========================================================
+   ORDER CARD BOTTOM
+========================================================= */
+
+.admin-fashion-order-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 20px;
+}
+
+.admin-fashion-mini-items {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.admin-fashion-mini-item {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.admin-fashion-mini-image {
+  flex: 0 0 auto;
+
+  width: 40px;
+  height: 40px;
+
+  overflow: hidden;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 9px;
+
+  background: var(--team-wash);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-fashion-mini-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.admin-fashion-mini-image span {
+  color: var(--team-primary);
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.admin-fashion-mini-item > div:last-child {
+  min-width: 0;
+}
+
+.admin-fashion-mini-item strong {
+  display: block;
+
+  max-width: 150px;
+
+  overflow: hidden;
+
+  color: #405449;
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-fashion-mini-item small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9aa49f;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+.admin-fashion-more-items {
+  flex: 0 0 auto;
+
+  color: #87948d;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.admin-fashion-view-button {
+  flex: 0 0 auto;
+
+  min-width: 145px;
+  min-height: 40px;
+
+  padding: 0 14px;
+
+  border: 1px solid
+    #bdcec3;
+
+  border-radius: 10px;
+
+  background: #f8fbf9;
+
+  color: var(--team-primary);
+
+  font-size: 10px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.admin-fashion-view-button:hover {
+  border-color: var(--team-primary);
+
+  background: var(--team-primary);
+
+  color: #ffffff;
+
+  transform: translateX(2px);
+}
+
+.admin-fashion-view-button span {
+  font-size: 14px;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.admin-fashion-empty {
+  min-height: 300px;
+
+  padding: 35px;
+
+  border: 1px dashed
+    #ccd8d1;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  text-align: center;
+}
+
+.admin-fashion-empty-icon {
+  color: #789080;
+
+  font-size: 32px;
+}
+
+.admin-fashion-empty h2 {
+  margin: 12px 0 5px;
+
+  color: #394d42;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.admin-fashion-empty p {
+  margin: 0;
+
+  color: #929d97;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.admin-fashion-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 20px;
+  padding: 5px 2px;
+}
+
+.admin-fashion-pagination > span {
+  color: #8b9790;
+
+  font-size: 10px;
+}
+
+.admin-fashion-pagination > div {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.admin-fashion-pagination button {
+  min-width: 36px;
+  min-height: 35px;
+
+  padding: 0 11px;
+
+  border: 1px solid
+    #dce4df;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #5d6d63;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.admin-fashion-pagination button:hover:not(
+  :disabled
+) {
+  border-color: #a9c3b2;
+
+  background: var(--team-wash);
+}
+
+.admin-fashion-pagination button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.admin-fashion-pagination > div button.active {
+  border-color: var(--team-primary);
+
+  background: var(--team-primary);
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-fashion-bookings-loading {
+  min-height: 60vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 14px;
+
+  color: #7e8b84;
+
+  font-size: 13px;
+}
+
+.admin-fashion-spinner {
+  width: 30px;
+  height: 30px;
+
+  border: 3px solid
+    #dce5df;
+
+  border-top-color:
+    var(--team-primary);
+
+  border-radius: 50%;
+
+  animation:
+    admin-fashion-spin
+    0.8s linear infinite;
+}
+
+@keyframes admin-fashion-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   MODAL BACKDROP
+========================================================= */
+
+.admin-fashion-modal-backdrop {
+  position: fixed;
+
+  z-index: 9999;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    rgba(25, 34, 29, 0.58);
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+
+  animation:
+    admin-fashion-modal-fade
+    0.18s ease;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.admin-fashion-details {
+  position: relative;
+
+  width: min(
+    1080px,
+    calc(100vw - 48px)
+  );
+
+  height: min(
+    84vh,
+    740px
+  );
+
+  max-height:
+    calc(100vh - 48px);
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.78);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fcf9 100%
+    );
+
+  box-shadow:
+    0 30px 90px
+      rgba(22, 32, 27, 0.26),
+    0 8px 28px
+      rgba(22, 32, 27, 0.09);
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #aab9b0 transparent;
+
+  animation:
+    admin-fashion-modal-scale
+    0.2s ease;
+}
+
+.admin-fashion-details::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-fashion-details::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-fashion-details::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+
+  border-radius: 999px;
+
+  background: #aab9b0;
+
+  background-clip:
+    padding-box;
+}
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.admin-fashion-details-header {
+  position: sticky;
+
+  z-index: 10;
+
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 19px 24px;
+
+  border-bottom: 1px solid
+    #e3ebe6;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.96
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+}
+
+.admin-fashion-details-header > div:first-child {
+  min-width: 0;
+}
+
+.admin-fashion-details-header
+  > div:first-child
+  > span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #789080;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.2em;
+}
+
+.admin-fashion-details-header h2 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: var(--team-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 24px;
+  font-weight: 500;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-fashion-details-header p {
+  margin: 5px 0 0;
+
+  color: #929e97;
+
+  font-size: 9px;
+}
+
+.admin-fashion-details-header-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  flex: 0 0 auto;
+}
+
+.admin-fashion-close {
+  width: 37px;
+  height: 37px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: var(--team-primary);
+
+  font-size: 21px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.admin-fashion-close:hover:not(
+  :disabled
+) {
+  border-color: #a4c1ad;
+
+  background: var(--team-wash);
+}
+
+.admin-fashion-close:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   DETAIL LOADING
+========================================================= */
+
+.admin-fashion-detail-loading {
+  min-height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 13px;
+
+  color: #84918a;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   DETAIL SECTION
+========================================================= */
+
+.admin-fashion-detail-section {
+  padding: 23px 27px;
+
+  border-bottom: 1px solid
+    #e4ebe7;
+}
+
+.admin-fashion-detail-section-title,
+.admin-fashion-detail-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+}
+
+.admin-fashion-detail-section-title span,
+.admin-fashion-detail-section-heading span,
+.admin-fashion-finance-title {
+  color: #71897b;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 0.17em;
+}
+
+.admin-fashion-detail-section-heading strong {
+  color: #87948d;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   CUSTOMER
+========================================================= */
+
+.admin-fashion-customer-box {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 16px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 12px;
+
+  background: var(--team-wash);
+}
+
+.admin-fashion-avatar {
+  flex: 0 0 auto;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d5ecdc,
+      #eff9f1
+    );
+
+  color: var(--team-primary);
+
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.admin-fashion-customer-box h3 {
+  margin: 0 0 4px;
+
+  color: #354c40;
+
+  font-size: 14px;
+}
+
+.admin-fashion-customer-box p {
+  margin: 3px 0;
+
+  color: #8b9891;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   ITEMS TABLE
+========================================================= */
+
+.admin-fashion-items-table {
+  overflow: hidden;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 12px;
+
+  background: #ffffff;
+}
+
+.admin-fashion-items-head,
+.admin-fashion-item-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(230px, 2.1fr)
+    70px
+    55px
+    125px
+    125px
+    125px;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.admin-fashion-items-head {
+  min-height: 40px;
+
+  padding: 0 14px;
+
+  background: #f6faf7;
+
+  border-bottom: 1px solid
+    var(--team-line);
+}
+
+.admin-fashion-items-head span {
+  color: #8a9890;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+}
+
+.admin-fashion-item-row {
+  min-height: 73px;
+
+  padding: 10px 14px;
+
+  border-bottom: 1px solid
+    #edf1ee;
+}
+
+.admin-fashion-item-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-fashion-item-design {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.admin-fashion-detail-item-image {
+  flex: 0 0 auto;
+
+  width: 49px;
+  height: 58px;
+
+  overflow: hidden;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 8px;
+
+  background: var(--team-wash);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-fashion-detail-item-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.admin-fashion-detail-item-image span {
+  color: var(--team-primary);
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.admin-fashion-item-design-info {
+  min-width: 0;
+}
+
+.admin-fashion-item-design-info strong {
+  display: block;
+
+  overflow: hidden;
+
+  color: #405449;
+
+  font-size: 11px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-fashion-item-design-info small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #9aa59f;
+
+  font-size: 8px;
+}
+
+.admin-fashion-item-size,
+.admin-fashion-item-qty,
+.admin-fashion-original-price,
+.admin-fashion-item-discount,
+.admin-fashion-item-total {
+  font-size: 10px;
+}
+
+.admin-fashion-item-size,
+.admin-fashion-item-qty {
+  color: #53665b;
+
+  font-weight: 800;
+}
+
+.admin-fashion-original-price {
+  color: #61746a;
+
+  font-weight: 700;
+}
+
+.admin-fashion-item-discount {
+  font-weight: 800;
+}
+
+.admin-fashion-item-discount.has-discount {
+  color: #b34e46;
+}
+
+.admin-fashion-item-discount.no-discount {
+  color: #a2aaa5;
+
+  font-weight: 500;
+}
+
+.admin-fashion-item-total {
+  color: #164b34;
+
+  font-size: 12px;
+
+  font-weight: 900;
+}
+
+.admin-fashion-no-items {
+  padding: 35px;
+
+  color: #8c9992;
+
+  font-size: 11px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   FINANCE GRID
+========================================================= */
+
+.admin-fashion-finance-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  border-bottom: 1px solid
+    #e3eae5;
+}
+
+.admin-fashion-finance-card {
+  min-width: 0;
+
+  padding: 24px 27px;
+}
+
+.admin-fashion-finance-card:first-child {
+  border-right: 1px solid
+    #e3eae5;
+}
+
+.admin-fashion-finance-title {
+  display: block;
+
+  margin-bottom: 17px;
+}
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+.admin-fashion-payment-details {
+  display: grid;
+
+  gap: 0;
+}
+
+.admin-fashion-payment-details
+  > div:not(
+    .admin-fashion-payment-actions
+  ) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 11px 0;
+
+  border-bottom: 1px solid
+    #edf1ee;
+}
+
+.admin-fashion-payment-details
+  > div:last-child {
+  border-bottom: 0;
+}
+
+.admin-fashion-payment-details
+  > div
+  span {
+  color: #89968f;
+
+  font-size: 10px;
+}
+
+.admin-fashion-payment-details
+  > div
+  strong {
+  max-width: 65%;
+
+  color: #30483a;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-align: right;
+
+  word-break: break-word;
+}
+
+.admin-fashion-payment-status {
+  display: inline-flex;
+
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  font-size: 9px !important;
+}
+
+.admin-fashion-payment-status.pending {
+  background: #fff4d9;
+  color: #9b741c !important;
+}
+
+.admin-fashion-payment-status.submitted {
+  background: #fff0da;
+  color: #9c6827 !important;
+}
+
+.admin-fashion-payment-status.verified {
+  background: #e6f6ed;
+  color: #32734f !important;
+}
+
+.admin-fashion-payment-status.rejected {
+  background: #fae9e9;
+  color: #a34e4e !important;
+}
+
+/* =========================================================
+   PAYMENT ACTIONS
+========================================================= */
+
+.admin-fashion-payment-actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+
+  margin-top: 14px;
+}
+
+.admin-fashion-verify-button,
+.admin-fashion-proof-button {
+  min-height: 42px;
+
+  padding: 0 11px;
+
+  border: 1px solid
+    #bdd0c4;
+
+  border-radius: 9px;
+
+  background: #f5faf7;
+
+  color: #3c6750;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.admin-fashion-verify-button:hover:not(
+  :disabled
+) {
+  border-color: #91bba0;
+
+  background: #e1f2e6;
+}
+
+.admin-fashion-proof-button:hover:not(
+  :disabled
+) {
+  border-color: #71937f;
+
+  background: #eaf3ed;
+}
+
+.admin-fashion-verify-button:disabled,
+.admin-fashion-proof-button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.admin-fashion-payment-verified {
+  grid-column: 1 / -1;
+
+  min-height: 42px;
+
+  border: 1px solid
+    #c6dfcd;
+
+  border-radius: 9px;
+
+  background: #edf8f0;
+
+  color: #2a6c46;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.admin-fashion-payment-loading,
+.admin-fashion-payment-empty {
+  min-height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 7px;
+
+  text-align: center;
+}
+
+.admin-fashion-payment-loading {
+  color: #84918a;
+
+  font-size: 11px;
+}
+
+.admin-fashion-payment-empty strong {
+  color: #5a6a61;
+
+  font-size: 11px;
+}
+
+.admin-fashion-payment-empty span {
+  color: #9aa49f;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   PRICE SUMMARY
+========================================================= */
+
+.admin-fashion-price-summary {
+  display: grid;
+
+  gap: 15px;
+}
+
+.admin-fashion-price-summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.admin-fashion-price-summary span {
+  color: #7e8c85;
+
+  font-size: 11px;
+}
+
+.admin-fashion-price-summary strong {
+  color: #30483a;
+
+  font-size: 11px;
+}
+
+.admin-fashion-price-summary strong.discount {
+  color: #b24e46;
+}
+
+.admin-fashion-price-summary
+  > div.total {
+  margin-top: 5px;
+
+  padding-top: 17px;
+
+  border-top: 1px solid
+    #dce5df;
+}
+
+.admin-fashion-price-summary
+  > div.total
+  span {
+  color: #253a2f;
+
+  font-size: 13px;
+
+  font-weight: 900;
+}
+
+.admin-fashion-price-summary
+  > div.total
+  strong {
+  color: #14623f;
+
+  font-size: 23px;
+
+  font-weight: 900;
+}
+
+/* =========================================================
+   SHIPPING
+========================================================= */
+
+.admin-fashion-shipping-grid {
+  display: grid;
+
+  grid-template-columns:
+    2fr
+    1fr
+    1fr;
+
+  gap: 11px;
+}
+
+.admin-fashion-shipping-grid > div {
+  min-width: 0;
+
+  padding: 14px;
+
+  border: 1px solid
+    #dfe8e2;
+
+  border-radius: 10px;
+
+  background: #fbfdfb;
+}
+
+.admin-fashion-shipping-grid span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #89968f;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.admin-fashion-shipping-grid strong {
+  color: #3d5147;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.admin-fashion-notes {
+  padding: 14px 16px;
+
+  border: 1px solid
+    var(--team-line);
+
+  border-radius: 10px;
+
+  background: var(--team-wash);
+
+  color: #64746c;
+
+  font-size: 10px;
+
+  line-height: 1.65;
+
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   STATUS UPDATE
+========================================================= */
+
+.admin-fashion-status-update {
+  display: grid;
+
+  grid-template-columns:
+    minmax(130px, 0.7fr)
+    minmax(300px, 1.3fr);
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 21px 27px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbf9,
+      #f1f7f3
+    );
+
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+}
+
+.admin-fashion-status-update
+  > div:first-child
+  span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #7d9084;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.16em;
+}
+
+.admin-fashion-status-update
+  > div:first-child
+  strong {
+  color: #30483a;
+
+  font-size: 13px;
+}
+
+.admin-fashion-status-controls {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.admin-fashion-status-controls select {
+  flex: 1;
+
+  min-height: 43px;
+
+  padding: 0 11px;
+
+  border: 1px solid
+    #cad8cf;
+
+  border-radius: 9px;
+
+  outline: 0;
+
+  background: #ffffff;
+
+  color: #3f5448;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.admin-fashion-status-controls button {
+  min-height: 43px;
+
+  padding: 0 15px;
+
+  border: 1px solid
+    var(--team-primary);
+
+  border-radius: 9px;
+
+  background: var(--team-primary);
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.admin-fashion-status-controls button:hover:not(
+  :disabled
+) {
+  background: var(--team-deep);
+}
+
+.admin-fashion-status-controls button:disabled,
+.admin-fashion-status-controls select:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+.admin-fashion-status-update
+  > small {
+  grid-column: 2;
+
+  color: #9aa49f;
+
+  font-size: 8px;
+}
+
+/* =========================================================
+   CANCELLATION REASON
+========================================================= */
+
+.admin-fashion-cancellation-field {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0 8px;
+}
+
+.admin-fashion-cancellation-field label {
+  color: var(--danger, #a84e48);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.admin-fashion-cancellation-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cad8cf;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #30483a;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.admin-fashion-cancellation-field textarea:focus {
+  border-color: var(--team-primary);
+  box-shadow: 0 0 0 3px rgba(73, 105, 87, 0.12);
+}
+
+.admin-fashion-cancellation-field small {
+  color: #87948d;
+  font-size: 10px;
+}
+
+.admin-fashion-cancellation-reason-box {
+  background: #fdf5f5;
+  border-left: 3px solid var(--danger, #a84e48);
+  color: #5c2b28;
+}
+
+/* =========================================================
+   MODAL ANIMATIONS
+========================================================= */
+
+@keyframes admin-fashion-modal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes admin-fashion-modal-scale {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.admin-fashion-refresh-button:focus-visible,
+.admin-fashion-stat-card:focus-visible,
+.admin-fashion-status-filters
+  button:focus-visible,
+.admin-fashion-view-button:focus-visible,
+.admin-fashion-pagination
+  button:focus-visible,
+.admin-fashion-close:focus-visible,
+.admin-fashion-status-controls
+  button:focus-visible,
+.admin-fashion-status-controls
+  select:focus-visible,
+.admin-fashion-proof-button:focus-visible,
+.admin-fashion-verify-button:focus-visible {
+  outline: 2px solid
+    var(--team-mid);
+
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-fashion-stats {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-fashion-items-table {
+    overflow-x: auto;
+  }
+
+  .admin-fashion-items-head,
+  .admin-fashion-item-row {
+    min-width: 820px;
+  }
+}
+
+/* =========================================================
+   TABLET / MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+  .admin-fashion-bookings {
+    padding: 28px 16px 42px;
+  }
+
+  .admin-fashion-bookings-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    margin-bottom: 25px;
+  }
+
+  .admin-fashion-bookings-header h1 {
+    font-size:
+      clamp(
+        36px,
+        9vw,
+        52px
+      );
+  }
+
+  .admin-fashion-refresh-button {
+    width: 100%;
+  }
+
+  .admin-fashion-stats {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-fashion-toolbar {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .admin-fashion-search {
+    width: 100%;
+  }
+
+  .admin-fashion-sort {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .admin-fashion-sort select {
+    flex: 1;
+  }
+
+  .admin-fashion-order-card-middle {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .admin-fashion-order-card-middle
+    > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .admin-fashion-order-card-bottom {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .admin-fashion-mini-items {
+    overflow-x: auto;
+
+    padding-bottom: 3px;
+  }
+
+  .admin-fashion-view-button {
+    width: 100%;
+  }
+
+  /* Modal */
+
+  .admin-fashion-modal-backdrop {
+    padding: 12px;
+  }
+
+  .admin-fashion-details {
+    width: calc(100vw - 24px);
+
+    height:
+      calc(100vh - 24px);
+
+    max-height:
+      calc(100vh - 24px);
+
+    border-radius: 18px;
+  }
+
+  .admin-fashion-finance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-fashion-finance-card:first-child {
+    border-right: 0;
+
+    border-bottom: 1px solid
+      #e3eae5;
+  }
+
+  .admin-fashion-status-update {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-fashion-status-update
+    > small {
+    grid-column: 1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .admin-fashion-bookings {
+    padding: 18px 10px 30px;
+  }
+
+  .admin-fashion-stats {
+    gap: 8px;
+  }
+
+  .admin-fashion-stat-card {
+    min-height: 88px;
+
+    padding: 13px;
+  }
+
+  .admin-fashion-stat-card strong {
+    margin-top: 11px;
+
+    font-size: 23px;
+  }
+
+  .admin-fashion-order-card-top {
+    padding: 17px;
+
+    flex-direction: column;
+  }
+
+  .admin-fashion-order-total {
+    align-items: flex-start;
+
+    width: 100%;
+
+    flex-direction: row;
+
+    justify-content: space-between;
+  }
+
+  .admin-fashion-order-card-middle
+    > div {
+    padding: 13px;
+  }
+
+  .admin-fashion-order-card-bottom {
+    padding: 14px;
+  }
+
+  .admin-fashion-mini-items {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: stretch;
+  }
+
+  .admin-fashion-mini-item {
+    min-width: 0;
+  }
+
+  .admin-fashion-more-items {
+    grid-column: 1 / -1;
+  }
+
+  .admin-fashion-pagination {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .admin-fashion-pagination
+    > div {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  /* Modal */
+
+  .admin-fashion-details-header {
+    padding: 15px 16px;
+  }
+
+  .admin-fashion-details-header h2 {
+    font-size: 19px;
+  }
+
+  .admin-fashion-details-header-actions
+    .admin-fashion-status {
+    display: none;
+  }
+
+  .admin-fashion-detail-section {
+    padding: 18px 16px;
+  }
+
+  .admin-fashion-finance-card {
+    padding: 19px 16px;
+  }
+
+  .admin-fashion-shipping-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-fashion-payment-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-fashion-status-update {
+    padding: 18px 16px;
+  }
+
+  .admin-fashion-status-controls {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .admin-fashion-status-controls
+    select,
+  .admin-fashion-status-controls
+    button {
+    width: 100%;
+  }
+
+  .admin-fashion-items-table {
+    border-radius: 9px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-fashion-modal-backdrop,
+  .admin-fashion-details {
+    animation: none;
+  }
+
+  .admin-fashion-order-card,
+  .admin-fashion-view-button,
+  .admin-fashion-refresh-button {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   PAYMENT PROOF MODAL
+========================================================= */
+
+.admin-fashion-proof-modal {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(18, 39, 29, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: admin-fashion-proof-fade-in 0.18s ease;
+}
+
+.admin-fashion-proof-modal-content {
+  display: flex;
+  flex-direction: column;
+  width: min(760px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  border: 1px solid var(--team-line);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 28px 80px rgba(10, 42, 27, 0.3);
+  animation: admin-fashion-proof-slide-in 0.2s ease;
+}
+
+.admin-fashion-proof-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--team-line);
+  background: #ffffff;
+}
+
+.admin-fashion-proof-modal-header span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--team-primary);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.admin-fashion-proof-modal-header h3 {
+  margin: 0;
+  color: var(--team-deep);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.admin-fashion-proof-close {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border: 1px solid var(--team-line);
+  border-radius: 10px;
+  background: var(--team-wash);
+  color: var(--team-primary);
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.admin-fashion-proof-close:hover {
+  background: var(--team-soft);
+  transform: scale(1.04);
+}
+
+.admin-fashion-proof-image-wrapper {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 20px;
+  background: var(--team-wash);
+}
+
+.admin-fashion-proof-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  border: 1px solid var(--team-line);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(18, 60, 43, 0.12);
+}
+
+.admin-fashion-proof-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 22px;
+  border-top: 1px solid var(--team-line);
+  background: #ffffff;
+}
+
+.admin-fashion-proof-footer-button {
+  min-width: 100px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--team-line);
+  border-radius: 9px;
+  background: var(--team-deep);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.admin-fashion-proof-footer-button:hover {
+  background: var(--team-primary);
+  transform: translateY(-1px);
+}
+
+.admin-fashion-proof-close:focus-visible,
+.admin-fashion-proof-footer-button:focus-visible {
+  outline: 2px solid var(--team-mid);
+  outline-offset: 3px;
+}
+
+@keyframes admin-fashion-proof-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes admin-fashion-proof-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-fashion-proof-modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .admin-fashion-proof-modal-content {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    animation: admin-fashion-proof-mobile-slide-in 0.22s ease;
+  }
+
+  .admin-fashion-proof-modal-header {
+    padding: 16px 18px;
+  }
+
+  .admin-fashion-proof-modal-header h3 {
+    font-size: 18px;
+  }
+
+  .admin-fashion-proof-image-wrapper {
+    min-height: 280px;
+    padding: 14px;
+  }
+
+  .admin-fashion-proof-image {
+    width: 100%;
+    max-height: 64vh;
+  }
+
+  .admin-fashion-proof-modal-footer {
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .admin-fashion-proof-footer-button {
+    width: 100%;
+  }
+}
+
+@keyframes admin-fashion-proof-mobile-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-fashion-proof-modal,
+  .admin-fashion-proof-modal-content {
+    animation: none;
+  }
+}

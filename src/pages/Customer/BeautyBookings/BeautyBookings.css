@@ -4858,6 +4858,320 @@
 }
 
 /* =========================================================
+   PREMIUM BEAUTY BOOKINGS SURFACE
+========================================================= */
+
+:root {
+  --bb-page-premium: #f2f7f1;
+  --bb-sage-border: #d6e4d5;
+  --bb-sage-shadow: rgba(42, 79, 52, 0.09);
+}
+
+.beauty-bookings-page {
+  padding: 34px 0 64px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(214, 234, 211, 0.62), transparent 30rem),
+    linear-gradient(180deg, #f8fbf7 0%, var(--bb-page-premium) 100%);
+}
+
+.beauty-bookings-container {
+  width: min(calc(100% - 72px), 1320px);
+}
+
+.beauty-bookings-header {
+  position: relative;
+  min-height: 232px;
+  margin-bottom: 24px;
+  padding: 38px 40px;
+  overflow: hidden;
+  align-items: center;
+  border: 1px solid var(--bb-sage-border);
+  border-radius: 26px;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.98), rgba(246, 251, 245, 0.94)),
+    #ffffff;
+  box-shadow: 0 18px 45px var(--bb-sage-shadow);
+}
+
+.beauty-bookings-header::after {
+  position: absolute;
+  right: -120px;
+  bottom: -170px;
+  width: 420px;
+  height: 420px;
+  border: 1px solid rgba(100, 143, 93, 0.15);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 27px rgba(100, 143, 93, 0.045),
+    0 0 0 58px rgba(100, 143, 93, 0.03);
+  content: '';
+  pointer-events: none;
+}
+
+.beauty-bookings-header-copy,
+.beauty-bookings-header-actions {
+  position: relative;
+  z-index: 1;
+}
+
+.beauty-bookings-eyebrow {
+  color: #648858;
+}
+
+.beauty-bookings-eyebrow > span {
+  background: #86a979;
+}
+
+.beauty-bookings-header-copy h1 {
+  color: #1b3528;
+  letter-spacing: -3.5px;
+}
+
+.beauty-bookings-header-copy h1 em {
+  color: #4a7c42;
+}
+
+.beauty-bookings-header-copy p {
+  max-width: 590px;
+  margin-top: 15px;
+  color: #687a6e;
+}
+
+.beauty-bookings-header-summary {
+  margin-top: 17px;
+  color: #42673d;
+  font-size: 13px;
+}
+
+.beauty-bookings-header-note {
+  color: #7c765f;
+}
+
+.beauty-bookings-back-button,
+.beauty-bookings-new-button {
+  min-height: 48px;
+  border-radius: 12px;
+}
+
+.beauty-bookings-back-button {
+  border-color: #d3e0d1;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.beauty-bookings-new-button {
+  border-color: #3d7137;
+  background: linear-gradient(135deg, #4d8245, #34672f);
+  box-shadow: 0 10px 24px rgba(57, 106, 50, 0.17);
+}
+
+.beauty-bookings-main-card {
+  border-color: var(--bb-sage-border);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 45px var(--bb-sage-shadow);
+}
+
+.beauty-bookings-toolbar {
+  min-height: 96px;
+  padding: 19px 22px;
+  border-bottom-color: #e3ece1;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.beauty-bookings-filters {
+  gap: 8px;
+}
+
+.beauty-bookings-filters > button {
+  min-height: 45px;
+  border-color: #e0e9de;
+  border-radius: 12px;
+  background: #f8fbf7;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.beauty-bookings-filters > button:hover {
+  transform: translateY(-1px);
+  border-color: #bdd2bb;
+  background: #f0f7ef;
+}
+
+.beauty-bookings-filters > button.active {
+  border-color: #3f7438;
+  background: linear-gradient(135deg, #4a7f42, #35692f);
+  box-shadow: 0 8px 18px rgba(57, 106, 50, 0.18);
+}
+
+.beauty-bookings-filters > button strong {
+  background: #e8f1e5;
+  color: #55734e;
+}
+
+.beauty-bookings-filters > button.active strong {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.beauty-search-box,
+.beauty-sort-box {
+  border-color: #dbe7d9;
+  border-radius: 12px;
+  background: #fbfdfb;
+}
+
+.beauty-search-box:focus-within,
+.beauty-sort-box:focus-within {
+  border-color: #91ae8b;
+  box-shadow: 0 0 0 3px rgba(76, 126, 68, 0.09);
+}
+
+.beauty-bookings-list {
+  gap: 16px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(249, 252, 248, 0.82), rgba(255, 255, 255, 0.46));
+}
+
+.beauty-booking-card {
+  border-color: #dce7da;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(54, 84, 57, 0.045);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.beauty-booking-card:hover {
+  transform: translateY(-2px);
+  border-color: #b6ceb2;
+  box-shadow: 0 14px 30px rgba(54, 84, 57, 0.1);
+}
+
+.beauty-booking-card.expanded {
+  border-color: #79a674;
+  box-shadow: 0 16px 34px rgba(54, 84, 57, 0.12);
+}
+
+.beauty-booking-date-panel {
+  border-right-color: #e0e9df;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(222, 239, 218, 0.78), transparent 8rem),
+    linear-gradient(180deg, #f9fcf8 0%, #eff7ed 100%);
+}
+
+.beauty-booking-time {
+  background: #e3f1df;
+  color: #3d7138;
+}
+
+.beauty-booking-heading h2 {
+  color: #203b2c;
+}
+
+.beauty-booking-status-area > span[class*='status'],
+.beauty-booking-status-area > span {
+  box-shadow: 0 4px 10px rgba(45, 70, 48, 0.04);
+}
+
+.beauty-booking-actions {
+  border-top-color: #edf2eb;
+}
+
+.beauty-booking-details-button,
+.beauty-booking-rebook-button {
+  border-radius: 9px;
+}
+
+.beauty-booking-details-button:hover {
+  border-color: #a9c5a6;
+  background: #f0f7ef;
+}
+
+.beauty-booking-summary {
+  background: #fbfdfb;
+  border-top-color: #e7eee5;
+  border-bottom-color: #e7eee5;
+}
+
+.beauty-bookings-empty {
+  padding: 84px 24px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.beauty-bookings-empty-icon {
+  background: linear-gradient(145deg, #eef7eb, #e0efdc);
+  box-shadow: 0 10px 22px rgba(61, 110, 54, 0.1);
+}
+
+@media (max-width: 850px) {
+  .beauty-bookings-header {
+    padding: 30px;
+  }
+
+  .beauty-booking-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .beauty-bookings-page {
+    padding: 14px 0 34px;
+  }
+
+  .beauty-bookings-container {
+    width: calc(100% - 24px);
+  }
+
+  .beauty-bookings-header {
+    min-height: 0;
+    margin-bottom: 14px;
+    padding: 25px 18px 20px;
+    border-radius: 20px;
+  }
+
+  .beauty-bookings-header-copy h1 {
+    font-size: 36px;
+    letter-spacing: -2px;
+  }
+
+  .beauty-bookings-header-copy p {
+    margin-top: 11px;
+    line-height: 1.5;
+  }
+
+  .beauty-bookings-header-summary {
+    margin-top: 13px;
+  }
+
+  .beauty-bookings-main-card {
+    border-radius: 18px;
+  }
+
+  .beauty-bookings-toolbar {
+    padding: 14px;
+    gap: 11px;
+  }
+
+  .beauty-bookings-list {
+    gap: 12px;
+    padding: 14px 12px 0;
+  }
+
+  .beauty-booking-card {
+    border-radius: 15px;
+  }
+
+  .beauty-bookings-empty {
+    padding: 64px 18px;
+  }
+}
+
+/* =========================================================
    PEOPLE & SERVICES - VIEW DETAILS
 ========================================================= */
 

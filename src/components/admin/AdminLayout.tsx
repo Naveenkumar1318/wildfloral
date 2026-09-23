@@ -505,27 +505,27 @@ function AdminLayout() {
                 <span className="admin-subitem-dot" />
 
                 <span>
-                  Beauty Services
+                  Beauty Bookings
                 </span>
               </NavLink>
 
               <NavLink
-                to="/admin/bookings/fashion"
-                onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `admin-nav-subitem ${
-                    isActive
-                      ? 'active'
-                      : ''
-                  }`
-                }
-              >
-                <span className="admin-subitem-dot" />
+  to="/admin/bookings/fashion"
+  onClick={closeMobileMenu}
+  className={({ isActive }) =>
+    `admin-nav-subitem ${
+      isActive
+        ? 'active'
+        : ''
+    }`
+  }
+>
+  <span className="admin-subitem-dot" />
 
-                <span>
-                  Fashion Services
-                </span>
-              </NavLink>
+  <span>
+    Fashion Bookings
+  </span>
+</NavLink>
 
             </div>
 
@@ -664,22 +664,20 @@ function AdminLayout() {
               </NavLink>
 
               <NavLink
-                to="/admin/services/fashion"
-                onClick={closeMobileMenu}
-                className={({ isActive }) =>
-                  `admin-nav-subitem ${
-                    isActive
-                      ? 'active'
-                      : ''
-                  }`
-                }
-              >
-                <span className="admin-subitem-dot" />
+  to="/admin/services/fashion"
+  onClick={closeMobileMenu}
+  className={({ isActive }) =>
+    `admin-nav-subitem ${
+      isActive ? 'active' : ''
+    }`
+  }
+>
+  <span className="admin-subitem-dot" />
 
-                <span>
-                  Fashion Services
-                </span>
-              </NavLink>
+  <span>
+    Fashion Services
+  </span>
+</NavLink>
 
             </div>
 
@@ -742,7 +740,7 @@ function AdminLayout() {
               </NavLink>
 
               <NavLink
-                to="/admin/offers/fashion"
+                to="/admin/services/fashion/offers"
                 onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${

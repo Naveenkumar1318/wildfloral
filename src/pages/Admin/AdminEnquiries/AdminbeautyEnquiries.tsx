@@ -1036,11 +1036,13 @@ await loadEnquiries()
   <button
     type="button"
     className="admin-enquiries-back-button"
-    onClick={() => navigate(-1)}
-    aria-label="Go back"
+    onClick={() =>
+      navigate('/admin')
+    }
+    aria-label="Back to Dashboard"
   >
     <span aria-hidden="true">←</span>
-    <span>Back</span>
+    <span>Back to Dashboard</span>
   </button>
 </div>
 

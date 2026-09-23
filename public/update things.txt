@@ -1,0 +1,2041 @@
+Yes. We will fix only the customer Fashion page now.
+
+I checked your current Fashion.tsx. It already has:
+
+size selection
+stock_quantity
+cart
+Book Now
+image gallery
+wishlist
+offers
+
+But currently the card only checks whether stock is greater than 0; it does not show the remaining quantity, and the cart + handler can increase quantity beyond available stock.
+
+We will add:
+
+Only X left for the selected size.
+Out of stock when stock is 0.
+Cart quantity cannot exceed actual stock.
+View Details button.
+Ecommerce-style product details modal.
+Multiple product images with thumbnails.
+Product description.
+About this item from admin's product_details.
+Additional Information from admin's additional_information.
+Size + price + stock inside details.
+Mobile responsive details view.
+File 1
+File name
+
+Fashion.tsx
+
+File path
+src/pages/General Public Pages/Fashion/Fashion.tsx
+
+Your current customer file is the one containing FashionDesignCard, FashionImageGallery, loadFashionData(), cart handlers, etc.
+
+1. Update FashionDesign
+
+Find:
+
+type FashionDesign = {
+  id: string
+  subcategory_id: string
+  name: string
+  slug: string
+  description: string
+  is_active: boolean
+  is_featured: boolean
+  delivery_min_days: number
+  delivery_max_days: number
+  created_at: string
+  images: FashionImage[]
+  sizes: FashionSize[]
+  category: FashionCategory | null
+  subcategory: FashionSubcategory | null
+}
+
+Replace with:
+
+type FashionDesign = {
+  id: string
+  subcategory_id: string
+  name: string
+  slug: string
+  description: string
+  product_details: string
+  additional_information: string
+  is_active: boolean
+  is_featured: boolean
+  delivery_min_days: number
+  delivery_max_days: number
+  created_at: string
+  images: FashionImage[]
+  sizes: FashionSize[]
+  category: FashionCategory | null
+  subcategory: FashionSubcategory | null
+}
+2. Load the two new fields
+
+Your current fashion_designs query contains:
+
+.select(`
+  id,
+  subcategory_id,
+  name,
+  slug,
+  description,
+  is_active,
+  is_featured,
+  delivery_min_days,
+  delivery_max_days,
+  created_at
+`)
+
+Replace it with:
+
+.select(`
+  id,
+  subcategory_id,
+  name,
+  slug,
+  description,
+  product_details,
+  additional_information,
+  is_active,
+  is_featured,
+  delivery_min_days,
+  delivery_max_days,
+  created_at
+`)
+
+Your existing loadFashionData() separately loads designs, images and sizes and then combines them into each FashionDesign.
+
+Because we are adding the fields directly to the design query, this will automatically preserve them in:
+
+return {
+  ...design,
+  images:
+    imagesMap.get(design.id) ?? [],
+  sizes:
+    sizesMap.get(design.id) ?? [],
+  category,
+  subcategory,
+} as FashionDesign
+
+So you don't need to change that part.
+
+3. Add selected product state
+
+Inside function Fashion() you currently have states such as:
+
+const [
+  cartOpen,
+  setCartOpen,
+] = useState(false)
+
+Immediately after that add:
+
+const [
+  selectedDesignForDetails,
+  setSelectedDesignForDetails,
+] = useState<FashionDesign | null>(null)
+
+So it becomes:
+
+const [
+  cartOpen,
+  setCartOpen,
+] = useState(false)
+
+const [
+  selectedDesignForDetails,
+  setSelectedDesignForDetails,
+] = useState<FashionDesign | null>(null)
+4. Add a safe stock helper
+
+Inside function Fashion(), before the cart handlers, add:
+
+function getCartQuantityForSize(
+  designId: string,
+  designSizeId: string,
+) {
+  const item = cartItems.find(
+    (cartItem) =>
+      cartItem.designId === designId &&
+      cartItem.designSizeId === designSizeId,
+  )
+
+  return item
+    ? Number(item.quantity)
+    : 0
+}
+5. Replace handleAddToCart
+
+Your current version simply calls addToFashionCart().
+
+Replace the entire function with:
+
+function handleAddToCart(
+  design: FashionDesign,
+  size: FashionSize,
+) {
+  const stock = Number(
+    size.stock_quantity,
+  )
+
+  const currentQuantity =
+    getCartQuantityForSize(
+      design.id,
+      size.id,
+    )
+
+  if (
+    !size.is_active ||
+    stock <= 0
+  ) {
+    return
+  }
+
+  if (
+    currentQuantity >= stock
+  ) {
+    return
+  }
+
+  const cart =
+    addToFashionCart({
+      designId: design.id,
+      designSizeId: size.id,
+      size: size.size,
+      quantity: 1,
+    })
+
+  syncCart(cart)
+}
+6. Replace handleIncreaseCartItem
+
+This is the important fix for your 5 stock / add 7 problem.
+
+Your current code blindly does:
+
+Number(item.quantity) + 1
+
+which allows the cart to exceed stock.
+
+Replace the complete function with:
+
+function handleIncreaseCartItem(
+  item: FashionCartItem,
+) {
+  const design =
+    designs.find(
+      (entry) =>
+        entry.id ===
+        item.designId,
+    )
+
+  if (!design) {
+    return
+  }
+
+  const size =
+    design.sizes.find(
+      (entry) =>
+        entry.id ===
+        item.designSizeId,
+    )
+
+  if (!size) {
+    return
+  }
+
+  const stock = Number(
+    size.stock_quantity,
+  )
+
+  const currentQuantity =
+    Number(item.quantity)
+
+  if (
+    !size.is_active ||
+    stock <= 0
+  ) {
+    return
+  }
+
+  if (
+    currentQuantity >= stock
+  ) {
+    return
+  }
+
+  const cart =
+    updateFashionCartQuantity(
+      item.designId,
+      item.designSizeId,
+      currentQuantity + 1,
+    )
+
+  syncCart(cart)
+}
+Result
+
+If stock is:
+
+5
+
+customer can have:
+
+1
+2
+3
+4
+5
+
+but clicking + at 5 does nothing.
+
+It cannot become:
+
+6
+7
+8
+7. Add stock display to the product card
+
+Your current card has:
+
+<div className="fashion-size-section">
+  <div className="fashion-size-heading">
+    <span>Available Sizes</span>
+
+    {selectedSize && (
+      <strong>
+        {selectedSize.size}
+      </strong>
+    )}
+  </div>
+
+Replace that heading section with:
+
+<div className="fashion-size-section">
+  <div className="fashion-size-heading">
+    <span>Available Sizes</span>
+
+    {selectedSize && (
+      <strong>
+        {selectedSize.size}
+      </strong>
+    )}
+  </div>
+
+Then immediately after the closing </div> of .fashion-size-list, add:
+
+{selectedSize && (
+  <div
+    className={`fashion-stock-left ${
+      Number(
+        selectedSize.stock_quantity,
+      ) <= 0
+        ? 'out'
+        : Number(
+              selectedSize.stock_quantity,
+            ) <= 5
+          ? 'low'
+          : ''
+    }`}
+  >
+    {Number(
+      selectedSize.stock_quantity,
+    ) <= 0
+      ? 'Out of stock'
+      : Number(
+            selectedSize.stock_quantity,
+          ) <= 5
+        ? `Only ${Number(
+            selectedSize.stock_quantity,
+          )} left`
+        : `${Number(
+            selectedSize.stock_quantity,
+          )} available`}
+  </div>
+)}
+
+So a product will show:
+
+Available Sizes                 M
+
+[ XS ] [ S ] [ M ] [ L ] [ XL ]
+
+Only 5 left
+
+If stock is 12:
+
+12 available
+
+If stock is 0:
+
+Out of stock
+8. Add View Details button
+
+Your current card ends with:
+
+<div className="fashion-card-actions">
+
+Before that section, add:
+
+<button
+  type="button"
+  className="fashion-view-details-button"
+  onClick={() =>
+    setSelectedDesignForDetails(
+      design,
+    )
+  }
+>
+  View Details
+  <ArrowIcon />
+</button>
+
+So the bottom of your card becomes:
+
+<div className="fashion-delivery">
+  <span className="fashion-delivery-icon">
+    <CheckIcon />
+  </span>
+
+  <span>
+    Delivery:{' '}
+    <strong>
+      {design.delivery_min_days}–
+      {design.delivery_max_days}{' '}
+      days
+    </strong>
+  </span>
+</div>
+
+{!isAvailable && (
+  <div className="fashion-stock-warning">
+    Please select an available size.
+  </div>
+)}
+
+<button
+  type="button"
+  className="fashion-view-details-button"
+  onClick={() =>
+    setSelectedDesignForDetails(
+      design,
+    )
+  }
+>
+  View Details
+  <ArrowIcon />
+</button>
+
+<div className="fashion-card-actions">
+9. Add the product details component
+
+Put this after FashionDesignCard, before FashionPromoCard.
+
+/* =========================================================
+   PRODUCT DETAILS MODAL
+========================================================= */
+
+function FashionProductDetailsModal({
+  design,
+  offer,
+  onClose,
+  onAddToCart,
+  onBookNow,
+  isInCart,
+}: {
+  design: FashionDesign
+  offer: FashionOffer | null
+  onClose: () => void
+  onAddToCart: (
+    design: FashionDesign,
+    size: FashionSize,
+  ) => void
+  onBookNow: (
+    design: FashionDesign,
+    size: FashionSize,
+  ) => void
+  isInCart: (
+    designId: string,
+    sizeId: string,
+  ) => boolean
+}) {
+  const activeSizes =
+    getActiveSizes(
+      design.sizes,
+    )
+
+  const [
+    selectedSizeId,
+    setSelectedSizeId,
+  ] = useState(
+    activeSizes[0]?.id ?? '',
+  )
+
+  const [
+    currentImageIndex,
+    setCurrentImageIndex,
+  ] = useState(0)
+
+  const images =
+    getSortedImages(
+      design.images,
+    )
+
+  const selectedSize =
+    activeSizes.find(
+      (size) =>
+        size.id ===
+        selectedSizeId,
+    ) ??
+    activeSizes[0] ??
+    null
+
+  useEffect(() => {
+    setSelectedSizeId(
+      activeSizes[0]?.id ?? '',
+    )
+
+    setCurrentImageIndex(0)
+  }, [design.id])
+
+  useEffect(() => {
+    document.body.style.overflow =
+      'hidden'
+
+    return () => {
+      document.body.style.overflow =
+        ''
+    }
+  }, [])
+
+  useEffect(() => {
+    function handleEscape(
+      event: KeyboardEvent,
+    ) {
+      if (
+        event.key === 'Escape'
+      ) {
+        onClose()
+      }
+    }
+
+    document.addEventListener(
+      'keydown',
+      handleEscape,
+    )
+
+    return () => {
+      document.removeEventListener(
+        'keydown',
+        handleEscape,
+      )
+    }
+  }, [onClose])
+
+  const basePrice =
+    selectedSize
+      ? Number(
+          selectedSize.price,
+        )
+      : null
+
+  const discountedPrice =
+    basePrice !== null
+      ? calculateDiscountedPrice(
+          basePrice,
+          offer,
+        )
+      : null
+
+  const hasDiscount =
+    basePrice !== null &&
+    discountedPrice !== null &&
+    discountedPrice <
+      basePrice
+
+  const stock =
+    selectedSize
+      ? Number(
+          selectedSize.stock_quantity,
+        )
+      : 0
+
+  const isAvailable =
+    Boolean(
+      selectedSize &&
+        selectedSize.is_active &&
+        stock > 0,
+    )
+
+  const selectedSizeInCart =
+    selectedSize
+      ? isInCart(
+          design.id,
+          selectedSize.id,
+        )
+      : false
+
+  function nextImage() {
+    if (!images.length) {
+      return
+    }
+
+    setCurrentImageIndex(
+      (current) =>
+        (current + 1) %
+        images.length,
+    )
+  }
+
+  function previousImage() {
+    if (!images.length) {
+      return
+    }
+
+    setCurrentImageIndex(
+      (current) =>
+        current === 0
+          ? images.length - 1
+          : current - 1,
+    )
+  }
+
+  return (
+    <div
+      className="fashion-product-modal-backdrop"
+      onMouseDown={(event) => {
+        if (
+          event.target ===
+          event.currentTarget
+        ) {
+          onClose()
+        }
+      }}
+    >
+      <div
+        className="fashion-product-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${design.name} details`}
+      >
+        <header className="fashion-product-modal-header">
+          <div>
+            <span>
+              FASHION / PRODUCT
+            </span>
+
+            <h2>
+              {design.name}
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            className="fashion-product-modal-close"
+            onClick={onClose}
+            aria-label="Close product details"
+          >
+            ×
+          </button>
+        </header>
+
+        <div className="fashion-product-modal-body">
+
+          {/* =================================================
+              IMAGE GALLERY
+          ================================================= */}
+
+          <section className="fashion-product-gallery">
+
+            <div className="fashion-product-thumbnails">
+              {images.map(
+                (image, index) => (
+                  <button
+                    key={image.id}
+                    type="button"
+                    className={
+                      index ===
+                      currentImageIndex
+                        ? 'active'
+                        : ''
+                    }
+                    onClick={() =>
+                      setCurrentImageIndex(
+                        index,
+                      )
+                    }
+                  >
+                    <img
+                      src={
+                        getImageUrl(
+                          image.image_url,
+                        ) ?? ''
+                      }
+                      alt={
+                        image.alt_text ??
+                        design.name
+                      }
+                    />
+                  </button>
+                ),
+              )}
+            </div>
+
+            <div className="fashion-product-main-image">
+
+              {images[
+                currentImageIndex
+              ] ? (
+                <img
+                  src={
+                    getImageUrl(
+                      images[
+                        currentImageIndex
+                      ]
+                        .image_url,
+                    ) ?? ''
+                  }
+                  alt={
+                    images[
+                      currentImageIndex
+                    ].alt_text ??
+                    design.name
+                  }
+                />
+              ) : (
+                <div>
+                  W
+                </div>
+              )}
+
+              {images.length >
+                1 && (
+                <>
+                  <button
+                    type="button"
+                    className="fashion-product-image-arrow left"
+                    onClick={
+                      previousImage
+                    }
+                    aria-label="Previous image"
+                  >
+                    ‹
+                  </button>
+
+                  <button
+                    type="button"
+                    className="fashion-product-image-arrow right"
+                    onClick={
+                      nextImage
+                    }
+                    aria-label="Next image"
+                  >
+                    ›
+                  </button>
+                </>
+              )}
+
+            </div>
+
+          </section>
+
+          {/* =================================================
+              PRODUCT INFORMATION
+          ================================================= */}
+
+          <section className="fashion-product-information">
+
+            <div className="fashion-product-breadcrumb">
+              {design.category?.name}
+
+              {design.subcategory?.name && (
+                <>
+                  <span>/</span>
+                  {
+                    design.subcategory
+                      .name
+                  }
+                </>
+              )}
+            </div>
+
+            <h1>
+              {design.name}
+            </h1>
+
+            <p className="fashion-product-description">
+              {design.description}
+            </p>
+
+            <div className="fashion-product-price">
+              {discountedPrice !==
+              null ? (
+                <>
+                  <strong>
+                    {formatPrice(
+                      discountedPrice,
+                    )}
+                  </strong>
+
+                  {hasDiscount && (
+                    <del>
+                      {formatPrice(
+                        basePrice!,
+                      )}
+                    </del>
+                  )}
+
+                  {hasDiscount &&
+                    offer && (
+                      <span>
+                        {getDiscountText(
+                          offer,
+                        )}
+                      </span>
+                    )}
+                </>
+              ) : (
+                <strong>
+                  Price on request
+                </strong>
+              )}
+            </div>
+
+            {/* SIZE */}
+
+            <div className="fashion-product-size-section">
+
+              <div>
+                <strong>
+                  Select Size
+                </strong>
+
+                {selectedSize && (
+                  <span>
+                    {selectedSize.size}
+                  </span>
+                )}
+              </div>
+
+              <div className="fashion-product-size-list">
+
+                {activeSizes.map(
+                  (size) => {
+                    const sizeStock =
+                      Number(
+                        size.stock_quantity,
+                      )
+
+                    return (
+                      <button
+                        key={size.id}
+                        type="button"
+                        disabled={
+                          sizeStock <= 0
+                        }
+                        className={
+                          selectedSizeId ===
+                          size.id
+                            ? 'active'
+                            : ''
+                        }
+                        onClick={() =>
+                          setSelectedSizeId(
+                            size.id,
+                          )
+                        }
+                      >
+                        <span>
+                          {size.size}
+                        </span>
+
+                        {sizeStock <=
+                        0 && (
+                          <small>
+                            Out
+                          </small>
+                        )}
+                      </button>
+                    )
+                  },
+                )}
+
+              </div>
+
+            </div>
+
+            {/* STOCK */}
+
+            {selectedSize && (
+              <div
+                className={`fashion-product-stock ${
+                  stock <= 0
+                    ? 'out'
+                    : stock <= 5
+                      ? 'low'
+                      : ''
+                }`}
+              >
+                {stock <= 0
+                  ? 'Out of stock'
+                  : stock <= 5
+                    ? `Only ${stock} left in stock`
+                    : `${stock} available in stock`}
+              </div>
+            )}
+
+            {/* DELIVERY */}
+
+            <div className="fashion-product-delivery">
+              <CheckIcon />
+
+              <span>
+                Delivery:{' '}
+                <strong>
+                  {
+                    design.delivery_min_days
+                  }
+                  –
+                  {
+                    design.delivery_max_days
+                  } days
+                </strong>
+              </span>
+            </div>
+
+            {/* ACTIONS */}
+
+            <div className="fashion-product-actions">
+
+              <button
+                type="button"
+                disabled={
+                  !selectedSize ||
+                  !isAvailable ||
+                  selectedSizeInCart
+                }
+                onClick={() => {
+                  if (
+                    selectedSize &&
+                    isAvailable &&
+                    !selectedSizeInCart
+                  ) {
+                    onAddToCart(
+                      design,
+                      selectedSize,
+                    )
+                  }
+                }}
+              >
+                {selectedSizeInCart
+                  ? 'Already in Cart'
+                  : 'Add to Cart'}
+              </button>
+
+              <button
+                type="button"
+                disabled={
+                  !selectedSize ||
+                  !isAvailable
+                }
+                onClick={() => {
+                  if (
+                    selectedSize &&
+                    isAvailable
+                  ) {
+                    onBookNow(
+                      design,
+                      selectedSize,
+                    )
+
+                    onClose()
+                  }
+                }}
+              >
+                Buy Now
+              </button>
+
+            </div>
+
+            {/* =================================================
+                ABOUT THIS ITEM
+            ================================================= */}
+
+            {design.product_details
+              ?.trim() && (
+              <section className="fashion-product-info-section">
+
+                <h2>
+                  About this item
+                </h2>
+
+                <div className="fashion-product-text">
+                  {design.product_details}
+                </div>
+
+              </section>
+            )}
+
+            {/* =================================================
+                ADDITIONAL INFORMATION
+            ================================================= */}
+
+            {design.additional_information
+              ?.trim() && (
+              <section className="fashion-product-info-section">
+
+                <h2>
+                  Additional Information
+                </h2>
+
+                <div className="fashion-product-text">
+                  {
+                    design.additional_information
+                  }
+                </div>
+
+              </section>
+            )}
+
+          </section>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+10. Render the modal
+
+At the bottom of your main Fashion() JSX, before the final closing </main>, add:
+
+{selectedDesignForDetails && (
+  <FashionProductDetailsModal
+    design={
+      selectedDesignForDetails
+    }
+    offer={getApplicableOffer(
+      selectedDesignForDetails,
+      offerScopes,
+      now,
+    )}
+    onClose={() =>
+      setSelectedDesignForDetails(
+        null,
+      )
+    }
+    onAddToCart={
+      handleAddToCart
+    }
+    onBookNow={
+      handleBookNow
+    }
+    isInCart={
+      isFashionItemInCart
+    }
+  />
+)}
+
+This is what makes:
+
+View Details
+      ↓
+Product details opens
+
+without navigating away from the Fashion catalogue.
+
+File 2
+File name
+
+Fashion.css
+
+File path
+src/pages/General Public Pages/Fashion/Fashion.css
+
+Add this at the bottom of your current CSS.
+
+/* =========================================================
+   STOCK LEFT
+========================================================= */
+
+.fashion-stock-left {
+  margin-top: 8px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  color: #47745b;
+}
+
+.fashion-stock-left.low {
+  color: #b36a24;
+}
+
+.fashion-stock-left.out {
+  color: #b43e3e;
+}
+
+
+/* =========================================================
+   VIEW DETAILS BUTTON
+========================================================= */
+
+.fashion-view-details-button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 42px;
+
+  margin-top: 14px;
+
+  border: 1px solid #cdded3;
+  border-radius: 9px;
+
+  background: #f7fbf8;
+
+  color: #24533d;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fashion-view-details-button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.fashion-view-details-button:hover {
+  border-color: #24533d;
+  background: #edf6f0;
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   PRODUCT DETAILS MODAL
+========================================================= */
+
+.fashion-product-modal-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 28px;
+
+  background:
+    rgba(18, 35, 28, 0.58);
+
+  backdrop-filter:
+    blur(7px);
+
+  animation:
+    fashion-product-backdrop-in
+    0.2s ease;
+}
+
+.fashion-product-modal {
+  width: min(
+    1180px,
+    100%
+  );
+
+  max-height:
+    min(
+      900px,
+      calc(100vh - 56px)
+    );
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid
+    rgba(207, 225, 215, 0.9);
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 30px 80px
+      rgba(15, 45, 32, 0.28);
+
+  animation:
+    fashion-product-modal-in
+    0.24s ease;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.fashion-product-modal-header {
+  flex: 0 0 auto;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding:
+    22px 28px;
+
+  border-bottom:
+    1px solid
+    #e3ebe6;
+}
+
+.fashion-product-modal-header span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #4d7c65;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing:
+    0.18em;
+
+  text-transform:
+    uppercase;
+}
+
+.fashion-product-modal-header h2 {
+  margin: 0;
+
+  color: #183c2c;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      23px,
+      3vw,
+      34px
+    );
+
+  font-weight: 500;
+}
+
+.fashion-product-modal-close {
+  flex: 0 0 auto;
+
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    #d8e5dd;
+
+  border-radius: 10px;
+
+  background: #f7faf8;
+
+  color: #315c48;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+.fashion-product-modal-close:hover {
+  background: #edf5f0;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.fashion-product-modal-body {
+  min-height: 0;
+
+  overflow-y: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.05fr)
+    minmax(390px, 0.95fr);
+
+  gap: 34px;
+
+  padding: 30px;
+}
+
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+.fashion-product-gallery {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    76px
+    minmax(0, 1fr);
+
+  gap: 16px;
+
+  align-self: start;
+}
+
+.fashion-product-thumbnails {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  max-height:
+    620px;
+
+  overflow-y: auto;
+}
+
+.fashion-product-thumbnails button {
+  width: 70px;
+  height: 78px;
+
+  padding: 3px;
+
+  border:
+    1px solid
+    #dfe8e2;
+
+  border-radius: 9px;
+
+  background: #fafcfb;
+
+  overflow: hidden;
+
+  cursor: pointer;
+}
+
+.fashion-product-thumbnails button.active {
+  border:
+    2px solid
+    #24533d;
+}
+
+.fashion-product-thumbnails img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.fashion-product-main-image {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 560px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  background:
+    #f7f9f7;
+}
+
+.fashion-product-main-image img {
+  width: 100%;
+  height: 100%;
+
+  max-height: 620px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.fashion-product-main-image > div {
+  color: #668273;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 70px;
+}
+
+.fashion-product-image-arrow {
+  position: absolute;
+
+  top: 50%;
+
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.92);
+
+  color: #244b3a;
+
+  font-size: 25px;
+
+  box-shadow:
+    0 5px 18px
+      rgba(0, 0, 0, 0.12);
+
+  cursor: pointer;
+
+  transform:
+    translateY(-50%);
+}
+
+.fashion-product-image-arrow.left {
+  left: 14px;
+}
+
+.fashion-product-image-arrow.right {
+  right: 14px;
+}
+
+
+/* =========================================================
+   PRODUCT INFORMATION
+========================================================= */
+
+.fashion-product-information {
+  min-width: 0;
+
+  padding-right: 8px;
+}
+
+.fashion-product-breadcrumb {
+  display: flex;
+
+  gap: 7px;
+
+  margin-bottom: 10px;
+
+  color: #789087;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.08em;
+}
+
+.fashion-product-information h1 {
+  margin:
+    0 0 12px;
+
+  color: #183c2c;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      28px,
+      4vw,
+      43px
+    );
+
+  line-height: 1.1;
+
+  font-weight: 500;
+}
+
+.fashion-product-description {
+  margin: 0 0 20px;
+
+  color: #6f8078;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+.fashion-product-price {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  padding-bottom: 20px;
+
+  border-bottom:
+    1px solid
+    #e3ebe6;
+}
+
+.fashion-product-price strong {
+  color: #183c2c;
+
+  font-size: 28px;
+}
+
+.fashion-product-price del {
+  color: #99a69f;
+
+  font-size: 14px;
+}
+
+.fashion-product-price span {
+  padding:
+    5px 8px;
+
+  border-radius: 5px;
+
+  background: #edf6ef;
+
+  color: #397052;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   PRODUCT SIZE
+========================================================= */
+
+.fashion-product-size-section {
+  padding:
+    20px 0;
+
+  border-bottom:
+    1px solid
+    #e3ebe6;
+}
+
+.fashion-product-size-section > div:first-child {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.fashion-product-size-section strong {
+  color: #304c3f;
+
+  font-size: 12px;
+}
+
+.fashion-product-size-section span {
+  color: #657970;
+
+  font-size: 12px;
+}
+
+.fashion-product-size-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.fashion-product-size-list button {
+  min-width: 52px;
+
+  min-height: 42px;
+
+  padding:
+    0 13px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  border:
+    1px solid
+    #ccdcd3;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #315344;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.fashion-product-size-list button.active {
+  border-color: #24533d;
+
+  background: #24533d;
+
+  color: #ffffff;
+}
+
+.fashion-product-size-list button:disabled {
+  opacity: 0.42;
+
+  text-decoration:
+    line-through;
+
+  cursor: not-allowed;
+}
+
+.fashion-product-size-list small {
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.fashion-product-stock {
+  margin-top: 14px;
+
+  color: #3d7658;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.fashion-product-stock.low {
+  color: #b36a24;
+}
+
+.fashion-product-stock.out {
+  color: #b43e3e;
+}
+
+
+/* =========================================================
+   DELIVERY
+========================================================= */
+
+.fashion-product-delivery {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    18px 0;
+
+  color: #6d8076;
+
+  font-size: 12px;
+}
+
+.fashion-product-delivery svg {
+  width: 17px;
+  height: 17px;
+
+  color: #3d7658;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.fashion-product-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 10px;
+
+  margin-bottom: 26px;
+}
+
+.fashion-product-actions button {
+  min-height: 48px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.fashion-product-actions button:first-child {
+  border:
+    1px solid
+    #24533d;
+
+  background: #ffffff;
+
+  color: #24533d;
+}
+
+.fashion-product-actions button:last-child {
+  border:
+    1px solid
+    #24533d;
+
+  background: #24533d;
+
+  color: #ffffff;
+}
+
+.fashion-product-actions button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ABOUT / ADDITIONAL INFORMATION
+========================================================= */
+
+.fashion-product-info-section {
+  padding:
+    22px 0;
+
+  border-top:
+    1px solid
+    #dce7e1;
+}
+
+.fashion-product-info-section h2 {
+  margin:
+    0 0 14px;
+
+  color: #253f34;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.fashion-product-text {
+  color: #52675d;
+
+  font-size: 12px;
+
+  line-height: 1.8;
+
+  white-space: pre-line;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fashion-product-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fashion-product-modal-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(14px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   MOBILE PRODUCT DETAILS
+========================================================= */
+
+@media (max-width: 760px) {
+  .fashion-product-modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .fashion-product-modal {
+    width: 100%;
+
+    max-height:
+      94vh;
+
+    border-radius:
+      18px 18px 0 0;
+  }
+
+  .fashion-product-modal-header {
+    padding:
+      15px 17px;
+  }
+
+  .fashion-product-modal-header h2 {
+    font-size: 22px;
+  }
+
+  .fashion-product-modal-body {
+    grid-template-columns: 1fr;
+
+    gap: 22px;
+
+    padding: 17px;
+  }
+
+  .fashion-product-gallery {
+    grid-template-columns: 58px minmax(0, 1fr);
+
+    gap: 9px;
+  }
+
+  .fashion-product-thumbnails {
+    max-height: 330px;
+  }
+
+  .fashion-product-thumbnails button {
+    width: 52px;
+    height: 60px;
+  }
+
+  .fashion-product-main-image {
+    min-height: 330px;
+    max-height: 390px;
+  }
+
+  .fashion-product-information {
+    padding-right: 0;
+  }
+
+  .fashion-product-information h1 {
+    font-size: 30px;
+  }
+
+  .fashion-product-actions {
+    position: sticky;
+
+    bottom: 0;
+
+    padding-top: 10px;
+
+    background:
+      linear-gradient(
+        to bottom,
+        transparent,
+        #ffffff 12px
+      );
+  }
+}
+
+@media (max-width: 430px) {
+  .fashion-product-modal-body {
+    padding: 14px;
+  }
+
+  .fashion-product-gallery {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .fashion-product-thumbnails button {
+    width: 44px;
+    height: 52px;
+  }
+
+  .fashion-product-main-image {
+    min-height: 280px;
+  }
+
+  .fashion-product-actions {
+    grid-template-columns: 1fr;
+  }
+}
+What you will get
+
+Your card will now look conceptually like:
+
+┌─────────────────────────────┐
+│                             │
+│          PRODUCT IMAGE      │
+│                             │
+├─────────────────────────────┤
+│ Dress Name                  │
+│ Description...              │
+│                             │
+│ Available Sizes       M     │
+│ [S] [M] [L] [XL]            │
+│                             │
+│ Only 5 left                 │
+│                             │
+│ ₹2,499                      │
+│                             │
+│ Delivery: 3–5 days          │
+│                             │
+│       View Details          │
+│                             │
+│ [ Add to Cart ] [ Book Now ]│
+└─────────────────────────────┘
+
+When clicking View Details:
+
+┌─────────────────────────────────────────────────────────┐
+│ FASHION / PRODUCT                         ×             │
+│                                                         │
+│ ┌────────┐ ┌───────────────────┐  Product Name         │
+│ │ image  │ │                   │  Description           │
+│ │ image  │ │   MAIN PRODUCT    │                        │
+│ │ image  │ │      IMAGE        │  ₹2,499               │
+│ │ image  │ │                   │  Select Size           │
+│ └────────┘ └───────────────────┘  [S] [M] [L] [XL]      │
+│                                      Only 5 left         │
+│                                      Delivery: 3–5 days  │
+│                                                         │
+│                                      [Add to Cart]       │
+│                                      [Buy Now]           │
+│                                                         │
+│                                      About this item     │
+│                                      • Style Number...   │
+│                                      • Relaxed Fit...    │
+│                                      • Round Neck...     │
+│                                                         │
+│                                      Additional          │
+│                                      Information         │
+│                                      Manufacturer...     │
+│                                      Item Weight...      │
+└─────────────────────────────────────────────────────────┘
+
+On mobile it changes into a bottom-sheet ecommerce-style product viewer, rather than trying to squeeze the desktop layout onto the phone.
+
+One important stock point
+
+This fixes the frontend cart quantity limit, so if stock is 5, the customer cannot use the cart + button to reach 6 or 7.
+
+However, this is not yet the final inventory guarantee. A production ecommerce system must also validate/decrement stock server-side when the order is created, because two customers could both see 5 available at the same time.
+
+We should do that in the Fashion Booking / order creation file next. Your current booking page also has quantity controls, so that is the next place we should fix after this page.
+
+First test this page
+
+After making these changes:
+
+Open Fashion.
+Select a size with stock 5.
+Confirm it says Only 5 left.
+Add it to cart.
+Open cart.
+Click + repeatedly.
+It must stop at 5.
+Click View Details.
+Confirm images, size, stock, description, About this item, and Additional Information appear.
+
+If you get a TypeScript/Vite error after these changes, send me the exact error before changing anything else.
+
+IMPLEMENTATION STATUS - VERIFIED 2026-09-21
+
+The requested Fashion page changes are implemented in:
+
+src/pages/General Public Pages/Fashion/Fashion.tsx
+src/pages/General Public Pages/Fashion/Fashion.css
+
+Implemented:
+
+- Added product_details and additional_information to the FashionDesign type and Supabase query.
+- Added visible stock status for the selected size: available, Only X left, and Out of stock.
+- Kept active zero-stock sizes visible so customers can see their status.
+- Prevented page-level Add to Cart and cart + actions from exceeding the selected size stock.
+- Added View Details to every product card.
+- Added a responsive product details modal with image thumbnails, image navigation, size selection, price, offer, stock, delivery, product description, About this item, and Additional Information.
+- Added Escape and backdrop closing for the modal and body-scroll locking while it is open.
+- Changed the floating cart control to an icon-first shopping bag button with a count badge.
+- Replaced cart quantity minus/plus text glyphs with accessible SVG icons.
+- Added premium ecommerce styling for cards, stock states, cart control, modal, desktop layout, and mobile bottom-sheet layout.
+
+Verification:
+
+- npm run build passes: TypeScript compilation and Vite production build completed successfully.
+- Vite reports only the existing large bundle-size warning.
+
+Remaining production requirement:
+
+- Inventory must still be validated and decremented server-side during booking/order creation. The frontend limit prevents normal customer interactions from exceeding stock, but it cannot prevent two customers from purchasing the last item simultaneously.
+
+LAYOUT POLISH STATUS - VERIFIED 2026-09-21
+
+- Product cards now use compact spacing, reduced image heights, horizontal size scrolling, close stock messaging, and compact action buttons.
+- The product modal now has a fixed-size gallery, a scrollable information body, responsive desktop/tablet/mobile sizing, and mobile image indicators.
+- Main product images support left/right touch swiping and keyboard ArrowLeft/ArrowRight navigation.
+- Modal body scroll locking now restores the previous page overflow value when closed.
+- Card active-size calculation is memoized with useMemo.
+- npm run build passes, and VS Code diagnostics report no errors for Fashion.tsx or Fashion.css.

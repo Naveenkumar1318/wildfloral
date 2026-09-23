@@ -20,6 +20,57 @@
   margin: 0 auto;
 }
 
+.admin-beauty-bookings-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid #dce7d8;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #405247;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow:
+    0 3px 12px rgba(55, 43, 36, 0.035);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-beauty-bookings-back span {
+  font-size: 17px;
+  line-height: 1;
+  transition:
+    transform 0.2s ease;
+}
+
+.admin-beauty-bookings-back:hover {
+  border-color: #8faf7e;
+  background: #f8fbf6;
+  color: #20352a;
+  box-shadow:
+    0 6px 18px rgba(55, 43, 36, 0.07);
+  transform: translateY(-1px);
+}
+
+.admin-beauty-bookings-back:hover span {
+  transform: translateX(-3px);
+}
+
+.admin-beauty-bookings-back:focus-visible {
+  outline: none;
+  border-color: #8ea981;
+  box-shadow:
+    0 0 0 3px rgba(82, 124, 62, 0.12);
+}
+
 
 /* =========================================================
    HEADER

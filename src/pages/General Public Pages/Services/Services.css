@@ -330,7 +330,7 @@
 
   max-width: none;
 
-  object-fit: cover;
+  object-fit: fixed;
 
   object-position: center;
 
@@ -4043,3 +4043,297 @@
       auto !important;
   }
 }
+/* =========================================================
+   FASHION STATS
+========================================================= */
+
+.fashion-stats-strip {
+  width: 100%;
+
+  height: 88px;
+
+  margin-top: 55px;
+
+  background: #7650a8;
+
+  display: flex;
+
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+.fashion-stats-container {
+  width: min(
+    1100px,
+    calc(100% - 96px)
+  );
+
+  height: 100%;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1px
+    1fr
+    1px
+    1fr
+    1px
+    1fr;
+
+  align-items: center;
+}
+
+.fashion-stat-item {
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.fashion-stat-icon {
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.fashion-stat-icon svg {
+  width: 35px;
+  height: 35px;
+
+  fill: none;
+
+  stroke: rgba(
+    255,
+    255,
+    255,
+    0.82
+  );
+
+  stroke-width: 1.7;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+.fashion-stat-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.fashion-stat-content strong {
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 21px;
+
+  font-weight: 500;
+
+  line-height: 1;
+}
+
+.fashion-stat-content span {
+  color: rgba(
+    255,
+    255,
+    255,
+    0.78
+  );
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 400;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+}
+
+.fashion-stat-divider {
+  width: 1px;
+
+  height: 42px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.28
+  );
+}
+/* =========================================================
+   FASHION STATS
+   MOBILE RESPONSIVE — SINGLE ROW
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .fashion-stats-strip {
+    width: 100%;
+
+    height: 68px;
+
+    margin-top: 40px;
+
+    padding: 0 6px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+  }
+
+  .fashion-stats-container {
+    width: 100%;
+
+    height: 100%;
+
+    margin: 0;
+
+    display: grid;
+
+    grid-template-columns:
+      1fr
+      1px
+      1fr
+      1px
+      1fr
+      1px
+      1fr;
+
+    align-items: center;
+
+    column-gap: 4px;
+
+    box-sizing: border-box;
+  }
+
+  .fashion-stat-item {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 0 2px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+  }
+
+  .fashion-stat-icon {
+    width: 25px;
+    height: 25px;
+
+    min-width: 25px;
+
+    flex: 0 0 25px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fashion-stat-icon svg {
+    width: 22px;
+    height: 22px;
+
+    max-width: 22px;
+    max-height: 22px;
+
+    stroke-width: 1.6;
+  }
+
+  .fashion-stat-content {
+    min-width: 0;
+
+    max-width: calc(100% - 29px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 2px;
+
+    overflow: hidden;
+  }
+
+  .fashion-stat-content strong {
+    font-size: 12px;
+
+    line-height: 1;
+
+    white-space: nowrap;
+  }
+
+  .fashion-stat-content span {
+    max-width: 100%;
+
+    font-size: 6px;
+
+    line-height: 1.15;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+  /* Keep separators on mobile */
+  .fashion-stat-divider {
+    display: block;
+
+    width: 1px;
+
+    height: 34px;
+
+    background: rgba(
+      255,
+      255,
+      255,
+      0.28
+    );
+  }
+}
+
+
+

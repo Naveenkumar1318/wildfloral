@@ -22,6 +22,8 @@ import {
   XCircle,
 } from 'lucide-react'
 
+import { Link } from 'react-router-dom'
+
 import { supabase } from '../../../lib/supabase'
 
 import './AdminBeautyBookings.css'
@@ -1457,6 +1459,18 @@ function AdminBeautyBookings() {
   return (
     <main className="admin-beauty-bookings">
       <div className="admin-beauty-bookings-container">
+
+        <Link
+          to="/admin"
+          className="admin-beauty-bookings-back"
+          aria-label="Back to Dashboard"
+        >
+          <span aria-hidden="true">
+            ←
+          </span>
+
+          Back to Dashboard
+        </Link>
 
         {/* =================================================
             HEADER

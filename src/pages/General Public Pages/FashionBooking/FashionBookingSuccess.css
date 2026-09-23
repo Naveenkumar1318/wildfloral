@@ -1,0 +1,271 @@
+/* =========================================================
+   WILDFLORAL · FASHION BOOKING SUCCESS (MATCHING IMAGE 3)
+   Smooth animations & 100% Mobile/Tablet/Desktop Responsive
+========================================================= */
+
+.fashion-booking-success-page {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px 80px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.fashion-success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  animation: fashion-fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* TOP HERO GRAPHIC */
+.fashion-success-hero-graphic {
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fashion-success-hero-graphic svg {
+  width: 170px;
+  height: auto;
+  filter: drop-shadow(0 12px 24px rgba(16, 185, 129, 0.15));
+}
+
+/* TYPOGRAPHY */
+.fashion-success-title {
+  margin: 0 0 10px 0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: clamp(28px, 4vw, 34px);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.fashion-success-subtitle {
+  margin: 0 0 28px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #64748b;
+  max-width: 440px;
+}
+
+/* ORDER REFERENCE CARD */
+.fashion-reference-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.fashion-reference-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.fashion-reference-box {
+  background: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.fashion-reference-number-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.fashion-reference-code {
+  font-family: Inter, system-ui, -apple-system, monospace;
+  font-size: clamp(17px, 3.5vw, 21px);
+  font-weight: 800;
+  color: #16a34a;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+.fashion-copy-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fashion-copy-icon-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.fashion-reference-timestamp {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+/* INFO BANNER */
+.fashion-info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.fashion-info-icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fashion-info-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #166534;
+}
+
+.fashion-info-text strong {
+  color: #14532d;
+  font-weight: 700;
+}
+
+/* ACTIONS */
+.fashion-success-actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.fashion-btn-primary-navy,
+.fashion-btn-secondary-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.fashion-btn-primary-navy {
+  border: 0;
+  background: #031b4e;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(3, 27, 78, 0.22);
+}
+
+.fashion-btn-primary-navy:hover {
+  background: #062863;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(3, 27, 78, 0.32);
+}
+
+.fashion-btn-secondary-outline {
+  border: 1.5px solid #031b4e;
+  background: #ffffff;
+  color: #031b4e !important;
+}
+
+.fashion-btn-secondary-outline:hover {
+  background: #f8fafc;
+  border-color: #062863;
+  color: #062863 !important;
+  transform: translateY(-1px);
+}
+
+/* ANIMATION */
+@keyframes fashion-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .fashion-booking-success-page {
+    padding: 30px 16px 60px;
+  }
+
+  .fashion-success-screen {
+    max-width: 100%;
+  }
+
+  .fashion-success-hero-graphic svg {
+    width: 140px;
+  }
+
+  .fashion-success-title {
+    font-size: 26px;
+  }
+
+  .fashion-success-subtitle {
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  .fashion-reference-box {
+    padding: 14px 16px;
+  }
+
+  .fashion-reference-code {
+    font-size: 17px;
+  }
+
+  .fashion-btn-primary-navy,
+  .fashion-btn-secondary-outline {
+    min-height: 48px;
+    font-size: 14px;
+  }
+}

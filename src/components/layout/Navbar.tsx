@@ -222,11 +222,11 @@ function Navbar() {
             </NavLink>
 
             <NavLink to="/services">
-              Services
+              Beauty Services
             </NavLink>
 
             <NavLink to="/fashion">
-              Fashion
+              Fashion Services
             </NavLink>
 
             <NavLink to="/portfolio">
@@ -359,7 +359,7 @@ function Navbar() {
               onClick={closeMobileMenu}
             >
               <span>03</span>
-              Services
+              Beauty Services
             </NavLink>
 
             <NavLink
@@ -367,7 +367,7 @@ function Navbar() {
               onClick={closeMobileMenu}
             >
               <span>04</span>
-              Fashion
+              Fashion Services
             </NavLink>
 
             <NavLink

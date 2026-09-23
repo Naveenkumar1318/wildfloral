@@ -1,0 +1,1395 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.fashion-design-form-page {
+  min-height: 100vh;
+  padding: 28px 24px 60px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8f9fc 0%,
+      #ffffff 48%,
+      #f8f9fc 100%
+    );
+
+  color: #17233b;
+}
+
+.fashion-design-form-shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.fashion-design-form-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 18px;
+
+  color: #315fd3;
+  text-decoration: none;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fashion-design-form-back:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.fashion-design-form-header {
+  margin-bottom: 24px;
+}
+
+.fashion-design-form-header > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #315fd3;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.fashion-design-form-header h1 {
+  margin: 0;
+
+  color: #17233b;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: clamp(
+    34px,
+    5vw,
+    52px
+  );
+
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.fashion-design-form-header p {
+  max-width: 620px;
+
+  margin: 10px 0 0;
+
+  color: #718096;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.fashion-design-form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+
+  margin-bottom: 18px;
+  padding: 13px 15px;
+
+  border: 1px solid #efd4d4;
+  border-radius: 10px;
+
+  background: #fff8f8;
+
+  color: #9d3f3f;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fashion-design-form-error > span {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: #b94a48;
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.fashion-design-form-error p {
+  margin: 1px 0 0;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.fashion-design-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.fashion-design-form-card {
+  padding: 24px;
+
+  border: 1px solid #dfe5ee;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 7px 24px
+      rgba(
+        25,
+        43,
+        72,
+        0.045
+      );
+}
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.fashion-design-form-heading {
+  margin-bottom: 22px;
+}
+
+.fashion-design-form-heading h2 {
+  margin: 0 0 5px;
+
+  color: #1d2940;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.fashion-design-form-heading p {
+  margin: 0;
+
+  color: #7a8595;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.fashion-design-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 19px 18px;
+}
+
+.fashion-design-form-grid label,
+.fashion-delivery-grid label {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fashion-design-form-grid label > span,
+.fashion-delivery-grid label > span {
+  color: #35425a;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fashion-design-form-grid label > small,
+.fashion-delivery-grid label > small {
+  color: #8a94a3;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.fashion-design-form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.fashion-design-form-grid input,
+.fashion-design-form-grid select,
+.fashion-design-form-grid textarea,
+.fashion-delivery-grid input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d9e0e9;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #1e2a40;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 12px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.fashion-design-form-grid input,
+.fashion-design-form-grid select,
+.fashion-delivery-grid input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.fashion-design-form-grid textarea {
+  min-height: 130px;
+
+  padding: 12px;
+
+  resize: vertical;
+}
+
+.fashion-design-form-grid input::placeholder,
+.fashion-design-form-grid textarea::placeholder,
+.fashion-delivery-grid input::placeholder {
+  color: #a4acb8;
+}
+
+.fashion-design-form-grid input:focus,
+.fashion-design-form-grid select:focus,
+.fashion-design-form-grid textarea:focus,
+.fashion-delivery-grid input:focus {
+  border-color: #315fd3;
+
+  box-shadow:
+    0 0 0 3px
+      rgba(
+        49,
+        95,
+        211,
+        0.09
+      );
+}
+
+.fashion-design-form-grid input:disabled,
+.fashion-design-form-grid select:disabled,
+.fashion-delivery-grid input:disabled {
+  cursor: not-allowed;
+
+  background: #f4f6f8;
+  color: #9aa2ae;
+}
+
+/* =========================================================
+   DELIVERY
+========================================================= */
+
+.fashion-delivery-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    30px
+    minmax(0, 1fr)
+    minmax(180px, 0.8fr);
+
+  align-items: end;
+
+  gap: 12px;
+}
+
+.fashion-delivery-range-separator {
+  padding-bottom: 13px;
+
+  color: #7c8796;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fashion-delivery-preview {
+  min-height: 66px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 10px 14px;
+
+  border: 1px solid #dce4f1;
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7f9ff,
+      #eef3ff
+    );
+}
+
+.fashion-delivery-preview span {
+  margin-bottom: 5px;
+
+  color: #71809a;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fashion-delivery-preview strong {
+  color: #315fd3;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 17px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   UPLOAD ROW
+========================================================= */
+
+.fashion-design-upload-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 9px;
+}
+
+.fashion-design-image-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+
+  color: #7b8798;
+
+  font-size: 12px;
+}
+
+.fashion-design-image-counter strong {
+  color: #17233b;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.fashion-design-upload-button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 16px;
+
+  border: 1px solid #315fd3;
+  border-radius: 8px;
+
+  background: #315fd3;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.fashion-design-upload-button:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px
+      rgba(
+        49,
+        95,
+        211,
+        0.2
+      );
+}
+
+.fashion-design-upload-button.disabled {
+  cursor: not-allowed;
+
+  border-color: #cfd6df;
+
+  background: #e9edf2;
+  color: #8c96a4;
+
+  box-shadow: none;
+}
+
+.fashion-design-upload-button input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   UPLOAD HELP
+========================================================= */
+
+.fashion-design-upload-help {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 16px;
+
+  margin-bottom: 17px;
+
+  color: #8a94a3;
+
+  font-size: 10px;
+}
+
+.fashion-design-upload-help span {
+  position: relative;
+}
+
+.fashion-design-upload-help span:not(:last-child)::after {
+  content: '';
+
+  position: absolute;
+
+  top: 50%;
+  right: -10px;
+
+  width: 3px;
+  height: 3px;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: #c5ccd5;
+}
+
+/* =========================================================
+   IMAGE GRID
+========================================================= */
+
+.fashion-design-images-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+}
+
+/* =========================================================
+   IMAGE ITEM
+========================================================= */
+
+.fashion-design-image-item {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid #dfe4eb;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fashion-design-image-item:hover {
+  transform: translateY(-2px);
+
+  border-color: #cbd5e3;
+
+  box-shadow:
+    0 8px 22px
+      rgba(
+        24,
+        42,
+        68,
+        0.08
+      );
+}
+
+.fashion-design-image-item.primary {
+  border-color: #315fd3;
+
+  box-shadow:
+    0 0 0 2px
+      rgba(
+        49,
+        95,
+        211,
+        0.08
+      );
+}
+
+.fashion-design-image-item.deleted {
+  opacity: 0.55;
+
+  border-color: #e5cfcf;
+}
+
+/* =========================================================
+   IMAGE FRAME
+========================================================= */
+
+.fashion-design-image-frame {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #f2f4f7;
+}
+
+.fashion-design-image-frame img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  /*
+     contain is intentional:
+     the uploaded image is displayed without
+     cutting away its actual composition.
+  */
+
+  object-fit: contain;
+
+  background: #f2f4f7;
+}
+
+/* =========================================================
+   IMAGE LABELS
+========================================================= */
+
+.fashion-primary-label,
+.fashion-new-image-label,
+.fashion-deleted-label {
+  position: absolute;
+
+  top: 8px;
+
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 22px;
+
+  padding: 0 8px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.fashion-primary-label {
+  left: 8px;
+
+  background: #315fd3;
+  color: #ffffff;
+}
+
+.fashion-new-image-label {
+  right: 8px;
+
+  background: #ffffff;
+  color: #315fd3;
+
+  box-shadow:
+    0 2px 8px
+      rgba(
+        20,
+        35,
+        60,
+        0.12
+      );
+}
+
+.fashion-deleted-label {
+  left: 8px;
+
+  background: #8b3e3e;
+  color: #ffffff;
+}
+
+/* =========================================================
+   IMAGE ACTIONS
+========================================================= */
+
+.fashion-design-image-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 7px;
+
+  padding: 9px;
+}
+
+.fashion-design-image-actions button {
+  min-width: 0;
+
+  height: 31px;
+
+  padding: 0 5px;
+
+  border: 1px solid #dce2ea;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #315fd3;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.fashion-design-image-actions button:hover {
+  border-color: #315fd3;
+
+  background: #f7f9ff;
+}
+
+.fashion-design-image-actions button:disabled {
+  cursor: default;
+
+  border-color: #dfe4eb;
+
+  background: #f5f7f9;
+  color: #7e8897;
+}
+
+.fashion-design-image-actions button.danger {
+  border-color: #efd1d1;
+
+  color: #a04848;
+}
+
+.fashion-design-image-actions button.danger:hover {
+  border-color: #dfb9b9;
+
+  background: #fff8f8;
+
+  color: #8d3333;
+}
+
+/* =========================================================
+   SIZE SUMMARY
+========================================================= */
+
+.fashion-size-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+
+  margin-bottom: 14px;
+
+  color: #7c8796;
+
+  font-size: 11px;
+}
+
+.fashion-size-summary strong {
+  color: #315fd3;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 25px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   SIZE TABLE
+========================================================= */
+
+.fashion-size-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid #e0e5ec;
+  border-radius: 9px;
+}
+
+.fashion-size-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 620px;
+}
+
+.fashion-size-table th {
+  height: 42px;
+
+  padding: 0 12px;
+
+  border-bottom: 1px solid #e2e6ec;
+
+  background: #f8f9fb;
+
+  color: #718096;
+
+  text-align: left;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fashion-size-table td {
+  height: 60px;
+
+  padding: 8px 12px;
+
+  border-bottom: 1px solid #edf0f4;
+
+  color: #364258;
+
+  font-size: 11px;
+}
+
+.fashion-size-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.fashion-size-table td strong {
+  color: #1e2a40;
+
+  font-size: 11px;
+}
+
+.fashion-size-table td input {
+  width: 130px;
+  max-width: 100%;
+
+  height: 35px;
+
+  box-sizing: border-box;
+
+  padding: 0 10px;
+
+  border: 1px solid #d9e0e8;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #273248;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.fashion-size-table td input:focus {
+  border-color: #315fd3;
+
+  box-shadow:
+    0 0 0 3px
+      rgba(
+        49,
+        95,
+        211,
+        0.08
+      );
+}
+
+.fashion-size-table td input:disabled {
+  cursor: not-allowed;
+
+  background: #f3f5f7;
+  color: #a0a8b4;
+}
+
+/* =========================================================
+   SIZE TOGGLE
+========================================================= */
+
+.fashion-size-toggle {
+  position: relative;
+
+  width: 38px;
+  height: 21px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #cfd5dd;
+
+  cursor: pointer;
+}
+
+.fashion-size-toggle span {
+  position: absolute;
+
+  top: 3px;
+  left: 3px;
+
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 4px
+      rgba(
+        0,
+        0,
+        0,
+        0.18
+      );
+
+  transition:
+    transform 0.2s ease;
+}
+
+.fashion-size-toggle.active {
+  background: #315fd3;
+}
+
+.fashion-size-toggle.active span {
+  transform:
+    translateX(17px);
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.fashion-design-setting-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap: 28px;
+}
+
+.fashion-design-setting-row > div:first-child h2 {
+  margin: 0 0 5px;
+
+  color: #1d2940;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.fashion-design-setting-row > div:first-child p {
+  margin: 0;
+
+  color: #7d8795;
+
+  font-size: 11px;
+}
+
+.fashion-design-setting-controls {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.fashion-design-setting-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fashion-design-setting-controls strong {
+  color: #344159;
+
+  font-size: 11px;
+}
+
+.fashion-design-setting-controls small {
+  color: #8b95a4;
+
+  font-size: 9px;
+}
+
+.fashion-setting-toggle {
+  position: relative;
+
+  width: 40px;
+  height: 22px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #cfd5dd;
+
+  cursor: pointer;
+}
+
+.fashion-setting-toggle span {
+  position: absolute;
+
+  top: 3px;
+  left: 3px;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 4px
+      rgba(
+        0,
+        0,
+        0,
+        0.18
+      );
+
+  transition:
+    transform 0.2s ease;
+}
+
+.fashion-setting-toggle.active {
+  background: #315fd3;
+}
+
+.fashion-setting-toggle.active span {
+  transform:
+    translateX(18px);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.fashion-design-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding-top: 5px;
+}
+
+.fashion-design-cancel,
+.fashion-design-save {
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 18px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.fashion-design-cancel {
+  border: 1px solid #d9e0e8;
+
+  background: #ffffff;
+  color: #566277;
+}
+
+.fashion-design-cancel:hover {
+  border-color: #c4ccd7;
+
+  background: #f8f9fb;
+}
+
+.fashion-design-save {
+  border: 1px solid #315fd3;
+
+  background: #315fd3;
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 16px
+      rgba(
+        49,
+        95,
+        211,
+        0.18
+      );
+}
+
+.fashion-design-save:hover {
+  background: #2855c5;
+}
+
+.fashion-design-save:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
+
+  box-shadow: none;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.fashion-design-form-loading {
+  min-height: 70vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 11px;
+
+  color: #697386;
+
+  font-size: 13px;
+}
+
+.fashion-design-form-spinner {
+  width: 21px;
+  height: 21px;
+
+  border: 2px solid #dce2eb;
+  border-top-color: #315fd3;
+
+  border-radius: 50%;
+
+  animation:
+    fashion-design-spin
+    0.75s linear infinite;
+}
+
+@keyframes fashion-design-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .fashion-design-images-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .fashion-delivery-grid {
+    grid-template-columns:
+      1fr 24px 1fr;
+  }
+
+  .fashion-delivery-preview {
+    grid-column: 1 / -1;
+  }
+
+  .fashion-design-setting-row {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .fashion-design-setting-row > div:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 680px) {
+  .fashion-design-form-page {
+    padding:
+      20px
+      14px
+      40px;
+  }
+
+  .fashion-design-form-card {
+    padding: 18px 15px;
+  }
+
+  .fashion-design-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-design-form-grid .full-width {
+    grid-column: auto;
+  }
+
+  .fashion-design-images-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 10px;
+  }
+
+  .fashion-delivery-grid {
+    grid-template-columns:
+      1fr 20px 1fr;
+  }
+
+  .fashion-design-setting-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .fashion-design-setting-row > div:first-child {
+    grid-column: auto;
+  }
+
+  .fashion-design-setting-controls {
+    justify-content: space-between;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #edf0f4;
+  }
+
+  .fashion-design-upload-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .fashion-design-upload-button {
+    width: 100%;
+  }
+
+  .fashion-design-form-footer {
+    flex-direction: column-reverse;
+  }
+
+  .fashion-design-cancel,
+  .fashion-design-save {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .fashion-design-form-header h1 {
+    font-size: 34px;
+  }
+
+  .fashion-design-images-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .fashion-delivery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-delivery-range-separator {
+    display: none;
+  }
+
+  .fashion-delivery-preview {
+    grid-column: auto;
+  }
+
+  .fashion-design-image-actions {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .fashion-design-form-heading h2 {
+    font-size: 21px;
+  }
+}
+
+/* =========================================================
+   PRODUCT DETAILS / ADDITIONAL INFORMATION
+========================================================= */
+
+.fashion-design-form-full-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fashion-design-form-full-field > span {
+  color: #35425a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fashion-design-form-full-field > textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 15px 16px;
+
+  border: 1px solid #dfe5ee;
+  border-radius: 10px;
+
+  background: #fbfcfe;
+  color: #273449;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  resize: vertical;
+
+  outline: none;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.fashion-design-form-full-field > textarea::placeholder {
+  color: #9aa4b2;
+  white-space: pre-line;
+}
+
+.fashion-design-form-full-field > textarea:focus {
+  border-color: #789582;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 3px
+      rgba(120, 149, 130, 0.12);
+}
+
+.fashion-design-form-full-field > small {
+  align-self: flex-end;
+
+  color: #8a94a3;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .fashion-design-form-full-field > textarea {
+    min-height: 180px;
+
+    padding: 13px 14px;
+
+    font-size: 12px;
+  }
+}

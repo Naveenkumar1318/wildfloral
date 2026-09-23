@@ -395,8 +395,8 @@ function getApplicableOffer(
       const endDate =
         offer.endsAt
           ? new Date(
-              offer.endsAt,
-            )
+            offer.endsAt,
+          )
           : null
 
       if (now < startDate) {
@@ -573,7 +573,7 @@ function Services() {
     setSearchParams,
   ] = useSearchParams()
 
-  
+
   const categoryParam =
     searchParams.get('category')
 
@@ -581,12 +581,12 @@ function Services() {
     searchParams.get('assignTo')
 
   const opCustomer =
-  searchParams.get(
-    'opCustomer',
-  )
+    searchParams.get(
+      'opCustomer',
+    )
 
-const isOPCustomer =
-  opCustomer === 'true'
+  const isOPCustomer =
+    opCustomer === 'true'
 
   const modeParam =
     searchParams.get('mode')
@@ -774,31 +774,35 @@ const isOPCustomer =
       )
 
       setServices(
-        serviceRows.map(
-          (row) => {
+        serviceRows
+          .filter((row) => {
+            if (!row.category_id) {
+              return false
+            }
+
+            return categoryMap.has(
+              row.category_id,
+            )
+          })
+          .map((row) => {
             const category =
-              row.category_id
-                ? categoryMap.get(
-                    row.category_id,
-                  )
-                : undefined
+              categoryMap.get(
+                row.category_id!,
+              )
 
             return {
               id: row.id,
               categoryId:
-                row.category_id ??
-                '',
+                row.category_id!,
               category:
-                category?.name ??
-                row.category ??
-                'Beauty',
+                category?.name ?? '',
               name: row.name,
               description:
                 row.description ??
                 '',
               duration:
                 row.duration_minutes &&
-                row.duration_minutes >
+                  row.duration_minutes >
                   0
                   ? `${row.duration_minutes} min`
                   : 'By consultation',
@@ -810,11 +814,10 @@ const isOPCustomer =
                 row.image_url ||
                 assets.hero,
             }
-          },
-        ),
+          }),
       )
     } catch (
-      loadError
+    loadError
     ) {
       setError(
         loadError instanceof Error
@@ -1007,7 +1010,7 @@ const isOPCustomer =
               priority:
                 Number(
                   row.priority ??
-                    0,
+                  0,
                 ),
               scopeType:
                 row.scope_type,
@@ -1059,7 +1062,7 @@ const isOPCustomer =
         mappedOffers,
       )
     } catch (
-      loadError
+    loadError
     ) {
       console.error(
         'Offers:',
@@ -1080,74 +1083,74 @@ const isOPCustomer =
    RESTORE SAVED SELECTION
 ======================================================= */
 
-useEffect(() => {
-  /*
-   * ENQUIRY MODE
-   *
-   * Enquiry data lives in:
-   * wildfloral_enquiry_flow
-   */
-  if (mode === 'enquiry') {
-    const enquiry =
-      loadEnquiryFlow()
+  useEffect(() => {
+    /*
+     * ENQUIRY MODE
+     *
+     * Enquiry data lives in:
+     * wildfloral_enquiry_flow
+     */
+    if (mode === 'enquiry') {
+      const enquiry =
+        loadEnquiryFlow()
 
-    if (!enquiry) {
-      setSelectedServices([])
+      if (!enquiry) {
+        setSelectedServices([])
+        return
+      }
+
+      const targetPersonId =
+        assignTo ??
+        enquiry.people[0]?.id
+
+      const person =
+        enquiry.people.find(
+          (item) =>
+            item.id === targetPersonId,
+        )
+
+      setSelectedServices(
+        person?.serviceIds ?? [],
+      )
+
       return
     }
 
-    const targetPersonId =
-      assignTo ??
-      enquiry.people[0]?.id
+    /*
+     * NORMAL BOOKING MODE
+     */
+    if (assignTo) {
+      const booking =
+        loadBookingFlow()
 
-    const person =
-      enquiry.people.find(
-        (item) =>
-          item.id === targetPersonId,
+      if (!booking) {
+        setSelectedServices([])
+        return
+      }
+
+      const person =
+        booking.people.find(
+          (item) =>
+            item.id === assignTo,
+        )
+
+      setSelectedServices(
+        person?.serviceIds ?? [],
       )
 
-    setSelectedServices(
-      person?.serviceIds ?? [],
-    )
-
-    return
-  }
-
-  /*
-   * NORMAL BOOKING MODE
-   */
-  if (assignTo) {
-    const booking =
-      loadBookingFlow()
-
-    if (!booking) {
-      setSelectedServices([])
       return
     }
 
-    const person =
-      booking.people.find(
-        (item) =>
-          item.id === assignTo,
-      )
+    const savedServiceIds =
+      getBookingCartServiceIds()
 
     setSelectedServices(
-      person?.serviceIds ?? [],
+      savedServiceIds,
     )
-
-    return
-  }
-
-  const savedServiceIds =
-    getBookingCartServiceIds()
-
-  setSelectedServices(
-    savedServiceIds,
-  )
-}, [
-  assignTo,
-  mode,
-])
+  }, [
+    assignTo,
+    mode,
+  ])
 
   /* =======================================================
      SORT MENU
@@ -1211,10 +1214,10 @@ useEffect(() => {
       let result =
         activeCategory
           ? services.filter(
-              (service) =>
-                service.categoryId ===
-                activeCategory.id,
-            )
+            (service) =>
+              service.categoryId ===
+              activeCategory.id,
+          )
           : [...services]
 
       if (
@@ -1316,7 +1319,7 @@ useEffect(() => {
       1,
       Math.ceil(
         filteredServices.length /
-          ITEMS_PER_PAGE,
+        ITEMS_PER_PAGE,
       ),
     )
 
@@ -1346,7 +1349,7 @@ useEffect(() => {
       return filteredServices.slice(
         start,
         start +
-          ITEMS_PER_PAGE,
+        ITEMS_PER_PAGE,
       )
     }, [
       filteredServices,
@@ -1452,7 +1455,7 @@ useEffect(() => {
 
     setCategoryCanScrollRight(
       element.scrollLeft <
-        maxScroll - 4,
+      maxScroll - 4,
     )
   }
 
@@ -1471,7 +1474,7 @@ useEffect(() => {
     const amount =
       Math.max(
         element.clientWidth *
-          0.72,
+        0.72,
         260,
       )
 
@@ -1608,7 +1611,7 @@ useEffect(() => {
      SERVICE ACTIONS
   ======================================================= */
 
-    function isServiceSelected(
+  function isServiceSelected(
     serviceId: string,
   ) {
     return selectedServices.includes(
@@ -1616,49 +1619,49 @@ useEffect(() => {
     )
   }
 
-function saveServicePrice(
-  serviceId: string,
-) {
-  const service =
-    services.find(
-      (item) =>
-        item.id === serviceId,
-    )
+  function saveServicePrice(
+    serviceId: string,
+  ) {
+    const service =
+      services.find(
+        (item) =>
+          item.id === serviceId,
+      )
 
-  if (!service) {
-    return
+    if (!service) {
+      return
+    }
+
+    const booking =
+      loadBookingFlow()
+
+    const offer =
+      getApplicableOffer(
+        service,
+        offers,
+      )
+
+    const pricing =
+      calculateDiscount(
+        service.price,
+        offer,
+      )
+
+    const currentPrices =
+      booking?.servicePrices ??
+      {}
+
+    setServicePrices({
+      ...currentPrices,
+      [serviceId]:
+        pricing.finalPrice,
+    })
   }
 
-  const booking =
-    loadBookingFlow()
-
-  const offer =
-  getApplicableOffer(
-    service,
-    offers,
-  )
-
-  const pricing =
-    calculateDiscount(
-      service.price,
-      offer,
-    )
-
-  const currentPrices =
-    booking?.servicePrices ??
-    {}
-
-  setServicePrices({
-    ...currentPrices,
-    [serviceId]:
-      pricing.finalPrice,
-  })
-}
-
-function toggleService(
-  serviceId: string,
-) {
-  setError('')
+  function toggleService(
+    serviceId: string,
+  ) {
+    setError('')
 
     /*
    * =====================================================
@@ -1670,299 +1673,299 @@ function toggleService(
    * booking logic.
    */
 
-  if (isOPCustomer) {
-    const opFlow =
-      loadOPFlow()
+    if (isOPCustomer) {
+      const opFlow =
+        loadOPFlow()
 
-    if (!opFlow) {
-      setError(
-        'OP customer session has expired. Please return to OP Customers.',
-      )
+      if (!opFlow) {
+        setError(
+          'OP customer session has expired. Please return to OP Customers.',
+        )
 
-      return
-    }
+        return
+      }
 
-    const targetPersonId =
-      opFlow.selectedPersonId
+      const targetPersonId =
+        opFlow.selectedPersonId
 
-    if (!targetPersonId) {
-      setError(
-        'Please select a person before choosing services.',
-      )
+      if (!targetPersonId) {
+        setError(
+          'Please select a person before choosing services.',
+        )
 
-      return
-    }
+        return
+      }
 
-    toggleOPService(
-      targetPersonId,
-      serviceId,
-    )
-
-    const updatedFlow =
-      loadOPFlow()
-
-    setSelectedServices(
-      updatedFlow?.people.find(
-        (person) =>
-          person.id ===
-          targetPersonId,
-      )?.serviceIds ?? [],
-    )
-
-    return
-  }
-
-  /*
-   * =====================================================
-   * ENQUIRY SERVICE ASSIGNMENT
-   * =====================================================
-   */
-  if (mode === 'enquiry') {
-    const enquiry =
-      loadEnquiryFlow()
-
-    if (!enquiry) {
-      setError(
-        'Your enquiry session has expired. Please return to the enquiry.',
-      )
-
-      return
-    }
-
-    const targetPersonId =
-      assignTo ??
-      enquiry.people[0]?.id
-
-    if (!targetPersonId) {
-      setError(
-        'No enquiry person is available.',
-      )
-
-      return
-    }
-
-    const person =
-      enquiry.people.find(
-        (item) =>
-          item.id === targetPersonId,
-      )
-
-    if (!person) {
-      setError(
-        'The selected enquiry person could not be found.',
-      )
-
-      return
-    }
-
-    const currentIds =
-      currentServiceIds(
-        person.serviceIds ?? [],
-      )
-
-    const isSelected =
-      currentIds.includes(
+      toggleOPService(
+        targetPersonId,
         serviceId,
       )
 
-    const nextIds =
-      isSelected
-        ? currentIds.filter(
+      const updatedFlow =
+        loadOPFlow()
+
+      setSelectedServices(
+        updatedFlow?.people.find(
+          (person) =>
+            person.id ===
+            targetPersonId,
+        )?.serviceIds ?? [],
+      )
+
+      return
+    }
+
+    /*
+     * =====================================================
+     * ENQUIRY SERVICE ASSIGNMENT
+     * =====================================================
+     */
+    if (mode === 'enquiry') {
+      const enquiry =
+        loadEnquiryFlow()
+
+      if (!enquiry) {
+        setError(
+          'Your enquiry session has expired. Please return to the enquiry.',
+        )
+
+        return
+      }
+
+      const targetPersonId =
+        assignTo ??
+        enquiry.people[0]?.id
+
+      if (!targetPersonId) {
+        setError(
+          'No enquiry person is available.',
+        )
+
+        return
+      }
+
+      const person =
+        enquiry.people.find(
+          (item) =>
+            item.id === targetPersonId,
+        )
+
+      if (!person) {
+        setError(
+          'The selected enquiry person could not be found.',
+        )
+
+        return
+      }
+
+      const currentIds =
+        currentServiceIds(
+          person.serviceIds ?? [],
+        )
+
+      const isSelected =
+        currentIds.includes(
+          serviceId,
+        )
+
+      const nextIds =
+        isSelected
+          ? currentIds.filter(
             (id) =>
               id !== serviceId,
           )
-        : [
+          : [
             ...currentIds,
             serviceId,
           ]
 
-    const nextEnquiry: BookingFlowState = {
-      ...enquiry,
-      mode: 'enquiry',
-      people:
-        enquiry.people.map(
-          (item) =>
-            item.id === targetPersonId
-              ? {
+      const nextEnquiry: BookingFlowState = {
+        ...enquiry,
+        mode: 'enquiry',
+        people:
+          enquiry.people.map(
+            (item) =>
+              item.id === targetPersonId
+                ? {
                   ...item,
                   serviceIds: nextIds,
                 }
-              : item,
-        ),
-    }
+                : item,
+          ),
+      }
 
-    saveEnquiryFlow(
-      nextEnquiry,
-    )
+      saveEnquiryFlow(
+        nextEnquiry,
+      )
 
-    setSelectedServices(
-      nextIds,
-    )
-
-    return
-  }
-
-  /*
-   * =====================================================
-   * NORMAL BOOKING PERSON ASSIGNMENT
-   * =====================================================
-   */
-  if (assignTo) {
-    const booking =
-      loadBookingFlow()
-
-    if (!booking) {
-      setError(
-        'Your booking session has expired. Please return to your booking.',
+      setSelectedServices(
+        nextIds,
       )
 
       return
     }
 
-    const targetPersonId =
-      assignTo ??
-      booking.people[0]?.id
+    /*
+     * =====================================================
+     * NORMAL BOOKING PERSON ASSIGNMENT
+     * =====================================================
+     */
+    if (assignTo) {
+      const booking =
+        loadBookingFlow()
 
-    if (!targetPersonId) {
-      setError(
-        'No person is available for service selection.',
-      )
+      if (!booking) {
+        setError(
+          'Your booking session has expired. Please return to your booking.',
+        )
 
-      return
-    }
+        return
+      }
 
-    const person =
-      booking.people.find(
-        (item) =>
-          item.id ===
-          targetPersonId,
-      )
+      const targetPersonId =
+        assignTo ??
+        booking.people[0]?.id
 
-    if (!person) {
-      setError(
-        'The selected booking person could not be found.',
-      )
+      if (!targetPersonId) {
+        setError(
+          'No person is available for service selection.',
+        )
 
-      return
-    }
+        return
+      }
 
-    const currentIds =
-      currentServiceIds(
-        person.serviceIds ?? [],
-      )
+      const person =
+        booking.people.find(
+          (item) =>
+            item.id ===
+            targetPersonId,
+        )
 
-    const isSelected =
-      currentIds.includes(
-        serviceId,
-      )
+      if (!person) {
+        setError(
+          'The selected booking person could not be found.',
+        )
 
-    const nextIds =
-      isSelected
-        ? currentIds.filter(
+        return
+      }
+
+      const currentIds =
+        currentServiceIds(
+          person.serviceIds ?? [],
+        )
+
+      const isSelected =
+        currentIds.includes(
+          serviceId,
+        )
+
+      const nextIds =
+        isSelected
+          ? currentIds.filter(
             (id) =>
               id !== serviceId,
           )
-        : [
+          : [
             ...currentIds,
             serviceId,
           ]
 
-    const nextPeople =
-      booking.people.map(
-        (item) =>
-          item.id ===
-          targetPersonId
-            ? {
+      const nextPeople =
+        booking.people.map(
+          (item) =>
+            item.id ===
+              targetPersonId
+              ? {
                 ...item,
                 serviceIds:
                   nextIds,
               }
-            : item,
+              : item,
+        )
+
+      const nextBooking: BookingFlowState = {
+        ...booking,
+
+        mode: 'booking',
+
+        people:
+          nextPeople,
+      }
+
+      saveBookingFlow(
+        nextBooking,
       )
 
-    const nextBooking: BookingFlowState = {
-      ...booking,
+      setSelectedServices(
+        nextIds,
+      )
 
-      mode: 'booking',
+      /*
+       * Recalculate price for the newly selected
+       * service without touching bookingCart.
+       */
+      if (!isSelected) {
+        saveServicePrice(
+          serviceId,
+        )
+      } else {
+        const currentPrices =
+          nextBooking.servicePrices ??
+          {}
 
-      people:
-        nextPeople,
+        const {
+          [serviceId]:
+          _removedPrice,
+          ...remainingPrices
+        } = currentPrices
+
+        setServicePrices(
+          remainingPrices,
+        )
+
+        saveBookingFlow({
+          ...nextBooking,
+          servicePrices:
+            remainingPrices,
+        })
+      }
+
+      return
     }
-
-    saveBookingFlow(
-      nextBooking,
-    )
-
-    setSelectedServices(
-      nextIds,
-    )
 
     /*
-     * Recalculate price for the newly selected
-     * service without touching bookingCart.
+     * =====================================================
+     * NORMAL PUBLIC BOOKING SELECTION
+     * =====================================================
+     *
+     * ONLY normal /services selection uses bookingCart.
      */
-    if (!isSelected) {
-      saveServicePrice(
+
+    const selectedCurrentServiceIds =
+      currentServiceIds(
+        getBookingCartServiceIds(),
+      )
+
+    const isSelected =
+      selectedCurrentServiceIds.includes(
         serviceId,
       )
-    } else {
-      const currentPrices =
-        nextBooking.servicePrices ??
-        {}
 
-      const {
-        [serviceId]:
-          _removedPrice,
-        ...remainingPrices
-      } = currentPrices
-
-      setServicePrices(
-        remainingPrices,
+    if (isSelected) {
+      removeFromBookingCart(
+        serviceId,
       )
 
-      saveBookingFlow({
-        ...nextBooking,
-        servicePrices:
-          remainingPrices,
-      })
-    }
+      const booking =
+        loadBookingFlow()
 
-    return
-  }
-
-  /*
-   * =====================================================
-   * NORMAL PUBLIC BOOKING SELECTION
-   * =====================================================
-   *
-   * ONLY normal /services selection uses bookingCart.
-   */
-
-  const selectedCurrentServiceIds =
-    currentServiceIds(
-      getBookingCartServiceIds(),
-    )
-
-  const isSelected =
-    selectedCurrentServiceIds.includes(
-      serviceId,
-    )
-
-  if (isSelected) {
-    removeFromBookingCart(
-      serviceId,
-    )
-
-    const booking =
-      loadBookingFlow()
-
-    if (booking) {
-      const nextPeople =
-        booking.people.map(
-          (person) =>
-            person.id ===
-            booking.people[0]?.id
-              ? {
+      if (booking) {
+        const nextPeople =
+          booking.people.map(
+            (person) =>
+              person.id ===
+                booking.people[0]?.id
+                ? {
                   ...person,
                   serviceIds:
                     person.serviceIds.filter(
@@ -1971,205 +1974,205 @@ function toggleService(
                         serviceId,
                     ),
                 }
-              : person,
-        )
+                : person,
+          )
 
-      const currentPrices =
-        booking.servicePrices ??
-        {}
+        const currentPrices =
+          booking.servicePrices ??
+          {}
 
-      const {
-        [serviceId]:
+        const {
+          [serviceId]:
           _removedPrice,
-        ...remainingPrices
-      } = currentPrices
+          ...remainingPrices
+        } = currentPrices
 
-      saveBookingFlow({
-        ...booking,
-        mode: 'booking',
-        people:
-          nextPeople,
-        servicePrices:
+        saveBookingFlow({
+          ...booking,
+          mode: 'booking',
+          people:
+            nextPeople,
+          servicePrices:
+            remainingPrices,
+        })
+
+        setServicePrices(
           remainingPrices,
-      })
+        )
+      }
 
-      setServicePrices(
-        remainingPrices,
+      setSelectedServices(
+        selectedCurrentServiceIds.filter(
+          (id) =>
+            id !== serviceId,
+        ),
       )
-    }
 
-    setSelectedServices(
-      selectedCurrentServiceIds.filter(
-        (id) =>
-          id !== serviceId,
-      ),
-    )
-
-    return
-  }
-
-  /*
-   * Add new service.
-   */
-
-  addToBookingCart(
-    serviceId,
-  )
-
-  saveServicePrice(
-    serviceId,
-  )
-
-  setSelectedServices([
-    ...selectedCurrentServiceIds,
-    serviceId,
-  ])
-}
-function clearSelection() {
-  /*
-   * =====================================================
-   * ENQUIRY
-   * =====================================================
-   */
-
-  if (mode === 'enquiry') {
-    const enquiry =
-      loadEnquiryFlow()
-
-    if (!enquiry) {
-      setSelectedServices([])
       return
     }
 
-    const targetPersonId =
-      assignTo ??
-      enquiry.people[0]?.id
+    /*
+     * Add new service.
+     */
 
-    const nextEnquiry: BookingFlowState = {
-      ...enquiry,
-      mode: 'enquiry',
-      people:
-        enquiry.people.map(
-          (person) =>
-            person.id === targetPersonId
-              ? {
+    addToBookingCart(
+      serviceId,
+    )
+
+    saveServicePrice(
+      serviceId,
+    )
+
+    setSelectedServices([
+      ...selectedCurrentServiceIds,
+      serviceId,
+    ])
+  }
+  function clearSelection() {
+    /*
+     * =====================================================
+     * ENQUIRY
+     * =====================================================
+     */
+
+    if (mode === 'enquiry') {
+      const enquiry =
+        loadEnquiryFlow()
+
+      if (!enquiry) {
+        setSelectedServices([])
+        return
+      }
+
+      const targetPersonId =
+        assignTo ??
+        enquiry.people[0]?.id
+
+      const nextEnquiry: BookingFlowState = {
+        ...enquiry,
+        mode: 'enquiry',
+        people:
+          enquiry.people.map(
+            (person) =>
+              person.id === targetPersonId
+                ? {
                   ...person,
                   serviceIds: [],
                 }
-              : person,
-        ),
-    }
+                : person,
+          ),
+      }
 
-    saveEnquiryFlow(
-      nextEnquiry,
-    )
+      saveEnquiryFlow(
+        nextEnquiry,
+      )
 
-    setSelectedServices([])
-
-    return
-  }
-
-  /*
-   * =====================================================
-   * NORMAL BOOKING PERSON ASSIGNMENT
-   * =====================================================
-   */
-  if (assignTo) {
-    const booking =
-      loadBookingFlow()
-
-    if (!booking) {
       setSelectedServices([])
-      setServicePrices({})
+
       return
     }
 
-    const targetPersonId =
-      assignTo ??
-      booking.people[0]?.id
+    /*
+     * =====================================================
+     * NORMAL BOOKING PERSON ASSIGNMENT
+     * =====================================================
+     */
+    if (assignTo) {
+      const booking =
+        loadBookingFlow()
 
-    const nextPeople =
-      booking.people.map(
-        (person) =>
-          person.id ===
-          targetPersonId
-            ? {
+      if (!booking) {
+        setSelectedServices([])
+        setServicePrices({})
+        return
+      }
+
+      const targetPersonId =
+        assignTo ??
+        booking.people[0]?.id
+
+      const nextPeople =
+        booking.people.map(
+          (person) =>
+            person.id ===
+              targetPersonId
+              ? {
                 ...person,
                 serviceIds: [],
               }
-            : person,
+              : person,
+        )
+
+      const nextBooking: BookingFlowState = {
+        ...booking,
+        mode: 'booking',
+
+        people:
+          nextPeople,
+
+        servicePrices: {},
+      }
+
+      saveBookingFlow(
+        nextBooking,
       )
 
-    const nextBooking: BookingFlowState = {
-      ...booking,
-      mode: 'booking',
+      setSelectedServices([])
 
-      people:
-        nextPeople,
+      setServicePrices({})
 
-      servicePrices: {},
+      return
     }
 
-    saveBookingFlow(
-      nextBooking,
-    )
+    /*
+     * =====================================================
+     * NORMAL BOOKING
+     * =====================================================
+     *
+     * Clear BOTH the public cart and Person 1's
+     * bookingFlow services.
+     *
+     * This prevents the old services from coming back
+     * when the user returns to /services.
+     */
+
+    clearBookingCart()
+
+    const booking =
+      loadBookingFlow()
+
+    if (booking) {
+      const nextBooking: BookingFlowState = {
+        ...booking,
+
+        mode: 'booking',
+
+        people:
+          booking.people.map(
+            (person, index) =>
+              index === 0
+                ? {
+                  ...person,
+                  serviceIds: [],
+                }
+                : person,
+          ),
+
+        servicePrices: {},
+      }
+
+      saveBookingFlow(
+        nextBooking,
+      )
+    }
 
     setSelectedServices([])
 
     setServicePrices({})
-
-    return
   }
 
-  /*
-   * =====================================================
-   * NORMAL BOOKING
-   * =====================================================
-   *
-   * Clear BOTH the public cart and Person 1's
-   * bookingFlow services.
-   *
-   * This prevents the old services from coming back
-   * when the user returns to /services.
-   */
 
-  clearBookingCart()
-
-  const booking =
-    loadBookingFlow()
-
-  if (booking) {
-    const nextBooking: BookingFlowState = {
-      ...booking,
-
-      mode: 'booking',
-
-      people:
-        booking.people.map(
-          (person, index) =>
-            index === 0
-              ? {
-                  ...person,
-                  serviceIds: [],
-                }
-              : person,
-        ),
-
-      servicePrices: {},
-    }
-
-    saveBookingFlow(
-      nextBooking,
-    )
-  }
-
-  setSelectedServices([])
-
-  setServicePrices({})
-}
-
-
-async function continueAssignment() {
+  async function continueAssignment() {
 
     /*
    * =====================================================
@@ -2177,37 +2180,117 @@ async function continueAssignment() {
    * =====================================================
    */
 
-  if (isOPCustomer) {
-    const opFlow =
-      loadOPFlow()
+    if (isOPCustomer) {
+      const opFlow =
+        loadOPFlow()
 
-    if (!opFlow) {
-      setError(
-        'OP customer session has expired.',
+      if (!opFlow) {
+        setError(
+          'OP customer session has expired.',
+        )
+
+        return
+      }
+
+      const person =
+        opFlow.people.find(
+          (item) =>
+            item.id ===
+            opFlow.selectedPersonId,
+        )
+
+      if (!person) {
+        setError(
+          'Please select a person.',
+        )
+
+        return
+      }
+
+      if (
+        person.serviceIds.length ===
+        0
+      ) {
+        setError(
+          'Please select at least one service for this person.',
+        )
+
+        return
+      }
+
+      navigate(
+        '/admin/op-customers/beauty',
       )
 
       return
     }
+    /*
+     * =====================================================
+     * ENQUIRY
+     * =====================================================
+     */
+    if (mode === 'enquiry') {
+      if (selectedServices.length === 0) {
+        setError(
+          assignTo
+            ? 'Please select at least one service for this person.'
+            : 'Please select at least one service.',
+        )
 
-    const person =
-      opFlow.people.find(
-        (item) =>
-          item.id ===
-          opFlow.selectedPersonId,
-      )
+        return
+      }
 
-    if (!person) {
-      setError(
-        'Please select a person.',
-      )
+      navigate('/enquiry')
 
       return
     }
 
-    if (
-      person.serviceIds.length ===
-      0
-    ) {
+    /*
+     * =====================================================
+     * NORMAL BOOKING
+     * =====================================================
+     */
+    if (!assignTo) {
+      if (selectedServices.length === 0) {
+        setError(
+          'Please select at least one service.',
+        )
+
+        return
+      }
+
+      saveSelectedServices(
+        selectedServices,
+      )
+
+      setBookingMode('booking')
+      setBookingStep(1)
+
+      const {
+        data: {
+          user,
+        },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        navigate(
+          `/login?redirect=${encodeURIComponent(
+            '/booking',
+          )}`,
+          {
+            replace: true,
+          },
+        )
+
+        return
+      }
+
+      navigate('/booking')
+
+      return
+    }
+
+    if (selectedServices.length === 0) {
       setError(
         'Please select at least one service for this person.',
       )
@@ -2215,88 +2298,8 @@ async function continueAssignment() {
       return
     }
 
-    navigate(
-      '/admin/op-customers/beauty',
-    )
-
-    return
-  }
-  /*
-   * =====================================================
-   * ENQUIRY
-   * =====================================================
-   */
-  if (mode === 'enquiry') {
-    if (selectedServices.length === 0) {
-      setError(
-        assignTo
-          ? 'Please select at least one service for this person.'
-          : 'Please select at least one service.',
-      )
-
-      return
-    }
-
-    navigate('/enquiry')
-
-    return
-  }
-
-  /*
-   * =====================================================
-   * NORMAL BOOKING
-   * =====================================================
-   */
-  if (!assignTo) {
-    if (selectedServices.length === 0) {
-      setError(
-        'Please select at least one service.',
-      )
-
-      return
-    }
-
-    saveSelectedServices(
-      selectedServices,
-    )
-
-    setBookingMode('booking')
-    setBookingStep(1)
-
-    const {
-      data: {
-        user,
-      },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      navigate(
-        `/login?redirect=${encodeURIComponent(
-          '/booking',
-        )}`,
-        {
-          replace: true,
-        },
-      )
-
-      return
-    }
-
     navigate('/booking')
-
-    return
   }
-
-  if (selectedServices.length === 0) {
-    setError(
-      'Please select at least one service for this person.',
-    )
-
-    return
-  }
-
-  navigate('/booking')
-}
   function goToPage(
     page: number,
   ) {
@@ -2400,24 +2403,24 @@ async function continueAssignment() {
 
           <div className="services-hero-actions">
 
-           <button
-  type="button"
-  className="services-primary-button"
-  onClick={() => {
-    if (assignTo) {
-      navigate('/booking')
-      return
-    }
+            <button
+              type="button"
+              className="services-primary-button"
+              onClick={() => {
+                if (assignTo) {
+                  navigate('/booking')
+                  return
+                }
 
-    void continueAssignment()
-  }}
->
-  {assignTo
-    ? 'Back to Booking'
-    : 'Book Appointment'}
+                void continueAssignment()
+              }}
+            >
+              {assignTo
+                ? 'Back to Booking'
+                : 'Book Appointment'}
 
-  <ArrowIcon />
-</button>
+              <ArrowIcon />
+            </button>
             <a
               href="#our-services"
               className="services-secondary-button"
@@ -2552,7 +2555,7 @@ async function continueAssignment() {
                   key={category.id}
                   className={
                     activeCategory?.id ===
-                    category.id
+                      category.id
                       ? 'service-category-card active'
                       : 'service-category-card'
                   }
@@ -2644,7 +2647,7 @@ async function continueAssignment() {
             <p>
               {filteredServices.length}{' '}
               {filteredServices.length ===
-              1
+                1
                 ? 'service'
                 : 'services'}{' '}
               available
@@ -2712,7 +2715,7 @@ async function continueAssignment() {
                       }
                       className={
                         sortBy ===
-                        option.value
+                          option.value
                           ? 'active'
                           : ''
                       }
@@ -2735,10 +2738,10 @@ async function continueAssignment() {
 
                       {sortBy ===
                         option.value && (
-                        <span>
-                          ✓
-                        </span>
-                      )}
+                          <span>
+                            ✓
+                          </span>
+                        )}
 
                     </button>
                   ),
@@ -2819,324 +2822,324 @@ async function continueAssignment() {
         {!loading &&
           !error &&
           paginatedServices.length >
-            0 && (
+          0 && (
 
-          <div className="services-grid">
+            <div className="services-grid">
 
-            {paginatedServices.map(
-              (
-                service,
-                index,
-              ) => {
+              {paginatedServices.map(
+                (
+                  service,
+                  index,
+                ) => {
 
-                const isSelected =
-                  isServiceSelected(
-                    service.id,
-                  )
+                  const isSelected =
+                    isServiceSelected(
+                      service.id,
+                    )
 
-                const offer =
-                  getApplicableOffer(
-                    service,
-                    offers,
-                  )
+                  const offer =
+                    getApplicableOffer(
+                      service,
+                      offers,
+                    )
 
-                const pricing =
-                  calculateDiscount(
-                    service.price,
-                    offer,
-                  )
+                  const pricing =
+                    calculateDiscount(
+                      service.price,
+                      offer,
+                    )
 
-                const hasDiscount =
-                  Boolean(
-                    offer &&
-                    pricing.discountAmount >
+                  const hasDiscount =
+                    Boolean(
+                      offer &&
+                      pricing.discountAmount >
                       0,
-                  )
+                    )
 
-                return (
-                  <article
-                    className={
-                      isSelected
-                        ? 'service-card selected'
-                        : 'service-card'
-                    }
-                    key={
-                      service.id
-                    }
-                  >
+                  return (
+                    <article
+                      className={
+                        isSelected
+                          ? 'service-card selected'
+                          : 'service-card'
+                      }
+                      key={
+                        service.id
+                      }
+                    >
 
-                    <div className="service-card-image">
+                      <div className="service-card-image">
 
-                      <img
-                        src={
-                          service.image ||
-                          assets.hero
-                        }
-                        alt={
-                          service.name
-                        }
-                        loading={
-                          index < 3
-                            ? 'eager'
-                            : 'lazy'
-                        }
-                      />
+                        <img
+                          src={
+                            service.image ||
+                            assets.hero
+                          }
+                          alt={
+                            service.name
+                          }
+                          loading={
+                            index < 3
+                              ? 'eager'
+                              : 'lazy'
+                          }
+                        />
 
-                      <span className="service-card-category-pill">
-                        {
-                          service.category
-                        }
-                      </span>
+                        <span className="service-card-category-pill">
+                          {
+                            service.category
+                          }
+                        </span>
 
-                      {hasDiscount &&
-                        offer && (
-                          <span className="service-card-offer-pill">
-                            {
-                              discountText(
-                                offer,
-                              )
-                            }
-                          </span>
-                        )}
-
-                      <button
-                        type="button"
-                        className={
-                          isSelected
-                            ? 'service-card-select selected'
-                            : 'service-card-select'
-                        }
-                        onClick={() =>
-                          toggleService(
-                            service.id,
-                          )
-                        }
-                        aria-label={
-                          isSelected
-                            ? `Remove ${service.name}`
-                            : `Add ${service.name}`
-                        }
-                      >
-                        {isSelected
-                          ? '✓'
-                          : '+'}
-                      </button>
-
-                    </div>
-
-                    <div className="service-card-content">
-
-                      <h3>
-                        {
-                          service.name
-                        }
-                      </h3>
-
-                      <p>
-                        {
-                          service.description
-                        }
-                      </p>
-
-                      <div className="service-card-meta">
-
-                        <div className="service-price">
-
-                          {hasDiscount &&
-                          offer ? (
-                            <>
-                              <span>
-                                Regular price
-                              </span>
-
-                              <del>
-                                {formatPrice(
-                                  pricing.originalPrice,
-                                )}
-                              </del>
-
-                              <strong className="service-offer-price">
-                                {formatPrice(
-                                  pricing.finalPrice,
-                                )}
-                              </strong>
-
-                              <small>
-                                You save{' '}
-                                {formatPrice(
-                                  pricing.discountAmount,
-                                )}
-                              </small>
-                            </>
-                          ) : (
-                            <>
-                              <span>
-                                Starting from
-                              </span>
-
-                              <strong>
-                                {formatPrice(
-                                  service.price,
-                                )}
-                              </strong>
-                            </>
+                        {hasDiscount &&
+                          offer && (
+                            <span className="service-card-offer-pill">
+                              {
+                                discountText(
+                                  offer,
+                                )
+                              }
+                            </span>
                           )}
 
-                        </div>
-
-                        <div className="service-duration">
-
-                          <ClockIcon />
-
-                          <span>
-                            {
-                              service.duration
-                            }
-                          </span>
-
-                        </div>
+                        <button
+                          type="button"
+                          className={
+                            isSelected
+                              ? 'service-card-select selected'
+                              : 'service-card-select'
+                          }
+                          onClick={() =>
+                            toggleService(
+                              service.id,
+                            )
+                          }
+                          aria-label={
+                            isSelected
+                              ? `Remove ${service.name}`
+                              : `Add ${service.name}`
+                          }
+                        >
+                          {isSelected
+                            ? '✓'
+                            : '+'}
+                        </button>
 
                       </div>
 
-                      {hasDiscount &&
-                        offer && (
-                          <div className="service-card-current-offer">
+                      <div className="service-card-content">
 
-                            <div>
+                        <h3>
+                          {
+                            service.name
+                          }
+                        </h3>
 
-                              <span>
-                                CURRENT OFFER
-                              </span>
+                        <p>
+                          {
+                            service.description
+                          }
+                        </p>
 
-                              <strong>
-                                {
-                                  offer.title
-                                }
-                              </strong>
+                        <div className="service-card-meta">
 
-                            </div>
+                          <div className="service-price">
 
-                            {offer.endsAt && (
-                              <small>
-                                Ends{' '}
-                                {formatOfferDate(
-                                  offer.endsAt,
-                                )}
-                              </small>
+                            {hasDiscount &&
+                              offer ? (
+                              <>
+                                <span>
+                                  Regular price
+                                </span>
+
+                                <del>
+                                  {formatPrice(
+                                    pricing.originalPrice,
+                                  )}
+                                </del>
+
+                                <strong className="service-offer-price">
+                                  {formatPrice(
+                                    pricing.finalPrice,
+                                  )}
+                                </strong>
+
+                                <small>
+                                  You save{' '}
+                                  {formatPrice(
+                                    pricing.discountAmount,
+                                  )}
+                                </small>
+                              </>
+                            ) : (
+                              <>
+                                <span>
+                                  Regular price
+                                </span>
+
+                                <strong>
+                                  {formatPrice(
+                                    service.price,
+                                  )}
+                                </strong>
+                              </>
                             )}
 
                           </div>
-                        )}
 
-                      <button
-                        type="button"
-                        className={
-                          isSelected
-                            ? 'service-book-button selected'
-                            : 'service-book-button'
-                        }
-                        disabled={
-                          addingService
-                        }
-                        onClick={() => {
-                          if (
-                            addingService
-                          ) {
-                            return
+                          <div className="service-duration">
+
+                            <ClockIcon />
+
+                            <span>
+                              {
+                                service.duration
+                              }
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                        {hasDiscount &&
+                          offer && (
+                            <div className="service-card-current-offer">
+
+                              <div>
+
+                                <span>
+                                  CURRENT OFFER
+                                </span>
+
+                                <strong>
+                                  {
+                                    offer.title
+                                  }
+                                </strong>
+
+                              </div>
+
+                              {offer.endsAt && (
+                                <small>
+                                  Ends{' '}
+                                  {formatOfferDate(
+                                    offer.endsAt,
+                                  )}
+                                </small>
+                              )}
+
+                            </div>
+                          )}
+
+                        <button
+                          type="button"
+                          className={
+                            isSelected
+                              ? 'service-book-button selected'
+                              : 'service-book-button'
                           }
+                          disabled={
+                            addingService
+                          }
+                          onClick={() => {
+                            if (
+                              addingService
+                            ) {
+                              return
+                            }
 
-                          if (
-                            assignTo
-                          ) {
-                            setAddingService(
-                              true,
-                            )
+                            if (
+                              assignTo
+                            ) {
+                              setAddingService(
+                                true,
+                              )
+
+                              toggleService(
+                                service.id,
+                              )
+
+                              window.setTimeout(
+                                () =>
+                                  setAddingService(
+                                    false,
+                                  ),
+                                200,
+                              )
+
+                              return
+                            }
 
                             toggleService(
                               service.id,
                             )
+                          }}
+                        >
 
-                            window.setTimeout(
-                              () =>
-                                setAddingService(
-                                  false,
-                                ),
-                              200,
-                            )
+                          <span>
+                            {isSelected
+                              ? assignTo
+                                ? 'Remove from Person'
+                                : 'Remove from Booking'
+                              : assignTo
+                                ? 'Add to Person'
+                                : 'Add to Booking'}
+                          </span>
 
-                            return
-                          }
+                          <span>
+                            {isSelected
+                              ? '✓'
+                              : '+'}
+                          </span>
 
-                          toggleService(
-                            service.id,
-                          )
-                        }}
-                      >
+                        </button>
 
-                        <span>
-                          {isSelected
-                            ? assignTo
-                              ? 'Remove from Person'
-                              : 'Added to Selection'
-                            : assignTo
-                              ? 'Add to Person'
-                              : 'Add to Selection'}
-                        </span>
+                      </div>
 
-                        <span>
-                          {isSelected
-                            ? '✓'
-                            : '+'}
-                        </span>
+                    </article>
+                  )
+                },
+              )}
 
-                      </button>
-
-                    </div>
-
-                  </article>
-                )
-              },
-            )}
-
-          </div>
-        )}
+            </div>
+          )}
 
         {/* EMPTY */}
 
         {!loading &&
           !error &&
           paginatedServices.length ===
-            0 && (
-          <div className="services-message">
+          0 && (
+            <div className="services-message">
 
-            <h3>
-              No services
-              <span>
-                available.
-              </span>
-            </h3>
+              <h3>
+                No services
+                <span>
+                  available.
+                </span>
+              </h3>
 
-            <p>
-              There are no services
-              available in this category
-              yet.
-            </p>
+              <p>
+                There are no services
+                available in this category
+                yet.
+              </p>
 
-            {activeCategory && (
-              <button
-                type="button"
-                className="services-primary-button"
-                onClick={
-                  selectAllServices
-                }
-              >
-                View All Services
-                <ArrowIcon />
-              </button>
-            )}
+              {activeCategory && (
+                <button
+                  type="button"
+                  className="services-primary-button"
+                  onClick={
+                    selectAllServices
+                  }
+                >
+                  View All Services
+                  <ArrowIcon />
+                </button>
+              )}
 
-          </div>
-        )}
+            </div>
+          )}
 
         {/* PAGINATION */}
 
@@ -3170,7 +3173,7 @@ async function continueAssignment() {
                     key={page}
                     className={
                       currentPage ===
-                      page
+                        page
                         ? 'active'
                         : ''
                     }
@@ -3212,30 +3215,30 @@ async function continueAssignment() {
 
       {!offerLoading &&
         displayedOffers.length >
-          0 && (
-        <section className="services-promo">
+        0 && (
+          <section className="services-promo">
 
-          {displayedOffers.map(
-            (
-              offer,
-              index,
-            ) => (
-              <DealOfDay
-                key={
-                  offer.id
-                }
-                offer={
-                  offer
-                }
-                featured={
-                  index === 0
-                }
-              />
-            ),
-          )}
+            {displayedOffers.map(
+              (
+                offer,
+                index,
+              ) => (
+                <DealOfDay
+                  key={
+                    offer.id
+                  }
+                  offer={
+                    offer
+                  }
+                  featured={
+                    index === 0
+                  }
+                />
+              ),
+            )}
 
-        </section>
-      )}
+          </section>
+        )}
 
       {/* =================================================
           SELECTION BAR
@@ -3243,84 +3246,58 @@ async function continueAssignment() {
 
       {selectedServices.length >
         0 && (
-        <div className="service-selection-bar">
+          <div className="service-selection-bar">
 
-          <div className="service-selection-inner">
+            <div className="service-selection-inner">
 
-            <div className="selection-summary">
+              <div className="selection-summary">
 
-              <div className="selection-count">
-                {
-                  selectedServices.length
-                }
-              </div>
+                <div className="selection-count">
+                  {
+                    selectedServices.length
+                  }
+                </div>
 
-              <div>
-                <strong>
+                <div>
+                  <strong>
                     {isOPCustomer
                       ? 'Services for person'
                       : assignTo
                         ? 'Services for person'
                         : 'Services selected'}
                   </strong>
-                <span>
-                  Total{' '}
-                  {formatPrice(
-                    selectedTotal,
-                  )}
-                </span>
+                  <span>
+                    Total{' '}
+                    {formatPrice(
+                      selectedTotal,
+                    )}
+                  </span>
+                </div>
+
               </div>
 
-            </div>
+              <div className="selection-actions">
 
-            <div className="selection-actions">
-
-              <button
-                type="button"
-                className="selection-clear"
-                onClick={
-                  clearSelection
-                }
-              >
-                Clear
-              </button>
-
-              {isOPCustomer ? (
-  <button
-    type="button"
-    className="selection-book"
-    onClick={continueAssignment}
-  >
-    Done
-    <ArrowIcon />
-  </button>
-) : assignTo ? (
                 <button
                   type="button"
-                  className="selection-book"
+                  className="selection-clear"
                   onClick={
-                    continueAssignment
+                    clearSelection
                   }
                 >
-                  Done
-                  <ArrowIcon />
+                  Clear
                 </button>
-              ) : (
-                <>
-                  <button
-  type="button"
-  className="selection-enquiry"
-  onClick={() =>
-    navigate(
-      `/enquiry?services=${encodeURIComponent(
-        selectedServices.join(','),
-      )}`,
-    )
-  }
->
-  Enquire Now
-</button>
 
+                {isOPCustomer ? (
+                  <button
+                    type="button"
+                    className="selection-book"
+                    onClick={continueAssignment}
+                  >
+                    Done
+                    <ArrowIcon />
+                  </button>
+                ) : assignTo ? (
                   <button
                     type="button"
                     className="selection-book"
@@ -3328,18 +3305,44 @@ async function continueAssignment() {
                       continueAssignment
                     }
                   >
-                    Book Appointment
+                    Done
                     <ArrowIcon />
                   </button>
-                </>
-              )}
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="selection-enquiry"
+                      onClick={() =>
+                        navigate(
+                          `/enquiry?services=${encodeURIComponent(
+                            selectedServices.join(','),
+                          )}`,
+                        )
+                      }
+                    >
+                      Enquire Now
+                    </button>
+
+                    <button
+                      type="button"
+                      className="selection-book"
+                      onClick={
+                        continueAssignment
+                      }
+                    >
+                      Book Appointment
+                      <ArrowIcon />
+                    </button>
+                  </>
+                )}
+
+              </div>
 
             </div>
 
           </div>
-
-        </div>
-      )}
+        )}
 
       {/* =================================================
           ASSIGNMENT FOOTER
@@ -3347,41 +3350,41 @@ async function continueAssignment() {
 
       {assignTo &&
         selectedServices.length >
-          0 && (
-        <div className="services-assignment-footer">
+        0 && (
+          <div className="services-assignment-footer">
 
-          <div>
+            <div>
 
-            <span>
-              READY
-            </span>
+              <span>
+                READY
+              </span>
 
-            <strong>
-              {
-                selectedServices.length
-              }{' '}
-              service
-              {selectedServices.length ===
-              1
-                ? ''
-                : 's'}{' '}
-              selected for this person
-            </strong>
+              <strong>
+                {
+                  selectedServices.length
+                }{' '}
+                service
+                {selectedServices.length ===
+                  1
+                  ? ''
+                  : 's'}{' '}
+                selected for this person
+              </strong>
+
+            </div>
+
+            <button
+              type="button"
+              onClick={
+                continueAssignment
+              }
+            >
+              Continue to Booking
+              <ArrowIcon />
+            </button>
 
           </div>
-
-          <button
-            type="button"
-            onClick={
-              continueAssignment
-            }
-          >
-            Continue to Booking
-            <ArrowIcon />
-          </button>
-
-        </div>
-      )}
+        )}
 
       {/* =================================================
           FINAL CTA
@@ -3401,18 +3404,125 @@ async function continueAssignment() {
             </em>
           </h2>
 
-<button
-  type="button"
-  className="services-final-button"
-  onClick={() => {
-    void continueAssignment()
-  }}
->
-  Book Appointment
-  <ArrowIcon />
-</button>
+          <button
+            type="button"
+            className="services-final-button"
+            onClick={() => {
+              void continueAssignment()
+            }}
+          >
+            Book Appointment
+            <ArrowIcon />
+          </button>
         </section>
       )}
+
+      {/* =================================================
+    FASHION STATS
+================================================= */}
+
+      <section className="fashion-stats-strip">
+        <div className="fashion-stats-container">
+
+          {/* HAPPY CLIENTS */}
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <circle cx="24" cy="16" r="6" />
+                <circle cx="10" cy="20" r="5" />
+                <circle cx="38" cy="20" r="5" />
+
+                <path d="M13 37c0-7 5-11 11-11s11 4 11 11" />
+                <path d="M3 36c0-5 3-8 8-8" />
+                <path d="M45 36c0-5-3-8-8-8" />
+              </svg>
+            </div>
+
+            <div className="fashion-stat-content">
+              <strong>20+</strong>
+              <span>Happy Clients</span>
+            </div>
+          </div>
+
+          <div className="fashion-stat-divider" />
+
+          {/* PROJECTS COMPLETED */}
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <rect
+                  x="9"
+                  y="8"
+                  width="30"
+                  height="34"
+                  rx="3"
+                />
+
+                <path d="M16 5v7" />
+                <path d="M32 5v7" />
+
+                <path d="M15 19h18" />
+                <path d="M15 26h11" />
+                <path d="M15 33h7" />
+
+                <path d="M31 27l3 3 6-7" />
+              </svg>
+            </div>
+
+            <div className="fashion-stat-content">
+              <strong>50+</strong>
+              <span>Projects Completed</span>
+            </div>
+          </div>
+
+          <div className="fashion-stat-divider" />
+
+          {/* CLIENT SATISFACTION */}
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <circle
+                  cx="24"
+                  cy="24"
+                  r="18"
+                />
+
+                <path d="M16 24l5 5 11-11" />
+              </svg>
+            </div>
+
+            <div className="fashion-stat-content">
+              <strong>100%</strong>
+              <span>Client Satisfaction</span>
+            </div>
+          </div>
+
+          <div className="fashion-stat-divider" />
+
+          {/* EXPERIENCE */}
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <circle
+                  cx="24"
+                  cy="20"
+                  r="13"
+                />
+
+                <path d="M18 31l-3 12 9-5 9 5-3-12" />
+
+                <path d="M24 12l2.2 4.5 5 .7-3.6 3.5.8 5-4.4-2.4-4.4 2.4.8-5-3.6-3.5 5-.7z" />
+              </svg>
+            </div>
+
+            <div className="fashion-stat-content">
+              <strong>2+</strong>
+              <span>Years Experience</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
     </main>
   )
@@ -3523,21 +3633,21 @@ function DealOfDay({
 
             {remaining.days >
               0 && (
-              <div>
-                <strong>
-                  {String(
-                    remaining.days,
-                  ).padStart(
-                    2,
-                    '0',
-                  )}
-                </strong>
+                <div>
+                  <strong>
+                    {String(
+                      remaining.days,
+                    ).padStart(
+                      2,
+                      '0',
+                    )}
+                  </strong>
 
-                <span>
-                  DAYS
-                </span>
-              </div>
-            )}
+                  <span>
+                    DAYS
+                  </span>
+                </div>
+              )}
 
             <div>
               <strong>
@@ -3657,24 +3767,26 @@ function getRemaining(
   return {
     days: Math.floor(
       totalSeconds /
-        86400,
+      86400,
     ),
 
     hours: Math.floor(
       (totalSeconds %
         86400) /
-        3600,
+      3600,
     ),
 
     minutes: Math.floor(
       (totalSeconds %
         3600) /
-        60,
+      60,
     ),
 
     seconds:
       totalSeconds % 60,
   }
 }
+
+
 
 export default Services

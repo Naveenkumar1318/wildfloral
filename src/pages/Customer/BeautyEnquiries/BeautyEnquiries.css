@@ -1824,3 +1824,323 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* =========================================================
+   PREMIUM ENQUIRIES SURFACE
+========================================================= */
+
+.beauty-enquiries {
+  max-width: 1320px;
+  padding: 34px 36px 70px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(214, 234, 211, 0.62), transparent 30rem),
+    linear-gradient(180deg, #f8fbf7 0%, #f1f7f0 100%);
+}
+
+.beauty-enquiries-header {
+  position: relative;
+  min-height: 228px;
+  margin-bottom: 22px;
+  padding: 36px 38px;
+  overflow: hidden;
+  align-items: center;
+  border: 1px solid #d5e4d3;
+  border-radius: 25px;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.98), rgba(246, 251, 245, 0.94)),
+    #ffffff;
+  box-shadow: 0 18px 45px rgba(42, 79, 52, 0.09);
+}
+
+.beauty-enquiries-header::after {
+  position: absolute;
+  right: -115px;
+  bottom: -170px;
+  width: 410px;
+  height: 410px;
+  border: 1px solid rgba(100, 143, 93, 0.15);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 27px rgba(100, 143, 93, 0.045),
+    0 0 0 58px rgba(100, 143, 93, 0.03);
+  content: '';
+  pointer-events: none;
+}
+
+.beauty-enquiries-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.beauty-enquiries-back-button {
+  border-color: #d3e1d1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.beauty-enquiries-eyebrow {
+  color: #648858;
+}
+
+.beauty-enquiries-heading h1 {
+  color: #1c3529;
+  letter-spacing: -2.8px;
+}
+
+.beauty-enquiries-heading h1 span {
+  color: #4b7f43;
+}
+
+.beauty-enquiries-heading p {
+  max-width: 590px;
+  margin-top: 14px;
+  color: #687a6e;
+}
+
+.beauty-enquiries-count {
+  border-color: #d5e4d3;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(42, 79, 52, 0.08);
+}
+
+.beauty-enquiries-count strong {
+  color: #4f8045;
+}
+
+.beauty-enquiries-filters {
+  gap: 7px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border-color: #d5e4d3;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 22px rgba(42, 79, 52, 0.045);
+}
+
+.beauty-enquiries-filters button {
+  min-height: 38px;
+  border-radius: 10px;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.beauty-enquiries-filters button:hover {
+  transform: translateY(-1px);
+  background: #f0f7ef;
+}
+
+.beauty-enquiries-filters button.active {
+  background: linear-gradient(135deg, #4a7f42, #35692f);
+  color: #ffffff;
+  box-shadow: 0 7px 16px rgba(57, 106, 50, 0.16);
+}
+
+.beauty-enquiries-filters button.active strong {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.beauty-enquiries-state,
+.beauty-enquiries-empty {
+  border-color: #d7e5d5;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 30px rgba(42, 79, 52, 0.055);
+}
+
+.beauty-enquiries-list {
+  gap: 16px;
+}
+
+.beauty-enquiry-card {
+  border-color: #d8e6d6;
+  border-radius: 19px;
+  box-shadow: 0 9px 27px rgba(44, 65, 52, 0.06);
+}
+
+.beauty-enquiry-card:hover {
+  border-color: #b7ceb3;
+  box-shadow: 0 16px 36px rgba(44, 65, 52, 0.1);
+  transform: translateY(-2px);
+}
+
+.beauty-enquiry-card-header {
+  padding: 17px 23px;
+  border-bottom-color: #e4ede2;
+  background: linear-gradient(180deg, #ffffff, #fbfdfb);
+}
+
+.beauty-enquiry-status {
+  min-height: 30px;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 10px rgba(44, 65, 52, 0.045);
+}
+
+.beauty-enquiry-card-body {
+  padding: 22px 23px 23px;
+}
+
+.beauty-enquiry-index {
+  border-color: #cfe0cc;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #eef7eb, #e1efdd);
+  color: #4f8045;
+}
+
+.beauty-enquiry-main h2 {
+  color: #203a2c;
+}
+
+.beauty-enquiry-status-message {
+  border-radius: 12px;
+  background: #f6faf4;
+}
+
+.beauty-enquiry-info-card {
+  border-color: #d9e6d7;
+  border-radius: 14px;
+  background: #f8fbf7;
+}
+
+.beauty-enquiry-info-card > div {
+  border-right-color: #d9e6d7;
+}
+
+.beauty-enquiry-total-value {
+  color: #4d8044 !important;
+}
+
+.beauty-enquiry-card-footer {
+  border-top-color: #e2ebe0;
+  background: #fbfdfb;
+}
+
+.beauty-enquiry-summary span {
+  border-color: #dce8da;
+  background: #f1f7ef;
+}
+
+.beauty-enquiry-view-button {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4a8061, #286448);
+  box-shadow: 0 7px 16px rgba(37, 116, 87, 0.14);
+}
+
+.beauty-enquiry-book-button {
+  border-radius: 10px;
+  border-color: #a9c89f;
+  background: #eef7eb;
+}
+
+.beauty-enquiry-pagination-button,
+.beauty-enquiry-pagination-pages button {
+  border-color: #d5e4d3;
+  border-radius: 9px;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.beauty-enquiry-pagination-pages button.active {
+  border-color: #3d7137;
+  background: linear-gradient(135deg, #4a7f42, #35692f);
+}
+
+.beauty-enquiry-modal {
+  border-color: #d4e3d2;
+  border-radius: 24px;
+  box-shadow: 0 35px 90px rgba(20, 36, 27, 0.26);
+}
+
+.beauty-enquiry-modal-header {
+  border-bottom-color: #e1ebe0;
+  background: linear-gradient(118deg, #ffffff, #f7fbf6);
+}
+
+.beauty-enquiry-modal-close {
+  border-color: #d6e4d4;
+}
+
+.beauty-enquiry-modal-top-grid > div,
+.beauty-enquiry-person-card {
+  border-color: #d9e6d7;
+  background: #f7fbf6;
+}
+
+.beauty-enquiry-person-number {
+  background: linear-gradient(145deg, #4d7f45, #315e2e);
+}
+
+.beauty-enquiry-person-services {
+  border-color: #dce8da;
+  box-shadow: 0 8px 20px rgba(44, 65, 52, 0.04);
+}
+
+@media (max-width: 760px) {
+  .beauty-enquiries {
+    padding: 28px 18px 55px;
+  }
+
+  .beauty-enquiries-header {
+    min-height: 0;
+    padding: 28px 24px;
+    border-radius: 21px;
+  }
+
+  .beauty-enquiry-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .beauty-enquiries {
+    padding: 14px 12px 38px;
+  }
+
+  .beauty-enquiries-header {
+    gap: 17px;
+    margin-bottom: 14px;
+    padding: 23px 17px 20px;
+    border-radius: 19px;
+  }
+
+  .beauty-enquiries-heading h1 {
+    font-size: 34px;
+    letter-spacing: -1.8px;
+  }
+
+  .beauty-enquiries-heading p {
+    margin-top: 10px;
+    line-height: 1.55;
+  }
+
+  .beauty-enquiries-count {
+    width: 100%;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    text-align: left;
+  }
+
+  .beauty-enquiries-count strong {
+    margin-top: 0;
+    font-size: 24px;
+  }
+
+  .beauty-enquiries-filters {
+    margin-bottom: 14px;
+    border-radius: 13px;
+    box-shadow: none;
+  }
+
+  .beauty-enquiry-card {
+    border-radius: 15px;
+  }
+}

@@ -1,0 +1,1978 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.fashion-offers-page {
+  min-height: 100vh;
+
+  padding: 42px 30px 60px;
+
+  background: #f5f8fc;
+
+  color: #1d304f;
+
+  box-sizing: border-box;
+}
+
+.fashion-offers-container {
+  width: min(1340px, 100%);
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.fashion-offers-back {
+  display: inline-flex;
+
+  margin-bottom: 28px;
+
+  color: #527092;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.fashion-offers-back:hover {
+  color: #315fd0;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.fashion-offers-page-header {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+.fashion-offers-page-header > div {
+  min-width: 0;
+}
+
+.fashion-offers-page-header > div > span,
+.fashion-offer-form-header > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #315fd0;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
+}
+
+.fashion-offers-page-header h1,
+.fashion-offer-form-header h1 {
+  margin: 0;
+
+  color: #19365b;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 50px;
+
+  line-height: 1.05;
+
+  font-weight: 500;
+}
+
+.fashion-offers-page-header p,
+.fashion-offer-form-header p {
+  max-width: 680px;
+
+  margin: 12px 0 0;
+
+  color: #7890ad;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+.fashion-offers-primary-button {
+  display: inline-flex;
+
+  min-height: 48px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0 23px;
+
+  border-radius: 11px;
+
+  background: #315fd0;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 9px 22px
+    rgba(49, 95, 208, 0.18);
+}
+
+.fashion-offers-primary-button:hover {
+  background: #2855c1;
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.fashion-offers-error,
+.fashion-offer-error {
+  margin-bottom: 22px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #efc7bf;
+
+  border-radius: 10px;
+
+  background: #fff7f5;
+
+  color: #b34f3d;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.fashion-offers-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 20px;
+}
+
+.fashion-offers-stats article {
+  min-width: 0;
+
+  padding: 20px 22px;
+
+  border: 1px solid #d9e3ef;
+
+  border-radius: 14px;
+
+  background: #fff;
+}
+
+.fashion-offers-stats article span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #7890ad;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+.fashion-offers-stats article strong {
+  color: #19365b;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 31px;
+
+  font-weight: 500;
+}
+
+.fashion-offers-stats article.active {
+  border-color: #cce7da;
+}
+
+.fashion-offers-stats article.active strong {
+  color: #17845a;
+}
+
+.fashion-offers-stats article.scheduled {
+  border-color: #d4dff1;
+}
+
+.fashion-offers-stats article.scheduled strong {
+  color: #315fd0;
+}
+
+.fashion-offers-stats article.expired {
+  border-color: #efd7d1;
+}
+
+.fashion-offers-stats article.expired strong {
+  color: #bf5947;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.fashion-offers-toolbar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(280px, 1fr)
+    220px
+    180px;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.fashion-offers-search {
+  position: relative;
+
+  min-width: 0;
+}
+
+.fashion-offers-search > span {
+  position: absolute;
+
+  top: 50%;
+
+  left: 16px;
+
+  transform:
+    translateY(-50%);
+
+  color: #7790ae;
+
+  font-size: 18px;
+
+  pointer-events: none;
+}
+
+.fashion-offers-search input,
+.fashion-offers-toolbar select {
+  width: 100%;
+
+  height: 46px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d5e0ed;
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  color: #304b6e;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 13px;
+}
+
+.fashion-offers-search input {
+  padding: 0 16px 0 43px;
+}
+
+.fashion-offers-toolbar select {
+  padding: 0 14px;
+
+  cursor: pointer;
+}
+
+.fashion-offers-search input:focus,
+.fashion-offers-toolbar select:focus {
+  border-color: #315fd0;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(49, 95, 208, 0.08);
+}
+
+/* =========================================================
+   LIST CARD
+========================================================= */
+
+.fashion-offers-list-card {
+  overflow: hidden;
+
+  border: 1px solid #d9e3ef;
+
+  border-radius: 15px;
+
+  background: #fff;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.fashion-offers-empty {
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 40px;
+
+  text-align: center;
+}
+
+.fashion-offers-empty h2 {
+  margin: 0;
+
+  color: #19365b;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 30px;
+
+  font-weight: 500;
+}
+
+.fashion-offers-empty p {
+  margin: 9px 0 18px;
+
+  color: #7890ad;
+
+  font-size: 13px;
+}
+
+.fashion-offers-empty a {
+  color: #315fd0;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   TABLE
+   DESKTOP = FIT INSIDE CARD
+   MOBILE = HORIZONTAL SWIPE
+========================================================= */
+
+.fashion-offers-table-wrap,
+.fashion-offers-table-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  box-sizing: border-box;
+}
+
+.fashion-offers-table {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  table-layout: fixed;
+
+  box-sizing: border-box;
+}
+
+.fashion-offers-table th {
+  padding: 15px 17px;
+
+  border-bottom: 1px solid #e2e9f1;
+
+  background: #fbfcfe;
+
+  color: #7b90aa;
+
+  text-align: left;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+.fashion-offers-table td {
+  padding: 17px;
+
+  border-bottom: 1px solid #edf1f5;
+
+  vertical-align: middle;
+
+  color: #415a79;
+
+  font-size: 12px;
+}
+
+.fashion-offers-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.fashion-offers-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+/* =========================================================
+   DESKTOP COLUMN WIDTHS
+   Balanced spacing — no cramped columns
+========================================================= */
+
+.fashion-offers-table th:nth-child(1),
+.fashion-offers-table td:nth-child(1) {
+  width: 18%;
+}
+
+.fashion-offers-table th:nth-child(2),
+.fashion-offers-table td:nth-child(2) {
+  width: 10%;
+}
+
+.fashion-offers-table th:nth-child(3),
+.fashion-offers-table td:nth-child(3) {
+  width: 23%;
+}
+
+.fashion-offers-table th:nth-child(4),
+.fashion-offers-table td:nth-child(4) {
+  width: 10%;
+}
+
+.fashion-offers-table th:nth-child(5),
+.fashion-offers-table td:nth-child(5) {
+  width: 8%;
+}
+
+.fashion-offers-table th:nth-child(6),
+.fashion-offers-table td:nth-child(6) {
+  width: 10%;
+}
+
+.fashion-offers-table th:nth-child(7),
+.fashion-offers-table td:nth-child(7) {
+  width: 9%;
+}
+
+.fashion-offers-table th:nth-child(8),
+.fashion-offers-table td:nth-child(8) {
+  width: 12%;
+}
+
+/* =========================================================
+   DESKTOP CELL SPACING
+========================================================= */
+
+.fashion-offers-table th,
+.fashion-offers-table td {
+  box-sizing: border-box;
+  min-width: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.fashion-offers-table th:first-child,
+.fashion-offers-table td:first-child {
+  padding-left: 22px;
+}
+
+.fashion-offers-table th:last-child,
+.fashion-offers-table td:last-child {
+  padding-right: 22px;
+}
+
+/* =========================================================
+   DESKTOP CONTENT
+========================================================= */
+
+.fashion-offer-name,
+.fashion-offer-applies,
+.fashion-offer-actions {
+  min-width: 0;
+  width: 100%;
+}
+
+.fashion-offer-name strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fashion-offer-name small {
+  display: block;
+  margin-top: 6px;
+}
+
+.fashion-offer-applies strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fashion-offer-applies small {
+  display: block;
+  margin-top: 5px;
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   OFFER NAME
+========================================================= */
+
+.fashion-offer-name {
+  min-width: 0;
+
+  display: flex;
+
+  width: 100%;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.fashion-offer-name strong {
+  color: #1d3b60;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-name small {
+  overflow: hidden;
+
+  color: #8497ae;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+.fashion-offer-name > span {
+  width: fit-content;
+
+  padding: 4px 7px;
+
+  border: 1px solid #d8e3f0;
+
+  border-radius: 5px;
+
+  background: #f5f8fc;
+
+  color: #315fd0;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.4px;
+}
+
+/* =========================================================
+   TARGET
+========================================================= */
+
+.fashion-offer-target {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+.fashion-offer-target.all {
+  background: #eef4ff;
+
+  color: #315fd0;
+}
+
+.fashion-offer-target.category {
+  background: #f1f7f1;
+
+  color: #3d805b;
+}
+
+.fashion-offer-target.subcategory {
+  background: #fff5e9;
+
+  color: #b87822;
+}
+
+.fashion-offer-target.design {
+  background: #f6efff;
+
+  color: #7650a8;
+}
+
+/* =========================================================
+   APPLIES
+========================================================= */
+
+.fashion-offer-applies {
+  display: flex;
+
+  width: 100%;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.fashion-offer-applies strong {
+  overflow: hidden;
+
+  color: #344e6e;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-applies small {
+  color: #899bb0;
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+/* =========================================================
+   DISCOUNT
+========================================================= */
+
+.fashion-offer-discount {
+  color: #315fd0;
+
+  white-space: nowrap;
+
+  font-size: 13px;
+}
+
+.fashion-offer-priority {
+  color: #36516f;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.fashion-offer-date {
+  color: #687f9d;
+
+  white-space: nowrap;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.fashion-offer-status {
+  display: inline-flex;
+
+  min-width: 92px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 6px 9px;
+
+  border: 0;
+
+  border-radius: 20px;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-status i {
+  width: 6px;
+
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+.fashion-offer-status.active {
+  background: #eaf7f0;
+
+  color: #17845a;
+}
+
+.fashion-offer-status.scheduled {
+  background: #eef4ff;
+
+  color: #315fd0;
+}
+
+.fashion-offer-status.expired {
+  background: #fff0ec;
+
+  color: #bf5947;
+}
+
+.fashion-offer-status.inactive {
+  background: #f0f2f5;
+
+  color: #7d8998;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.fashion-offer-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 8px;
+
+  width: 100%;
+  min-width: 0;
+
+  white-space: nowrap;
+}
+
+.fashion-offer-actions button {
+  flex: 0 0 auto;
+
+  white-space: nowrap;
+
+  padding: 7px 10px;
+
+  border: 1px solid #d5e0ed;
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #426080;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-actions button:hover {
+  border-color: #315fd0;
+
+  color: #315fd0;
+}
+
+.fashion-offer-actions button.delete {
+  border-color: #efd0ca;
+
+  color: #b65343;
+}
+
+.fashion-offer-actions button.delete:hover {
+  background: #fff6f4;
+}
+
+/* =========================================================
+   LIST FOOTER
+========================================================= */
+
+.fashion-offers-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 15px 17px;
+
+  border-top: 1px solid #e4eaf1;
+
+  color: #8093aa;
+
+  font-size: 11px;
+}
+
+.fashion-offers-footer strong {
+  color: #415a79;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.fashion-offers-pagination,
+.fashion-selection-pagination {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.fashion-offers-pagination button,
+.fashion-selection-pagination button {
+  min-width: 32px;
+
+  height: 32px;
+
+  padding: 0 9px;
+
+  border: 1px solid #d7e1ec;
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #627994;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.fashion-offers-pagination button:hover,
+.fashion-selection-pagination button:hover {
+  border-color: #315fd0;
+
+  color: #315fd0;
+}
+
+.fashion-offers-pagination button.active {
+  border-color: #315fd0;
+
+  background: #315fd0;
+
+  color: #fff;
+}
+
+.fashion-offers-pagination button:disabled,
+.fashion-selection-pagination button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.fashion-selection-pagination {
+  justify-content: flex-end;
+
+  margin-top: 14px;
+}
+
+.fashion-selection-pagination span {
+  padding: 0 8px;
+
+  color: #7890ad;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   FORM SHELL
+========================================================= */
+
+.fashion-offer-form-shell {
+  width: min(1180px, 100%);
+
+  margin: 0 auto;
+}
+
+.fashion-offer-form-header {
+  padding-bottom: 30px;
+}
+
+.fashion-offer-form-topline {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 35px;
+}
+
+.fashion-offer-form-topline a {
+  color: #58718e;
+
+  text-decoration: none;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.fashion-offer-form-topline a:hover {
+  color: #315fd0;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.fashion-offer-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.fashion-offer-section {
+  padding: 30px 32px;
+
+  border: 1px solid #d9e3ef;
+
+  border-radius: 15px;
+
+  background: #fff;
+}
+
+.fashion-offer-section-heading {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 14px;
+
+  margin-bottom: 24px;
+}
+
+.fashion-offer-section-heading > span {
+  display: inline-flex;
+
+  width: 31px;
+
+  height: 31px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 7px;
+
+  background: #eef4ff;
+
+  color: #315fd0;
+
+  font-size: 10px;
+
+  font-weight: 900;
+}
+
+.fashion-offer-section-heading small {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #315fd0;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.1px;
+}
+
+.fashion-offer-section-heading h2 {
+  margin: 0;
+
+  color: #19365b;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 27px;
+
+  font-weight: 500;
+}
+
+.fashion-offer-section-description {
+  margin: -10px 0 20px;
+
+  color: #7890ad;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.fashion-offer-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.fashion-offer-field {
+  display: flex;
+
+  min-width: 0;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.fashion-offer-field.full {
+  grid-column: 1 / -1;
+}
+
+.fashion-offer-field > span {
+  color: #4d6684;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-field > input,
+.fashion-offer-field > textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d4dfeb;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #334e6e;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 12px;
+}
+
+.fashion-offer-field > input {
+  height: 43px;
+
+  padding: 0 12px;
+}
+
+.fashion-offer-field > textarea {
+  min-height: 105px;
+
+  padding: 12px;
+
+  resize: vertical;
+}
+
+.fashion-offer-field > input:focus,
+.fashion-offer-field > textarea:focus {
+  border-color: #315fd0;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(49, 95, 208, 0.08);
+}
+
+.fashion-offer-field > small {
+  color: #8a9caf;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   TARGET OPTIONS
+========================================================= */
+
+.fashion-offer-target-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.fashion-offer-target-options button {
+  min-height: 145px;
+
+  padding: 22px 18px;
+
+  border: 1px solid #d8e3ef;
+
+  border-radius: 13px;
+
+  background: #fff;
+
+  color: #31506f;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.fashion-offer-target-options button:hover {
+  border-color: #9db7dd;
+}
+
+.fashion-offer-target-options button.selected {
+  border-color: #315fd0;
+
+  background: #f3f6ff;
+
+  box-shadow:
+    0 0 0 1px
+    rgba(49, 95, 208, 0.08);
+}
+
+.fashion-offer-target-options strong {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #1d3b60;
+
+  font-size: 13px;
+}
+
+.fashion-offer-target-options span {
+  display: block;
+
+  margin-bottom: 13px;
+
+  color: #7890ad;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+.fashion-offer-target-options small {
+  display: block;
+
+  color: #315fd0;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   SELECTION BLOCK
+========================================================= */
+
+.fashion-selection-block {
+  margin-top: 22px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #e6ebf1;
+}
+
+.fashion-selection-heading {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 15px;
+}
+
+.fashion-selection-heading > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.fashion-selection-heading strong {
+  color: #314c6c;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+.fashion-selection-heading small {
+  color: #8295ab;
+
+  font-size: 10px;
+}
+
+.fashion-selection-heading > span {
+  color: #315fd0;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   SELECTION GRID
+========================================================= */
+
+.fashion-selection-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.fashion-selection-grid button {
+  min-height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  border: 1px solid #d8e3ef;
+
+  border-radius: 9px;
+
+  background: #fff;
+
+  color: #405a78;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.fashion-selection-grid button:hover {
+  border-color: #9db7dd;
+}
+
+.fashion-selection-grid button.selected {
+  border-color: #315fd0;
+
+  background: #f3f6ff;
+}
+
+.fashion-checkbox {
+  width: 26px;
+
+  height: 26px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid #cfdae7;
+
+  border-radius: 6px;
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 900;
+}
+
+.fashion-selection-grid button.selected
+.fashion-checkbox {
+  border-color: #315fd0;
+
+  background: #315fd0;
+}
+
+.fashion-selection-grid button > div {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.fashion-selection-grid button strong {
+  overflow: hidden;
+
+  color: #304c6c;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 11px;
+}
+
+.fashion-selection-grid button small {
+  color: #8a9caf;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   DESIGN MODE
+========================================================= */
+
+.fashion-design-mode {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.fashion-design-mode button {
+  padding: 18px;
+
+  border: 1px solid #d8e3ef;
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.fashion-design-mode button.selected {
+  border-color: #315fd0;
+
+  background: #f3f6ff;
+}
+
+.fashion-design-mode strong {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #304c6c;
+
+  font-size: 12px;
+}
+
+.fashion-design-mode span {
+  color: #8295ab;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   DISCOUNT
+========================================================= */
+
+.fashion-discount-toggle {
+  display: flex;
+
+  height: 43px;
+
+  border: 1px solid #d4dfeb;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+}
+
+.fashion-discount-toggle button {
+  flex: 1;
+
+  border: 0;
+
+  background: #fff;
+
+  color: #7890ad;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 800;
+}
+
+.fashion-discount-toggle button.selected {
+  background: #315fd0;
+
+  color: #fff;
+}
+
+.fashion-discount-input {
+  position: relative;
+}
+
+.fashion-discount-input input {
+  width: 100%;
+
+  height: 43px;
+
+  box-sizing: border-box;
+
+  padding: 0 45px 0 12px;
+
+  border: 1px solid #d4dfeb;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  color: #334e6e;
+
+  font-family: inherit;
+
+  font-size: 12px;
+}
+
+.fashion-discount-input input:focus {
+  border-color: #315fd0;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(49, 95, 208, 0.08);
+}
+
+.fashion-discount-input span {
+  position: absolute;
+
+  top: 0;
+
+  right: 0;
+
+  width: 42px;
+
+  height: 43px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-left: 1px solid #d4dfeb;
+
+  color: #7890ad;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.fashion-offer-active-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-top: 24px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #e5ebf1;
+}
+
+.fashion-offer-active-row > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.fashion-offer-active-row strong {
+  color: #304c6c;
+
+  font-size: 12px;
+}
+
+.fashion-offer-active-row span {
+  color: #8295ab;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.fashion-switch {
+  position: relative;
+
+  width: 52px;
+
+  height: 30px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 20px;
+
+  background: #d6dee8;
+
+  cursor: pointer;
+}
+
+.fashion-switch span {
+  position: absolute;
+
+  top: 4px;
+
+  left: 4px;
+
+  width: 22px;
+
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  box-shadow:
+    0 2px 5px
+    rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease;
+}
+
+.fashion-switch.active {
+  background: #315fd0;
+}
+
+.fashion-switch.active span {
+  transform:
+    translateX(22px);
+}
+
+/* =========================================================
+   FORM ACTIONS
+========================================================= */
+
+.fashion-offer-form-actions {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 5px 0 20px;
+}
+
+.fashion-offer-form-actions button {
+  min-width: 145px;
+
+  height: 47px;
+
+  padding: 0 18px;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+.fashion-offer-form-actions .secondary {
+  border: 1px solid #d4deea;
+
+  background: #fff;
+
+  color: #596f8b;
+}
+
+.fashion-offer-form-actions .primary {
+  border: 1px solid #315fd0;
+
+  background: #315fd0;
+
+  color: #fff;
+
+  box-shadow:
+    0 8px 18px
+    rgba(49, 95, 208, 0.15);
+}
+
+.fashion-offer-form-actions button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.fashion-offer-loading {
+  min-height: 260px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #d9e3ef;
+
+  border-radius: 15px;
+
+  background: #fff;
+
+  color: #7890ad;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.fashion-offers-page
+button:focus-visible,
+.fashion-offers-page
+input:focus-visible,
+.fashion-offers-page
+select:focus-visible,
+.fashion-offers-page
+textarea:focus-visible,
+.fashion-offers-page
+a:focus-visible {
+  outline: 2px solid #315fd0;
+
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+  .fashion-offers-page-header h1,
+  .fashion-offer-form-header h1 {
+    font-size: 43px;
+  }
+
+  .fashion-offers-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .fashion-offer-target-options {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .fashion-selection-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE TABLE
+   KEEP HORIZONTAL SWIPE
+========================================================= */
+
+@media (max-width: 768px) {
+  .fashion-offers-table-wrap,
+  .fashion-offers-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow-x: auto !important;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+
+    scrollbar-width: thin;
+  }
+
+  .fashion-offers-table {
+    width: 1050px !important;
+    min-width: 1050px !important;
+    max-width: none !important;
+
+    table-layout: fixed;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 800px) {
+  .fashion-offers-page {
+    padding: 25px 17px 45px;
+  }
+
+  .fashion-offers-page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .fashion-offers-primary-button {
+    width: 100%;
+  }
+
+  .fashion-offers-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-offer-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-offer-field.full {
+    grid-column: auto;
+  }
+
+  .fashion-offer-section {
+    padding: 23px 20px;
+  }
+
+  .fashion-offer-form-topline {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    margin-bottom: 27px;
+  }
+
+  .fashion-selection-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+  .fashion-offers-page {
+    padding: 20px 13px 35px;
+  }
+
+  .fashion-offers-page-header h1,
+  .fashion-offer-form-header h1 {
+    font-size: 34px;
+  }
+
+  .fashion-offers-page-header p,
+  .fashion-offer-form-header p {
+    font-size: 12px;
+  }
+
+  .fashion-offers-stats {
+    gap: 8px;
+  }
+
+  .fashion-offers-stats article {
+    padding: 15px;
+  }
+
+  .fashion-offers-stats article strong {
+    font-size: 25px;
+  }
+
+  .fashion-offer-target-options {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-selection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-design-mode {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-offer-section-heading h2 {
+    font-size: 24px;
+  }
+
+  .fashion-selection-heading {
+    flex-direction: column;
+  }
+
+  .fashion-offer-active-row {
+    align-items: flex-start;
+  }
+
+  .fashion-offer-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .fashion-offer-form-actions button {
+    width: 100%;
+  }
+
+  .fashion-offers-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding: 15px;
+
+    gap: 14px;
+  }
+
+  .fashion-offers-pagination {
+    width: 100%;
+
+    justify-content: flex-end;
+
+    overflow-x: auto;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .fashion-offers-page *,
+  .fashion-offers-page *::before,
+  .fashion-offers-page *::after {
+    animation: none !important;
+
+    transition: none !important;
+
+    scroll-behavior: auto !important;
+  }
+}

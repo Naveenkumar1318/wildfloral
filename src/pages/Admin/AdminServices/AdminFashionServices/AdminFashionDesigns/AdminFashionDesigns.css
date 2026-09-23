@@ -1,0 +1,2274 @@
+/* =========================================================
+   PAGE
+========================================================= */
+
+.fashion-designs-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  padding: 28px 38px 55px;
+
+  background: #f5f8fc;
+  color: #172a46;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.fashion-designs-shell {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.fashion-designs-back {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 18px;
+
+  color: #486383;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: color 0.18s ease;
+}
+
+.fashion-designs-back:hover {
+  color: #2f5fd0;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.fashion-designs-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 25px;
+}
+
+.fashion-design-heading {
+  min-width: 0;
+}
+
+.fashion-design-eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #2f5fd0;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.fashion-design-heading h1 {
+  margin: 0;
+
+  color: #172a46;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 42px;
+  font-weight: 500;
+
+  line-height: 1.05;
+}
+
+.fashion-design-heading p {
+  max-width: 600px;
+
+  margin: 10px 0 0;
+
+  color: #71839c;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.fashion-design-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+.fashion-design-header-actions button {
+  min-height: 40px;
+
+  padding: 0 15px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.fashion-design-secondary {
+  border: 1px solid #d5e0ed;
+  background: #ffffff;
+  color: #365478;
+}
+
+.fashion-design-secondary:hover {
+  border-color: #aec3df;
+  background: #f7faff;
+  color: #2f5fd0;
+}
+
+.fashion-design-primary {
+  border: 1px solid #2f5fd0;
+  background: #2f5fd0;
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 16px rgba(47, 95, 208, 0.18);
+}
+
+.fashion-design-primary:hover {
+  background: #264fae;
+  border-color: #264fae;
+
+  box-shadow:
+    0 9px 20px rgba(47, 95, 208, 0.24);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.fashion-design-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+.fashion-design-stat {
+  min-width: 0;
+  min-height: 82px;
+
+  padding: 16px 18px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d9e3ef;
+  border-radius: 10px;
+
+  background: #ffffff;
+}
+
+.fashion-design-stat span {
+  display: block;
+
+  margin-bottom: 11px;
+
+  color: #73859e;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.fashion-design-stat strong {
+  color: #182c48;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.fashion-design-stat.active {
+  border-color: #cfe8db;
+}
+
+.fashion-design-stat.active strong {
+  color: #198052;
+}
+
+.fashion-design-stat.inactive {
+  border-color: #ead9d6;
+}
+
+.fashion-design-stat.inactive strong {
+  color: #b35b50;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.fashion-design-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+  padding: 11px 14px;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.fashion-design-alert button {
+  width: 25px;
+  height: 25px;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.fashion-design-alert.error {
+  border: 1px solid #efc9c4;
+  background: #fff7f6;
+  color: #a9463d;
+}
+
+.fashion-design-alert.error button {
+  color: #a9463d;
+}
+
+.fashion-design-alert.success {
+  border: 1px solid #cde7d9;
+  background: #f3fbf7;
+  color: #187b4f;
+}
+
+.fashion-design-alert.success button {
+  color: #187b4f;
+}
+
+
+/* =========================================================
+   FILTER TOOLBAR
+========================================================= */
+
+.fashion-design-toolbar {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1fr)
+    190px
+    190px
+    150px;
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+.fashion-design-search {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+  height: 42px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  border: 1px solid #d7e1ed;
+  border-radius: 8px;
+
+  background: #ffffff;
+}
+
+.fashion-design-search span {
+  margin-right: 9px;
+  color: #6f83a0;
+  font-size: 15px;
+}
+
+.fashion-design-search input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #263d5c;
+
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.fashion-design-search input::placeholder {
+  color: #9aa9bb;
+}
+
+.fashion-design-toolbar select {
+  width: 100%;
+  height: 42px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #d7e1ed;
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #405875;
+
+  font-family: inherit;
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.fashion-design-toolbar select:focus,
+.fashion-design-search:focus-within {
+  border-color: #9fb8df;
+
+  box-shadow:
+    0 0 0 3px rgba(47, 95, 208, 0.07);
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.fashion-design-table-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d8e2ee;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 28px rgba(28, 49, 77, 0.05);
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.fashion-design-table-wrapper {
+  width: 100%;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.fashion-design-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.fashion-design-table th {
+  height: 54px;
+
+  padding: 0 14px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #dce5ef;
+
+  background: #f7f9fc;
+
+  color: #6d819d;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.13em;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLE CELLS
+========================================================= */
+
+.fashion-design-table td {
+  height: 82px;
+
+  padding: 8px 14px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #e8edf3;
+
+  vertical-align: middle;
+
+  overflow: hidden;
+}
+
+.fashion-design-table tbody tr {
+  transition: background 0.16s ease;
+}
+
+.fashion-design-table tbody tr:hover {
+  background: #fbfcff;
+}
+
+.fashion-design-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+   TOTAL = 100%
+========================================================= */
+
+/* Service */
+.fashion-design-table th:nth-child(1),
+.fashion-design-table td:nth-child(1) {
+  width: 18%;
+}
+
+/* Main category */
+.fashion-design-table th:nth-child(2),
+.fashion-design-table td:nth-child(2) {
+  width: 13%;
+}
+
+/* Sub category */
+.fashion-design-table th:nth-child(3),
+.fashion-design-table td:nth-child(3) {
+  width: 15%;
+}
+
+/* Status */
+.fashion-design-table th:nth-child(5),
+.fashion-design-table td:nth-child(5) {
+  width: 10%;
+}
+
+/* Actions */
+.fashion-design-table th:nth-child(6),
+.fashion-design-table td:nth-child(6) {
+  width: 10%;
+}
+
+
+/* =========================================================
+   SERVICE CELL
+========================================================= */
+
+.fashion-table-service {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: 11px;
+}
+
+.fashion-table-image {
+  width: 66px;
+  height: 66px;
+
+  flex: 0 0 66px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dbe4ef;
+  border-radius: 10px;
+
+  background: #f4f7fb;
+}
+
+.fashion-table-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  /*
+   * IMPORTANT:
+   * contain prevents uploaded fashion images
+   * from being cropped or zoomed.
+   */
+  object-fit: contain;
+
+  object-position: center;
+
+  background: #ffffff;
+}
+
+.fashion-table-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: #8da0b8;
+
+  font-size: 20px;
+}
+
+.fashion-table-service-info {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap: 5px;
+}
+
+.fashion-table-service-info strong {
+  overflow: hidden;
+
+  color: #182c48;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fashion-table-service-info span {
+  display: -webkit-box;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+  color: #8293aa;
+
+  font-size: 9px;
+  line-height: 1.45;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+
+/* =========================================================
+   MAIN CATEGORY
+========================================================= */
+
+.fashion-table-category {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 100%;
+
+  min-height: 29px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  background: #edf3fb;
+  color: #3b5d86;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   SUBCATEGORY
+========================================================= */
+
+.fashion-table-subcategory {
+  display: block;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+  color: #314b6d;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   SIZE / STOCK
+========================================================= */
+
+.fashion-table-size {
+  color: #1d3555;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.fashion-table-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  min-height: 29px;
+
+  padding: 0 10px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+.fashion-table-status i {
+  display: block;
+
+  width: 6px;
+  height: 6px;
+
+  flex: 0 0 6px;
+
+  border-radius: 50%;
+}
+
+.fashion-table-status.active {
+  background: #eaf7f0;
+  color: #188052;
+}
+
+.fashion-table-status.active i {
+  background: #1d9b66;
+}
+
+.fashion-table-status.inactive {
+  background: #fff1ef;
+  color: #ad5046;
+}
+
+.fashion-table-status.inactive i {
+  background: #c9655b;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.fashion-table-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  width: 100%;
+}
+
+.fashion-table-actions button {
+  min-width: 55px;
+  height: 34px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.fashion-table-edit {
+  border: 1px solid #cbd9ea;
+  color: #2f5fd0;
+}
+
+.fashion-table-edit:hover {
+  border-color: #9db7dd;
+  background: #f4f7fd;
+}
+
+.fashion-table-delete {
+  border: 1px solid #efc8c3;
+  color: #b44c43;
+}
+
+.fashion-table-delete:hover {
+  border-color: #dfaaa4;
+  background: #fff6f5;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.fashion-design-empty {
+  min-height: 350px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 35px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+.fashion-design-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 14px;
+
+  border: 1px solid #d9e3ef;
+  border-radius: 50%;
+
+  background: #f4f7fb;
+  color: #2f5fd0;
+
+  font-size: 20px;
+}
+
+.fashion-design-empty h2 {
+  margin: 0;
+
+  color: #1a2d49;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.fashion-design-empty p {
+  max-width: 420px;
+
+  margin: 9px 0 18px;
+
+  color: #7b8da5;
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.fashion-design-loading {
+  min-height: 60vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #70839d;
+
+  font-size: 11px;
+}
+
+.fashion-design-spinner {
+  width: 30px;
+  height: 30px;
+
+  margin-bottom: 12px;
+
+  border: 3px solid #dce5f1;
+  border-top-color: #2f5fd0;
+
+  border-radius: 50%;
+
+  animation:
+    fashionDesignSpin
+    0.8s linear infinite;
+}
+
+@keyframes fashionDesignSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.fashion-design-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 14px 17px;
+
+  border-top: 1px solid #e1e8f0;
+
+  background: #ffffff;
+}
+
+.fashion-design-pagination > span {
+  color: #7d8fa7;
+  font-size: 9px;
+}
+
+.fashion-design-pagination > div {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.fashion-design-pagination button {
+  min-width: 34px;
+  height: 32px;
+
+  padding: 0 8px;
+
+  border: 1px solid #d9e2ed;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #657993;
+
+  font-family: inherit;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.fashion-design-pagination
+  button:hover:not(:disabled) {
+  border-color: #b7cae5;
+  color: #2f5fd0;
+}
+
+.fashion-design-pagination
+  button.active {
+  border-color: #2f5fd0;
+  background: #2f5fd0;
+  color: #ffffff;
+}
+
+.fashion-design-pagination
+  button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.fashion-design-modal-backdrop {
+  position: fixed;
+
+  z-index: 1000;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(18, 31, 51, 0.48);
+
+  backdrop-filter: blur(4px);
+}
+
+.fashion-design-confirm {
+  width: min(100%, 430px);
+
+  padding: 28px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dbe4ef;
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 24px 70px rgba(16, 32, 57, 0.2);
+}
+
+.fashion-design-modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 15px;
+
+  border-radius: 50%;
+
+  background: #fff2f0;
+  color: #b4483e;
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.fashion-design-confirm h2 {
+  margin: 0;
+
+  color: #182a44;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.fashion-design-confirm p {
+  margin: 9px 0 23px;
+
+  color: #74869f;
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.fashion-design-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 8px;
+}
+
+.fashion-design-modal-actions button {
+  min-height: 38px;
+
+  padding: 0 16px;
+
+  border: 1px solid #d7e1ed;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #526a87;
+
+  font-family: inherit;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.fashion-design-modal-actions
+  button.danger {
+  border-color: #d9675b;
+
+  background: #c95449;
+
+  color: #ffffff;
+}
+
+.fashion-design-modal-actions
+  button.danger:hover {
+  background: #b9473d;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .fashion-designs-page {
+    padding: 24px 24px 45px;
+  }
+
+  .fashion-designs-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .fashion-design-header-actions {
+    width: 100%;
+
+    justify-content: flex-start;
+  }
+
+  .fashion-design-toolbar {
+    grid-template-columns:
+      minmax(0, 1fr)
+      repeat(3, minmax(120px, 1fr));
+  }
+
+  /*
+   * Slightly smaller table spacing so the complete
+   * table including Delete remains visible.
+   */
+  .fashion-design-table th {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .fashion-design-table td {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .fashion-table-image {
+    width: 58px;
+    height: 58px;
+
+    flex-basis: 58px;
+  }
+
+  .fashion-table-service {
+    gap: 9px;
+  }
+
+  .fashion-table-actions {
+    gap: 5px;
+  }
+
+  .fashion-table-actions button {
+    min-width: 48px;
+
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+  .fashion-designs-page {
+    padding: 18px 14px 35px;
+  }
+
+  .fashion-designs-back {
+    margin-bottom: 15px;
+  }
+
+  .fashion-design-heading h1 {
+    font-size: 34px;
+  }
+
+  .fashion-design-heading p {
+    font-size: 11px;
+  }
+
+
+  /* -------------------------------------------------------
+     HEADER BUTTONS
+  ------------------------------------------------------- */
+
+  .fashion-design-header-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    width: 100%;
+
+    gap: 7px;
+  }
+
+  .fashion-design-header-actions button {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 0 8px;
+
+    font-size: 9px;
+  }
+
+  .fashion-design-header-actions
+    .fashion-design-primary {
+    grid-column: 1 / -1;
+  }
+
+
+  /* -------------------------------------------------------
+     STATS
+  ------------------------------------------------------- */
+
+  .fashion-design-stats {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .fashion-design-stat {
+    min-height: 76px;
+
+    padding: 14px;
+  }
+
+  .fashion-design-stat span {
+    font-size: 8px;
+  }
+
+  .fashion-design-stat strong {
+    font-size: 23px;
+  }
+
+
+  /* -------------------------------------------------------
+     FILTERS
+  ------------------------------------------------------- */
+
+  .fashion-design-toolbar {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .fashion-design-search {
+    grid-column: 1 / -1;
+  }
+
+
+  /* -------------------------------------------------------
+     TABLE CARD
+  ------------------------------------------------------- */
+
+  .fashion-design-table-card {
+    border-radius: 11px;
+  }
+
+  /*
+   * IMPORTANT:
+   * No horizontal scrolling on mobile.
+   */
+  .fashion-design-table-wrapper {
+    width: 100%;
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE TABLE
+     Convert table rows into compact cards.
+  ------------------------------------------------------- */
+
+  .fashion-design-table {
+    width: 100%;
+
+    display: block;
+
+    table-layout: auto;
+  }
+
+  .fashion-design-table thead {
+    display: none;
+  }
+
+  .fashion-design-table tbody {
+    display: block;
+
+    width: 100%;
+  }
+
+  .fashion-design-table tbody tr {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    border-bottom: 1px solid #e8edf3;
+
+    background: #ffffff;
+  }
+
+  .fashion-design-table tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .fashion-design-table td {
+    width: auto !important;
+
+    height: auto;
+
+    min-width: 0;
+
+    padding: 7px 5px;
+
+    border: 0;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     SERVICE
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(1) {
+    grid-column: 1 / -1;
+
+    padding-top: 0;
+    padding-bottom: 12px;
+  }
+
+  .fashion-table-service {
+    width: 100%;
+
+    gap: 11px;
+  }
+
+  .fashion-table-image {
+    width: 64px;
+    height: 64px;
+
+    flex-basis: 64px;
+
+    border-radius: 9px;
+  }
+
+  .fashion-table-service-info {
+    flex: 1;
+
+    min-width: 0;
+  }
+
+  .fashion-table-service-info strong {
+    font-size: 12px;
+  }
+
+  .fashion-table-service-info span {
+    font-size: 9px;
+  }
+
+
+  /* -------------------------------------------------------
+     MAIN CATEGORY
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(2)::before {
+    content: "MAIN CATEGORY";
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8393a8;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+  }
+
+
+  /* -------------------------------------------------------
+     SUB CATEGORY
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(3)::before {
+    content: "SUB CATEGORY";
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8393a8;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+  }
+
+
+  /* -------------------------------------------------------
+     TOTAL SIZE
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(4)::before {
+    content: "SIZE / STOCK";
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8393a8;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+  }
+
+  .fashion-table-size {
+    font-size: 17px;
+  }
+
+
+  /* -------------------------------------------------------
+     STATUS
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(5)::before {
+    content: "STATUS";
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #8393a8;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+  }
+
+  .fashion-table-status {
+    min-height: 27px;
+
+    padding: 0 9px;
+
+    font-size: 8px;
+  }
+
+
+  /* -------------------------------------------------------
+     ACTIONS
+  ------------------------------------------------------- */
+
+  .fashion-design-table td:nth-child(6) {
+    grid-column: 1 / -1;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #edf1f5;
+  }
+
+  .fashion-design-table td:nth-child(6)::before {
+    content: "ACTIONS";
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #8393a8;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+  }
+
+  .fashion-table-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    width: 100%;
+
+    gap: 7px;
+  }
+
+  .fashion-table-actions button {
+    width: 100%;
+
+    height: 36px;
+
+    min-width: 0;
+
+    font-size: 9px;
+  }
+
+
+  /* -------------------------------------------------------
+     PAGINATION
+  ------------------------------------------------------- */
+
+  .fashion-design-pagination {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .fashion-design-pagination > div {
+    width: 100%;
+
+    justify-content: flex-end;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .fashion-designs-page {
+    padding: 15px 10px 30px;
+  }
+
+  .fashion-design-heading h1 {
+    font-size: 30px;
+  }
+
+
+  /* Header */
+  .fashion-design-header-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-design-header-actions
+    .fashion-design-primary {
+    grid-column: auto;
+  }
+
+
+  /* Filters */
+  .fashion-design-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .fashion-design-search {
+    grid-column: auto;
+  }
+
+
+  /* Stats */
+  .fashion-design-stats {
+    gap: 6px;
+  }
+
+  .fashion-design-stat {
+    padding: 12px;
+  }
+
+  .fashion-design-stat strong {
+    font-size: 21px;
+  }
+
+
+  /* Mobile row */
+  .fashion-design-table tbody tr {
+    padding: 12px;
+  }
+
+  .fashion-table-image {
+    width: 58px;
+    height: 58px;
+
+    flex-basis: 58px;
+  }
+
+  .fashion-table-service-info strong {
+    font-size: 11px;
+  }
+
+  .fashion-table-service-info span {
+    font-size: 8px;
+  }
+
+  .fashion-table-category {
+    font-size: 9px;
+  }
+
+  .fashion-table-subcategory {
+    font-size: 9px;
+  }
+
+  .fashion-table-size {
+    font-size: 16px;
+  }
+}
+/* =========================================================
+   MOBILE TABLE — DESKTOP STRUCTURE + HORIZONTAL SWIPE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  /* ---------------------------------------------------------
+     TABLE WRAPPER
+     The page itself must NOT become horizontally scrollable.
+     Only the table area should swipe.
+     --------------------------------------------------------- */
+
+  .fashion-design-table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+
+    /* Important */
+    display: block !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE
+     Keep the exact desktop table structure.
+     Do NOT convert it into cards.
+     --------------------------------------------------------- */
+
+  .fashion-design-table {
+    display: table !important;
+
+    width: 1100px !important;
+    min-width: 1100px !important;
+    max-width: none !important;
+
+    table-layout: fixed !important;
+
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE ROWS
+     Prevent mobile CSS from turning rows into blocks.
+     --------------------------------------------------------- */
+
+  .fashion-design-table thead {
+    display: table-header-group !important;
+  }
+
+  .fashion-design-table tbody {
+    display: table-row-group !important;
+  }
+
+  .fashion-design-table tr {
+    display: table-row !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     HEADER
+     --------------------------------------------------------- */
+
+  .fashion-design-table th {
+    display: table-cell !important;
+
+    height: 64px !important;
+
+    padding: 0 20px !important;
+
+    vertical-align: middle !important;
+
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     BODY CELLS
+     --------------------------------------------------------- */
+
+  .fashion-design-table td {
+    display: table-cell !important;
+
+    height: 92px !important;
+
+    padding: 12px 20px !important;
+
+    vertical-align: middle !important;
+
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =========================================================
+     COLUMN WIDTHS
+     Total = 1100px
+     ========================================================= */
+
+
+  /* ---------------------------------------------------------
+     1. SERVICE
+     --------------------------------------------------------- */
+
+  .fashion-design-table th:nth-child(1),
+  .fashion-design-table td:nth-child(1) {
+    width: 360px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     2. MAIN CATEGORY
+     --------------------------------------------------------- */
+
+  .fashion-design-table th:nth-child(2),
+  .fashion-design-table td:nth-child(2) {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     3. SUB CATEGORY
+     --------------------------------------------------------- */
+
+  .fashion-design-table th:nth-child(3),
+  .fashion-design-table td:nth-child(3) {
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     5. STATUS
+     --------------------------------------------------------- */
+
+  .fashion-design-table th:nth-child(5),
+  .fashion-design-table td:nth-child(5) {
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+  }
+
+
+  /* ---------------------------------------------------------
+     6. ACTIONS
+     --------------------------------------------------------- */
+
+  .fashion-design-table th:nth-child(6),
+  .fashion-design-table td:nth-child(6) {
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+  }
+
+
+  /* =========================================================
+     SERVICE IMAGE
+     ========================================================= */
+
+  .fashion-table-image {
+    width: 64px !important;
+    height: 64px !important;
+
+    min-width: 64px !important;
+    max-width: 64px !important;
+
+    flex: 0 0 64px !important;
+
+    border-radius: 10px !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  .fashion-table-image img {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
+
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+
+
+  /* =========================================================
+     SERVICE CONTENT
+     ========================================================= */
+
+  .fashion-table-service {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 14px !important;
+
+    min-width: 0 !important;
+
+    width: 100% !important;
+  }
+
+
+  .fashion-table-service-info {
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+  }
+
+
+  .fashion-table-service-info strong {
+    display: block !important;
+
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+
+  .fashion-table-service-info span {
+    display: block !important;
+
+    max-width: 230px !important;
+
+    margin-top: 4px !important;
+
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+
+  /* =========================================================
+     MAIN CATEGORY
+     ========================================================= */
+
+  .fashion-table-category {
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =========================================================
+     SUB CATEGORY
+     ========================================================= */
+
+  .fashion-table-subcategory {
+    display: block !important;
+
+    max-width: 160px !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+
+  /* =========================================================
+     TOTAL SIZE
+     ========================================================= */
+
+  .fashion-table-size {
+    display: block !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =========================================================
+     STATUS
+     ========================================================= */
+
+  .fashion-table-status {
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =========================================================
+     ACTIONS
+     ========================================================= */
+
+  .fashion-table-actions {
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: flex-start !important;
+
+    gap: 8px !important;
+
+    flex-wrap: nowrap !important;
+
+    width: max-content !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  .fashion-table-actions button {
+    display: inline-flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    flex: 0 0 auto !important;
+
+    width: auto !important;
+    min-width: 72px !important;
+
+    height: 42px !important;
+
+    padding: 0 16px !important;
+
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =========================================================
+     PAGINATION
+     Pagination stays OUTSIDE the horizontal table scroll.
+     ========================================================= */
+
+  .fashion-design-pagination {
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+  }
+
+
+  /* =========================================================
+     IMPORTANT RESET
+     Prevent any previous mobile card/table CSS from
+     changing the table layout.
+     ========================================================= */
+
+  .fashion-design-table-wrapper table,
+  .fashion-design-table-wrapper thead,
+  .fashion-design-table-wrapper tbody,
+  .fashion-design-table-wrapper tr,
+  .fashion-design-table-wrapper th,
+  .fashion-design-table-wrapper td {
+    float: none !important;
+  }
+
+
+  .fashion-design-table-wrapper tr::before,
+  .fashion-design-table-wrapper tr::after,
+  .fashion-design-table-wrapper td::before,
+  .fashion-design-table-wrapper td::after {
+    display: none !important;
+    content: none !important;
+  }
+}
+
+
+/* =========================================================
+   SIZE / STOCK
+   Compact premium inline layout
+========================================================= */
+
+.fashion-design-table th:nth-child(4),
+.fashion-design-table td:nth-child(4) {
+  width: 34%;
+  min-width: 0;
+  max-width: none;
+  vertical-align: middle;
+}
+
+.fashion-table-stock-list {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #56606b;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.8;
+  white-space: normal;
+}
+
+.fashion-table-stock-item {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+/* Keep long size lists balanced: four sizes per line. */
+.fashion-table-stock-item:nth-child(4n)::after {
+  content: "";
+  display: block;
+}
+
+.fashion-table-stock-size {
+  color: #59636d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fashion-table-stock-size::after {
+  content: " - ";
+  color: #a08f7b;
+  font-weight: 600;
+}
+
+.fashion-table-stock-quantity {
+  color: #247548;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.fashion-table-stock-separator {
+  margin-right: 5px;
+  color: #a8aaa7;
+  font-weight: 500;
+}
+
+.fashion-table-stock-quantity.low {
+  color: #a66a00;
+}
+
+.fashion-table-stock-quantity.out {
+  color: #c0392b;
+}
+
+.fashion-table-no-stock {
+  display: inline;
+  color: #929b95;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fashion-design-table tbody tr {
+  height: auto !important;
+}
+
+.fashion-design-table tbody td {
+  height: auto !important;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .fashion-design-table th:nth-child(4),
+  .fashion-design-table td:nth-child(4) {
+    width: 34% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .fashion-table-stock-list {
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .fashion-table-stock-size,
+  .fashion-table-stock-quantity {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   FINAL TABLE PROPORTIONS
+   Keep the same compact layout on desktop and mobile.
+========================================================= */
+
+.fashion-design-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.fashion-design-table th:nth-child(1),
+.fashion-design-table td:nth-child(1) {
+  width: 15% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table th:nth-child(2),
+.fashion-design-table td:nth-child(2) {
+  width: 15% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table th:nth-child(3),
+.fashion-design-table td:nth-child(3) {
+  width: 15% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table th:nth-child(4),
+.fashion-design-table td:nth-child(4) {
+  width: 30% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table th:nth-child(5),
+.fashion-design-table td:nth-child(5) {
+  width: 10% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table th:nth-child(6),
+.fashion-design-table td:nth-child(6) {
+  width: 15% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.fashion-design-table td:nth-child(4) {
+  overflow: visible;
+}
+
+.fashion-table-stock-list {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+.fashion-table-actions {
+  gap: 4px;
+}
+
+.fashion-table-actions button {
+  min-width: 0;
+  flex: 1 1 0;
+  padding: 0 5px;
+  font-size: 8px;
+}
+
+@media (max-width: 768px) {
+  .fashion-design-table-wrapper {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  .fashion-design-table {
+    width: 900px !important;
+    min-width: 900px !important;
+    max-width: none !important;
+    display: table !important;
+  }
+
+  .fashion-design-table th,
+  .fashion-design-table td {
+    white-space: normal !important;
+  }
+
+  .fashion-design-table th {
+    padding: 0 10px !important;
+  }
+
+  .fashion-design-table td {
+    padding: 10px !important;
+  }
+
+  .fashion-table-stock-list {
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  .fashion-table-stock-size,
+  .fashion-table-stock-quantity {
+    font-size: 11px;
+  }
+
+  .fashion-table-actions {
+    width: 100%;
+    white-space: normal;
+  }
+
+  .fashion-table-actions button {
+    height: 34px !important;
+    font-size: 8px !important;
+  }
+}
