@@ -359,6 +359,24 @@ function Enquiry() {
     useState('')
 
   /* =======================================================
+     KEEP ENQUIRY STEPS AT TOP
+  ======================================================= */
+
+  useEffect(() => {
+    if (!flow || success) {
+      return
+    }
+
+    window.requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant',
+      })
+    })
+  }, [flow?.step, success])
+
+  /* =======================================================
      INITIALISE
   ======================================================= */
 
@@ -1400,16 +1418,16 @@ clearBookingCart()
        * Do not leave the submitted enquiry as an
        * unfinished booking draft.
        */
- window.localStorage.removeItem(
+window.localStorage.removeItem(
   'wildfloral_enquiry_flow',
 )
 
 setSuccess(true)
 
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
+window.scrollTo({
+  top: 0,
+  behavior: 'smooth',
+})
     } catch (
       submitError
     ) {
@@ -2233,11 +2251,6 @@ setSuccess(true)
               setBookingStep(
                 step,
               )
-
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
             }}
           />
         )}

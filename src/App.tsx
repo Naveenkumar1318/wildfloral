@@ -3,6 +3,8 @@ import {
   Routes,
 } from 'react-router-dom'
 
+import ScrollToTop from './components/common/ScrollToTop'
+
 /* =========================================================
    PUBLIC LAYOUT
 ========================================================= */
@@ -187,7 +189,10 @@ import AdminFashionBookings from './pages/Admin/AdminBookings/AdminFashionBookin
   
 function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+
+      <Routes>
 
       {/* =====================================================
           PUBLIC WEBSITE
@@ -607,7 +612,8 @@ function App() {
 
       </Route>
 
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

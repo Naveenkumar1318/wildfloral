@@ -110,6 +110,12 @@ function AdminBeautyCategoryForm() {
   const [error, setError] = useState('')
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    })
+
     if (!id) {
       setLoading(false)
       return

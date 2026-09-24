@@ -227,6 +227,8 @@ const SORT_OPTIONS = [
 function ArrowIcon() {
   return (
     <svg
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
@@ -242,9 +244,26 @@ function ArrowIcon() {
   )
 }
 
+function ChevronIcon({ direction }: { direction: 'left' | 'right' }) {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path
+        d={direction === 'left' ? 'M14.5 5l-7 7 7 7' : 'M9.5 5l7 7-7 7'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 function BackIcon() {
   return (
     <svg
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
@@ -263,6 +282,8 @@ function BackIcon() {
 function ClockIcon() {
   return (
     <svg
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
@@ -280,6 +301,28 @@ function ClockIcon() {
         fill="none"
         stroke="currentColor"
         strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+
+
+function CheckIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 12.5l4 4L19 7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -654,6 +697,62 @@ function Services() {
     addingService,
     setAddingService,
   ] = useState(false)
+
+  /* =======================================================
+     HERO SLIDESHOW SLIDER (FASHION HERITAGE STYLE)
+  ======================================================= */
+  const heroSlides = useMemo(() => {
+    const list = [
+      {
+        id: 'sanctuary-main',
+        title: 'Royal Lavender & Amethyst Soak',
+        category: 'FEATURED TREATMENT',
+        duration: '60 mins',
+        price: 2800,
+        oldPrice: 3800,
+        image: assets.hero,
+      },
+    ]
+
+    services.forEach((service) => {
+      if (list.length >= 6) return
+      if (service.image) {
+        list.push({
+          id: service.id,
+          title: service.name,
+          category: service.category ? service.category.toUpperCase() : 'LAVENDER SERVICE',
+          duration: service.duration,
+          price: service.price,
+          oldPrice: Math.round(service.price * 1.25),
+          image: service.image,
+        })
+      }
+    })
+
+    return list
+  }, [services])
+
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0)
+  const [heroPaused, setHeroPaused] = useState(false)
+
+  const heroSlideCount = heroSlides.length
+  const activeHeroIndex = Math.min(heroSlideIndex, heroSlideCount - 1)
+  const activeHeroSlide = heroSlides[activeHeroIndex] ?? heroSlides[0]
+
+  useEffect(() => {
+    if (heroSlideCount < 2 || heroPaused) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const timer = window.setTimeout(() => {
+      setHeroSlideIndex((current) => (current + 1) % heroSlideCount)
+    }, 5600)
+
+    return () => window.clearTimeout(timer)
+  }, [heroSlideCount, heroPaused, activeHeroIndex])
+
+  function moveHeroSlide(direction: number) {
+    setHeroSlideIndex((current) => (current + direction + heroSlideCount) % heroSlideCount)
+  }
 
   const sortRef =
     useRef<HTMLDivElement | null>(
@@ -2251,17 +2350,11 @@ function Services() {
      * =====================================================
      */
     if (!assignTo) {
-      if (selectedServices.length === 0) {
-        setError(
-          'Please select at least one service.',
+      if (selectedServices.length > 0) {
+        saveSelectedServices(
+          selectedServices,
         )
-
-        return
       }
-
-      saveSelectedServices(
-        selectedServices,
-      )
 
       setBookingMode('booking')
       setBookingStep(1)
@@ -2334,1195 +2427,754 @@ function Services() {
     <main className="services-page">
 
       {/* =================================================
-          ASSIGNMENT HEADER
+          ASSIGNMENT HEADER BANNER
       ================================================= */}
 
       {assignTo && (
         <section className="services-assignment-banner">
-
           <div>
             <span>
-              {mode === 'enquiry'
-                ? 'ENQUIRY'
-                : 'BOOKING'}{' '}
-              · SERVICE ASSIGNMENT
+              {mode === 'enquiry' ? 'ENQUIRY' : 'BOOKING'} · SERVICE ASSIGNMENT
             </span>
-
-            <h2>
-              Choose services
-              for this person
-            </h2>
-
+            <h2>Choose services for this person</h2>
             <p>
-              Services selected
-              here will be added
-              only to this person's
-              booking card.
+              Services selected here will be added only to this person's booking card.
             </p>
           </div>
 
           <button
             type="button"
-            onClick={() =>
-              navigate('/booking')
-            }
+            onClick={() => navigate('/booking')}
           >
             <BackIcon />
             Back to Booking
           </button>
-
         </section>
       )}
 
       {/* =================================================
-          HERO
+          1. HERO SECTION (LAVENDER SANCTUARY EDITORIAL)
       ================================================= */}
 
       <section className="services-hero">
+        <div className="services-hero-bg-glow glow-1" />
+        <div className="services-hero-bg-glow glow-2" />
 
-        <div className="services-hero-content">
+        <div className="services-hero-container">
+          <div className="services-hero-content">
+            <div className="services-hero-badge">
+              <span>✦</span>
+              <span>WILDFLORAL VIOLET SANCTUARY &amp; SPA</span>
+            </div>
 
-          <span className="services-hero-label">
-            WILDFLORAL BEAUTY
-          </span>
+            <h1>
+              Awaken Your Senses in{' '}
+              <span>Lavender Radiance.</span>
+            </h1>
 
-          <h1>
-            Beauty that feels
-            <span>
-              uniquely yours.
-            </span>
-          </h1>
+            <p>
+              Immerse in bespoke restorative services crafted around aromatic French lavender, royal purple orchid soaks, amethyst crystal bodywork, and restorative botanical tranquility.
+            </p>
 
-          <p>
-            Premium beauty care
-            and styling created
-            around your look,
-            occasion, and personal
-            style.
-          </p>
 
-          <div className="services-hero-actions">
+            {/* HERO ACTION BUTTONS */}
+            <div className="services-hero-actions">
+              <button
+                type="button"
+                className="services-primary-button"
+                onClick={() => {
+                  if (assignTo) {
+                    navigate('/booking')
+                    return
+                  }
+                  void continueAssignment()
+                }}
+              >
+                <span>{assignTo ? 'Back to Booking' : 'Book Appointment'} ✦</span>
+              </button>
 
-            <button
-              type="button"
-              className="services-primary-button"
-              onClick={() => {
-                if (assignTo) {
-                  navigate('/booking')
-                  return
-                }
+              <a href="#services" className="services-secondary-button">
+                Explore Services
+              </a>
+            </div>
 
-                void continueAssignment()
-              }}
-            >
-              {assignTo
-                ? 'Back to Booking'
-                : 'Book Appointment'}
-
-              <ArrowIcon />
-            </button>
-            <a
-              href="#our-services"
-              className="services-secondary-button"
-            >
-              Explore Services
-            </a>
-
+            {/* TRUST STRIP POINTS */}
+            <ul className="services-hero-points">
+              <li>
+                <span className="hero-point-icon"><CheckIcon /></span>
+                Licensed Master Therapists
+              </li>
+              <li>
+                <span className="hero-point-icon"><CheckIcon /></span>
+                100% Lavender &amp; Botanical Oils
+              </li>
+              <li>
+                <span className="hero-point-icon"><CheckIcon /></span>
+                Instant Bespoke Concierge
+              </li>
+            </ul>
           </div>
 
+          {/* RIGHT ARCHED SHOWCASE SLIDER & FLOATING SPOTLIGHT CARD (FASHION HERITAGE EDITORIAL) */}
+          <div
+            className="services-hero-stage"
+            onMouseEnter={() => setHeroPaused(true)}
+            onMouseLeave={() => setHeroPaused(false)}
+            onFocus={() => setHeroPaused(true)}
+            onBlur={() => setHeroPaused(false)}
+          >
+            <div className="services-hero-frame">
+              {heroSlides.map((slide, slideIndex) => (
+                <img
+                  key={slide.id}
+                  src={slide.image}
+                  alt={slide.title}
+                  className={slideIndex === activeHeroIndex ? 'active' : ''}
+                  loading={slideIndex === 0 ? 'eager' : 'lazy'}
+                  aria-hidden={slideIndex !== activeHeroIndex}
+                  draggable={false}
+                />
+              ))}
+
+              {heroSlideCount > 1 && (
+                <div className="services-hero-controls">
+                  <button
+                    type="button"
+                    className="services-hero-arrow"
+                    onClick={() => moveHeroSlide(-1)}
+                    aria-label="Previous slide"
+                  >
+                    <ChevronIcon direction="left" />
+                  </button>
+
+                  <div className="services-hero-progress">
+                    {heroSlides.map((slide, slideIndex) => (
+                      <button
+                        key={slide.id}
+                        type="button"
+                        className={slideIndex === activeHeroIndex ? 'active' : ''}
+                        onClick={() => setHeroSlideIndex(slideIndex)}
+                        aria-label={`Show slide ${slideIndex + 1} of ${heroSlideCount}`}
+                      >
+                        {slideIndex === activeHeroIndex && (
+                          <span
+                            key={`${slide.id}-${heroPaused ? 'paused' : 'running'}`}
+                            className={`services-hero-fill ${heroPaused ? 'paused' : ''}`}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="services-hero-arrow"
+                    onClick={() => moveHeroSlide(1)}
+                    aria-label="Next slide"
+                  >
+                    <ChevronIcon direction="right" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* FLOATING GLASS SPOTLIGHT CARD */}
+            <div className="services-hero-spotlight" key={activeHeroSlide.id}>
+              <div className="services-spotlight-header">
+                <span className="services-spotlight-badge">{activeHeroSlide.category}</span>
+                <span className="services-spotlight-duration">{activeHeroSlide.duration}</span>
+              </div>
+              <strong>{activeHeroSlide.title}</strong>
+              <div className="services-spotlight-price-row">
+                <span className="services-spotlight-price">{formatPrice(activeHeroSlide.price)}</span>
+                {activeHeroSlide.oldPrice > activeHeroSlide.price && (
+                  <del className="services-spotlight-old-price">{formatPrice(activeHeroSlide.oldPrice)}</del>
+                )}
+              </div>
+              <div className="services-spotlight-footer">
+                <span className="services-spotlight-validity">Available Today</span>
+                <a href="#service-list" className="services-spotlight-button">
+                  View Service →
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div className="services-hero-image">
-
-          <img
-            src={assets.hero}
-            alt="Beauty and fashion styling"
-          />
-
-        </div>
-
       </section>
 
       {/* =================================================
-          CATEGORY SECTION
+          2. EXPLORE BY CATEGORY SECTION
       ================================================= */}
 
-      <section
-        className="services-category-section"
-        id="our-services"
-      >
-
-        {/* CENTERED HEADING */}
-
-        <div className="services-category-heading">
-
-          <div>
-
-            <span>
-              EXPLORE
-            </span>
-
-            <h2>
-              Find your perfect
-              <em>
-                beauty service.
-              </em>
-            </h2>
-
-            <p>
-              Browse our professional
-              beauty services by category.
-            </p>
-
-          </div>
-
+      <section className="services-category-section" id="services">
+        <div className="services-category-heading centered">
+          <span>LAVENDER ATELIER</span>
+          <h2>
+            Curated Lavender &amp; <em>Amethyst Services</em>
+          </h2>
+          <p>
+            Find your perfect service from our curated collections
+          </p>
         </div>
 
-        {/* =================================================
-            CATEGORY CAROUSEL
-        ================================================= */}
-
+        {/* CAROUSEL WITH ARROW NAVIGATION */}
         <div className="services-category-slider">
-
-          {/* LEFT ARROW */}
-
           <button
             type="button"
             className="category-scroll-button category-scroll-button-left"
-            disabled={
-              !categoryCanScrollLeft
-            }
-            onClick={() =>
-              scrollCategories('left')
-            }
+            disabled={!categoryCanScrollLeft}
+            onClick={() => scrollCategories('left')}
             aria-label="Previous categories"
           >
             ←
           </button>
 
-          {/* CATEGORY LIST */}
-
-          <div
-            className="services-category-list"
-            ref={
-              categoryScrollRef
-            }
-          >
-
-            {/* ALL SERVICES */}
-
+          <div className="services-category-list" ref={categoryScrollRef}>
+            {/* ALL SERVICES BUTTON */}
             <button
               type="button"
-              className={
-                !activeCategory
-                  ? 'service-category-card active'
-                  : 'service-category-card'
-              }
-              onClick={
-                selectAllServices
-              }
+              className={!activeCategory ? 'service-category-circle-item active' : 'service-category-circle-item'}
+              onClick={selectAllServices}
             >
-
-              <div className="service-category-image">
-
-                <img
-                  src={assets.hero}
-                  alt=""
-                />
-
+              <div className="service-category-circle-avatar all-rituals-avatar">
+                <div className="service-category-circle-inner">
+                  <span className="all-rituals-sparkle">✦</span>
+                </div>
               </div>
-
-              <div>
-
-                <span>
-                  ALL SERVICES
-                </span>
-
-                <strong>
-                  All Beauty
-                </strong>
-
+              <div className="service-category-circle-info">
+                <strong>All Services</strong>
+                <span>{services.length} {services.length === 1 ? 'Service' : 'Services'}</span>
               </div>
-
             </button>
 
-            {/* DATABASE CATEGORIES */}
-
-            {categories.map(
-              (category) => (
+            {/* CATEGORIES FROM DATABASE */}
+            {categories.map((category) => {
+              const serviceCount = services.filter((s) => s.categoryId === category.id).length
+              return (
                 <button
                   type="button"
                   key={category.id}
-                  className={
-                    activeCategory?.id ===
-                      category.id
-                      ? 'service-category-card active'
-                      : 'service-category-card'
-                  }
-                  onClick={() =>
-                    selectCategory(
-                      category,
-                    )
-                  }
+                  className={activeCategory?.id === category.id ? 'service-category-circle-item active' : 'service-category-circle-item'}
+                  onClick={() => selectCategory(category)}
                 >
-
-                  <div className="service-category-image">
-
+                  <div className="service-category-circle-avatar">
                     <img
-                      src={
-                        category.image ||
-                        assets.hero
-                      }
-                      alt=""
+                      src={category.image || assets.hero}
+                      alt={category.name}
                       loading="lazy"
                     />
-
                   </div>
-
-                  <div>
-
-                    <span>
-                      CATEGORY
-                    </span>
-
-                    <strong>
-                      {
-                        category.name
-                      }
-                    </strong>
-
+                  <div className="service-category-circle-info">
+                    <strong>{category.name}</strong>
+                    <span>{serviceCount > 0 ? `${serviceCount} ${serviceCount === 1 ? 'Service' : 'Services'}` : 'Service Collection'}</span>
                   </div>
-
                 </button>
-              ),
-            )}
-
+              )
+            })}
           </div>
-
-          {/* RIGHT ARROW */}
 
           <button
             type="button"
             className="category-scroll-button category-scroll-button-right"
-            disabled={
-              !categoryCanScrollRight
-            }
-            onClick={() =>
-              scrollCategories('right')
-            }
+            disabled={!categoryCanScrollRight}
+            onClick={() => scrollCategories('right')}
             aria-label="Next categories"
           >
             →
           </button>
-
         </div>
-
       </section>
 
       {/* =================================================
-          SERVICE LIST
+          3. PREMIUM CATALOG GRID SECTION
       ================================================= */}
 
-      <section
-        className="services-list-section"
-        id="service-list"
-      >
-
+      <section className="services-list-section" id="service-list">
         <div className="services-list-heading">
-
           <div>
-
             <span>
-              {activeCategory
-                ? activeCategory.name
-                : 'ALL BEAUTY SERVICES'}
+              {activeCategory ? activeCategory.name.toUpperCase() : 'ALL CURATED OFFERINGS'}
             </span>
-
             <h2>
-              {activeCategory
-                ? `${activeCategory.name} services`
-                : 'Our signature services'}
+              {activeCategory ? `${activeCategory.name} Services` : 'All Curated Offerings'}
             </h2>
-
             <p>
               {filteredServices.length}{' '}
-              {filteredServices.length ===
-                1
-                ? 'service'
-                : 'services'}{' '}
-              available
-              {categories.length >
-                0 &&
-                ` across ${categories.length} categories`}
+              {filteredServices.length === 1 ? 'Service' : 'Services'} available
+              {categories.length > 0 && ` across ${categories.length} categories`}
             </p>
-
           </div>
 
-          <div
-            className="services-sort-wrapper"
-            ref={sortRef}
-          >
-
+          {/* SORT MENU DROPDOWN */}
+          <div className="services-sort-wrapper" ref={sortRef}>
             <button
               type="button"
               className="services-sort-button"
-              onClick={() =>
-                setSortOpen(
-                  (current) =>
-                    !current,
-                )
-              }
-              aria-expanded={
-                sortOpen
-              }
+              onClick={() => setSortOpen((current) => !current)}
+              aria-expanded={sortOpen}
             >
-
-              <span>
-                Sort by
-              </span>
-
+              <span>Sort by:</span>
               <strong>
-                {
-                  SORT_OPTIONS.find(
-                    (option) =>
-                      option.value ===
-                      sortBy,
-                  )?.label
-                }
+                {SORT_OPTIONS.find((option) => option.value === sortBy)?.label}
               </strong>
-
-              <span
-                className={
-                  sortOpen
-                    ? 'sort-chevron open'
-                    : 'sort-chevron'
-                }
-              >
-                ↓
-              </span>
-
+              <span>↓</span>
             </button>
 
             {sortOpen && (
               <div className="services-sort-menu">
-
-                {SORT_OPTIONS.map(
-                  (option) => (
-                    <button
-                      type="button"
-                      key={
-                        option.value
-                      }
-                      className={
-                        sortBy ===
-                          option.value
-                          ? 'active'
-                          : ''
-                      }
-                      onClick={() => {
-                        setSortBy(
-                          option.value,
-                        )
-
-                        setSortOpen(
-                          false,
-                        )
-                      }}
-                    >
-
-                      <span>
-                        {
-                          option.label
-                        }
-                      </span>
-
-                      {sortBy ===
-                        option.value && (
-                          <span>
-                            ✓
-                          </span>
-                        )}
-
-                    </button>
-                  ),
-                )}
-
+                {SORT_OPTIONS.map((option) => (
+                  <button
+                    type="button"
+                    key={option.value}
+                    className={sortBy === option.value ? 'active' : ''}
+                    onClick={() => {
+                      setSortBy(option.value)
+                      setSortOpen(false)
+                    }}
+                  >
+                    <span>{option.label}</span>
+                    {sortBy === option.value && <span>✓</span>}
+                  </button>
+                ))}
               </div>
             )}
-
           </div>
-
         </div>
 
-        {/* LOADING */}
-
+        {/* LOADING STATE */}
         {loading && (
           <div className="services-grid">
-
-            {Array.from({
-              length:
-                ITEMS_PER_PAGE,
-            }).map(
-              (_, index) => (
-                <div
-                  className="service-skeleton"
-                  key={index}
-                >
-
-                  <div className="service-skeleton-image" />
-
-                  <div className="service-skeleton-content">
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-
-                </div>
-              ),
-            )}
-
+            {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+              <div className="service-card" key={index}>
+                <div className="service-card-image" style={{ background: '#f3e8ff' }} />
+                <div style={{ height: '120px', background: '#f5f0ff', borderRadius: '12px' }} />
+              </div>
+            ))}
           </div>
         )}
 
-        {/* ERROR */}
-
-        {!loading &&
-          error && (
-            <div className="services-message">
-
-              <h3>
-                Something went
-                <span>
-                  wrong.
-                </span>
-              </h3>
-
-              <p>
-                {error}
-              </p>
-
-              <button
-                type="button"
-                className="services-primary-button"
-                onClick={() => {
-                  void loadServices()
-                  void loadOffers()
-                }}
-              >
-                Try Again
-                <ArrowIcon />
-              </button>
-
-            </div>
-          )}
-
-        {/* SERVICES */}
-
-        {!loading &&
-          !error &&
-          paginatedServices.length >
-          0 && (
-
-            <div className="services-grid">
-
-              {paginatedServices.map(
-                (
-                  service,
-                  index,
-                ) => {
-
-                  const isSelected =
-                    isServiceSelected(
-                      service.id,
-                    )
-
-                  const offer =
-                    getApplicableOffer(
-                      service,
-                      offers,
-                    )
-
-                  const pricing =
-                    calculateDiscount(
-                      service.price,
-                      offer,
-                    )
-
-                  const hasDiscount =
-                    Boolean(
-                      offer &&
-                      pricing.discountAmount >
-                      0,
-                    )
-
-                  return (
-                    <article
-                      className={
-                        isSelected
-                          ? 'service-card selected'
-                          : 'service-card'
-                      }
-                      key={
-                        service.id
-                      }
-                    >
-
-                      <div className="service-card-image">
-
-                        <img
-                          src={
-                            service.image ||
-                            assets.hero
-                          }
-                          alt={
-                            service.name
-                          }
-                          loading={
-                            index < 3
-                              ? 'eager'
-                              : 'lazy'
-                          }
-                        />
-
-                        <span className="service-card-category-pill">
-                          {
-                            service.category
-                          }
-                        </span>
-
-                        {hasDiscount &&
-                          offer && (
-                            <span className="service-card-offer-pill">
-                              {
-                                discountText(
-                                  offer,
-                                )
-                              }
-                            </span>
-                          )}
-
-                        <button
-                          type="button"
-                          className={
-                            isSelected
-                              ? 'service-card-select selected'
-                              : 'service-card-select'
-                          }
-                          onClick={() =>
-                            toggleService(
-                              service.id,
-                            )
-                          }
-                          aria-label={
-                            isSelected
-                              ? `Remove ${service.name}`
-                              : `Add ${service.name}`
-                          }
-                        >
-                          {isSelected
-                            ? '✓'
-                            : '+'}
-                        </button>
-
-                      </div>
-
-                      <div className="service-card-content">
-
-                        <h3>
-                          {
-                            service.name
-                          }
-                        </h3>
-
-                        <p>
-                          {
-                            service.description
-                          }
-                        </p>
-
-                        <div className="service-card-meta">
-
-                          <div className="service-price">
-
-                            {hasDiscount &&
-                              offer ? (
-                              <>
-                                <span>
-                                  Regular price
-                                </span>
-
-                                <del>
-                                  {formatPrice(
-                                    pricing.originalPrice,
-                                  )}
-                                </del>
-
-                                <strong className="service-offer-price">
-                                  {formatPrice(
-                                    pricing.finalPrice,
-                                  )}
-                                </strong>
-
-                                <small>
-                                  You save{' '}
-                                  {formatPrice(
-                                    pricing.discountAmount,
-                                  )}
-                                </small>
-                              </>
-                            ) : (
-                              <>
-                                <span>
-                                  Regular price
-                                </span>
-
-                                <strong>
-                                  {formatPrice(
-                                    service.price,
-                                  )}
-                                </strong>
-                              </>
-                            )}
-
-                          </div>
-
-                          <div className="service-duration">
-
-                            <ClockIcon />
-
-                            <span>
-                              {
-                                service.duration
-                              }
-                            </span>
-
-                          </div>
-
-                        </div>
-
-                        {hasDiscount &&
-                          offer && (
-                            <div className="service-card-current-offer">
-
-                              <div>
-
-                                <span>
-                                  CURRENT OFFER
-                                </span>
-
-                                <strong>
-                                  {
-                                    offer.title
-                                  }
-                                </strong>
-
-                              </div>
-
-                              {offer.endsAt && (
-                                <small>
-                                  Ends{' '}
-                                  {formatOfferDate(
-                                    offer.endsAt,
-                                  )}
-                                </small>
-                              )}
-
-                            </div>
-                          )}
-
-                        <button
-                          type="button"
-                          className={
-                            isSelected
-                              ? 'service-book-button selected'
-                              : 'service-book-button'
-                          }
-                          disabled={
-                            addingService
-                          }
-                          onClick={() => {
-                            if (
-                              addingService
-                            ) {
-                              return
-                            }
-
-                            if (
-                              assignTo
-                            ) {
-                              setAddingService(
-                                true,
-                              )
-
-                              toggleService(
-                                service.id,
-                              )
-
-                              window.setTimeout(
-                                () =>
-                                  setAddingService(
-                                    false,
-                                  ),
-                                200,
-                              )
-
-                              return
-                            }
-
-                            toggleService(
-                              service.id,
-                            )
-                          }}
-                        >
-
-                          <span>
-                            {isSelected
-                              ? assignTo
-                                ? 'Remove from Person'
-                                : 'Remove from Booking'
-                              : assignTo
-                                ? 'Add to Person'
-                                : 'Add to Booking'}
-                          </span>
-
-                          <span>
-                            {isSelected
-                              ? '✓'
-                              : '+'}
-                          </span>
-
-                        </button>
-
-                      </div>
-
-                    </article>
-                  )
-                },
-              )}
-
-            </div>
-          )}
-
-        {/* EMPTY */}
-
-        {!loading &&
-          !error &&
-          paginatedServices.length ===
-          0 && (
-            <div className="services-message">
-
-              <h3>
-                No services
-                <span>
-                  available.
-                </span>
-              </h3>
-
-              <p>
-                There are no services
-                available in this category
-                yet.
-              </p>
-
-              {activeCategory && (
-                <button
-                  type="button"
-                  className="services-primary-button"
-                  onClick={
-                    selectAllServices
-                  }
-                >
-                  View All Services
-                  <ArrowIcon />
-                </button>
-              )}
-
-            </div>
-          )}
-
-        {/* PAGINATION */}
-
-        {totalPages > 1 && (
-          <div className="services-pagination">
-
+        {/* ERROR STATE */}
+        {!loading && error && (
+          <div className="services-final">
+            <h2>Something went <em>wrong.</em></h2>
+            <p>{error}</p>
             <button
               type="button"
-              disabled={
-                currentPage === 1
-              }
-              onClick={() =>
-                goToPage(
-                  currentPage - 1,
-                )
-              }
+              className="services-primary-button"
+              onClick={() => {
+                void loadServices()
+                void loadOffers()
+              }}
+            >
+              Try Again <ArrowIcon />
+            </button>
+          </div>
+        )}
+
+        {/* SERVICES CARDS GRID */}
+        {!loading && !error && paginatedServices.length > 0 && (
+          <div className="services-grid">
+            {paginatedServices.map((service, index) => {
+              const isSelected = isServiceSelected(service.id)
+              const offer = getApplicableOffer(service, offers)
+              const pricing = calculateDiscount(service.price, offer)
+              const hasDiscount = Boolean(offer && pricing.discountAmount > 0)
+
+              return (
+                <article
+                  className={isSelected ? 'service-card selected' : 'service-card'}
+                  key={service.id}
+                >
+                  {/* UN-CROPPED IMAGE CONTAINER WITH BADGES */}
+                  <div className="service-card-image">
+                    <img
+                      src={service.image || assets.hero}
+                      alt={service.name}
+                      loading={index < 3 ? 'eager' : 'lazy'}
+                    />
+
+                    {hasDiscount && offer ? (
+                      <span className="service-card-offer-pill">
+                        {discountText(offer)}
+                      </span>
+                    ) : (
+                      <span className="service-card-category-pill">
+                        {service.category}
+                      </span>
+                    )}
+
+                    <div className="service-duration-badge">
+                      <ClockIcon />
+                      <span>{service.duration}</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={isSelected ? 'service-card-select selected' : 'service-card-select'}
+                      onClick={() => toggleService(service.id)}
+                      aria-label={isSelected ? `Remove ${service.name}` : `Add ${service.name}`}
+                    >
+                      {isSelected ? '✓' : '+'}
+                    </button>
+                  </div>
+
+                  {/* CARD BODY CONTENT */}
+                  <div className="service-card-content">
+                    <div className="service-card-meta">
+                      <span className="service-category-tag">{service.category}</span>
+                      <div className="service-rating">
+                        <span>★</span>
+                        <span>4.98</span>
+                      </div>
+                    </div>
+
+                    <div className="service-card-header">
+                      <h3>{service.name}</h3>
+                      <p>{service.description}</p>
+                    </div>
+
+                    {/* OFFER BANNER IF APPLICABLE */}
+                    {hasDiscount && offer && (
+                      <div className="service-card-current-offer">
+                        <div className="offer-title-group">
+                          <span className="offer-tag-icon">🏷️</span>
+                          <strong className="offer-title-text">{offer.title}</strong>
+                        </div>
+                        {offer.endsAt && (
+                          <span className="offer-expiry-text">
+                            Valid until {formatOfferDate(offer.endsAt)}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* CARD FOOTER WITH PRICE & ACTION */}
+                    <div className="service-card-footer">
+                      <div className="service-price-block">
+                        <div className="service-price-row">
+                          <div className="price-details">
+                            {hasDiscount && offer ? (
+                              <>
+                                <strong className="service-offer-price">
+                                  {formatPrice(pricing.finalPrice)}
+                                </strong>
+                                <del className="original-price">
+                                  {formatPrice(pricing.originalPrice)}
+                                </del>
+                              </>
+                            ) : (
+                              <strong className="service-normal-price">
+                                {formatPrice(service.price)}
+                              </strong>
+                            )}
+                          </div>
+                        </div>
+
+                        {hasDiscount && offer && pricing.discountAmount > 0 && (
+                          <span className="service-save-badge">
+                            Save {formatPrice(pricing.discountAmount)}
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        className={isSelected ? 'service-book-button selected' : 'service-book-button'}
+                        disabled={addingService}
+                        onClick={() => {
+                          if (addingService) return
+                          if (assignTo) {
+                            setAddingService(true)
+                            toggleService(service.id)
+                            window.setTimeout(() => setAddingService(false), 200)
+                            return
+                          }
+                          toggleService(service.id)
+                        }}
+                      >
+                        {isSelected
+                          ? assignTo
+                            ? '✓ Added'
+                            : '✓ Added to Booking'
+                          : assignTo
+                            ? '+ Add to Person'
+                            : '+ Add to Booking'}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        )}
+
+        {/* EMPTY STATE */}
+        {!loading && !error && paginatedServices.length === 0 && (
+          <div className="services-final">
+            <h2>No services <em>found.</em></h2>
+            <p>Try searching for a different therapy or reset search filters.</p>
+            <button
+              type="button"
+              className="services-primary-button"
+              onClick={() => {
+                selectAllServices()
+              }}
+            >
+              View All Services <ArrowIcon />
+            </button>
+          </div>
+        )}
+
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <div className="services-pagination">
+            <button
+              type="button"
+              className="pagination-arrow"
+              disabled={currentPage === 1}
+              onClick={() => goToPage(currentPage - 1)}
+              aria-label="Previous Page"
             >
               ←
             </button>
 
-            {Array.from({
-              length: totalPages,
-            }).map(
-              (_, index) => {
-                const page =
-                  index + 1
+            <div className="services-pagination-numbers">
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const page = index + 1
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      type="button"
+                      key={page}
+                      className={currentPage === page ? 'active' : ''}
+                      onClick={() => goToPage(page)}
+                    >
+                      {page}
+                    </button>
+                  )
+                }
 
-                return (
-                  <button
-                    type="button"
-                    key={page}
-                    className={
-                      currentPage ===
-                        page
-                        ? 'active'
-                        : ''
-                    }
-                    onClick={() =>
-                      goToPage(
-                        page,
-                      )
-                    }
-                  >
-                    {page}
-                  </button>
-                )
-              },
-            )}
+                if (
+                  (page === 2 && currentPage > 3) ||
+                  (page === totalPages - 1 && currentPage < totalPages - 2)
+                ) {
+                  return (
+                    <span key={`ellipsis-${page}`} className="pagination-ellipsis">
+                      …
+                    </span>
+                  )
+                }
+
+                return null
+              })}
+            </div>
 
             <button
               type="button"
-              disabled={
-                currentPage ===
-                totalPages
-              }
-              onClick={() =>
-                goToPage(
-                  currentPage + 1,
-                )
-              }
+              className="pagination-arrow"
+              disabled={currentPage === totalPages}
+              onClick={() => goToPage(currentPage + 1)}
+              aria-label="Next Page"
             >
               →
             </button>
-
           </div>
         )}
-
       </section>
 
       {/* =================================================
-          PROMOTIONS
+          4. PROMOTIONS & SPECIAL OFFERS SECTION
       ================================================= */}
 
-      {!offerLoading &&
-        displayedOffers.length >
-        0 && (
-          <section className="services-promo">
-
-            {displayedOffers.map(
-              (
-                offer,
-                index,
-              ) => (
-                <DealOfDay
-                  key={
-                    offer.id
-                  }
-                  offer={
-                    offer
-                  }
-                  featured={
-                    index === 0
-                  }
-                />
-              ),
-            )}
-
-          </section>
-        )}
+      {!offerLoading && displayedOffers.length > 0 && (
+        <section className="services-promo">
+          {displayedOffers.map((offer, index) => (
+            <DealOfDay
+              key={offer.id}
+              offer={offer}
+              featured={index === 0}
+            />
+          ))}
+        </section>
+      )}
 
       {/* =================================================
-          SELECTION BAR
+          5. FINAL BRAND INVITATION & METRICS STRIP
       ================================================= */}
 
-      {selectedServices.length >
-        0 && (
-          <div className="service-selection-bar">
+      {!assignTo && (
+        <section className="services-final">
+          <span>WILDFLORAL VIOLET SANCTUARY</span>
+          <h2>
+            Your serene transformation <em>begins here.</em>
+          </h2>
+          <p style={{ maxWidth: '580px', margin: '0 auto 24px', color: 'var(--text-subtle)' }}>
+            Surrender to an immersive twilight haven of French lavender and restorative botanical bodywork designed to rejuvenate body and soul.
+          </p>
+          <button
+            type="button"
+            className="services-final-button"
+            onClick={() => void continueAssignment()}
+          >
+            Book Appointment <ArrowIcon />
+          </button>
+        </section>
+      )}
 
-            <div className="service-selection-inner">
+      {/* LUXURY METRICS STRIP */}
+      <section className="fashion-stats-strip">
+        <div className="fashion-stats-container">
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div className="fashion-stat-content">
+              <strong>20k+</strong>
+              <span>Sanctuary Guests</span>
+            </div>
+          </div>
 
-              <div className="selection-summary">
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div className="fashion-stat-content">
+              <strong>50+</strong>
+              <span>Master Therapists</span>
+            </div>
+          </div>
 
-                <div className="selection-count">
-                  {
-                    selectedServices.length
-                  }
-                </div>
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div className="fashion-stat-content">
+              <strong>100%</strong>
+              <span>Organic Botanicals</span>
+            </div>
+          </div>
 
-                <div>
-                  <strong>
-                    {isOPCustomer
-                      ? 'Services for person'
-                      : assignTo
-                        ? 'Services for person'
-                        : 'Services selected'}
-                  </strong>
-                  <span>
-                    Total{' '}
-                    {formatPrice(
-                      selectedTotal,
-                    )}
-                  </span>
-                </div>
+          <div className="fashion-stat-item">
+            <div className="fashion-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div className="fashion-stat-content">
+              <strong>15+</strong>
+              <span>Years Heritage</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* =================================================
+          6. FLOATING STICKY SELECTION BAR
+      ================================================= */}
+
+      {selectedServices.length > 0 && (
+        <div className="service-selection-bar">
+          <div className="service-selection-inner">
+            <div className="selection-summary">
+              <div className="selection-count">
+                {selectedServices.length}
               </div>
+              <div className="selection-summary-text">
+                <strong>
+                  {isOPCustomer ? (
+                    <>
+                      <span className="desktop-text">Services for person</span>
+                      <span className="mobile-text">Person</span>
+                    </>
+                  ) : assignTo ? (
+                    <>
+                      <span className="desktop-text">Services for person</span>
+                      <span className="mobile-text">Person</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="desktop-text">Services selected</span>
+                      <span className="mobile-text">Selected</span>
+                    </>
+                  )}
+                </strong>
+                <span>Total {formatPrice(selectedTotal)}</span>
+              </div>
+            </div>
 
-              <div className="selection-actions">
+            <div className="selection-actions">
+              <button
+                type="button"
+                className="selection-clear"
+                onClick={clearSelection}
+              >
+                Clear
+              </button>
 
+              {isOPCustomer ? (
                 <button
                   type="button"
-                  className="selection-clear"
-                  onClick={
-                    clearSelection
-                  }
+                  className="selection-book"
+                  onClick={continueAssignment}
                 >
-                  Clear
+                  <span className="desktop-text">Done</span>
+                  <span className="mobile-text">Done</span> <ArrowIcon />
                 </button>
+              ) : assignTo ? (
+                <button
+                  type="button"
+                  className="selection-book"
+                  onClick={continueAssignment}
+                >
+                  <span className="desktop-text">Done</span>
+                  <span className="mobile-text">Done</span> <ArrowIcon />
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="selection-enquiry"
+                    onClick={() =>
+                      navigate(
+                        `/enquiry?services=${encodeURIComponent(
+                          selectedServices.join(','),
+                        )}`,
+                      )
+                    }
+                  >
+                    <span className="desktop-text">Enquire Now</span>
+                    <span className="mobile-text">Enquire</span>
+                  </button>
 
-                {isOPCustomer ? (
                   <button
                     type="button"
                     className="selection-book"
                     onClick={continueAssignment}
                   >
-                    Done
-                    <ArrowIcon />
+                    <span className="desktop-text">Book Appointment</span>
+                    <span className="mobile-text">Book Now</span> <ArrowIcon />
                   </button>
-                ) : assignTo ? (
-                  <button
-                    type="button"
-                    className="selection-book"
-                    onClick={
-                      continueAssignment
-                    }
-                  >
-                    Done
-                    <ArrowIcon />
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      className="selection-enquiry"
-                      onClick={() =>
-                        navigate(
-                          `/enquiry?services=${encodeURIComponent(
-                            selectedServices.join(','),
-                          )}`,
-                        )
-                      }
-                    >
-                      Enquire Now
-                    </button>
-
-                    <button
-                      type="button"
-                      className="selection-book"
-                      onClick={
-                        continueAssignment
-                      }
-                    >
-                      Book Appointment
-                      <ArrowIcon />
-                    </button>
-                  </>
-                )}
-
-              </div>
-
-            </div>
-
-          </div>
-        )}
-
-      {/* =================================================
-          ASSIGNMENT FOOTER
-      ================================================= */}
-
-      {assignTo &&
-        selectedServices.length >
-        0 && (
-          <div className="services-assignment-footer">
-
-            <div>
-
-              <span>
-                READY
-              </span>
-
-              <strong>
-                {
-                  selectedServices.length
-                }{' '}
-                service
-                {selectedServices.length ===
-                  1
-                  ? ''
-                  : 's'}{' '}
-                selected for this person
-              </strong>
-
-            </div>
-
-            <button
-              type="button"
-              onClick={
-                continueAssignment
-              }
-            >
-              Continue to Booking
-              <ArrowIcon />
-            </button>
-
-          </div>
-        )}
-
-      {/* =================================================
-          FINAL CTA
-      ================================================= */}
-
-      {!assignTo && (
-        <section className="services-final">
-
-          <span>
-            WILDFLORAL BEAUTY
-          </span>
-
-          <h2>
-            Your best look
-            <em>
-              starts here.
-            </em>
-          </h2>
-
-          <button
-            type="button"
-            className="services-final-button"
-            onClick={() => {
-              void continueAssignment()
-            }}
-          >
-            Book Appointment
-            <ArrowIcon />
-          </button>
-        </section>
-      )}
-
-      {/* =================================================
-    FASHION STATS
-================================================= */}
-
-      <section className="fashion-stats-strip">
-        <div className="fashion-stats-container">
-
-          {/* HAPPY CLIENTS */}
-          <div className="fashion-stat-item">
-            <div className="fashion-stat-icon">
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <circle cx="24" cy="16" r="6" />
-                <circle cx="10" cy="20" r="5" />
-                <circle cx="38" cy="20" r="5" />
-
-                <path d="M13 37c0-7 5-11 11-11s11 4 11 11" />
-                <path d="M3 36c0-5 3-8 8-8" />
-                <path d="M45 36c0-5-3-8-8-8" />
-              </svg>
-            </div>
-
-            <div className="fashion-stat-content">
-              <strong>20+</strong>
-              <span>Happy Clients</span>
+                </>
+              )}
             </div>
           </div>
-
-          <div className="fashion-stat-divider" />
-
-          {/* PROJECTS COMPLETED */}
-          <div className="fashion-stat-item">
-            <div className="fashion-stat-icon">
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <rect
-                  x="9"
-                  y="8"
-                  width="30"
-                  height="34"
-                  rx="3"
-                />
-
-                <path d="M16 5v7" />
-                <path d="M32 5v7" />
-
-                <path d="M15 19h18" />
-                <path d="M15 26h11" />
-                <path d="M15 33h7" />
-
-                <path d="M31 27l3 3 6-7" />
-              </svg>
-            </div>
-
-            <div className="fashion-stat-content">
-              <strong>50+</strong>
-              <span>Projects Completed</span>
-            </div>
-          </div>
-
-          <div className="fashion-stat-divider" />
-
-          {/* CLIENT SATISFACTION */}
-          <div className="fashion-stat-item">
-            <div className="fashion-stat-icon">
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="18"
-                />
-
-                <path d="M16 24l5 5 11-11" />
-              </svg>
-            </div>
-
-            <div className="fashion-stat-content">
-              <strong>100%</strong>
-              <span>Client Satisfaction</span>
-            </div>
-          </div>
-
-          <div className="fashion-stat-divider" />
-
-          {/* EXPERIENCE */}
-          <div className="fashion-stat-item">
-            <div className="fashion-stat-icon">
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <circle
-                  cx="24"
-                  cy="20"
-                  r="13"
-                />
-
-                <path d="M18 31l-3 12 9-5 9 5-3-12" />
-
-                <path d="M24 12l2.2 4.5 5 .7-3.6 3.5.8 5-4.4-2.4-4.4 2.4.8-5-3.6-3.5 5-.7z" />
-              </svg>
-            </div>
-
-            <div className="fashion-stat-content">
-              <strong>2+</strong>
-              <span>Years Experience</span>
-            </div>
-          </div>
-
         </div>
-      </section>
+      )}
 
     </main>
   )
@@ -3539,39 +3191,21 @@ function DealOfDay({
   offer: Offer
   featured: boolean
 }) {
-  const [
-    remaining,
-    setRemaining,
-  ] = useState(
-    getRemaining(
-      offer.endsAt,
-    ),
-  )
+  const [remaining, setRemaining] = useState(getRemaining(offer.endsAt))
 
   useEffect(() => {
     if (!offer.endsAt) {
       return
     }
 
-    const timer =
-      window.setInterval(
-        () => {
-          setRemaining(
-            getRemaining(
-              offer.endsAt,
-            ),
-          )
-        },
-        1000,
-      )
+    const timer = window.setInterval(() => {
+      setRemaining(getRemaining(offer.endsAt))
+    }, 1000)
 
-    return () =>
-      window.clearInterval(
-        timer,
-      )
-  }, [
-    offer.endsAt,
-  ])
+    return () => window.clearInterval(timer)
+  }, [offer.endsAt])
+
+  const discountVal = discountText(offer)
 
   return (
     <article
@@ -3581,159 +3215,79 @@ function DealOfDay({
           : 'services-promo-card services-promo-deal'
       }
     >
+      <span className="services-promo-sparkle" aria-hidden="true">✦</span>
 
-      <div className="services-promo-copy">
-
+      <div className="services-promo-card-top">
         <span className="services-promo-label">
-          {featured
-            ? 'EXCLUSIVE OFFER'
-            : 'DEAL OF THE DAY'}
+          {featured ? 'EXCLUSIVE OFFER' : 'SPECIAL SPA OFFER'}
         </span>
 
-        <h2>
-          {
-            offer.title
-          }
-        </h2>
-
-        <strong className="services-promo-discount">
-          {
-            discountText(
-              offer,
-            )
-          }
-        </strong>
-
-        {offer.description && (
-          <p>
-            {
-              offer.description
-            }
-          </p>
+        {discountVal && (
+          <span className="services-promo-discount-badge">
+            {discountVal}
+          </span>
         )}
+      </div>
 
-        {offer.promoCode && (
-          <div className="services-promo-code">
+      <h2 className="services-promo-title">{offer.title}</h2>
 
-            <span>
-              USE CODE
+      {offer.description && (
+        <p className="services-promo-description">{offer.description}</p>
+      )}
+
+      {remaining && (
+        <div className="promo-countdown">
+          <div className="countdown-box">
+            <strong>{String(remaining.days).padStart(2, '0')}</strong>
+            <span>DAYS</span>
+          </div>
+
+          <span className="countdown-colon">:</span>
+
+          <div className="countdown-box">
+            <strong>{String(remaining.hours).padStart(2, '0')}</strong>
+            <span>HRS</span>
+          </div>
+
+          <span className="countdown-colon">:</span>
+
+          <div className="countdown-box">
+            <strong>{String(remaining.minutes).padStart(2, '0')}</strong>
+            <span>MINS</span>
+          </div>
+
+          <span className="countdown-colon">:</span>
+
+          <div className="countdown-box">
+            <strong>{String(remaining.seconds).padStart(2, '0')}</strong>
+            <span>SECS</span>
+          </div>
+        </div>
+      )}
+
+      <div className="services-promo-divider" />
+
+      <div className="services-promo-footer">
+        <div className="services-promo-info-group">
+          {offer.promoCode && (
+            <div className="services-promo-code">
+              <span>CODE:</span>
+              <strong>{offer.promoCode}</strong>
+            </div>
+          )}
+
+          {offer.endsAt && (
+            <span className="services-promo-validity">
+              Ends {formatOfferDate(offer.endsAt)}
             </span>
+          )}
+        </div>
 
-            <strong>
-              {
-                offer.promoCode
-              }
-            </strong>
-
-          </div>
-        )}
-
-        {remaining && (
-          <div className="promo-countdown">
-
-            {remaining.days >
-              0 && (
-                <div>
-                  <strong>
-                    {String(
-                      remaining.days,
-                    ).padStart(
-                      2,
-                      '0',
-                    )}
-                  </strong>
-
-                  <span>
-                    DAYS
-                  </span>
-                </div>
-              )}
-
-            <div>
-              <strong>
-                {String(
-                  remaining.hours,
-                ).padStart(
-                  2,
-                  '0',
-                )}
-              </strong>
-
-              <span>
-                HRS
-              </span>
-            </div>
-
-            <div>
-              <strong>
-                {String(
-                  remaining.minutes,
-                ).padStart(
-                  2,
-                  '0',
-                )}
-              </strong>
-
-              <span>
-                MINS
-              </span>
-            </div>
-
-            <div>
-              <strong>
-                {String(
-                  remaining.seconds,
-                ).padStart(
-                  2,
-                  '0',
-                )}
-              </strong>
-
-              <span>
-                SECS
-              </span>
-            </div>
-
-          </div>
-        )}
-
-        {offer.endsAt && (
-          <div className="services-promo-validity">
-            Valid until{' '}
-            {formatOfferDate(
-              offer.endsAt,
-            )}
-          </div>
-        )}
-
-        <Link
-          to="/booking"
-          className="services-promo-button"
-        >
+        <Link to="/booking" className="services-promo-button">
           Book Now
           <ArrowIcon />
         </Link>
-
       </div>
-
-      <div className="services-promo-art">
-
-        {offer.imageUrl ? (
-          <img
-            src={offer.imageUrl}
-            alt=""
-            loading="lazy"
-          />
-        ) : (
-          <div className="promo-gift">
-            <span>
-              W
-            </span>
-          </div>
-        )}
-
-      </div>
-
     </article>
   )
 }

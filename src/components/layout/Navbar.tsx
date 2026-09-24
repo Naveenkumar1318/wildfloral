@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
-  Link,
-  NavLink,
-  useLocation,
-} from 'react-router-dom'
-import {
+  Phone,
+  Sparkles,
+  LayoutDashboard,
+  LogIn,
   Menu,
-  UserRound,
   X,
+  Home,
+  Scissors,
+  Shirt
 } from 'lucide-react'
-
 import { supabase } from '../../lib/supabase'
-
 import './Navbar.css'
 
 function Navbar() {
@@ -20,7 +20,6 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [showNavbar, setShowNavbar] = useState(true)
 
   /* =======================================================
      AUTH SESSION
@@ -34,10 +33,7 @@ function Navbar() {
         data: { session },
       } = await supabase.auth.getSession()
 
-      if (!mounted) {
-        return
-      }
-
+      if (!mounted) return
       setIsLoggedIn(Boolean(session))
     }
 
@@ -45,15 +41,10 @@ function Navbar() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (!mounted) {
-          return
-        }
-
-        setIsLoggedIn(Boolean(session))
-      },
-    )
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return
+      setIsLoggedIn(Boolean(session))
+    })
 
     return () => {
       mounted = false
@@ -74,39 +65,12 @@ function Navbar() {
   ======================================================= */
 
   useEffect(() => {
-    let lastScrollY = window.scrollY
-
     function handleScroll() {
-      const currentScrollY = window.scrollY
-
-      setScrolled(currentScrollY > 12)
-
-      if (currentScrollY <= 12) {
-        setShowNavbar(true)
-      } else if (currentScrollY < lastScrollY) {
-        setShowNavbar(true)
-      } else if (currentScrollY > lastScrollY + 5) {
-        setShowNavbar(false)
-        setMobileOpen(false)
-      }
-
-      lastScrollY = currentScrollY
+      setScrolled(window.scrollY > 10)
     }
 
-    window.addEventListener(
-      'scroll',
-      handleScroll,
-      {
-        passive: true,
-      },
-    )
-
-    return () => {
-      window.removeEventListener(
-        'scroll',
-        handleScroll,
-      )
-    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   /* =======================================================
@@ -125,10 +89,6 @@ function Navbar() {
     }
   }, [mobileOpen])
 
-  /* =======================================================
-     ACTIONS
-  ======================================================= */
-
   function closeMobileMenu() {
     setMobileOpen(false)
   }
@@ -139,314 +99,183 @@ function Navbar() {
 
   return (
     <>
-      <header
-        className={[
-          'site-header',
-          showNavbar
-            ? 'site-header-visible'
-            : 'site-header-hidden',
-          scrolled
-            ? 'site-header-scrolled'
-            : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-      >
+      <div className="site-header-wrapper">
         {/* =================================================
-            ANNOUNCEMENT
+            TOP ANNOUNCEMENT BAR
         ================================================= */}
-
-        <div className="navbar-announcement">
-          <div className="navbar-announcement-inner">
-            <span>
-              ✦ Premium Beauty & Fashion Studio
-            </span>
-
-            <span className="navbar-announcement-divider">
-              |
-            </span>
-
-            <span>
-              Personalized experiences crafted for you
-            </span>
-
-            <Link
-              to="/services"
-              onClick={closeMobileMenu}
-            >
-              Explore Services →
-            </Link>
+        <div className="navbar-announcement-bar">
+          <div className="announcement-container">
+            <div className="announcement-text">
+              <span>✦ Premium Beauty &amp; Fashion Studio</span>
+              <span className="announcement-divider">|</span>
+              <span>Personalized experiences crafted for you</span>
+            </div>
           </div>
         </div>
 
         {/* =================================================
             MAIN HEADER
         ================================================= */}
-
-        <div className="site-header-container">
-
-          {/* BRAND */}
-
-          <Link
-            to="/"
-            className="brand"
-            onClick={closeMobileMenu}
-            aria-label="WildFloral home"
-          >
-            <span className="brand-name">
-              WildFloral
-            </span>
-
-            <span className="brand-tagline">
-              Beauty & Fashion Studio
-            </span>
-          </Link>
-
-          {/* =================================================
-              DESKTOP NAVIGATION
-          ================================================= */}
-
-          <nav
-            className="main-navigation"
-            aria-label="Main navigation"
-          >
-            <NavLink
-              to="/"
-              end
-            >
-              Home
-            </NavLink>
-
-            <NavLink to="/about">
-              About
-            </NavLink>
-
-            <NavLink to="/services">
-              Beauty Services
-            </NavLink>
-
-            <NavLink to="/fashion">
-              Fashion Services
-            </NavLink>
-
-            <NavLink to="/portfolio">
-              Portfolio
-            </NavLink>
-
-            <NavLink to="/contact">
-              Contact
-            </NavLink>
-          </nav>
-
-          {/* =================================================
-              DESKTOP ACTIONS
-          ================================================= */}
-
-          <div className="header-actions">
-
-            {isLoggedIn ? (
-  <Link
-    to="/account"
-    className="header-dashboard-link"
-    aria-label="Dashboard"
-    title="Dashboard"
-  >
-   
-    <span>MY Dashboard  → </span>
-    
-  </Link>
-) : (
-              <Link
-                to="/login"
-                className="header-login-link"
-              >
-                Sign In
-              </Link>
-            )}
-
-            <Link
-              to="/booking"
-              className="header-book-button"
-            >
-              Book Appointment
-
-              <span aria-hidden="true">
-                →
-              </span>
-            </Link>
-          </div>
-
-          {/* =================================================
-              MOBILE MENU BUTTON
-          ================================================= */}
-
-          <button
-            type="button"
-            className="mobile-menu-button"
-            onClick={toggleMobileMenu}
-            aria-label={
-              mobileOpen
-                ? 'Close navigation menu'
-                : 'Open navigation menu'
-            }
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-navigation"
-          >
-            {mobileOpen ? (
-              <X
-                size={22}
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
-            ) : (
-              <Menu
-                size={22}
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
-            )}
-          </button>
-        </div>
-
-        {/* =================================================
-            MOBILE NAVIGATION
-        ================================================= */}
-
-        <div
-          id="mobile-navigation"
-          className={[
-            'mobile-navigation-wrapper',
-            mobileOpen
-              ? 'mobile-navigation-open'
-              : '',
-          ]
-            .filter(Boolean)
-            .join(' ')}
+        <header
+          className={`site-navbar ${scrolled ? 'site-navbar-scrolled' : ''}`}
         >
-          <nav
-            className="mobile-navigation"
-            aria-label="Mobile navigation"
-          >
-            <div className="mobile-navigation-heading">
-              <span>
-                WILDFLORAL
-              </span>
+          <div className="navbar-container">
+            {/* BRAND LOGO */}
+            <Link to="/" className="navbar-brand" onClick={closeMobileMenu}>
+              <div className="navbar-logo-circle">
+                <Sparkles size={20} className="logo-sparkle-icon" />
+              </div>
+              <div className="navbar-brand-text">
+                <span className="brand-title">
+                  WildFloral<span className="brand-dot">.</span>
+                </span>
+                <span className="brand-subtitle">BEAUTY &amp; FASHION</span>
+              </div>
+            </Link>
 
-              <small>
-                BEAUTY · FASHION · YOU
-              </small>
+            {/* DESKTOP NAVIGATION */}
+            <nav className="navbar-links">
+              <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
+                Home
+              </NavLink>
+              <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
+                About
+              </NavLink>
+              <NavLink to="/services" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Beauty Services
+              </NavLink>
+              <NavLink to="/fashion" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Fashion Services
+              </NavLink>
+              <NavLink to="/portfolio" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Portfolio
+              </NavLink>
+              <NavLink to="/contact" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Contact Us
+              </NavLink>
+            </nav>
+
+            {/* DESKTOP RIGHT ACTIONS */}
+            <div className="navbar-right-actions">
+              {isLoggedIn ? (
+                <Link to="/account" className="dashboard-pill-btn">
+                  <LayoutDashboard size={16} />
+                  <span>My Dashboard</span>
+                </Link>
+              ) : (
+                <Link to="/login" className="dashboard-pill-btn">
+                  <LogIn size={16} />
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
 
-            <NavLink
-              to="/"
-              end
+            {/* MOBILE TOP PHONE BUTTON */}
+            <div className="navbar-mobile-header-action">
+              <a href="tel:8838894677" className="mobile-header-call-pill">
+                <Phone size={14} />
+                <span>8838894677</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* =================================================
+            MOBILE DRAWER MENU
+        ================================================= */}
+        <div className={`mobile-drawer ${mobileOpen ? 'open' : ''}`}>
+          <div className="mobile-drawer-header">
+            <div className="mobile-drawer-title-group">
+              <span className="mobile-brand-name">WildFloral.</span>
+              <small className="mobile-brand-sub">BEAUTY &amp; FASHION</small>
+            </div>
+            <button
+              type="button"
+              className="mobile-drawer-close"
               onClick={closeMobileMenu}
+              aria-label="Close menu"
             >
-              <span>01</span>
+              <X size={18} />
+            </button>
+          </div>
+
+          <nav className="mobile-drawer-nav">
+            <NavLink to="/" end onClick={closeMobileMenu}>
               Home
             </NavLink>
-
-            <NavLink
-              to="/about"
-              onClick={closeMobileMenu}
-            >
-              <span>02</span>
+            <NavLink to="/about" onClick={closeMobileMenu}>
               About
             </NavLink>
-
-            <NavLink
-              to="/services"
-              onClick={closeMobileMenu}
-            >
-              <span>03</span>
+            <NavLink to="/services" onClick={closeMobileMenu}>
               Beauty Services
             </NavLink>
-
-            <NavLink
-              to="/fashion"
-              onClick={closeMobileMenu}
-            >
-              <span>04</span>
+            <NavLink to="/fashion" onClick={closeMobileMenu}>
               Fashion Services
             </NavLink>
-
-            <NavLink
-              to="/portfolio"
-              onClick={closeMobileMenu}
-            >
-              <span>05</span>
+            <NavLink to="/portfolio" onClick={closeMobileMenu}>
               Portfolio
             </NavLink>
-
-            <NavLink
-              to="/contact"
-              onClick={closeMobileMenu}
-            >
-              <span>06</span>
-              Contact
+            <NavLink to="/contact" onClick={closeMobileMenu}>
+              Contact Us
             </NavLink>
 
-            <div className="mobile-navigation-divider" />
+            <div className="mobile-drawer-divider" />
 
             {isLoggedIn ? (
-              <Link
-                to="/account"
-                className="mobile-account-link"
-                onClick={closeMobileMenu}
-              >
-                <UserRound
-                  size={17}
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-
-                My Account
+              <Link to="/account" className="mobile-dashboard-link" onClick={closeMobileMenu}>
+                <LayoutDashboard size={18} />
+                <span>My Dashboard</span>
               </Link>
             ) : (
-              <Link
-                to="/login"
-                className="mobile-account-link"
-                onClick={closeMobileMenu}
-              >
-                <UserRound
-                  size={17}
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-
-                Sign In
+              <Link to="/login" className="mobile-dashboard-link" onClick={closeMobileMenu}>
+                <LogIn size={18} />
+                <span>Login</span>
               </Link>
             )}
 
-            <Link
-              to="/booking"
-              className="mobile-book-button"
-              onClick={closeMobileMenu}
-            >
-              Book Appointment
-
-              <span aria-hidden="true">
-                →
-              </span>
+            <Link to="/booking" className="mobile-booking-link" onClick={closeMobileMenu}>
+              Book Appointment →
             </Link>
           </nav>
         </div>
-      </header>
 
-      {/* =================================================
-          MOBILE BACKDROP
-      ================================================= */}
+        {/* MOBILE MENU BACKDROP */}
+        {mobileOpen && <div className="mobile-drawer-backdrop" onClick={closeMobileMenu} />}
+      </div>
 
-      {mobileOpen && (
-        <button
-          type="button"
-          className="mobile-menu-backdrop"
-          aria-label="Close navigation menu"
-          onClick={closeMobileMenu}
-        />
-      )}
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
+      <nav className="mobile-bottom-nav">
+        <NavLink to="/" end className="bottom-nav-item">
+          <Home size={18} />
+          <span>Home</span>
+        </NavLink>
+        <NavLink to="/services" className="bottom-nav-item">
+          <Scissors size={18} />
+          <span>Beauty Services</span>
+        </NavLink>
+        <NavLink to="/fashion" className="bottom-nav-item">
+          <Shirt size={18} />
+          <span>Fashion Services</span>
+        </NavLink>
+        {isLoggedIn ? (
+          <NavLink to="/account" className="bottom-nav-item">
+            <LayoutDashboard size={18} />
+            <span>Dashboard</span>
+          </NavLink>
+        ) : (
+          <NavLink to="/login" className="bottom-nav-item">
+            <LogIn size={18} />
+            <span>Login</span>
+          </NavLink>
+        )}
+        <button type="button" className="bottom-nav-item" onClick={toggleMobileMenu}>
+          <Menu size={18} />
+          <span>Menu</span>
+        </button>
+      </nav>
     </>
   )
 }
 
 export default Navbar
+

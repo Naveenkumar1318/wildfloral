@@ -41,6 +41,9 @@ type Service = {
 
 const SERVICES_PER_PAGE = 10
 
+const ADMIN_BEAUTY_SERVICES_PAGE_KEY =
+  'wildfloral_admin_beauty_services_page'
+
 /* =========================================================
    COMPONENT
 ========================================================= */
@@ -78,13 +81,35 @@ function AdminBeautyServices() {
     useState(false)
 
   const [currentPage, setCurrentPage] =
-    useState(1)
+    useState(() => {
+      try {
+        const storedPage =
+          window.sessionStorage.getItem(
+            ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+          )
+
+        const page = Number(storedPage)
+
+        return Number.isInteger(page) &&
+          page >= 1
+          ? page
+          : 1
+      } catch {
+        return 1
+      }
+    })
 
   /* =======================================================
      LOAD DATA
   ======================================================= */
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    })
+
     void loadData()
   }, [])
 
@@ -355,6 +380,33 @@ function AdminBeautyServices() {
       totalPages,
     )
 
+  useEffect(() => {
+    if (
+      loading ||
+      services.length === 0
+    ) {
+      return
+    }
+
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+
+      try {
+        window.sessionStorage.setItem(
+          ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+          String(totalPages),
+        )
+      } catch {
+        // Ignore storage errors.
+      }
+    }
+  }, [
+    currentPage,
+    totalPages,
+    loading,
+    services.length,
+  ])
+
   const startIndex =
     (safePage - 1) *
     SERVICES_PER_PAGE
@@ -378,16 +430,7 @@ function AdminBeautyServices() {
       filteredServices.length,
     )
 
-  /* =======================================================
-     RESET PAGE WHEN FILTER CHANGES
-  ======================================================= */
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [
-    search,
-    categoryFilter,
-  ])
 
   /* =======================================================
      CATEGORY FILTER LABEL
@@ -413,6 +456,15 @@ function AdminBeautyServices() {
     setCategoryFilter(categoryId)
     setDropdownOpen(false)
     setCurrentPage(1)
+
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+        '1',
+      )
+    } catch {
+      // Ignore storage errors.
+    }
   }
 
   /* =======================================================
@@ -424,6 +476,15 @@ function AdminBeautyServices() {
   ) {
     setCategoryFilter(categoryId)
     setCurrentPage(1)
+
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+        '1',
+      )
+    } catch {
+      // Ignore storage errors.
+    }
 
     window.setTimeout(() => {
       document
@@ -526,6 +587,15 @@ function AdminBeautyServices() {
       page > totalPages
     ) {
       return
+    }
+
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+        String(page),
+      )
+    } catch {
+      // Ignore storage errors.
     }
 
     setCurrentPage(page)
@@ -964,11 +1034,19 @@ function AdminBeautyServices() {
                 type="search"
                 value={search}
                 placeholder="Search services..."
-                onChange={(event) =>
-                  setSearch(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => {
+                  setSearch(event.target.value)
+                  setCurrentPage(1)
+
+                  try {
+                    window.sessionStorage.setItem(
+                      ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+                      '1',
+                    )
+                  } catch {
+                    // Ignore storage errors.
+                  }
+                }}
               />
 
             </div>
@@ -1278,11 +1356,20 @@ function AdminBeautyServices() {
 
                               <button
                                 type="button"
-                                onClick={() =>
+                                onClick={() => {
+                                  try {
+                                    window.sessionStorage.setItem(
+                                      ADMIN_BEAUTY_SERVICES_PAGE_KEY,
+                                      String(safePage),
+                                    )
+                                  } catch {
+                                    // Ignore storage errors.
+                                  }
+
                                   navigate(
                                     `/admin/services/${service.id}/edit`,
                                   )
-                                }
+                                }}
                               >
                                 Edit
                               </button>

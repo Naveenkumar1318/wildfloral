@@ -2842,6 +2842,11 @@ html {
 }
 
 @media (max-width: 768px) {
+  .fashion-floating-cart {
+    right: 18px;
+    bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
   .fashion-hero {
     width: 100%;
     margin: 0;

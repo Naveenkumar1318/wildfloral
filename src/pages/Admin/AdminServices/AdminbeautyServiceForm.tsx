@@ -245,6 +245,12 @@ function AdminBeautyServiceForm() {
   ========================================================= */
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    })
+
     void loadCategories()
 
     if (id) {

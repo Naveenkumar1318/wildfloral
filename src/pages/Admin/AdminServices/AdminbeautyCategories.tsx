@@ -29,6 +29,9 @@ type FilterType =
 
 const ITEMS_PER_PAGE = 10
 
+const ADMIN_BEAUTY_CATEGORIES_PAGE_KEY =
+  'admin_beauty_categories_page'
+
 function AdminBeautyCategories() {
   const navigate = useNavigate()
 
@@ -48,7 +51,23 @@ function AdminBeautyCategories() {
     useState<FilterType>('all')
 
   const [currentPage, setCurrentPage] =
-    useState(1)
+    useState(() => {
+      try {
+        const stored =
+          window.sessionStorage.getItem(
+            ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+          )
+
+        const page = Number(stored)
+
+        return Number.isInteger(page) &&
+          page >= 1
+          ? page
+          : 1
+      } catch {
+        return 1
+      }
+    })
 
   /* =====================================================
      LOAD CATEGORIES
@@ -91,6 +110,12 @@ function AdminBeautyCategories() {
   }
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    })
+
     void loadCategories()
   }, [])
 
@@ -160,6 +185,33 @@ function AdminBeautyCategories() {
       currentPage,
       totalPages,
     )
+
+  useEffect(() => {
+    if (
+      loading ||
+      categories.length === 0
+    ) {
+      return
+    }
+
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+
+      try {
+        window.sessionStorage.setItem(
+          ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+          String(totalPages),
+        )
+      } catch {
+        // Ignore storage errors.
+      }
+    }
+  }, [
+    currentPage,
+    totalPages,
+    loading,
+    categories.length,
+  ])
 
   const startIndex =
     (safePage - 1) *
@@ -290,6 +342,15 @@ function AdminBeautyCategories() {
       return
     }
 
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+        String(page),
+      )
+    } catch {
+      // Ignore storage errors.
+    }
+
     setCurrentPage(page)
   }
 
@@ -302,12 +363,30 @@ function AdminBeautyCategories() {
   ) {
     setFilter(value)
     setCurrentPage(1)
+
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+        '1',
+      )
+    } catch {
+      // Ignore storage errors.
+    }
   }
 
   function clearFilters() {
     setSearch('')
     setFilter('all')
     setCurrentPage(1)
+
+    try {
+      window.sessionStorage.setItem(
+        ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+        '1',
+      )
+    } catch {
+      // Ignore storage errors.
+    }
   }
 
   /* =====================================================
@@ -556,6 +635,15 @@ function AdminBeautyCategories() {
                     )
 
                     setCurrentPage(1)
+
+                    try {
+                      window.sessionStorage.setItem(
+                        ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+                        '1',
+                      )
+                    } catch {
+                      // Ignore storage errors.
+                    }
                   }}
                 />
 
@@ -730,11 +818,20 @@ function AdminBeautyCategories() {
                         <button
                           type="button"
                           className="admin-category-card-edit"
-                          onClick={() =>
+                          onClick={() => {
+                            try {
+                              window.sessionStorage.setItem(
+                                ADMIN_BEAUTY_CATEGORIES_PAGE_KEY,
+                                String(safePage),
+                              )
+                            } catch {
+                              // Ignore storage errors.
+                            }
+
                             navigate(
                               `/admin/services/categories/${category.id}/edit`,
                             )
-                          }
+                          }}
                           aria-label={`Edit ${category.name}`}
                         >
                           <svg

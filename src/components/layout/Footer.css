@@ -1,805 +1,608 @@
 /* =========================================================
-   WILDFLORAL GLOBAL FOOTER
+   WILDFLORAL LUXURY ELECTRIC PURPLE FOOTER STYLES
+   Rich, Vibrant Electric Purple (#5a01b5) Theme
 ========================================================= */
 
+footer.site-footer,
 .site-footer {
-  margin-top: 100px;
+  width: 100%;
+  background-color: #5a01b5 !important;
+  color: #ffffff !important;
+  padding: 64px 0 40px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  clear: both;
+}
 
-  background:
-    var(--color-dark, #211c19);
+.site-footer *,
+.site-footer *::before,
+.site-footer *::after {
+  box-sizing: border-box;
+}
 
-  color:
-    rgba(255, 255, 255, 0.72);
+.site-footer a {
+  text-decoration: none;
+  color: inherit;
 }
 
 /* =========================================================
-   MAIN FOOTER
+   CONTAINER & GRID
 ========================================================= */
 
 .site-footer-container {
-  width:
-    min(
-      1240px,
-      calc(100% - 40px)
-    );
+  width: min(1280px, calc(100% - 48px));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
 
-  margin:
-    0 auto;
+.footer-grid {
+  display: grid;
+  grid-template-columns: 4fr 2fr 3fr 3fr;
+  gap: 48px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
 
-  padding:
-    72px 0 68px;
-
-  display:
-    grid;
-
-  grid-template-columns:
-    1.7fr
-    0.9fr
-    1.1fr
-    1fr;
-
-  gap:
-    55px;
+.footer-col {
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================================================
-   BRAND
+   COLUMN 1: BRANDING & HOURS
 ========================================================= */
 
-.footer-brand-name {
-  display:
-    block;
-
-  width:
-    fit-content;
-
-  margin-bottom:
-    6px;
-
-  color:
-    #ffffff;
-
-  font-family:
-    var(--font-display),
-    Georgia,
-    serif;
-
-  font-size:
-    38px;
-
-  font-weight:
-    400;
-
-  line-height:
-    1;
-
-  letter-spacing:
-    -0.035em;
-
-  text-decoration:
-    none;
-
-  transition:
-    opacity 180ms ease;
+.brand-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
 }
 
-.footer-brand-name:hover {
-  opacity:
-    0.8;
+.brand-header-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.footer-brand-tagline {
-  display:
-    block;
-
-  color:
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-
-  font-size:
-    9px;
-
-  font-weight:
-    700;
-
-  letter-spacing:
-    1.8px;
-
-  text-transform:
-    uppercase;
+.brand-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.footer-brand p {
-  max-width:
-    320px;
+.brand-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #5a01b5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
 
-  margin:
-    28px 0 0;
+.brand-sparkle-icon {
+  color: #5a01b5;
+}
 
-  color:
-    rgba(255, 255, 255, 0.52);
+.brand-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
 
-  font-size:
-    12px;
+.brand-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff !important;
+  line-height: 1;
+}
 
-  line-height:
-    1.8;
+.brand-dot {
+  color: #e4cdff;
+}
+
+.brand-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: #e4cdff !important;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.brand-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e9d5ff !important;
+  max-width: 360px;
+  margin: 0 0 20px 0;
+}
+
+.instagram-pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.instagram-pill-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.instagram-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #5a01b5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.instagram-svg {
+  width: 12px;
+  height: 12px;
+}
+
+.instagram-handle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.insta-arrow-icon {
+  color: #e4cdff;
+  transition: transform 0.2s ease;
+}
+
+.instagram-pill-link:hover .insta-arrow-icon {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Working Hours Card */
+.working-hours-card {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 360px;
+}
+
+.hours-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e4cdff !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hours-clock-icon {
+  color: #e4cdff;
+}
+
+.hours-time-range {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff !important;
+  margin: 2px 0 0 0;
+}
+
+.hours-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6ee7b7 !important;
+  margin-top: 2px;
 }
 
 /* =========================================================
-   INSTAGRAM
+   COLUMN TITLES & GENERAL LISTS
 ========================================================= */
 
-.footer-instagram {
-  width:
-    fit-content;
-
-  margin-top:
-    24px;
-
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  gap:
-    9px;
-
-  color:
-    rgba(255, 255, 255, 0.65);
-
-  font-size:
-    10px;
-
-  font-weight:
-    600;
-
-  text-decoration:
-    none;
-
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
+.column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff !important;
+  letter-spacing: 0.02em;
+  margin: 0 0 20px 0;
 }
 
-.footer-instagram:hover {
-  color:
-    #ffffff;
-
-  transform:
-    translateX(2px);
-}
-
-.footer-instagram-icon {
-  width:
-    28px;
-
-  height:
-    28px;
-
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.2);
-
-  border-radius:
-    50%;
-
-  font-size:
-    12px;
-
-  font-weight:
-    600;
-}
-
-.footer-instagram:focus-visible {
-  outline:
-    2px solid
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-
-  outline-offset:
-    4px;
+.column-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e9d5ff !important;
+  margin: 0 0 20px 0;
 }
 
 /* =========================================================
-   FOOTER COLUMNS
+   COLUMN 2: QUICK LINKS
 ========================================================= */
 
-.footer-column {
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    flex-start;
-
-  gap:
-    13px;
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.footer-heading {
-  margin-bottom:
-    9px;
-
-  color:
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-
-  font-size:
-    9px;
-
-  font-weight:
-    700;
-
-  letter-spacing:
-    1.8px;
-
-  text-transform:
-    uppercase;
+.footer-links-list a {
+  color: #e9d5ff !important;
+  font-size: 14px;
+  font-weight: 400;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
 }
 
-.footer-column a {
-  width:
-    fit-content;
-
-  color:
-    rgba(255, 255, 255, 0.62);
-
-  font-size:
-    12px;
-
-  line-height:
-    1.5;
-
-  text-decoration:
-    none;
-
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.footer-column a:hover {
-  color:
-    #ffffff;
-
-  transform:
-    translateX(2px);
-}
-
-.footer-column a:focus-visible {
-  outline:
-    2px solid
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-
-  outline-offset:
-    4px;
+.footer-links-list a:hover {
+  color: #ffffff !important;
+  transform: translateX(3px);
 }
 
 /* =========================================================
-   APPOINTMENTS
+   COLUMN 3: APPOINTMENTS
 ========================================================= */
 
-.footer-booking {
-  gap:
-    14px;
+.appt-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.footer-booking p {
-  max-width:
-    240px;
+.appt-top-content {
+  display: flex;
+  flex-direction: column;
+}
 
-  margin:
-    0 0 5px;
+.book-appointment-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 9999px;
+  background-color: #7a22ea !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+  margin-bottom: 12px;
+}
 
-  color:
-    rgba(255, 255, 255, 0.48);
+.book-appointment-btn:hover {
+  background-color: #8831f7 !important;
+  transform: scale(1.02);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
 
-  font-size:
-    12px;
+.btn-arrow {
+  transition: transform 0.2s ease;
+}
 
-  line-height:
-    1.7;
+.book-appointment-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.enquiry-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.enquiry-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.appt-bottom-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+}
+
+.emerald-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+  flex-shrink: 0;
 }
 
 /* =========================================================
-   BOOK BUTTON
+   COLUMN 4: CONTACT INFO
 ========================================================= */
 
-.footer-book-button {
-  min-height:
-    43px;
-
-  display:
-    inline-flex !important;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  gap:
-    12px;
-
-  padding:
-    0 18px;
-
-  border:
-    1px solid
-    var(
-      --color-accent,
-      #6540d8
-    );
-
-  border-radius:
-    4px;
-
-  background:
-    var(
-      --color-accent,
-      #6540d8
-    );
-
-  color:
-    #ffffff !important;
-
-  font-size:
-    8px !important;
-
-  font-weight:
-    800;
-
-  letter-spacing:
-    0.09em;
-
-  text-transform:
-    uppercase;
-
-  box-shadow:
-    0 8px 24px
-    rgba(101, 64, 216, 0.18);
-
-  transition:
-    background 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.footer-book-button span {
-  font-size:
-    13px;
-
-  line-height:
-    1;
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.footer-book-button:hover {
-  background:
-    var(
-      --color-accent-dark,
-      #5130bd
-    );
+.contact-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
 
-  border-color:
-    var(
-      --color-accent-dark,
-      #5130bd
-    );
+.contact-details {
+  display: flex;
+  flex-direction: column;
+}
 
-  transform:
-    translateY(-1px);
+.contact-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e4cdff !important;
+  text-transform: uppercase;
+}
 
-  box-shadow:
-    0 10px 28px
-    rgba(101, 64, 216, 0.25);
+.contact-value-link {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff !important;
+  margin-top: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.contact-value-link:hover {
+  opacity: 0.85;
+}
+
+.link-with-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.link-with-arrow:hover {
+  text-decoration: underline;
+}
+
+.contact-value-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #ffffff !important;
+  font-weight: 500;
+  margin: 2px 0 0 0;
 }
 
 /* =========================================================
-   ENQUIRY
+   BOTTOM LEGAL & CONTROLS BAR
 ========================================================= */
 
-.footer-enquiry-link {
-  color:
-    rgba(255, 255, 255, 0.48) !important;
-
-  font-size:
-    10px !important;
-
-  font-weight:
-    600;
-
-  text-decoration:
-    underline !important;
-
-  text-underline-offset:
-    4px;
+.footer-bottom-bar {
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #e9d5ff !important;
 }
 
-.footer-enquiry-link:hover {
-  color:
-    #ffffff !important;
+.copyright-text {
+  color: #e9d5ff !important;
+}
+
+.legal-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.legal-links a {
+  color: #e9d5ff !important;
+  transition: color 0.2s ease;
+}
+
+.legal-links a:hover {
+  color: #ffffff !important;
+}
+
+.admin-login-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bar-separator {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.bar-separator.muted {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.locale-selector-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.locale-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.locale-btn:hover {
+  opacity: 0.8;
 }
 
 /* =========================================================
-   CONTACT
+   RESPONSIVE DESIGN (TABLET & MOBILE)
 ========================================================= */
 
-.footer-contact {
-  gap:
-    20px;
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
 }
 
-.footer-contact-item {
-  display:
-    inline-flex;
+@media (max-width: 640px) {
+  footer.site-footer,
+  .site-footer {
+    padding: 40px 0 120px;
+  }
 
-  align-items:
-    flex-start;
-
-  gap:
-    10px;
-
-  color:
-    rgba(255, 255, 255, 0.62) !important;
-
-  font-size:
-    11px !important;
-
-  line-height:
-    1.6;
-
-  text-decoration:
-    none !important;
-
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.footer-contact-item svg {
-  flex-shrink:
-    0;
-
-  margin-top:
-    2px;
-
-  color:
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-}
-
-.footer-contact-item:hover {
-  color:
-    #ffffff !important;
-
-  transform:
-    translateX(2px);
-}
-
-/* =========================================================
-   BOTTOM BAR
-========================================================= */
-
-.footer-bottom {
-  background:
-    rgba(0, 0, 0, 0.22);
-
-  border-top:
-    1px solid
-    rgba(255, 255, 255, 0.1);
-}
-
-.footer-bottom-inner {
-  width:
-    min(
-      1240px,
-      calc(100% - 40px)
-    );
-
-  min-height:
-    62px;
-
-  margin:
-    0 auto;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    25px;
-}
-
-/* =========================================================
-   LEGAL
-========================================================= */
-
-.footer-legal {
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  gap:
-    12px;
-}
-
-.footer-legal a {
-  color:
-    rgba(255, 255, 255, 0.4);
-
-  font-size:
-    9px;
-
-  text-decoration:
-    none;
-
-  transition:
-    color 180ms ease;
-}
-
-.footer-legal a:hover {
-  color:
-    #ffffff;
-}
-
-.footer-legal span {
-  color:
-    rgba(255, 255, 255, 0.18);
-}
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-.footer-admin-link {
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  gap:
-    7px;
-
-  color:
-    rgba(255, 255, 255, 0.42);
-
-  font-size:
-    9px;
-
-  font-weight:
-    700;
-
-  letter-spacing:
-    1.3px;
-
-  text-decoration:
-    none;
-
-  text-transform:
-    uppercase;
-
-  transition:
-    color 180ms ease,
-    gap 180ms ease;
-}
-
-.footer-admin-link:hover {
-  color:
-    #ffffff;
-
-  gap:
-    10px;
-}
-
-.footer-admin-link span {
-  font-size:
-    13px;
-}
-
-.footer-admin-link:focus-visible {
-  outline:
-    2px solid
-    var(
-      --color-accent-soft,
-      #d8b7c1
-    );
-
-  outline-offset:
-    5px;
-}
-
-/* =========================================================
-   COPYRIGHT
-========================================================= */
-
-.footer-copyright {
-  color:
-    rgba(255, 255, 255, 0.3);
-
-  font-size:
-    9px;
-
-  text-align:
-    right;
-}
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 950px) {
   .site-footer-container {
-    grid-template-columns:
-      1.5fr
-      1fr
-      1fr;
-
-    gap:
-      45px;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    margin: 0 auto;
   }
 
-  .footer-brand {
-    grid-column:
-      1 / -1;
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: none;
   }
 
-  .footer-contact {
-    grid-column:
-      2 / -1;
-  }
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 680px) {
-  .site-footer-container {
-    width:
-      min(
-        calc(100% - 32px),
-        560px
-      );
-
-    padding:
-      58px 0 52px;
-
-    grid-template-columns:
-      1fr 1fr;
-
-    gap:
-      42px 30px;
+  .brand-col {
+    align-items: center;
+    text-align: center;
   }
 
-  .footer-brand {
-    grid-column:
-      1 / -1;
+  .brand-logo-row {
+    justify-content: center;
   }
 
-  .footer-brand-name {
-    font-size:
-      34px;
+  .brand-description {
+    max-width: 100%;
   }
 
-  .footer-booking {
-    grid-column:
-      1 / -1;
+  .instagram-pill-link {
+    margin: 0 auto 12px auto;
   }
 
-  .footer-contact {
-    grid-column:
-      1 / -1;
+  .working-hours-card {
+    max-width: 100%;
+    width: 100%;
+    text-align: left;
   }
 
-  .footer-book-button {
-    width:
-      100%;
+  /* Mobile Content Cards */
+  .links-col,
+  .appt-col,
+  .contact-col {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
   }
 
-  .footer-bottom-inner {
-    width:
-      min(
-        calc(100% - 32px),
-        560px
-      );
-
-    min-height:
-      auto;
-
-    padding:
-      18px 0;
-
-    flex-direction:
-      column;
-
-    align-items:
-      flex-start;
-
-    gap:
-      12px;
+  /* 2-Column Grid for Quick Links on Mobile */
+  .footer-links-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  .footer-copyright {
-    text-align:
-      left;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 430px) {
-  .site-footer-container {
-    grid-template-columns:
-      1fr;
-
-    gap:
-      38px;
+  .footer-links-list a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
   }
 
-  .footer-brand,
-  .footer-booking,
-  .footer-contact {
-    grid-column:
-      auto;
+  .footer-bottom-bar {
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: 14px;
   }
 
-  .footer-legal {
-    flex-wrap:
-      wrap;
-
-    gap:
-      8px 12px;
+  .legal-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 11px;
+    gap: 10px;
   }
-}
 
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
+  .locale-selector-group {
+    justify-content: center;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .footer-brand-name,
-  .footer-instagram,
-  .footer-column a,
-  .footer-book-button,
-  .footer-legal a,
-  .footer-admin-link,
-  .footer-contact-item {
-    transition:
-      none;
+  .copyright-text {
+    font-size: 11px;
+    opacity: 0.8;
   }
 }
