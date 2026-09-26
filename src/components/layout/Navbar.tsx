@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   Phone,
@@ -20,6 +20,9 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [homeHeroHidden, setHomeHeroHidden] = useState(
+    location.pathname === '/',
+  )
 
   /* =======================================================
      AUTH SESSION
@@ -65,12 +68,91 @@ function Navbar() {
   ======================================================= */
 
   useEffect(() => {
-    function handleScroll() {
-      setScrolled(window.scrollY > 10)
+    const isHomePage = location.pathname === '/'
+
+    if (!isHomePage) {
+      setHomeHeroHidden(false)
+      return
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10)
+
+      const hero = document.querySelector<HTMLElement>(
+        '.home-hero-shell',
+      )
+
+      const viewport = document.querySelector<HTMLElement>(
+        '.home-hero-viewport',
+      )
+
+      if (!hero || !viewport) {
+        setHomeHeroHidden(window.scrollY === 0)
+        return
+      }
+
+      const heroEnd =
+        hero.offsetTop +
+        hero.offsetHeight -
+        viewport.offsetHeight
+
+      setHomeHeroHidden(
+        window.scrollY < Math.max(0, heroEnd),
+      )
+    }
+
+    handleScroll()
+
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+      { passive: true },
+    )
+
+    window.addEventListener(
+      'resize',
+      handleScroll,
+    )
+
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        handleScroll,
+      )
+
+      window.removeEventListener(
+        'resize',
+        handleScroll,
+      )
+    }
+  }, [location.pathname])
+
+  useLayoutEffect(() => {
+    const header = document.querySelector<HTMLElement>(
+      '.site-header-wrapper',
+    )
+
+    if (!header) return
+
+    const updateHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        '--site-header-height',
+        `${header.offsetHeight}px`,
+      )
+    }
+
+    updateHeaderHeight()
+
+    const observer = new ResizeObserver(updateHeaderHeight)
+
+    observer.observe(header)
+
+    window.addEventListener('resize', updateHeaderHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateHeaderHeight)
+    }
   }, [])
 
   /* =======================================================
@@ -99,7 +181,11 @@ function Navbar() {
 
   return (
     <>
-      <div className="site-header-wrapper">
+      <div
+        className={`site-header-wrapper ${
+          homeHeroHidden ? 'home-hero-hidden' : ''
+        }`}
+      >
         {/* =================================================
             TOP ANNOUNCEMENT BAR
         ================================================= */}
@@ -244,7 +330,11 @@ function Navbar() {
       </div>
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
-      <nav className="mobile-bottom-nav">
+      <nav
+        className={`mobile-bottom-nav ${
+          homeHeroHidden ? 'home-hero-hidden' : ''
+        }`}
+      >
         <NavLink to="/" end className="bottom-nav-item">
           <Home size={18} />
           <span>Home</span>
@@ -278,4 +368,4 @@ function Navbar() {
 }
 
 export default Navbar
-
+

@@ -45,9 +45,9 @@ const About: React.FC = () => {
               </h1>
 
               <p className="about-hero-description">
-                WildFloral is built on a journey that brings together beauty
-                therapy, business knowledge, fashion design, creativity, and a
-                passion for creating meaningful experiences.
+                WildFloral brings together Beauty Therapy, Business Administration,
+                Fashion &amp; Apparel Designing, and a growing passion for creating
+                meaningful beauty and fashion experiences.
               </p>
 
               <div className="about-hero-actions">
@@ -64,7 +64,7 @@ const About: React.FC = () => {
               <div className="trust-ribbon">
                 <div className="ribbon-item">
                   <Flower2 size={16} className="ribbon-icon" />
-                  <span>Haute Couture &amp; Botanical Alchemy</span>
+                  <span>Beauty Therapy &amp; Fashion Design</span>
                 </div>
                 <span className="ribbon-bullet">•</span>
                 <div className="ribbon-item">
@@ -87,7 +87,7 @@ const About: React.FC = () => {
                   <div className="visual-image-box">
                     <img
                       src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80"
-                      alt="Luxury Haute Couture & Beauty Editorial"
+                      alt="Beauty Therapy & Fashion Design Editorial"
                       className="visual-img"
                     />
                     <div className="visual-overlay-gradient"></div>
@@ -97,15 +97,14 @@ const About: React.FC = () => {
                       <div className="badge-overlay-header">
                         <Flower2 size={16} className="text-purple-600" />
                         <span className="badge-overlay-tag">
-                          Haute Couture &amp; Beauty
+                          Beauty &amp; Fashion Design
                         </span>
                       </div>
                       <h4 className="badge-overlay-title">
-                        WildFloral Sanctuary
+                        WildFloral Journey
                       </h4>
                       <p className="badge-overlay-sub">
-                        Botanical aesthetics &amp; bespoke tailoring handcrafted
-                        with purpose.
+                        Beauty Therapy, Fashion Design &amp; Entrepreneurship.
                       </p>
                     </div>
                   </div>
@@ -133,7 +132,8 @@ const About: React.FC = () => {
               </h2>
             </div>
             <p className="section-subtext-caps">
-              The convergence of craftsmanship, intuition, and formal mastery.
+              A journey shaped by professional training, creative education,
+              continuous learning, and entrepreneurial ambition.
             </p>
           </div>
 
@@ -143,16 +143,20 @@ const About: React.FC = () => {
               <div className="narrative-text-body">
                 <p className="dropcap-paragraph">
                   <span className="dropcap">O</span>ur journey is rooted in
-                  creativity, skill, and a genuine passion for beauty and
-                  fashion. With a professional background in Beauty Therapy,
-                  Business Administration, and Fashion &amp; Apparel Designing,
-                  we bring together diverse expertise to create a unique and
-                  evolving approach to the fashion and lifestyle industry.
+                  creativity, skill, and a passion for beauty and fashion.
+                  With a professional background in Beauty Therapy, Business
+                  Administration, and Fashion &amp; Apparel Designing, we bring
+                  together diverse expertise to create a unique and evolving
+                  approach to the fashion and lifestyle industry.
                 </p>
+
                 <p className="secondary-paragraph">
-                  What began with an interest in beauty developed into a broader
-                  creative journey — combining professional skills, business
-                  knowledge, design education, and entrepreneurial ambition.
+                  Our founder began this journey by completing a Beautician Course.
+                  While pursuing a Bachelor of Business Administration, she
+                  participated in the TN Skills Competition in Beauty Therapy,
+                  progressing to the State Level and participating in the
+                  competition held in Delhi. This journey was recognized with a
+                  Participation Certificate from the Government of Tamil Nadu.
                 </p>
               </div>
 
@@ -187,8 +191,7 @@ const About: React.FC = () => {
                   Where aesthetics meet purposeful execution.
                 </h3>
                 <p className="accent-card-sub">
-                  Each garment and ritual is conceived as living art—harmonizing
-                  human expression with botanical refinement.
+                  Combining beauty therapy, fashion design, and business expertise to create meaningful experiences.
                 </p>
               </div>
             </div>
@@ -317,12 +320,41 @@ const About: React.FC = () => {
                 <p className="stage-desc">
                   Driven by a passion for fashion and design, the founder pursued
                   a Post Graduate Diploma in Fashion and Apparel Designing,
-                  developing knowledge in garment design, apparel development, and
-                  creative craftsmanship.
+                  developing knowledge in garment design, apparel development,
+                  creative craftsmanship, and contemporary design.
                 </p>
                 <div className="stage-footer">
                   <span className="stage-dot"></span>
                   <span>Atelier Culmination</span>
+                </div>
+              </div>
+
+              {/* Stage 05 */}
+              <div className="timeline-card">
+                <div className="timeline-card-header">
+                  <div className="node-number node-purple">
+                    <span>05</span>
+                  </div>
+                  <span className="stage-pill">Entrepreneurship</span>
+                </div>
+
+                <div className="stage-category">
+                  <Diamond size={15} />
+                  <span>WildFloral Clothing Brand</span>
+                </div>
+
+                <h3 className="stage-title">Turning Passion Into a Brand</h3>
+
+                <p className="stage-desc">
+                  Today, this journey continues through our own clothing brand,
+                  bringing together creativity, quality, contemporary design,
+                  and thoughtful craftsmanship to create meaningful fashion
+                  experiences for our customers.
+                </p>
+
+                <div className="stage-footer">
+                  <span className="stage-dot"></span>
+                  <span>Building the Future</span>
                 </div>
               </div>
             </div>
@@ -442,11 +474,11 @@ const About: React.FC = () => {
                   </span>
                 </h2>
                 <p className="vision-lead">
-                  WildFloral is preparing to introduce its own clothing brand —
-                  bringing together creative vision, garment craftsmanship, and an
-                  appreciation for modern style. The focus is on designing
-                  pieces that celebrate individuality, confidence, and timeless
-                  contemporary design.
+                  Today, this journey continues through our own clothing brand,
+                  where creativity, quality, contemporary design, and thoughtful
+                  craftsmanship come together. Our vision is to create clothing
+                  that reflects individuality and elegance while building a
+                  meaningful fashion experience for every customer.
                 </p>
 
                 {/* Luxury Value Chips */}
@@ -496,14 +528,16 @@ const About: React.FC = () => {
           <div className="quote-card-box">
             <div className="giant-quote-mark">“</div>
             <blockquote className="quote-statement">
-              “My journey has always been about learning, creating, and turning
-              passion into something meaningful.”
+              “My goal is to build a successful fashion and lifestyle business
+              by bringing together creativity, craftsmanship, entrepreneurship,
+              and industry knowledge.”
             </blockquote>
             <p className="quote-body">
-              With a background spanning Beauty Therapy, Business Administration,
-              and Fashion &amp; Apparel Designing, I am building WildFloral as a
-              reflection of creativity, craftsmanship, entrepreneurship, and
-              personal style.
+              I am a creative and aspiring entrepreneur with a background in
+              Beauty Therapy, Business Administration, and Fashion &amp; Apparel
+              Designing. My journey continues through WildFloral, where I am
+              bringing together my knowledge of beauty, fashion, design, and
+              business to create something meaningful for our customers.
             </p>
 
             <div className="founder-signature-block">
@@ -512,7 +546,9 @@ const About: React.FC = () => {
                 <span className="sig-title">Founder, WildFloral</span>
                 <span className="sig-line"></span>
               </div>
-              <p className="sig-subtitle">Atelier Direction &amp; Design</p>
+              <p className="sig-subtitle">
+                Founder • Beauty • Fashion • Entrepreneurship
+              </p>
             </div>
           </div>
         </div>
@@ -534,7 +570,9 @@ const About: React.FC = () => {
           </h2>
 
           <p className="closing-cta-sub">
-            Explore our services and discover the fashion journey we are creating.
+            Discover the expertise, creativity, and craftsmanship behind
+            WildFloral — and explore the beauty and fashion experiences
+            created with you in mind.
           </p>
 
           <div className="closing-cta-actions">

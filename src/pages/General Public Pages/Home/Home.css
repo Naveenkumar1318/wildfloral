@@ -1,137 +1,2021 @@
-.coming-soon-page {
-  min-height: 70vh;
+/* =========================================================
+   WILDFLORAL HOME PAGE
+   Cinematic Scroll-Driven Experience
+========================================================= */
+
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+
+  /*
+   * IMPORTANT:
+   * overflow: clip does not create the
+   * scroll-container problem that can
+   * affect position: sticky.
+   */
+  overflow-x: clip;
+
+  background: #000000;
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   CINEMATIC HERO SCROLL SPACE
+========================================================= */
+
+.home-hero-shell {
+  /*
+   * 650vh is a better starting point than 800vh.
+   *
+   * The full 300-frame sequence still has
+   * enough scroll distance while the page
+   * does not feel excessively long.
+   */
+  --hero-scroll-height: 650vh;
+
+  position: relative;
+
+  width: 100%;
+  height: var(--hero-scroll-height);
+
+  background: #000000;
+}
+
+
+/* =========================================================
+   STICKY VIEWPORT
+========================================================= */
+
+.home-hero-viewport {
+  position: sticky;
+
+  top: 0;
+
+  width: 100%;
+
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
+
+  background: #000000;
+
+  isolation: isolate;
+}
+/* =========================================================
+   CANVAS
+========================================================= */
+
+.home-hero-canvas {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block;
+
+  background: #000000;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   CINEMATIC OVERLAY
+========================================================= */
+
+.home-hero-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.45) 24%,
+      rgba(0, 0, 0, 0.18) 48%,
+      rgba(0, 0, 0, 0.04) 72%,
+      rgba(0, 0, 0, 0) 100%
+    );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.home-hero-content {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO TEXT
+========================================================= */
+
+.home-hero-text-block {
+  --hero-text-shift: 30px;
+
+  position: absolute;
+
+  left: clamp(
+    1.5rem,
+    7vw,
+    7rem
+  );
+
+  top: 50%;
+
+  width: min(
+    34rem,
+    48vw
+  );
+
+  /*
+   * Keep vertical centering in CSS.
+   *
+   * JS only controls --hero-text-shift.
+   */
+  transform:
+    translate3d(
+      0,
+      calc(
+        -50% +
+        var(--hero-text-shift)
+      ),
+      0
+    );
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  will-change:
+    opacity,
+    transform;
+
+  /*
+   * No visibility:hidden here.
+   *
+   * JS controls opacity directly.
+   */
+  transition:
+    opacity 0.18s linear,
+    transform 0.18s ease-out;
+}
+
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.home-hero-eyebrow {
+  margin: 0 0 1rem;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 0.72rem;
+
+  line-height: 1;
+
+  letter-spacing: 0.34rem;
+
+  text-transform: uppercase;
+
+  color: #e4cdff;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.home-hero-heading {
+  margin: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      3.4rem,
+      6vw,
+      6.5rem
+    );
+
+  line-height: 0.9;
+
+  letter-spacing: -0.065em;
+
+  color: #ffffff;
+
+  font-weight: 500;
+
+  text-wrap: balance;
+}
+
+.home-hero-heading span {
+  display: block;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   SECONDARY HEADING
+========================================================= */
+
+.home-hero-heading--secondary {
+  max-width: 38rem;
+
+  font-size:
+    clamp(
+      2.8rem,
+      5vw,
+      5.2rem
+    );
+
+  line-height: 0.95;
+}
+
+
+/* =========================================================
+   HERO COPY
+========================================================= */
+
+.home-hero-copy {
+  max-width: 28rem;
+
+  margin:
+    1.35rem 0 0;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size:
+    clamp(
+      1rem,
+      1.35vw,
+      1.2rem
+    );
+
+  line-height: 1.7;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.78
+    );
+
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   SCROLL INDICATOR
+========================================================= */
+
+.home-hero-scroll-indicator {
+  position: absolute;
+
+  left: clamp(
+    1.5rem,
+    7vw,
+    7rem
+  );
+
+  bottom: clamp(
+    2rem,
+    5vh,
+    4rem
+  );
+
+  z-index: 8;
 
   display: flex;
 
   align-items: center;
-  justify-content: center;
 
-  padding: 80px 24px;
+  gap: 1rem;
 
-  background: #f8f7f5;
+  pointer-events: none;
+
+  opacity: 1;
+
+  will-change: opacity;
+
+  transition:
+    opacity 0.2s ease-out;
 }
 
-.coming-soon-content {
-  width: min(650px, 100%);
+.home-hero-scroll-indicator span {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
-  padding: 70px 40px;
+  font-size: 0.68rem;
 
-  text-align: center;
+  line-height: 1;
 
-  border: 1px solid #e5e2df;
+  letter-spacing: 0.28rem;
 
-  background: #ffffff;
-}
+  text-transform: uppercase;
 
-.coming-soon-eyebrow {
-  display: block;
-
-  margin-bottom: 18px;
-
-  color: #8b7b80;
-
-  font-size: 9px;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
 
   font-weight: 700;
 
-  letter-spacing: 0.2em;
-
-  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.coming-soon-content h1 {
-  margin: 0;
+.home-hero-scroll-indicator i {
+  position: relative;
 
-  color: #292624;
-
-  font-family:
-    var(--font-display),
-    Georgia,
-    serif;
-
-  font-size: clamp(
-    55px,
-    8vw,
-    90px
-  );
-
-  font-weight: 400;
-
-  line-height: 0.9;
-
-  letter-spacing: -0.05em;
-}
-
-.coming-soon-content h1 span {
   display: block;
 
-  color: #7258c7;
+  width: 3.4rem;
+  height: 1px;
 
-  font-style: italic;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(228, 205, 255, 1),
+      rgba(228, 205, 255, 0.12)
+    );
 }
 
-.coming-soon-content p {
-  max-width: 430px;
+.home-hero-scroll-indicator i::after {
+  content: "";
 
-  margin: 24px auto 30px;
+  position: absolute;
 
-  color: #8d8987;
+  top: 50%;
+  left: -30%;
 
-  font-size: 11px;
+  width: 30%;
+  height: 1px;
 
-  line-height: 1.8;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.95
+    );
+
+  transform:
+    translateY(-50%);
+
+  animation:
+    home-scroll-line
+    1.6s
+    ease-in-out
+    infinite;
 }
 
-.coming-soon-button {
-  min-height: 44px;
+@keyframes home-scroll-line {
 
+  0% {
+    transform:
+      translateX(-20%)
+      translateY(-50%);
+
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translateX(180%)
+      translateY(-50%);
+
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
+   STORY SECTION
+========================================================= */
+
+.home-story-section {
+  position: relative;
+
+  z-index: 10;
+
+  width: 100%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f5f1fa 0%,
+      #ffffff 100%
+    );
+
+  color: #121212;
+
+  padding:
+    clamp(5rem, 9vw, 9rem)
+    1.5rem;
+}
+
+.home-story-inner {
+  width: min(
+    72rem,
+    100%
+  );
+
+  margin: 0 auto;
+
+  text-align: left;
+}
+
+
+/* =========================================================
+   STORY EYEBROW
+========================================================= */
+
+.home-story-eyebrow {
+  margin: 0 0 1rem;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 0.72rem;
+
+  line-height: 1;
+
+  letter-spacing: 0.3rem;
+
+  text-transform: uppercase;
+
+  color: #5a01b5;
+
+  font-weight: 700;
+}
+
+.home-story-eyebrow--light {
+  color: #e4cdff;
+}
+
+
+/* =========================================================
+   STORY HEADING
+========================================================= */
+
+.home-story-section h2 {
+  margin: 0;
+
+  max-width: 60rem;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      2.8rem,
+      5vw,
+      5rem
+    );
+
+  line-height: 1.03;
+
+  letter-spacing: -0.06em;
+
+  color: #121212;
+
+  font-weight: 500;
+}
+
+.home-story-section h2 span {
+  display: block;
+
+  color: #121212;
+}
+
+
+/* =========================================================
+   STORY COPY
+========================================================= */
+
+.home-story-copy {
+  max-width: 42rem;
+
+  margin:
+    1.35rem 0 0;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size:
+    clamp(
+      1.05rem,
+      1.7vw,
+      1.3rem
+    );
+
+  line-height: 1.7;
+
+  color:
+    rgba(
+      18,
+      18,
+      18,
+      0.72
+    );
+}
+
+
+/* =========================================================
+   STORY BUTTONS
+========================================================= */
+
+.home-story-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 1rem;
+
+  margin-top: 2.4rem;
+}
+
+.home-story-actions a {
   display: inline-flex;
 
   align-items: center;
 
   justify-content: center;
 
-  padding: 0 22px;
+  min-height: 3.25rem;
 
-  border-radius: 4px;
+  padding:
+    0.9rem
+    1.6rem;
 
-  background: #7258c7;
-
-  color: #ffffff;
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.1em;
+  border-radius: 999px;
 
   text-decoration: none;
 
-  text-transform: uppercase;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 0.92rem;
+
+  font-weight: 700;
 
   transition:
-    background 160ms ease,
-    transform 160ms ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.coming-soon-button:hover {
-  background: #6047b7;
+.home-primary-link {
+  background:
+    linear-gradient(
+      135deg,
+      #5a01b5 0%,
+      #7d2dff 100%
+    );
 
-  transform: translateY(-1px);
+  color: #ffffff;
+
+  box-shadow:
+    0 18px 36px
+    rgba(
+      90,
+      1,
+      181,
+      0.25
+    );
 }
 
-@media (max-width: 600px) {
-  .coming-soon-page {
-    min-height: 65vh;
+.home-secondary-link {
+  color: #121212;
 
-    padding: 50px 16px;
+  border:
+    1px solid
+    rgba(
+      18,
+      18,
+      18,
+      0.14
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.65
+    );
+}
+
+.home-story-actions a:hover,
+.home-story-actions a:focus-visible {
+  transform:
+    translateY(-2px);
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.home-services-section {
+  position: relative;
+
+  z-index: 10;
+
+  width: 100%;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(
+        125,
+        45,
+        255,
+        0.12
+      ),
+      transparent 32rem
+    ),
+    #090909;
+
+  color: #ffffff;
+
+  padding:
+    clamp(5rem, 9vw, 8rem)
+    1.5rem;
+}
+
+.home-services-inner {
+  width: min(
+    72rem,
+    100%
+  );
+
+  margin: 0 auto;
+}
+
+.home-services-heading-wrap {
+  margin-bottom: 2.5rem;
+}
+
+.home-services-heading-wrap h3 {
+  max-width: 58rem;
+
+  margin: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      2.3rem,
+      4.5vw,
+      4.5rem
+    );
+
+  line-height: 1.05;
+
+  letter-spacing: -0.055em;
+
+  color: #ffffff;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   SERVICE GRID
+========================================================= */
+
+.home-services-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 1.5rem;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+.home-service-card {
+  position: relative;
+
+  min-height: 20rem;
+
+  padding: 1.8rem;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
+  border-radius: 1.5rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.055
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0.018
+      )
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      0.05
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.home-service-card:hover {
+  transform:
+    translateY(-5px);
+
+  border-color:
+    rgba(
+      228,
+      205,
+      255,
+      0.28
+    );
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.075
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0.025
+      )
+    );
+}
+
+
+/* =========================================================
+   CARD KICKER
+========================================================= */
+
+.home-card-kicker {
+  display: inline-block;
+
+  margin-bottom: 1.1rem;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 0.7rem;
+
+  line-height: 1;
+
+  letter-spacing: 0.18rem;
+
+  text-transform: uppercase;
+
+  color: #e4cdff;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   CARD HEADING
+========================================================= */
+
+.home-service-card h4 {
+  margin: 0;
+
+  max-width: 24rem;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      1.45rem,
+      2.2vw,
+      2rem
+    );
+
+  line-height: 1.18;
+
+  letter-spacing: -0.035em;
+
+  color: #ffffff;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   CARD COPY
+========================================================= */
+
+.home-service-card p {
+  margin:
+    1rem 0 0;
+
+  max-width: 26rem;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 1rem;
+
+  line-height: 1.7;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.68
+    );
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .home-hero-text-block {
+    left: 5vw;
+
+    width:
+      min(
+        34rem,
+        52vw
+      );
   }
 
-  .coming-soon-content {
-    padding: 55px 24px;
+  .home-services-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .home-hero-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.02) 0%,
+        rgba(0, 0, 0, 0.12) 35%,
+        rgba(0, 0, 0, 0.45) 65%,
+        rgba(0, 0, 0, 0.82) 100%
+      );
   }
 
-  .coming-soon-content h1 {
-    font-size: 58px;
+  .home-hero-text-block {
+    left: 1.25rem;
+    right: 1.25rem;
+
+    width: auto;
+
+    top: auto;
+
+    bottom:
+      clamp(
+        5rem,
+        13vh,
+        7rem
+      );
+
+    /*
+     * IMPORTANT:
+     * Do not use -50% on mobile.
+     */
+    transform:
+      translate3d(
+        0,
+        var(--hero-text-shift),
+        0
+      );
+  }
+
+  .home-hero-eyebrow {
+    margin-bottom: 0.85rem;
+
+    font-size: 0.62rem;
+
+    letter-spacing: 0.24rem;
+  }
+
+  .home-hero-heading {
+    max-width: 20rem;
+
+    font-size:
+      clamp(
+        3rem,
+        13vw,
+        4.8rem
+      );
+
+    line-height: 0.9;
+  }
+
+  .home-hero-heading--secondary {
+    font-size:
+      clamp(
+        2.4rem,
+        10vw,
+        4rem
+      );
+  }
+
+  .home-hero-copy {
+    max-width: 19rem;
+
+    margin-top: 1rem;
+
+    font-size: 0.94rem;
+
+    line-height: 1.6;
+  }
+
+  .home-hero-scroll-indicator {
+    left: 1.25rem;
+
+    bottom:
+      calc(
+        1.25rem +
+        env(
+          safe-area-inset-bottom
+        )
+      );
+
+    gap: 0.75rem;
+  }
+
+  .home-hero-scroll-indicator span {
+    font-size: 0.58rem;
+
+    letter-spacing: 0.18rem;
+  }
+
+  .home-hero-scroll-indicator i {
+    width: 2.5rem;
+  }
+
+    .home-hero-viewport {
+    height: 100svh;
+    min-height: 100svh;
+  }
+
+  .home-hero-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .home-story-section {
+    padding:
+      4.5rem
+      1.25rem;
+  }
+
+  .home-story-section h2 {
+    max-width: 25rem;
+
+    font-size:
+      clamp(
+        2.5rem,
+        12vw,
+        4rem
+      );
+  }
+
+  .home-story-copy {
+    max-width: 30rem;
+
+    font-size: 1rem;
+  }
+
+  .home-story-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    max-width: 22rem;
+  }
+
+  .home-story-actions a {
+    width: 100%;
+  }
+
+  .home-services-section {
+    padding:
+      4.5rem
+      1.25rem
+      6rem;
+  }
+
+  .home-services-heading-wrap {
+    margin-bottom: 2rem;
+  }
+
+  .home-services-heading-wrap h3 {
+    font-size:
+      clamp(
+        2.2rem,
+        10vw,
+        3.4rem
+      );
+  }
+
+  .home-services-grid {
+    grid-template-columns: 1fr;
+
+    gap: 1rem;
+  }
+
+  .home-service-card {
+    min-height: auto;
+
+    padding: 1.5rem;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .home-hero-text-block {
+    left: 1rem;
+    right: 1rem;
+
+    bottom:
+      calc(
+        4.5rem +
+        env(
+          safe-area-inset-bottom
+        )
+      );
+  }
+
+  .home-hero-heading {
+    font-size:
+      clamp(
+        2.75rem,
+        14vw,
+        4rem
+      );
+  }
+
+  .home-hero-heading--secondary {
+    font-size:
+      clamp(
+        2.25rem,
+        11vw,
+        3.5rem
+      );
+  }
+
+  .home-hero-copy {
+    max-width: 17rem;
+
+    font-size: 0.9rem;
+  }
+
+  .home-hero-scroll-indicator {
+    display: none;
+  }
+
+  .home-story-section h2 {
+    font-size: 2.5rem;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  /*
+   * Keep the hero structurally intact.
+   *
+   * Do NOT change it to 100vh here.
+   * That would completely remove the cinematic
+   * scroll space.
+   */
+  .home-hero-text-block {
+    transition: none;
+  }
+
+  .home-hero-scroll-indicator {
+    transition: none;
+  }
+
+  .home-hero-scroll-indicator i::after {
+    animation: none;
+  }
+
+  .home-story-actions a,
+  .home-service-card {
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   WILDFLORAL EXPERIENCE
+========================================================= */
+
+.home-experience-section {
+  background: #f5f0e8;
+  color: #171512;
+  padding: 9rem 6vw;
+}
+
+.home-experience-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-experience-intro {
+  max-width: 760px;
+  margin-bottom: 6rem;
+}
+
+.home-section-eyebrow {
+  margin: 0 0 1.25rem;
+
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28rem;
+  text-transform: uppercase;
+
+  color: #8b7358;
+}
+
+.home-experience-intro h2,
+.home-lookbook-heading h2,
+.home-why-heading h2,
+.home-fashion-content h2,
+.home-final-inner h2 {
+  margin: 0;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.home-experience-intro h2 span,
+.home-lookbook-heading h2 span,
+.home-why-heading h2 span,
+.home-fashion-content h2 span,
+.home-final-inner h2 span {
+  display: block;
+  color: #8b7358;
+}
+
+.home-experience-intro > p:last-child {
+  max-width: 620px;
+  margin: 2rem 0 0;
+
+  font-size: 1rem;
+  line-height: 1.8;
+
+  color: #6d655b;
+}
+
+.home-experience-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  border-top: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-experience-item {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 2rem;
+
+  padding: 3rem 2rem;
+
+  border-bottom: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-experience-item:nth-child(odd) {
+  border-right: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-experience-item > span {
+  font-size: 0.72rem;
+  letter-spacing: 0.16rem;
+  color: #a28c73;
+}
+
+.home-experience-item h3 {
+  margin: 0 0 1rem;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.home-experience-item p {
+  margin: 0;
+
+  max-width: 380px;
+
+  color: #756d63;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   LOOKBOOK
+========================================================= */
+
+.home-lookbook-section {
+  background: #10100f;
+  color: #ffffff;
+  padding: 9rem 6vw;
+}
+
+.home-lookbook-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.home-lookbook-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 3rem;
+
+  margin-bottom: 5rem;
+}
+
+.home-lookbook-heading h2 {
+  max-width: 700px;
+}
+
+.home-lookbook-heading > p {
+  max-width: 330px;
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.58);
+  line-height: 1.7;
+}
+
+.home-lookbook-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.4fr
+    0.8fr
+    0.8fr;
+
+  grid-template-rows:
+    280px
+    280px;
+
+  gap: 1rem;
+}
+
+.home-lookbook-card {
+  position: relative;
+
+  display: flex;
+  align-items: flex-end;
+
+  min-height: 200px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #28231e,
+      #8a7560
+    );
+
+  transition:
+    transform 0.4s ease;
+}
+
+.home-lookbook-card:hover {
+  transform: translateY(-6px);
+}
+
+.home-lookbook-card--large {
+  grid-row: span 2;
+
+  background:
+    linear-gradient(
+      145deg,
+      #171513,
+      #a28a70
+    );
+}
+
+.home-lookbook-card--medium {
+  grid-column: span 2;
+
+  background:
+    linear-gradient(
+      135deg,
+      #342c26,
+      #75604c
+    );
+}
+
+.home-lookbook-card--small:nth-child(3) {
+  background:
+    linear-gradient(
+      145deg,
+      #4a4036,
+      #b09a80
+    );
+}
+
+.home-lookbook-card--small:nth-child(4) {
+  background:
+    linear-gradient(
+      145deg,
+      #211e1a,
+      #685645
+    );
+}
+
+.home-lookbook-card::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55),
+      transparent 60%
+    );
+}
+
+.home-lookbook-card span {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 1.5rem;
+
+  font-size: 0.65rem;
+  letter-spacing: 0.24rem;
+}
+
+.home-lookbook-link,
+.home-fashion-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+
+  margin-top: 3rem;
+
+  color: inherit;
+
+  font-size: 0.72rem;
+  letter-spacing: 0.16rem;
+  text-transform: uppercase;
+
+  text-decoration: none;
+}
+
+.home-lookbook-link span,
+.home-fashion-link span {
+  font-size: 1.2rem;
+
+  transition:
+    transform 0.3s ease;
+}
+
+.home-lookbook-link:hover span,
+.home-fashion-link:hover span {
+  transform: translateX(6px);
+}
+
+
+/* =========================================================
+   WHY WILDFLORAL
+========================================================= */
+
+.home-why-section {
+  background: #f5f0e8;
+  color: #171512;
+
+  padding: 9rem 6vw;
+}
+
+.home-why-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-why-heading {
+  margin-bottom: 5rem;
+}
+
+.home-why-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  border-top: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-why-card {
+  padding: 2.5rem 1.5rem;
+
+  border-bottom: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-why-card + .home-why-card {
+  border-left: 1px solid rgba(23, 21, 18, 0.16);
+}
+
+.home-why-card span {
+  display: block;
+
+  margin-bottom: 3rem;
+
+  font-size: 0.68rem;
+  letter-spacing: 0.18rem;
+
+  color: #9b8368;
+}
+
+.home-why-card h3 {
+  margin: 0 0 1rem;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.home-why-card p {
+  margin: 0;
+
+  color: #756d63;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   CUSTOM FASHION
+========================================================= */
+
+.home-fashion-section {
+  background: #151311;
+  color: #ffffff;
+
+  padding: 0 6vw;
+}
+
+.home-fashion-inner {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  max-width: 1400px;
+  min-height: 720px;
+
+  margin: 0 auto;
+}
+
+.home-fashion-visual {
+  position: relative;
+
+  min-height: 600px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #211d19,
+      #88725b
+    );
+
+  overflow: hidden;
+}
+
+.home-fashion-visual::before {
+  content: '';
+
+  position: absolute;
+
+  width: 70%;
+  height: 110%;
+
+  left: 15%;
+  top: -5%;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(0, 0, 0, 0.3)
+    );
+
+  transform: rotate(8deg);
+}
+
+.home-fashion-visual-content {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 3rem;
+}
+
+.home-fashion-visual-content span {
+  font-size: 0.65rem;
+  letter-spacing: 0.24rem;
+}
+
+.home-fashion-visual-content strong {
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: clamp(4rem, 7vw, 7rem);
+  font-weight: 400;
+  line-height: 0.8;
+}
+
+.home-fashion-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 6rem;
+}
+
+.home-fashion-content h2 {
+  max-width: 520px;
+}
+
+.home-fashion-content > p:not(.home-section-eyebrow) {
+  max-width: 480px;
+
+  margin: 2rem 0 0;
+
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.8;
+}
+
+.home-fashion-content > p + p {
+  margin-top: 1rem !important;
+}
+
+.home-fashion-link {
+  margin-top: 3rem;
+}
+
+
+/* =========================================================
+   CLIENT STORIES
+========================================================= */
+
+.home-client-section {
+  background: #f5f0e8;
+  color: #171512;
+
+  padding: 10rem 6vw;
+}
+
+.home-client-inner {
+  max-width: 900px;
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.home-client-inner blockquote {
+  margin: 2rem 0;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.home-client-name {
+  color: #8b7358;
+
+  font-size: 0.72rem;
+  letter-spacing: 0.16rem;
+  text-transform: uppercase;
+}
+
+.home-client-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+
+  margin-top: 3rem;
+}
+
+.home-client-dots i {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #b9aa99;
+}
+
+.home-client-dots i.active {
+  background: #171512;
+}
+
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.home-final-section {
+  position: relative;
+
+  background: #11100f;
+  color: #ffffff;
+
+  padding: 10rem 6vw;
+
+  overflow: hidden;
+}
+
+.home-final-section::before {
+  content: '';
+
+  position: absolute;
+
+  width: 600px;
+  height: 600px;
+
+  top: -300px;
+  right: -200px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(161, 134, 103, 0.25),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+.home-final-inner {
+  position: relative;
+  z-index: 2;
+
+  max-width: 900px;
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.home-final-inner h2 {
+  font-size: clamp(3.2rem, 7vw, 7rem);
+}
+
+.home-final-inner > p:not(.home-section-eyebrow) {
+  max-width: 500px;
+
+  margin: 2rem auto 0;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  line-height: 1.8;
+}
+
+.home-final-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  margin-top: 3rem;
+}
+
+.home-final-primary,
+.home-final-secondary {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 52px;
+
+  padding: 0 2rem;
+
+  font-size: 0.68rem;
+  letter-spacing: 0.16rem;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+
+.home-final-primary {
+  background: #f5f0e8;
+  color: #171512;
+}
+
+.home-final-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+
+.home-final-primary:hover,
+.home-final-secondary:hover {
+  transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .home-experience-section,
+  .home-lookbook-section,
+  .home-why-section,
+  .home-client-section {
+    padding: 7rem 5vw;
+  }
+
+  .home-lookbook-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-why-card:nth-child(3) {
+    border-left: 0;
+  }
+
+  .home-fashion-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .home-fashion-visual {
+    min-height: 520px;
+  }
+
+  .home-fashion-content {
+    padding: 6rem 0;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .home-experience-section,
+  .home-lookbook-section,
+  .home-why-section,
+  .home-client-section {
+    padding: 5.5rem 1.25rem;
+  }
+
+  .home-experience-intro {
+    margin-bottom: 4rem;
+  }
+
+  .home-experience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-experience-item {
+    grid-template-columns: 45px 1fr;
+
+    padding: 2rem 0;
+
+    border-right: 0 !important;
+  }
+
+  .home-experience-item h3 {
+    font-size: 1.7rem;
+  }
+
+  .home-lookbook-heading {
+    margin-bottom: 3rem;
+  }
+
+  .home-lookbook-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 240px 180px 180px;
+  }
+
+  .home-lookbook-card--large {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+
+  .home-lookbook-card--medium {
+    grid-column: span 2;
+  }
+
+  .home-lookbook-card--small {
+    grid-column: span 1;
+  }
+
+  .home-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-why-card + .home-why-card {
+    border-left: 0;
+  }
+
+  .home-why-card {
+    padding: 2.25rem 0;
+  }
+
+  .home-why-card span {
+    margin-bottom: 1.5rem;
+  }
+
+  .home-fashion-section {
+    padding: 0 1.25rem;
+  }
+
+  .home-fashion-visual {
+    min-height: 480px;
+  }
+
+  .home-fashion-visual-content {
+    padding: 2rem;
+  }
+
+  .home-fashion-content {
+    padding: 5rem 0;
+  }
+
+  .home-client-inner blockquote {
+    font-size: 2.4rem;
+  }
+
+  .home-final-section {
+    padding: 7rem 1.25rem;
+  }
+
+  .home-final-actions {
+    flex-direction: column;
+  }
+
+  .home-final-primary,
+  .home-final-secondary {
+    width: 100%;
   }
 }

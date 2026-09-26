@@ -2,10 +2,11 @@
    WILDFLORAL ELECTRIC PURPLE LUXURY NAVBAR STYLES
    Theme: #5a01b5 Electric Purple with White Typography
 ========================================================= */
-
 .site-header-wrapper {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   width: 100%;
 }
@@ -475,6 +476,7 @@
 }
 
 @media (max-width: 640px) {
+
   .announcement-phone,
   .announcement-explore {
     display: none;
@@ -516,4 +518,34 @@
   }
 }
 
+/* =========================================================
+   HOME CINEMATIC HERO NAVBAR STATE
+========================================================= */
 
+.site-header-wrapper {
+  transition:
+    transform 0.45s ease,
+    opacity 0.35s ease;
+}
+
+.site-header-wrapper.home-hero-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   HOME CINEMATIC HERO MOBILE NAV STATE
+========================================================= */
+
+.mobile-bottom-nav {
+  transition:
+    transform 0.45s ease,
+    opacity 0.35s ease;
+}
+
+.mobile-bottom-nav.home-hero-hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}

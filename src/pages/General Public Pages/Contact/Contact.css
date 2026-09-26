@@ -30,7 +30,6 @@
   color: var(--wf-text-dark);
   font-family: var(--wf-font-sans);
   overflow-x: hidden;
-  padding-top: 80px; /* Space for fixed navbar */
 }
 
 /* =========================================================
@@ -177,7 +176,7 @@
 ========================================================= */
 
 .contact-hero {
-  padding: 50px 0 80px;
+  padding: clamp(16px, 2.5vw, 28px) 0 clamp(40px, 5vw, 80px);
 }
 
 /* Monogram Seal */
@@ -786,12 +785,8 @@
 ========================================================= */
 
 @media (max-width: 767px) {
-  .contact-page {
-    padding-top: 70px;
-  }
-
   .contact-hero {
-    padding: 30px 0 50px;
+    padding: 24px 0 50px;
   }
 
   .contact-hero-title {

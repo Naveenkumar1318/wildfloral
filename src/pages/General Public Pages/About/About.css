@@ -32,7 +32,6 @@
   color: var(--wf-text-dark);
   font-family: var(--wf-font-sans);
   overflow-x: hidden;
-  padding-top: 80px; /* Space for fixed navbar */
 }
 
 /* =========================================================
@@ -147,7 +146,7 @@
 .about-hero {
   position: relative;
   z-index: 1;
-  padding: 60px 0 90px;
+  padding: clamp(16px, 2.5vw, 28px) 0 clamp(40px, 5vw, 90px);
 }
 
 .about-hero-container {
@@ -1345,12 +1344,8 @@
 }
 
 @media (max-width: 767px) {
-  .about-page {
-    padding-top: 70px;
-  }
-  
   .about-hero {
-    padding: 40px 0 60px;
+    padding: 24px 0 50px;
   }
   
   .about-hero-title {

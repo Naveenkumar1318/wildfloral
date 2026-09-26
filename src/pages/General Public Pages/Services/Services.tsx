@@ -2464,12 +2464,12 @@ function Services() {
           <div className="services-hero-content">
             <div className="services-hero-badge">
               <span>✦</span>
-              <span>WILDFLORAL VIOLET SANCTUARY &amp; SPA</span>
+              <span>WILDFLORAL BEAUTY </span>
             </div>
 
             <h1>
               Awaken Your Senses in{' '}
-              <span>Lavender Radiance.</span>
+              <span>BEAUTY SERVICES.</span>
             </h1>
 
             <p>
@@ -2608,12 +2608,12 @@ function Services() {
 
       <section className="services-category-section" id="services">
         <div className="services-category-heading centered">
-          <span>LAVENDER ATELIER</span>
+          <span>Our Services</span>
           <h2>
-            Curated Lavender &amp; <em>Amethyst Services</em>
+            Browse <em>by Categories</em>
           </h2>
           <p>
-            Find your perfect service from our curated collections
+            Find your perfect service from our collections
           </p>
         </div>
 
@@ -2693,10 +2693,10 @@ function Services() {
         <div className="services-list-heading">
           <div>
             <span>
-              {activeCategory ? activeCategory.name.toUpperCase() : 'ALL CURATED OFFERINGS'}
+              {activeCategory ? activeCategory.name.toUpperCase() : 'ALL SERVICES'}
             </span>
             <h2>
-              {activeCategory ? `${activeCategory.name} Services` : 'All Curated Offerings'}
+              {activeCategory ? `${activeCategory.name} Services` : 'SERVICE CATALOG'}
             </h2>
             <p>
               {filteredServices.length}{' '}
@@ -3008,7 +3008,7 @@ function Services() {
 
       {!assignTo && (
         <section className="services-final">
-          <span>WILDFLORAL VIOLET SANCTUARY</span>
+          <span>WILDFLORAL Beauty and Fashion</span>
           <h2>
             Your serene transformation <em>begins here.</em>
           </h2>

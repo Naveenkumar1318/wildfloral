@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 /* =========================================================
    GLOBAL DESIGN SYSTEM
@@ -6,33 +6,42 @@
 
 :root {
   /* -------------------------------------------------------
-     COLORS
+     COLORS (ORGANIC SAGE LUXURY & WARM CREAM PALETTE)
   ------------------------------------------------------- */
 
-  --color-bg: #f7f3ed;
-  --color-surface: #fffdfa;
-  --color-surface-soft: #eee7df;
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f4efe6;
+  --color-surface-card: #ffffff;
 
-  --color-text: #241f1c;
-  --color-text-soft: #5f5751;
-  --color-text-muted: #8a817a;
+  --color-sage-dark: #1b2e24;
+  --color-sage-primary: #274235;
+  --color-sage-medium: #3b5e4d;
+  --color-sage-light: #527c67;
+  --color-sage-pale: #edf3ee;
+  --color-sage-soft: #e2ece5;
 
-  --color-border: rgba(36, 31, 28, 0.12);
-  --color-border-strong: rgba(36, 31, 28, 0.22);
+  --color-cream-bg: #faf8f5;
+  --color-cream-surface: #f3efe7;
+  --color-cream-border: #e6dfd3;
 
-  --color-accent: #6540d8;
-  --color-accent-dark: #5130bd;
-  --color-accent-soft: #eee9ff;
+  --color-text: #1d2521;
+  --color-text-soft: #4a5750;
+  --color-text-muted: #78877f;
 
-  --color-pink: #d88ba0;
-  --color-pink-soft: #f8e8ed;
+  --color-border: rgba(39, 66, 53, 0.12);
+  --color-border-strong: rgba(39, 66, 53, 0.22);
 
-  --color-warm: #9a6764;
-  --color-warm-dark: #674340;
-  --color-warm-soft: #d8bbb4;
+  --color-accent: #274235;
+  --color-accent-dark: #1b2e24;
+  --color-accent-soft: #edf3ee;
 
-  --color-dark: #241f1c;
-  --color-light: #fffdfa;
+  --color-gold: #c4a480;
+  --color-gold-light: #dfc8aa;
+  --color-gold-dark: #9e7f59;
+
+  --color-dark: #1b2e24;
+  --color-light: #faf8f5;
 
   /* -------------------------------------------------------
      TYPOGRAPHY
@@ -60,6 +69,9 @@
 
   --container-width: 1240px;
   --container-padding: 32px;
+
+  /* Fixed navbar height - updated dynamically by Navbar */
+  --site-header-height: 0px;
 
   /* -------------------------------------------------------
      SPACING
@@ -657,4 +669,32 @@ textarea::placeholder {
     scroll-behavior:
       auto !important;
   }
+}
+
+/* =========================================================
+   MOBILE BOTTOM NAV CLEARANCE
+   Prevents content from being hidden behind the fixed
+   mobile bottom navigation bar (56px height)
+========================================================= */
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: 56px;
+  }
+}
+
+
+/* =========================================================
+   FIXED PUBLIC NAVBAR
+   ========================================================= */
+
+.public-main {
+  width: 100%;
+  min-height: 60vh;
+  padding-top: var(--site-header-height, 0px);
+}
+
+/* Home cinematic hero starts directly at viewport top */
+.public-main-home {
+  padding-top: 0;
 }

@@ -154,7 +154,7 @@
 .services-hero {
   position: relative;
   width: 100%;
-  padding: clamp(32px, 5vw, 64px) 0 clamp(48px, 6vw, 80px);
+  padding: clamp(12px, 2vw, 24px) 0 clamp(40px, 5vw, 64px);
   background:
     radial-gradient(circle at 75% 20%, rgba(168, 85, 247, 0.14), transparent 50%),
     radial-gradient(circle at 20% 70%, rgba(124, 58, 237, 0.1), transparent 45%),
