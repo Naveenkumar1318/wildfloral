@@ -82,7 +82,7 @@ import BeautyBookings
 import BeautyEnquiries
   from './pages/Customer/BeautyEnquiries/BeautyEnquiries'
 
-import FashionEnquiry from './pages/Customer/FashionEnquiry/customerFashionEnquiry'
+import FashionEnquiry from './pages/Customer/FashionEnquiry/CustomerFashionEnquiry'
 /* =========================================================
    ADMIN AUTHENTICATION
 ========================================================= */

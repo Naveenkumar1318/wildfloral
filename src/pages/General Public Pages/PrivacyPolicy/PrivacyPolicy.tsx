@@ -14,9 +14,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
-  ExternalLink,
-  BookOpen,
-  Bell
+  BookOpen
 } from 'lucide-react'
 import './PrivacyPolicy.css'
 

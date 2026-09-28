@@ -6,7 +6,6 @@ import {
 } from 'react'
 
 import {
-  ArrowRight,
   ChevronRight,
   Download,
   ExternalLink,
