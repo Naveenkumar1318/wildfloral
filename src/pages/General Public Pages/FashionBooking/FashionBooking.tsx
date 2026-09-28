@@ -973,52 +973,119 @@ function FashionBooking() {
      VERIFY RAZORPAY PAYMENT
   ========================================================= */
 
-  async function verifyRazorpayPayment(
-    payment: RazorpayPaymentResponse,
-    orderId: string,
-  ) {
-    const {
+async function verifyRazorpayPayment(
+  payment: RazorpayPaymentResponse,
+  orderId: string,
+) {
+  const {
+    data,
+    error: functionError,
+  } =
+    await supabase.functions.invoke(
+      'verify-fashion-payment',
+      {
+        body: {
+          order_id:
+            orderId,
+          razorpay_order_id:
+            payment.razorpay_order_id,
+          razorpay_payment_id:
+            payment.razorpay_payment_id,
+          razorpay_signature:
+            payment.razorpay_signature,
+        },
+      },
+    )
+
+  console.log(
+    'Razorpay verification response:',
+    {
       data,
-      error: functionError,
-    } =
-      await supabase.functions.invoke(
-        'verify-fashion-payment',
+      functionError,
+    },
+  )
+
+  if (functionError) {
+    console.error(
+      'Verify Razorpay payment error:',
+      functionError,
+    )
+
+    throw new Error(
+      functionError.message ||
+        'Payment verification failed.',
+    )
+  }
+
+  if (!data?.success) {
+    throw new Error(
+      data?.error ||
+        'Payment verification failed.',
+    )
+  }
+
+  return data
+}
+
+   /* =========================================================
+     CLEANUP UNCOMPLETED FASHION ORDER
+  ========================================================= */
+
+  async function cleanupFashionOrder(
+    orderId: string,
+  ): Promise<void> {
+    if (!orderId) {
+      return
+    }
+
+    try {
+      const {
+        data,
+        error,
+      } = await supabase.functions.invoke(
+        'cleanup-fashion-order',
         {
           body: {
-            order_id:
-              orderId,
-
-            razorpay_order_id:
-              payment.razorpay_order_id,
-
-            razorpay_payment_id:
-              payment.razorpay_payment_id,
-
-            razorpay_signature:
-              payment.razorpay_signature,
+            order_id: orderId,
           },
         },
       )
 
-    if (functionError) {
+      if (error) {
+        console.error(
+          'Cleanup fashion order error:',
+          error,
+        )
+
+        throw new Error(
+          'Unable to clean up the incomplete order.',
+        )
+      }
+
+      if (!data?.success) {
+        console.error(
+          'Cleanup fashion order failed:',
+          data,
+        )
+
+        throw new Error(
+          data?.error ??
+            'Unable to clean up the incomplete order.',
+        )
+      }
+
+      console.log(
+        'Incomplete fashion order cleaned up:',
+        orderId,
+      )
+    } catch (cleanupError) {
       console.error(
-        'Verify Razorpay payment error:',
-        functionError,
+        'Fashion order cleanup error:',
+        cleanupError,
       )
 
-      throw new Error(
-        'Payment verification failed.',
-      )
+      throw cleanupError
     }
-
-    if (!data?.success) {
-      throw new Error(
-        data?.error ??
-          'Payment verification failed.',
-      )
-    }
-
-    return data
   }
 
   /* =========================================================
@@ -1061,8 +1128,10 @@ function FashionBooking() {
         prefill: {
           name:
             form.name.trim(),
+
           email:
             form.email.trim(),
+
           contact:
             form.phone.trim(),
         },
@@ -1070,6 +1139,7 @@ function FashionBooking() {
         notes: {
           order_id:
             orderId,
+
           order_number:
             orderNumber,
         },
@@ -1080,15 +1150,44 @@ function FashionBooking() {
         },
 
         modal: {
-            ondismiss:
-              () => {
-                setSubmitting(false)
+          ondismiss: async () => {
+            try {
+              /*
+               * Razorpay checkout has been closed.
+               *
+               * The cleanup Edge Function will check Razorpay
+               * directly before deleting anything.
+               *
+               * Therefore this is safe for both:
+               *
+               * 1. User cancelled/closed checkout
+               * 2. Payment failed and checkout was closed
+               *
+               * If Razorpay reports a captured/authorized payment,
+               * the backend will NOT delete the order.
+               */
 
-                setError(
-                  'Payment was cancelled. No completed order was created.',
-                )
-              },
+              await cleanupFashionOrder(orderId)
+
+              setSubmitting(false)
+
+              setError(
+                'Payment was cancelled or failed. The incomplete order has been removed.',
+              )
+            } catch (cleanupError) {
+              console.error(
+                'Failed to clean up cancelled fashion order:',
+                cleanupError,
+              )
+
+              setSubmitting(false)
+
+              setError(
+                'Payment was cancelled or failed, but we could not safely clean up the incomplete order. Please contact support.',
+              )
+            }
           },
+        },
 
         handler:
           async (
@@ -1096,20 +1195,43 @@ function FashionBooking() {
           ) => {
             try {
               setError('')
+
               setSubmitting(
                 true,
               )
+
+              /*
+               * IMPORTANT:
+               *
+               * Do NOT delete the order if Razorpay
+               * reports a payment response but backend
+               * verification fails.
+               *
+               * The payment may have actually succeeded.
+               * The backend must remain the source of truth.
+               */
 
               await verifyRazorpayPayment(
                 response,
                 orderId,
               )
 
+              /*
+               * At this point the backend has:
+               *
+               * - verified Razorpay signature
+               * - validated payment
+               * - validated stock
+               * - reduced stock
+               * - marked payment as paid
+               * - confirmed the order
+               */
+
               setSuccess(
                 'Payment completed successfully.',
               )
 
-               setCompletedOrderNumber(
+              setCompletedOrderNumber(
                 orderNumber,
               )
 
@@ -1136,6 +1258,14 @@ function FashionBooking() {
                 verificationError,
               )
 
+              /*
+               * DO NOT automatically delete the order here.
+               *
+               * If Razorpay payment succeeded but the
+               * verification request failed temporarily,
+               * deleting the order could lose a real payment.
+               */
+
               setError(
                 verificationError instanceof
                   Error
@@ -1157,6 +1287,7 @@ function FashionBooking() {
 
     razorpay.open()
   }
+  
 
   /* =========================================================
      PLACE ORDER
@@ -1508,6 +1639,7 @@ function FashionBooking() {
         )
       }
 
+
       /* -----------------------------------------
          OPEN CHECKOUT
       ----------------------------------------- */
@@ -1534,7 +1666,20 @@ function FashionBooking() {
         false,
       )
 
-      void createdOrderId
+            if (createdOrderId) {
+        try {
+          await cleanupFashionOrder(
+            createdOrderId,
+          )
+        } catch (
+          cleanupError
+        ) {
+          console.error(
+            'Failed to cleanup incomplete fashion order:',
+            cleanupError,
+          )
+        }
+      }
     }
   }
 

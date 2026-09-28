@@ -1,4 +1,3 @@
-import "@supabase/functions-js/edge-runtime.d.ts";
 
 const razorpayKeyId =
   Deno.env.get("RAZORPAY_KEY_ID") ?? "";

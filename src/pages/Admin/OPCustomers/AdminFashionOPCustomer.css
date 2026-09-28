@@ -1,0 +1,301 @@
+/* =========================================================
+   FASHION OP CUSTOMER - COMING SOON
+========================================================= */
+
+.fashion-op-coming-soon-page {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 50px 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8faf7 0%,
+      #ffffff 50%,
+      #f4f8f3 100%
+    );
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.fashion-op-coming-soon-card {
+  width: 100%;
+  max-width: 850px;
+
+  padding: 64px 70px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4ebe2;
+  border-radius: 28px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px rgba(35, 65, 45, 0.07);
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.fashion-op-coming-soon-icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #edf5eb;
+
+  color: #4f7d47;
+
+  font-size: 24px;
+}
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.fashion-op-coming-soon-badge {
+  display: inline-flex;
+
+  padding: 8px 15px;
+
+  border-radius: 999px;
+
+  background: #edf5eb;
+
+  color: #4f7d47;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.fashion-op-coming-soon-card h1 {
+  margin: 20px 0 14px;
+
+  color: #173d2d;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: clamp(34px, 5vw, 52px);
+
+  font-weight: 500;
+
+  line-height: 1.1;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.fashion-op-coming-soon-description {
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  color: #718078;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.fashion-op-coming-soon-features {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 42px;
+
+  text-align: left;
+}
+
+.fashion-op-coming-soon-feature {
+  min-height: 150px;
+
+  padding: 22px;
+
+  border: 1px solid #e7eee5;
+
+  border-radius: 16px;
+
+  background: #fbfcfa;
+}
+
+.fashion-op-coming-soon-feature > span {
+  display: block;
+
+  margin-bottom: 18px;
+
+  color: #88a181;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+}
+
+.fashion-op-coming-soon-feature strong {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #234536;
+
+  font-size: 14px;
+}
+
+.fashion-op-coming-soon-feature p {
+  margin: 0;
+
+  color: #7b8881;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.fashion-op-coming-soon-footer {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 42px;
+
+  justify-content: center;
+}
+
+.fashion-op-coming-soon-footer span {
+  width: 45px;
+  height: 1px;
+
+  background: #dce5da;
+}
+
+.fashion-op-coming-soon-footer p {
+  margin: 0;
+
+  color: #8a968f;
+
+  font-size: 11px;
+
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 760px) {
+  .fashion-op-coming-soon-page {
+    min-height: calc(100vh - 70px);
+
+    padding: 35px 18px;
+  }
+
+  .fashion-op-coming-soon-card {
+    padding: 48px 30px;
+
+    border-radius: 22px;
+  }
+
+  .fashion-op-coming-soon-features {
+    grid-template-columns:
+      1fr;
+  }
+
+  .fashion-op-coming-soon-feature {
+    min-height: auto;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+  .fashion-op-coming-soon-page {
+    padding: 25px 14px;
+  }
+
+  .fashion-op-coming-soon-card {
+    padding: 38px 18px;
+
+    border-radius: 18px;
+  }
+
+  .fashion-op-coming-soon-icon {
+    width: 50px;
+    height: 50px;
+
+    margin-bottom: 18px;
+  }
+
+  .fashion-op-coming-soon-card h1 {
+    font-size: 34px;
+  }
+
+  .fashion-op-coming-soon-description {
+    font-size: 13px;
+
+    line-height: 1.7;
+  }
+
+  .fashion-op-coming-soon-features {
+    margin-top: 30px;
+
+    gap: 10px;
+  }
+
+  .fashion-op-coming-soon-feature {
+    padding: 18px;
+  }
+
+  .fashion-op-coming-soon-footer {
+    margin-top: 30px;
+  }
+
+  .fashion-op-coming-soon-footer span {
+    width: 25px;
+  }
+
+  .fashion-op-coming-soon-footer p {
+    font-size: 10px;
+  }
+}

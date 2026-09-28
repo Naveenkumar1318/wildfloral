@@ -318,6 +318,55 @@ footer.site-footer,
   transform: translateX(4px);
 }
 
+.ai-fashion-footer-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-fashion-footer-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.16) 100%);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.ai-sparkle-icon {
+  color: #ffd54f;
+  flex-shrink: 0;
+}
+
+.ai-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #ffd54f;
+  color: #240e43 !important;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 2px;
+}
+
 .enquiry-btn {
   width: 100%;
   display: inline-flex;

@@ -19,7 +19,6 @@ import Home from './pages/General Public Pages/Home/Home'
 import About from './pages/General Public Pages/About/About'
 import Services from './pages/General Public Pages/Services/Services'
 import Fashion from './pages/General Public Pages/Fashion/Fashion'
-import Portfolio from './pages/General Public Pages/Portfolio/Portfolio'
 import Contact from './pages/General Public Pages/Contact/Contact'
 import Enquiry from './pages/General Public Pages/Enquiry/Enquiry'
 import Booking from './pages/General Public Pages/Booking/Booking'
@@ -27,6 +26,10 @@ import FashionBooking
   from './pages/General Public Pages/FashionBooking/FashionBooking'
 import FashionBookingSuccess
   from './pages/General Public Pages/FashionBooking/FashionBookingSuccess'
+import PrivacyPolicy
+  from './pages/General Public Pages/PrivacyPolicy/PrivacyPolicy'
+import TermsConditions
+  from './pages/General Public Pages/TermsConditions/TermsConditions'
 
   import CustomerFashionBooking
   from './pages/Customer/customer_Fashion_Booking/customer_Fashion_Booking'
@@ -67,6 +70,9 @@ import CustomerDashboard
 import CustomerBeautyDashboard
   from './pages/Customer/CustomerDashboard/CustomerBeautyDashboard/CustomerBeautyDashboard'
 
+import CustomerFashionDashboard
+  from './pages/Customer/CustomerDashboard/CustomerFashionDashboard/CustomerFashionDashboard'
+
 import CustomerProfile
   from './pages/Customer/CustomerProfile/CustomerProfile'
 
@@ -76,6 +82,7 @@ import BeautyBookings
 import BeautyEnquiries
   from './pages/Customer/BeautyEnquiries/BeautyEnquiries'
 
+import FashionEnquiry from './pages/Customer/FashionEnquiry/customerFashionEnquiry'
 /* =========================================================
    ADMIN AUTHENTICATION
 ========================================================= */
@@ -185,7 +192,18 @@ import AdminFashionDesignForm
 import AdminFashionOffers
   from './pages/Admin/AdminOffers/AdminFashionOffers'
 
+  /* =========================================================
+   ADMIN FASHION OP CUSTOMERS and ENQUIRIES
+========================================================= */
+import AdminFashionEnquiry from './pages/Admin/AdminEnquiries/AdminFashionEnquiry'
+import AdminFashionOPCustomer from './pages/Admin/OPCustomers/AdminFashionOPCustomer'
+
+  /* =========================================================
+   ADMIN FASHION BOOKINGS
+========================================================= */
+
 import AdminFashionBookings from './pages/Admin/AdminBookings/AdminFashionBookings'
+
   
 function App() {
   return (
@@ -223,11 +241,6 @@ function App() {
         />
 
         <Route
-          path="/portfolio"
-          element={<Portfolio />}
-        />
-
-        <Route
           path="/contact"
           element={<Contact />}
         />
@@ -250,6 +263,16 @@ function App() {
         <Route
           path="/fashion-booking/success/:orderId"
           element={<FashionBookingSuccess />}
+        />
+
+        <Route
+          path="/privacy"
+          element={<PrivacyPolicy />}
+        />
+
+        <Route
+          path="/terms"
+          element={<TermsConditions />}
         />
 
       </Route>
@@ -311,6 +334,11 @@ function App() {
           element={<CustomerBeautyDashboard />}
         />
 
+        <Route
+          path="/customer/fashion"
+          element={<CustomerFashionDashboard />}
+        />
+
         {/* ===================================================
             CUSTOMER PROFILE
         =================================================== */}
@@ -329,13 +357,18 @@ function App() {
           element={<BeautyBookings />}
         />
 
-                {/* ===================================================
-            CUSTOMER BEAUTY ENQUIRIES
+        {/* ===================================================
+            CUSTOMER BEAUTY ENQUIRIES and FASHION ENQUIRIES
         =================================================== */}
 
         <Route
           path="/account/enquiries/beauty"
           element={<BeautyEnquiries />}
+        />
+
+        <Route
+          path="/account/enquiries/fashion"
+          element={<FashionEnquiry />}
         />
 
         {/* ===================================================
@@ -609,6 +642,21 @@ function App() {
           element={<AdminFashionBookings />}
         />
 
+        {/* ===================================================
+            FASHION ENQUIRIES
+        =================================================== */} 
+        <Route
+          path="/admin/enquiries/fashion"
+          element={<AdminFashionEnquiry />}
+        />
+        {/* ===================================================
+            FASHION OP CUSTOMERS
+        =================================================== */} 
+
+        <Route
+          path="/admin/op-customers/fashion"
+          element={<AdminFashionOPCustomer />}
+        />
 
       </Route>
 

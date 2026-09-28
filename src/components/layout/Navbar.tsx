@@ -233,9 +233,7 @@ function Navbar() {
               <NavLink to="/fashion" className={({ isActive }) => (isActive ? 'active' : '')}>
                 Fashion Services
               </NavLink>
-              <NavLink to="/portfolio" className={({ isActive }) => (isActive ? 'active' : '')}>
-                Portfolio
-              </NavLink>
+              
               <NavLink to="/contact" className={({ isActive }) => (isActive ? 'active' : '')}>
                 Contact Us
               </NavLink>
@@ -297,9 +295,6 @@ function Navbar() {
             </NavLink>
             <NavLink to="/fashion" onClick={closeMobileMenu}>
               Fashion Services
-            </NavLink>
-            <NavLink to="/portfolio" onClick={closeMobileMenu}>
-              Portfolio
             </NavLink>
             <NavLink to="/contact" onClick={closeMobileMenu}>
               Contact Us

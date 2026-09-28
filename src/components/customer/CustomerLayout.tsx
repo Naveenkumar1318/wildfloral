@@ -7,8 +7,6 @@ import {
   useLocation,
 } from 'react-router-dom'
 import {
-  Menu,
-  X,
   ChevronDown,
 } from 'lucide-react'
 
@@ -192,6 +190,8 @@ function Icon({ type }: IconProps) {
 function CustomerSidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false)
+  const [mobileEnquiryOpen, setMobileEnquiryOpen] =
+    useState(false)
   const [openGroup, setOpenGroup] =
     useState<'bookings' | 'enquiries' | null>('bookings')
   const location = useLocation()
@@ -216,12 +216,15 @@ function CustomerSidebar() {
     }
   }, [mobileMenuOpen])
 
-  function toggleMobileMenu() {
-    setMobileMenuOpen((current) => !current)
-  }
-
   function closeMobileMenu() {
     setMobileMenuOpen(false)
+    setMobileEnquiryOpen(false)
+  }
+
+  function toggleMobileEnquiry() {
+    setMobileEnquiryOpen((current) =>
+      !current,
+    )
   }
 
   function toggleGroup(
@@ -246,50 +249,74 @@ function CustomerSidebar() {
           MOBILE HEADER
       ===================================================== */}
 
-      <header className="customer-mobile-header">
-        <Link
-          to="/account"
-          className="customer-mobile-brand"
-          onClick={closeMobileMenu}
-          aria-label="WildFloral Customer Account"
-        >
-          <span className="customer-mobile-brand-logo">
-            <Icon type="logo" />
-          </span>
+<header className="customer-mobile-header">
 
-          <span className="customer-mobile-brand-content">
-            <strong>WildFloral</strong>
-            <small>MY ACCOUNT</small>
-          </span>
-        </Link>
+  {/* =====================================================
+      MOBILE BRAND
+  ===================================================== */}
 
-        <button
-          type="button"
-          className="customer-mobile-menu-button"
-          onClick={toggleMobileMenu}
-          aria-label={
-            mobileMenuOpen
-              ? 'Close dashboard menu'
-              : 'Open dashboard menu'
-          }
-          aria-expanded={mobileMenuOpen}
-          aria-controls="customer-sidebar"
-        >
-          {mobileMenuOpen ? (
-            <X
-              size={22}
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
-          ) : (
-            <Menu
-              size={22}
-              strokeWidth={1.5}
-              aria-hidden="true"
-            />
-          )}
-        </button>
-      </header>
+  <Link
+    to="/account"
+    className="customer-mobile-brand"
+    onClick={closeMobileMenu}
+    aria-label="WildFloral Customer Account"
+  >
+    <span className="customer-mobile-brand-logo">
+      <Icon type="logo" />
+    </span>
+
+    <span className="customer-mobile-brand-content">
+      <strong>WildFloral</strong>
+
+      <small>
+        MY ACCOUNT
+      </small>
+    </span>
+  </Link>
+
+
+  {/* =====================================================
+      MOBILE HEADER ACTIONS
+  ===================================================== */}
+
+  <div className="customer-mobile-header-actions">
+
+    {/* BACK TO WEBSITE */}
+
+    <Link
+      to="/"
+      className="customer-mobile-header-action"
+      onClick={closeMobileMenu}
+    >
+      <span className="customer-mobile-header-action-icon">
+        <Icon type="website" />
+      </span>
+
+      <span>
+        Back to Website
+      </span>
+    </Link>
+
+
+    {/* LOGOUT */}
+
+    <button
+      type="button"
+      className="customer-mobile-header-action customer-mobile-header-logout"
+      onClick={() => void handleLogout()}
+    >
+      <span className="customer-mobile-header-action-icon">
+        <Icon type="logout" />
+      </span>
+
+      <span>
+        Logout
+      </span>
+    </button>
+
+  </div>
+
+</header>
 
 
       {/* =====================================================
@@ -607,6 +634,190 @@ function CustomerSidebar() {
         </div>
 
       </aside>
+
+
+      {/* =====================================================
+          MOBILE BOTTOM NAVIGATION
+      ===================================================== */}
+
+      <nav
+        className="customer-mobile-bottom-nav"
+        aria-label="Mobile customer navigation"
+      >
+
+        {/* HOME */}
+
+        <NavLink
+          to="/account"
+          end
+          onClick={closeMobileMenu}
+          className={({ isActive }) =>
+            `customer-mobile-bottom-item ${
+              isActive ? 'active' : ''
+            }`
+          }
+        >
+          <span className="customer-mobile-bottom-icon">
+            <Icon type="dashboard" />
+          </span>
+
+          <span className="customer-mobile-bottom-label">
+            Home
+          </span>
+        </NavLink>
+
+
+        {/* BEAUTY */}
+
+        <NavLink
+          to="/account/bookings/beauty"
+          onClick={closeMobileMenu}
+          className={({ isActive }) =>
+            `customer-mobile-bottom-item ${
+              isActive ? 'active' : ''
+            }`
+          }
+        >
+          <span className="customer-mobile-bottom-icon">
+            <Icon type="bookings" />
+          </span>
+
+          <span className="customer-mobile-bottom-label">
+            Beauty
+          </span>
+        </NavLink>
+
+
+        {/* FASHION */}
+
+        <NavLink
+          to="/account/bookings/fashion"
+          onClick={closeMobileMenu}
+          className={({ isActive }) =>
+            `customer-mobile-bottom-item ${
+              isActive ? 'active' : ''
+            }`
+          }
+        >
+          <span className="customer-mobile-bottom-icon">
+            <Icon type="bookings" />
+          </span>
+
+          <span className="customer-mobile-bottom-label">
+            Fashion
+          </span>
+        </NavLink>
+
+
+        {/* ENQUIRY */}
+
+        <div
+          className={[
+            'customer-mobile-bottom-group',
+            mobileEnquiryOpen
+              ? 'open'
+              : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
+
+          <button
+            type="button"
+            className={[
+              'customer-mobile-bottom-item',
+              'customer-mobile-bottom-button',
+              location.pathname.startsWith(
+                '/account/enquiries',
+              )
+                ? 'active'
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            onClick={toggleMobileEnquiry}
+            aria-label="Open enquiries"
+            aria-expanded={mobileEnquiryOpen}
+          >
+            <span className="customer-mobile-bottom-icon">
+              <Icon type="enquiries" />
+            </span>
+
+            <span className="customer-mobile-bottom-label">
+              Enquiry
+            </span>
+          </button>
+
+
+          {/* ENQUIRY OPTIONS */}
+
+          <div className="customer-mobile-enquiry-menu">
+
+            <NavLink
+              to="/account/enquiries/beauty"
+              onClick={closeMobileMenu}
+              className={({ isActive }) =>
+                `customer-mobile-enquiry-item ${
+                  isActive ? 'active' : ''
+                }`
+              }
+            >
+              <span className="customer-mobile-enquiry-icon">
+                <Icon type="enquiries" />
+              </span>
+
+              <span>
+                Beauty
+              </span>
+            </NavLink>
+
+
+            <NavLink
+              to="/account/enquiries/fashion"
+              onClick={closeMobileMenu}
+              className={({ isActive }) =>
+                `customer-mobile-enquiry-item ${
+                  isActive ? 'active' : ''
+                }`
+              }
+            >
+              <span className="customer-mobile-enquiry-icon">
+                <Icon type="enquiries" />
+              </span>
+
+              <span>
+                Fashion
+              </span>
+            </NavLink>
+
+          </div>
+
+        </div>
+
+
+        {/* PROFILE */}
+
+        <NavLink
+          to="/account/profile"
+          onClick={closeMobileMenu}
+          className={({ isActive }) =>
+            `customer-mobile-bottom-item ${
+              isActive ? 'active' : ''
+            }`
+          }
+        >
+          <span className="customer-mobile-bottom-icon">
+            <Icon type="profile" />
+          </span>
+
+          <span className="customer-mobile-bottom-label">
+            Profile
+          </span>
+        </NavLink>
+
+      </nav>
+
+
       <main className="customer-layout-content">
         <Outlet />
       </main>

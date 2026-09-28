@@ -127,7 +127,7 @@ const Contact: React.FC = () => {
               <span className="step-line"></span>
               <span className="step-label">Get In Touch</span>
             </div>
-            <span className="sanctuary-access-tag">Direct Sanctuary Access</span>
+            <span className="sanctuary-access-tag">Direct Studio Access</span>
           </div>
 
           {/* Architectural Cards Grid */}
@@ -144,12 +144,12 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
-              <span className="card-label">PHONE</span>
+              <span className="card-label">PHONE &amp; WHATSAPP</span>
               <a href="tel:8838894677" className="card-heading-link">
                 8838894677
               </a>
               <p className="card-subtext">
-                Call us for appointments and enquiries.
+                Call or message us for instant appointments and styling queries.
               </p>
 
               <div className="card-footer-box">
@@ -177,16 +177,14 @@ const Contact: React.FC = () => {
                 </div>
                 <div className="card-badge info-badge">
                   <Car size={14} />
-                  <span>Valet Available</span>
+                  <span>Parking Available</span>
                 </div>
               </div>
 
-              <span className="card-label">VISIT US</span>
-              <h3 className="card-heading">Our Studio</h3>
+              <span className="card-label">VISIT OUR ATELIER</span>
+              <h3 className="card-heading">Hosur Studio</h3>
               <p className="card-subtext">
-                3-1/2, Neela Mega Nagar
-                <br />
-                1st Cross
+                3-1/2, Neela Mega Nagar, 1st Cross, Hosur, Tamil Nadu
               </p>
 
               <div className="card-footer-box">
@@ -195,7 +193,7 @@ const Contact: React.FC = () => {
                   <span>Private VIP Fitting Chambers</span>
                 </div>
                 <a
-                  href="https://maps.google.com/?q=Neela+Mega+Nagar+1st+Cross"
+                  href="https://maps.google.com/?q=3-1/2+Neela+Mega+Nagar+1st+Cross+Hosur"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="card-action-btn directions-btn"
@@ -213,7 +211,7 @@ const Contact: React.FC = () => {
                   <span className="at-symbol">@</span>
                 </div>
                 <div className="card-badge journal-badge">
-                  <span>Visual Journal</span>
+                  <span>Visual Lookbook</span>
                 </div>
               </div>
 
@@ -224,10 +222,10 @@ const Contact: React.FC = () => {
                 rel="noopener noreferrer"
                 className="card-heading-link"
               >
-                @wildfloral
+                @wildfloral_beauty
               </a>
               <p className="card-subtext">
-                Follow our latest beauty and fashion work.
+                Follow our latest bridal makeovers, haircuts, and custom fashion.
               </p>
 
               {/* Lookbook Gallery Thumbnails */}
@@ -287,8 +285,8 @@ const Contact: React.FC = () => {
                 </h2>
 
                 <p className="enquiry-description">
-                  Share your requirements with us and we will help you find the
-                  right beauty service or fashion solution for your needs.
+                  Share your requirements with us and our team will help you find the
+                  right beauty service or bespoke fashion solution for your occasion.
                 </p>
 
                 <Link to="/enquiry" className="btn-contact-primary">
@@ -303,8 +301,7 @@ const Contact: React.FC = () => {
                   <span className="note-step-badge">02</span>
                   <span className="note-category-title">BEAUTY &amp; FASHION</span>
                   <p className="note-text">
-                    Personalized services, thoughtful design, and experiences
-                    created around you.
+                    Personalized beauty therapies, bespoke tailoring, and luxury experiences created with you in mind.
                   </p>
                 </div>
               </div>

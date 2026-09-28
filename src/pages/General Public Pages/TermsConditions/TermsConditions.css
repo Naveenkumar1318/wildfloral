@@ -1,0 +1,11 @@
+/* =========================================================
+   WILDFLORAL TERMS & CONDITIONS STYLES
+   Editorial, Luxury Purple & Modern Clean Aesthetics
+========================================================= */
+
+@import '../PrivacyPolicy/PrivacyPolicy.css';
+
+/* Any specific terms styling overrides can be placed here */
+.legal-page {
+  /* Inherits from PrivacyPolicy.css */
+}

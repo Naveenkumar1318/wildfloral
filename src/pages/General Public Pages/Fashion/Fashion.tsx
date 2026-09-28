@@ -27,6 +27,7 @@ import {
   type FashionCartItem,
 } from '../../../lib/fashionCart'
 
+import Ai_FashionEnquiry from '../Enquiry/Ai_FashionEnquiry'
 import './Fashion.css'
 
 /* =========================================================
@@ -1614,9 +1615,11 @@ function FashionCarousel({
 function FashionHero({
   designs,
   onViewDetails,
+  onOpenAi,
 }: {
   designs: FashionDesign[]
   onViewDetails: (design: FashionDesign) => void
+  onOpenAi: () => void
 }) {
   const slides = useMemo<HeroSlide[]>(() => {
     const list: HeroSlide[] = [
@@ -1702,9 +1705,17 @@ function FashionHero({
             <ArrowIcon />
           </a>
 
-          <Link to="/fashion/custom" className="fashion-hero-link">
+          <a
+            href="#ai-fashion-assistant"
+            role="button"
+            className="fashion-hero-link"
+            onClick={(event) => {
+              event.preventDefault()
+              onOpenAi()
+            }}
+          >
             Request a custom design
-          </Link>
+          </a>
         </div>
 
         <ul className="fashion-hero-points">
@@ -1871,6 +1882,7 @@ function Fashion() {
   const [wishlistIds, setWishlistIds] = useState<string[]>(readWishlist)
   const [now, setNow] = useState(() => Date.now())
   const [toast, setToast] = useState<ToastState>(null)
+  const [aiOpen, setAiOpen] = useState(false)
 
   const cartCount = getFashionCartCount()
 
@@ -2395,7 +2407,11 @@ function handleIncreaseCartItem(
   return (
     <main className="fashion-page">
       {/* HERO */}
-      <FashionHero designs={designs} onViewDetails={setSelectedDesignForDetails} />
+      <FashionHero
+        designs={designs}
+        onViewDetails={setSelectedDesignForDetails}
+        onOpenAi={() => setAiOpen(true)}
+      />
 
       {/* CATEGORIES */}
       <section className="fashion-category-section">
@@ -2627,10 +2643,18 @@ function handleIncreaseCartItem(
             preferences, and occasion.
           </p>
 
-          <Link to="/fashion/custom" className="fashion-custom-button">
+          <a
+            href="#ai-fashion-assistant"
+            role="button"
+            className="fashion-custom-button"
+            onClick={(event) => {
+              event.preventDefault()
+              setAiOpen(true)
+            }}
+          >
             Request custom design
             <ArrowIcon />
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -2857,6 +2881,13 @@ function handleIncreaseCartItem(
           isInCart={isFashionItemInCart}
         />
       )}
+
+      {/* =====================================================
+        FLOATING AI FASHION CUSTOMIZATION
+        ===================================================== */}
+
+        <Ai_FashionEnquiry isOpen={aiOpen} onOpenChange={setAiOpen} />
+
     </main>
   )
 }

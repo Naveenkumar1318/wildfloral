@@ -1,0 +1,1775 @@
+/* =========================================================
+   WILDFLORAL
+   CUSTOMER FASHION DASHBOARD
+========================================================= */
+
+.customer-fashion-dashboard {
+  --fashion-deep: #173d2b;
+  --fashion-dark: #214f38;
+  --fashion-green: #347a50;
+  --fashion-green-light: #eaf3e9;
+  --fashion-green-soft: #f4f8f2;
+
+  --fashion-text: #24392c;
+  --fashion-muted: #708078;
+  --fashion-light: #929d96;
+
+  --fashion-border: #dbe6da;
+  --fashion-border-light: #edf1eb;
+
+  --fashion-white: #ffffff;
+  --fashion-page: #f8faf7;
+
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 0 auto;
+
+  padding: 48px 42px 110px;
+
+  color: var(--fashion-text);
+
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  box-sizing: border-box;
+}
+
+.customer-fashion-dashboard *,
+.customer-fashion-dashboard *::before,
+.customer-fashion-dashboard *::after {
+  box-sizing: border-box;
+}
+
+.customer-fashion-dashboard h1,
+.customer-fashion-dashboard h2,
+.customer-fashion-dashboard h3,
+.customer-fashion-dashboard h4,
+.customer-fashion-dashboard p {
+  margin: 0;
+}
+
+.customer-fashion-dashboard a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.customer-fashion-dashboard button {
+  font: inherit;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.fashion-dashboard-hero {
+  margin-bottom: 34px;
+}
+
+.fashion-dashboard-hero-content {
+  max-width: 760px;
+}
+
+.fashion-dashboard-eyebrow {
+  display: block;
+
+  margin-bottom: 14px;
+
+  color: var(--fashion-green);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.28em;
+
+  text-transform: uppercase;
+}
+
+.fashion-dashboard-hero h1 {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(50px, 5.5vw, 76px);
+
+  font-weight: 400;
+
+  letter-spacing: -0.055em;
+
+  line-height: 0.94;
+}
+
+.fashion-dashboard-hero h1 span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #6d9e5c;
+
+  font-style: italic;
+}
+
+.fashion-dashboard-hero p {
+  max-width: 610px;
+
+  margin-top: 20px;
+
+  color: var(--fashion-muted);
+
+  font-size: 13px;
+
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   MODE SWITCH
+========================================================= */
+
+.fashion-dashboard-mode-switch {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  margin-top: 25px;
+
+  padding: 4px;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 7px;
+
+  background: #ffffff;
+}
+
+.fashion-dashboard-mode-switch button {
+  min-height: 42px;
+
+  padding: 0 20px;
+
+  border: 0;
+
+  border-radius: 4px;
+
+  background: transparent;
+
+  color: var(--fashion-muted);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.fashion-dashboard-mode-switch button:hover {
+  color: var(--fashion-deep);
+}
+
+.fashion-dashboard-mode-switch button.active {
+  background: var(--fashion-green);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(52, 122, 80, 0.14);
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.fashion-dashboard-error {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+
+  padding: 17px 20px;
+
+  border: 1px solid #ead4d4;
+
+  border-radius: 12px;
+
+  background: #fff8f8;
+}
+
+.fashion-dashboard-error strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 12px;
+
+  color: #8c4b4b;
+}
+
+.fashion-dashboard-error p {
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  color: #966d6d;
+}
+
+.fashion-dashboard-error button {
+  flex-shrink: 0;
+
+  min-height: 36px;
+
+  padding: 0 14px;
+
+  border: 1px solid #d9bebe;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: #8c4b4b;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.fashion-dashboard-state {
+  min-height: 500px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.fashion-state-spinner {
+  width: 32px;
+  height: 32px;
+
+  margin-bottom: 20px;
+
+  border: 2px solid var(--fashion-border);
+
+  border-top-color: var(--fashion-green);
+
+  border-radius: 50%;
+
+  animation:
+    fashion-spinner
+    0.8s linear infinite;
+}
+
+@keyframes fashion-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fashion-dashboard-state h2 {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 24px;
+
+  font-weight: 400;
+}
+
+.fashion-dashboard-state p {
+  max-width: 340px;
+
+  margin-top: 8px;
+
+  color: var(--fashion-muted);
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   OVERVIEW
+========================================================= */
+
+.fashion-dashboard-overview {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 26px;
+}
+
+.fashion-overview-card {
+  position: relative;
+
+  min-height: 145px;
+
+  padding: 25px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 17px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.fashion-overview-card:hover {
+  transform: translateY(-2px);
+
+  border-color: #cbdcca;
+
+  box-shadow:
+    0 15px 35px
+    rgba(31, 62, 43, 0.05);
+}
+
+.fashion-overview-icon {
+  width: 48px;
+  height: 48px;
+
+  flex: 0 0 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 19px;
+}
+
+.fashion-overview-content {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 0;
+}
+
+.fashion-overview-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--fashion-green);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.2em;
+}
+
+.fashion-overview-content strong {
+  display: block;
+
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 32px;
+
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.fashion-overview-content p {
+  margin-top: 7px;
+
+  color: var(--fashion-muted);
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   COMMON PANEL
+========================================================= */
+
+.fashion-dashboard-panel {
+  margin-top: 24px;
+
+  padding: 28px;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.9);
+}
+
+.fashion-panel-heading {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 22px;
+}
+
+.fashion-panel-eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--fashion-green);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.2em;
+}
+
+.fashion-panel-heading h2 {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 31px;
+
+  font-weight: 400;
+
+  letter-spacing: -0.025em;
+}
+
+.fashion-panel-heading p {
+  margin-top: 8px;
+
+  color: var(--fashion-muted);
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+.fashion-section-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-shrink: 0;
+
+  color: var(--fashion-green);
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.fashion-section-link:hover {
+  color: var(--fashion-deep);
+
+  transform: translateX(2px);
+}
+
+
+/* =========================================================
+   ORDERS TWO COLUMN
+========================================================= */
+
+.fashion-orders-layout {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+.fashion-orders-box {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   BOX HEADER
+========================================================= */
+
+.fashion-box-header {
+  min-height: 70px;
+
+  padding: 17px 19px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border-bottom: 1px solid var(--fashion-border);
+}
+
+.fashion-box-header > div > span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--fashion-green);
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+.fashion-box-header h3 {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+
+  font-weight: 400;
+}
+
+.fashion-box-header > strong {
+  width: 31px;
+  height: 31px;
+
+  flex: 0 0 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   ORDER LIST
+========================================================= */
+
+.fashion-order-list {
+  padding: 7px 11px;
+}
+
+.fashion-order-card {
+  display: grid;
+
+  grid-template-columns:
+    44px
+    minmax(0, 1fr)
+    auto;
+
+  gap: 12px;
+
+  align-items: center;
+
+  padding: 13px 8px;
+
+  border-bottom:
+    1px solid
+    var(--fashion-border-light);
+}
+
+.fashion-order-card:last-child {
+  border-bottom: 0;
+}
+
+.fashion-order-image {
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.fashion-order-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: fill;
+}
+
+.fashion-order-image img {
+  width: 100%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  object-fit: cover;
+}
+
+.fashion-order-info {
+  min-width: 0;
+}
+
+.fashion-order-id {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #87938b;
+
+  font-size: 7px;
+
+  letter-spacing: 0.07em;
+}
+
+.fashion-order-info h4 {
+  overflow: hidden;
+
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.fashion-order-info p {
+  margin-top: 4px;
+
+  color: var(--fashion-muted);
+
+  font-size: 8px;
+}
+
+.fashion-order-meta {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 5px;
+}
+
+.fashion-order-meta strong {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 12px;
+
+  font-weight: 400;
+}
+
+.fashion-order-status {
+  padding: 5px 7px;
+
+  border-radius: 20px;
+
+  background: #edf4ec;
+
+  color: var(--fashion-green);
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+}
+
+.fashion-order-status.pending {
+  background: #faf4e6;
+
+  color: #9a7634;
+}
+
+.fashion-order-status.processing {
+  background: #edf2fa;
+
+  color: #55739a;
+}
+
+.fashion-order-status.ready {
+  background: #eaf5f0;
+
+  color: #3f7e62;
+}
+
+.fashion-order-status.completed {
+  background: #e5f2e8;
+
+  color: #39724d;
+}
+
+.fashion-order-status.cancelled {
+  background: #f8eded;
+
+  color: #9a5757;
+}
+
+.fashion-order-view {
+  grid-column: 2 / -1;
+
+  justify-self: end;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: -4px;
+
+  color: var(--fashion-green);
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   MONTH CONTROLS
+========================================================= */
+
+.fashion-month-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  max-width: 185px;
+}
+
+.fashion-month-controls button {
+  width: 27px;
+  height: 27px;
+
+  flex: 0 0 27px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: var(--fashion-deep);
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.fashion-month-controls button:hover:not(:disabled) {
+  background: var(--fashion-green-light);
+
+  border-color: #bfd1bf;
+}
+
+.fashion-month-controls button:disabled {
+  opacity: 0.3;
+
+  cursor: not-allowed;
+}
+
+.fashion-month-controls span {
+  min-width: 100px;
+
+  color: var(--fashion-muted);
+
+  font-size: 8px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   MONTH CONTENT
+========================================================= */
+
+.fashion-month-content {
+  padding: 18px;
+}
+
+.fashion-month-stat {
+  padding: 18px;
+
+  border-radius: 11px;
+
+  background: var(--fashion-green-soft);
+}
+
+.fashion-month-stat span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--fashion-green);
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+.fashion-month-stat strong {
+  display: block;
+
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 31px;
+
+  font-weight: 400;
+}
+
+.fashion-month-order-list {
+  margin-top: 12px;
+}
+
+.fashion-month-order {
+  display: grid;
+
+  grid-template-columns:
+    35px
+    minmax(0, 1fr)
+    auto;
+
+  gap: 9px;
+
+  align-items: center;
+
+  padding: 10px 0;
+
+  border-bottom:
+    1px solid
+    var(--fashion-border-light);
+}
+
+.fashion-month-order:last-child {
+  border-bottom: 0;
+}
+
+.fashion-month-order-image {
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 7px;
+
+  font-weight: 800;
+}
+
+.fashion-month-order div {
+  min-width: 0;
+}
+
+.fashion-month-order div strong {
+  display: block;
+
+  overflow: hidden;
+
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 12px;
+
+  font-weight: 400;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.fashion-month-order div span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--fashion-muted);
+
+  font-size: 7px;
+}
+
+.fashion-month-order b {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 11px;
+
+  font-weight: 400;
+}
+
+.fashion-month-view-all {
+  margin-top: 13px;
+}
+
+
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+.fashion-small-empty,
+.fashion-custom-empty {
+  min-height: 225px;
+
+  padding: 28px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.fashion-empty-icon {
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 12px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 14px;
+}
+
+.fashion-small-empty h4,
+.fashion-custom-empty h4 {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 17px;
+
+  font-weight: 400;
+}
+
+.fashion-small-empty p,
+.fashion-custom-empty p {
+  max-width: 270px;
+
+  margin: 7px 0 16px;
+
+  color: var(--fashion-muted);
+
+  font-size: 9px;
+
+  line-height: 1.6;
+}
+
+.fashion-empty-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-height: 34px;
+
+  padding: 0 12px;
+
+  border-radius: 4px;
+
+  background: var(--fashion-green);
+
+  color: #ffffff;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CUSTOMIZATION
+========================================================= */
+
+.fashion-custom-overview {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+}
+
+.fashion-custom-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+.fashion-custom-box {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--fashion-border);
+
+  border-radius: 13px;
+
+  background: #ffffff;
+}
+
+.fashion-custom-box-header {
+  min-height: 70px;
+
+  padding: 17px 19px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  border-bottom:
+    1px solid
+    var(--fashion-border);
+}
+
+.fashion-custom-box-header span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--fashion-green);
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.17em;
+}
+
+.fashion-custom-box-header h3 {
+  color: var(--fashion-deep);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+
+  font-weight: 400;
+}
+
+.fashion-custom-box-header > strong {
+  width: 31px;
+  height: 31px;
+
+  flex: 0 0 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--fashion-green-light);
+
+  color: var(--fashion-green);
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .customer-fashion-dashboard {
+    padding: 38px 28px 100px;
+  }
+
+  .fashion-dashboard-overview {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .fashion-orders-layout,
+  .fashion-custom-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .customer-fashion-dashboard {
+    width: 100%;
+
+    max-width: none;
+
+    padding: 26px 14px 105px;
+  }
+
+  /* =======================================================
+     HERO
+  ======================================================= */
+
+  .fashion-dashboard-hero {
+    margin-bottom: 22px;
+  }
+
+  .fashion-dashboard-eyebrow {
+    margin-bottom: 10px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.23em;
+  }
+
+  .fashion-dashboard-hero h1 {
+    font-size: clamp(
+      39px,
+      12vw,
+      54px
+    );
+
+    line-height: 0.95;
+  }
+
+  .fashion-dashboard-hero p {
+    margin-top: 15px;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+  }
+
+  /* =======================================================
+     MODE SWITCH
+  ======================================================= */
+
+  .fashion-dashboard-mode-switch {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    margin-top: 19px;
+  }
+
+  .fashion-dashboard-mode-switch button {
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 0 7px;
+
+    font-size: 7px;
+
+    letter-spacing: 0.06em;
+  }
+
+  /* =======================================================
+     ERROR
+  ======================================================= */
+
+  .fashion-dashboard-error {
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 15px;
+  }
+
+  .fashion-dashboard-error button {
+    width: 100%;
+  }
+
+  /* =======================================================
+     OVERVIEW
+  ======================================================= */
+
+  .fashion-dashboard-overview {
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+  }
+
+  .fashion-overview-card {
+    min-height: 104px;
+
+    padding: 19px;
+
+    border-radius: 12px;
+
+    gap: 14px;
+  }
+
+  .fashion-overview-icon {
+    width: 39px;
+    height: 39px;
+
+    flex-basis: 39px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+  }
+
+  .fashion-overview-label {
+    margin-bottom: 5px;
+
+    font-size: 7px;
+  }
+
+  .fashion-overview-content strong {
+    font-size: 27px;
+  }
+
+  .fashion-overview-content p {
+    margin-top: 4px;
+
+    font-size: 9px;
+  }
+
+  /* =======================================================
+     PANELS
+  ======================================================= */
+
+  .fashion-dashboard-panel {
+    margin-top: 16px;
+
+    padding: 17px;
+
+    border-radius: 13px;
+  }
+
+  .fashion-panel-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+  }
+
+  .fashion-panel-eyebrow {
+    margin-bottom: 6px;
+
+    font-size: 7px;
+  }
+
+  .fashion-panel-heading h2 {
+    font-size: 24px;
+  }
+
+  .fashion-panel-heading p {
+    margin-top: 7px;
+
+    font-size: 9px;
+  }
+
+  .fashion-section-link {
+    font-size: 7px;
+  }
+
+  /* =======================================================
+     ORDERS
+  ======================================================= */
+
+  .fashion-orders-layout {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .fashion-box-header {
+    min-height: 65px;
+
+    padding: 15px;
+  }
+
+  .fashion-box-header > div > span {
+    font-size: 6px;
+  }
+
+  .fashion-box-header h3 {
+    font-size: 18px;
+  }
+
+  .fashion-box-header > strong {
+    width: 29px;
+    height: 29px;
+  }
+
+  .fashion-order-list {
+    padding: 5px 9px;
+  }
+
+  .fashion-order-card {
+    grid-template-columns:
+      40px
+      minmax(0, 1fr)
+      auto;
+
+    gap: 9px;
+
+    padding: 11px 6px;
+  }
+
+  .fashion-order-image {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 8px;
+
+    font-size: 7px;
+  }
+
+  .fashion-order-id {
+    font-size: 6px;
+  }
+
+  .fashion-order-info h4 {
+    font-size: 12px;
+  }
+
+  .fashion-order-info p {
+    font-size: 7px;
+  }
+
+  .fashion-order-meta strong {
+    font-size: 10px;
+  }
+
+  .fashion-order-status {
+    padding: 4px 6px;
+
+    font-size: 5px;
+  }
+
+  .fashion-order-view {
+    font-size: 6px;
+  }
+
+  /* =======================================================
+     MONTH
+  ======================================================= */
+
+  .fashion-month-controls {
+    max-width: 145px;
+  }
+
+  .fashion-month-controls span {
+    min-width: 72px;
+
+    font-size: 7px;
+  }
+
+  .fashion-month-controls button {
+    width: 25px;
+    height: 25px;
+
+    flex-basis: 25px;
+  }
+
+  .fashion-month-content {
+    padding: 13px;
+  }
+
+  .fashion-month-stat {
+    padding: 14px;
+  }
+
+  .fashion-month-stat span {
+    font-size: 6px;
+  }
+
+  .fashion-month-stat strong {
+    font-size: 27px;
+  }
+
+  .fashion-month-order {
+    grid-template-columns:
+      32px
+      minmax(0, 1fr)
+      auto;
+
+    gap: 7px;
+
+    padding: 9px 0;
+  }
+
+  .fashion-month-order-image {
+    width: 32px;
+    height: 32px;
+  }
+
+  .fashion-month-order div strong {
+    font-size: 10px;
+  }
+
+  .fashion-month-order div span {
+    font-size: 6px;
+  }
+
+  .fashion-month-order b {
+    font-size: 9px;
+  }
+
+  /* =======================================================
+     EMPTY
+  ======================================================= */
+
+  .fashion-small-empty,
+  .fashion-custom-empty {
+    min-height: 190px;
+
+    padding: 22px 15px;
+  }
+
+  .fashion-empty-icon {
+    width: 36px;
+    height: 36px;
+
+    margin-bottom: 10px;
+  }
+
+  .fashion-small-empty h4,
+  .fashion-custom-empty h4 {
+    font-size: 16px;
+  }
+
+  .fashion-small-empty p,
+  .fashion-custom-empty p {
+    max-width: 230px;
+
+    font-size: 8px;
+  }
+
+  /* =======================================================
+     CUSTOM
+  ======================================================= */
+
+  .fashion-custom-grid {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .fashion-custom-box-header {
+    min-height: 65px;
+
+    padding: 15px;
+  }
+
+  .fashion-custom-box-header span {
+    font-size: 6px;
+  }
+
+  .fashion-custom-box-header h3 {
+    font-size: 17px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .customer-fashion-dashboard {
+    padding:
+      22px
+      11px
+      105px;
+  }
+
+  .fashion-dashboard-hero h1 {
+    font-size: 40px;
+  }
+
+  .fashion-dashboard-panel {
+    padding: 14px;
+  }
+
+  .fashion-panel-heading h2 {
+    font-size: 22px;
+  }
+
+  .fashion-overview-card {
+    min-height: 96px;
+
+    padding: 17px;
+  }
+
+  .fashion-overview-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
+  }
+
+  .fashion-overview-content strong {
+    font-size: 25px;
+  }
+
+  .fashion-box-header h3 {
+    font-size: 17px;
+  }
+
+  .fashion-order-card {
+    grid-template-columns:
+      36px
+      minmax(0, 1fr);
+
+    align-items: start;
+  }
+
+  .fashion-order-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fashion-order-meta {
+    grid-column: 2;
+
+    align-items: flex-start;
+
+    flex-direction: row;
+
+    flex-wrap: wrap;
+
+    margin-top: -3px;
+  }
+
+  .fashion-order-view {
+    grid-column: 2;
+
+    justify-self: start;
+  }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.customer-fashion-dashboard
+  button:focus-visible,
+.customer-fashion-dashboard
+  a:focus-visible {
+  outline: 2px solid var(--fashion-green);
+
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .customer-fashion-dashboard *,
+  .customer-fashion-dashboard
+    *::before,
+  .customer-fashion-dashboard
+    *::after {
+    animation: none !important;
+
+    scroll-behavior: auto !important;
+
+    transition: none !important;
+  }
+
+}

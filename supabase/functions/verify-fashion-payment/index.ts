@@ -1,4 +1,3 @@
-import "@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const razorpayKeySecret =
@@ -220,43 +219,57 @@ export default {
        */
 
       const {
-        data,
-        error,
-      } =
-        await supabase.rpc(
-          "finalize_fashion_payment",
-          {
-            p_order_id:
-              orderId,
+  data,
+  error,
+} =
+  await supabase.rpc(
+    "finalize_fashion_payment",
+    {
+      p_order_id:
+        orderId,
 
-            p_razorpay_order_id:
-              razorpayOrderId,
+      p_razorpay_order_id:
+        razorpayOrderId,
 
-            p_razorpay_payment_id:
-              razorpayPaymentId,
+      p_razorpay_payment_id:
+        razorpayPaymentId,
 
-            p_razorpay_signature:
-              razorpaySignature,
-          },
-        );
+      p_razorpay_signature:
+        razorpaySignature,
+    },
+  );
 
+if (error) {
+  console.error(
+    "Finalize fashion payment error:",
+    {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    },
+  );
 
-      if (error) {
+  return jsonResponse(
+    {
+      success: false,
 
-        console.error(
-          "Finalize fashion payment error:",
-          error,
-        );
+      error:
+        error.message ||
+        "Unable to finalize payment.",
 
-        return jsonResponse(
-          {
-            error:
-              error.message ||
-              "Unable to finalize payment.",
-          },
-          400,
-        );
-      }
+      details:
+        error.details || null,
+
+      hint:
+        error.hint || null,
+
+      code:
+        error.code || null,
+    },
+    400,
+  );
+}
 
 
       if (!data?.success) {

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Clock,
@@ -11,10 +12,12 @@ import {
   ChevronDown,
   Sparkles
 } from 'lucide-react'
+import Ai_FashionEnquiry from '../../pages/General Public Pages/Enquiry/Ai_FashionEnquiry'
 import './Footer.css'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
+  const [isAiFashionOpen, setIsAiFashionOpen] = useState(false)
 
   return (
     <footer className="site-footer" id="footer-section">
@@ -87,9 +90,6 @@ function Footer() {
                 <Link to="/fashion">Fashion</Link>
               </li>
               <li>
-                <Link to="/portfolio">Portfolio</Link>
-              </li>
-              <li>
                 <Link to="/contact">Contact</Link>
               </li>
             </ul>
@@ -109,10 +109,21 @@ function Footer() {
                 <ArrowRight size={18} className="btn-arrow" />
               </Link>
 
+              {/* AI Fashion Enquiry Action */}
+              <button
+                type="button"
+                className="ai-fashion-footer-btn"
+                onClick={() => setIsAiFashionOpen(true)}
+              >
+                <Sparkles size={15} className="ai-sparkle-icon" />
+                <span>AI Fashion Enquiry</span>
+                <span className="ai-badge-chip">AI</span>
+              </button>
+
               {/* Enquiry secondary action */}
               <Link to="/enquiry" className="enquiry-btn">
                 <Mail size={15} />
-                <span>Make an Enquiry</span>
+                <span>Make an Beauty Enquiry</span>
               </Link>
             </div>
 
@@ -204,6 +215,13 @@ function Footer() {
           </div>
         </div>
       </div>
+
+      {/* AI Fashion Assistant Drawer */}
+      <Ai_FashionEnquiry
+        isOpen={isAiFashionOpen}
+        onOpenChange={setIsAiFashionOpen}
+        hideFloatingButton
+      />
     </footer>
   )
 }

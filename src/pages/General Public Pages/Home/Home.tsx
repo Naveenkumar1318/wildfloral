@@ -3,8 +3,132 @@ import {
   useRef,
   useState,
 } from 'react'
-
+import { supabase } from '../../../lib/supabase'
 import './Home.css'
+
+/* =========================================================
+   EDITORIAL FEATURE IMAGES
+========================================================= */
+
+import homeFeatureImageOne from '../../../assets/home page/1.png'
+import homeFeatureImageTwo from '../../../assets/home page/2.png'
+
+/* =========================================================
+   GALLERY IMAGES
+   (1 & 2 are already used above — this uses the remaining
+   images from the same "home page" assets folder.)
+========================================================= */
+
+import homeGalleryImageThree from '../../../assets/home page/3.png'
+import homeGalleryImageFour from '../../../assets/home page/4.png'
+import homeGalleryImageFive from '../../../assets/home page/5.png'
+import homeGalleryImageSix from '../../../assets/home page/6.png'
+import homeGalleryImageSeven from '../../../assets/home page/7.png'
+import homeGalleryImageEight from '../../../assets/home page/8.png'
+import homeGalleryImageNine from '../../../assets/home page/9.png'
+import homeGalleryImageTen from '../../../assets/home page/10.png'
+
+/* =========================================================
+   DETAILS SECTION — SPLIT IMAGE
+   Uses image 1 (already imported as homeFeatureImageOne)
+   for the "Designed Specifically for You" panel.
+========================================================= */
+
+type HomeGalleryImage = {
+  id: string
+  src: string
+  alt: string
+  caption: string
+}
+
+const homeGalleryImages: HomeGalleryImage[] = [
+  {
+    id: 'gallery-03',
+    src: homeGalleryImageThree,
+    alt: 'Wildfloral stylist preparing a fitting',
+    caption: 'The Fitting Room',
+  },
+  {
+    id: 'gallery-04',
+    src: homeGalleryImageFour,
+    alt: 'Golden hour light inside the Wildfloral studio',
+    caption: 'Golden Hour Glow',
+  },
+  {
+    id: 'gallery-05',
+    src: homeGalleryImageFive,
+    alt: 'Hand-tied botanical arrangement used in treatments',
+    caption: 'Hand-Tied Botanicals',
+  },
+  {
+    id: 'gallery-06',
+    src: homeGalleryImageSix,
+    alt: 'Close-up of the final stitching on a garment',
+    caption: 'The Final Stitch',
+  },
+  {
+    id: 'gallery-07',
+    src: homeGalleryImageSeven,
+    alt: 'Soft studio lighting over a styling station',
+    caption: 'Studio Light',
+  },
+  {
+    id: 'gallery-08',
+    src: homeGalleryImageEight,
+    alt: 'Bridal preparation moment at Wildfloral',
+    caption: 'Bridal Preparation',
+  },
+  {
+    id: 'gallery-09',
+    src: homeGalleryImageNine,
+    alt: 'Fabric textures and trims laid out for a design',
+    caption: 'Textures & Trims',
+  },
+  {
+    id: 'gallery-10',
+    src: homeGalleryImageTen,
+    alt: 'Finishing details on a completed look',
+    caption: 'Closing Details',
+  },
+]
+
+const galleryStaggerDelays = [
+  'atelier-scroll-delay-1',
+  'atelier-scroll-delay-2',
+  'atelier-scroll-delay-3',
+]
+
+type HomeBeautyService = {
+  id: string
+  name: string
+  category: string | null
+  image_url: string
+}
+
+type HomeBeautyServiceRow = Omit<HomeBeautyService, 'image_url'> & {
+  image_url: string | null
+}
+
+type HomeFashionImage = {
+  id: string
+  name: string
+  imageUrl: string
+  altText: string | null
+}
+
+type HomeFashionDesign = {
+  id: string
+  name: string
+}
+
+type HomeFashionImageRow = {
+  id: string
+  design_id: string
+  image_url: string
+  alt_text: string | null
+  display_order: number
+  is_primary: boolean
+}
 
 /* =========================================================
    HERO ANIMATION FRAMES
@@ -50,6 +174,9 @@ const mobileFrameUrls = sortFrameUrls(
   ) as Record<string, string>,
 )
 
+
+
+
 /* =========================================================
    HOME
 ========================================================= */
@@ -58,14 +185,177 @@ function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameIndexRef = useRef(0)
   const animationFrameRef = useRef<number | null>(null)
+  const [beautyServices, setBeautyServices] = useState<HomeBeautyService[]>([])
+  const [fashionImages, setFashionImages] = useState<HomeFashionImage[]>([])
+  const [imageLoadError, setImageLoadError] = useState('')
+  const [isFeaturedLoading, setIsFeaturedLoading] = useState(true)
 
   const [isMobile, setIsMobile] = useState(
     () => window.innerWidth <= 768,
   )
 
+  /* =====================================================
+     SCROLL REVEAL (Personal Style, Editorial Feature,
+     Beauty Philosophy sections + new sections)
+  ===================================================== */
+
+  useEffect(() => {
+    const elements = document.querySelectorAll(
+      `
+        .atelier-style-section .atelier-scroll-reveal,
+        .atelier-feature-section .atelier-scroll-reveal,
+        .atelier-philosophy-section .atelier-scroll-reveal,
+        .atelier-gallery-section .atelier-scroll-reveal,
+        .wf-details-section .atelier-scroll-reveal,
+        .wf-split-section .atelier-scroll-reveal,
+        .wf-testimonial-section .atelier-scroll-reveal,
+        .wf-final-cta-section .atelier-scroll-reveal
+      `,
+    )
+
+    if (elements.length === 0) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(
+              'atelier-scroll-visible',
+            )
+          } else {
+            entry.target.classList.remove(
+              'atelier-scroll-visible',
+            )
+          }
+        })
+      },
+      {
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px',
+      },
+    )
+
+    elements.forEach((element) => {
+      observer.observe(element)
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [beautyServices, fashionImages])
+
   const frameUrls = isMobile
     ? mobileFrameUrls
     : desktopFrameUrls
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadFeaturedImages = async () => {
+      setIsFeaturedLoading(true)
+
+      try {
+        const [beautyResult, fashionDesignsResult] = await Promise.all([
+          supabase
+            .from('services')
+            .select('id, name, category, image_url')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false }),
+          supabase
+            .from('fashion_designs')
+            .select('id, name')
+            .eq('is_active', true)
+            .order('is_featured', { ascending: false })
+            .order('created_at', { ascending: false }),
+        ])
+
+        if (beautyResult.error) {
+          throw new Error(beautyResult.error.message)
+        }
+
+        if (fashionDesignsResult.error) {
+          throw new Error(fashionDesignsResult.error.message)
+        }
+
+        const beautyRows =
+          (beautyResult.data ?? []) as HomeBeautyServiceRow[]
+        const fashionDesigns =
+          (fashionDesignsResult.data ?? []) as HomeFashionDesign[]
+
+        const fashionImagesResult = fashionDesigns.length > 0
+          ? await supabase
+            .from('fashion_design_images')
+            .select('id, design_id, image_url, alt_text, display_order, is_primary')
+            .in('design_id', fashionDesigns.map((design) => design.id))
+            .order('is_primary', { ascending: false })
+            .order('display_order', { ascending: true })
+          : { data: [], error: null }
+
+        if (fashionImagesResult.error) {
+          throw new Error(fashionImagesResult.error.message)
+        }
+
+        const designNames = new Map(
+          fashionDesigns.map((design) => [design.id, design.name]),
+        )
+        const fashionRows =
+          (fashionImagesResult.data ?? []) as HomeFashionImageRow[]
+        const includedDesignIds = new Set<string>()
+        const featuredBeautyServices = beautyRows.filter(
+          (service): service is HomeBeautyService =>
+            Boolean(service.image_url?.trim()),
+        )
+
+        if (isMounted) {
+          setBeautyServices(featuredBeautyServices)
+          setFashionImages(
+            fashionRows.flatMap((image) => {
+              const imageUrl = image.image_url?.trim()
+              const name = designNames.get(image.design_id)
+
+              if (
+                !imageUrl ||
+                !name ||
+                includedDesignIds.has(image.design_id)
+              ) {
+                return []
+              }
+
+              includedDesignIds.add(image.design_id)
+
+              return [{
+                id: image.id,
+                name,
+                imageUrl,
+                altText: image.alt_text,
+              }]
+            }),
+          )
+          setImageLoadError('')
+        }
+      } catch (error) {
+        console.error('Unable to load featured home page images.', error)
+
+        if (isMounted) {
+          setImageLoadError(
+            'Featured beauty and fashion images could not be loaded. Please try again later.',
+          )
+        }
+      } finally {
+        if (isMounted) {
+          setIsFeaturedLoading(false)
+        }
+      }
+    }
+
+    void loadFeaturedImages()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   useEffect(() => {
     const handleViewportResize = () => {
@@ -459,6 +749,9 @@ context.drawImage(
     }
   }, [frameUrls])
 
+  const hasFeaturedContent =
+    beautyServices.length > 0 || fashionImages.length > 0
+
   return (
     <main className="home-page">
 
@@ -565,461 +858,1001 @@ context.drawImage(
 
       </section>
 
-      {/* =====================================================
-          SERVICES
-      ===================================================== */}
-
-      <section className="home-services-section">
-
-        <div className="home-services-inner">
-
-          <div className="home-services-heading-wrap">
-
-            <p className="home-story-eyebrow home-story-eyebrow--light">
-              OUR SERVICES
-            </p>
-
-            <h3>
-              Crafted for Your
-              <br />
-              Personal Style
-            </h3>
-
-          </div>
-
-          <div className="home-services-grid">
-
-            <article className="home-service-card">
-
-              <span className="home-card-kicker">
-                01
-              </span>
-
-              <h4>
-                Hair Styling
-              </h4>
-
-              <p>
-                Professional styling designed for
-                everyday looks and special occasions.
-              </p>
-
-            </article>
-
-            <article className="home-service-card">
-
-              <span className="home-card-kicker">
-                02
-              </span>
-
-              <h4>
-                Bridal Makeup
-              </h4>
-
-              <p>
-                Complete bridal beauty styling for
-                your most memorable moments.
-              </p>
-
-            </article>
-
-            <article className="home-service-card">
-
-              <span className="home-card-kicker">
-                03
-              </span>
-
-              <h4>
-                Fashion Design
-              </h4>
-
-              <p>
-                Personalized outfits created around
-                your measurements and individual style.
-              </p>
-
-            </article>
-
-          </div>
-
-        </div>
-
-            </section>
-
-      {/* =====================================================
-          WILDFLORAL EXPERIENCE
-      ===================================================== */}
-
-      <section className="home-experience-section">
-
-        <div className="home-experience-inner">
-
-          <div className="home-experience-intro">
-
-            <p className="home-section-eyebrow">
-              THE WILDFLORAL EXPERIENCE
-            </p>
-
-            <h2>
-              More Than Beauty.
-              <span>
-                A Personal Experience.
-              </span>
-            </h2>
-
-            <p>
-              From the first consultation to the final reveal,
-              every detail is thoughtfully created around you,
-              your occasion, and your individual style.
-            </p>
-
-          </div>
-
-          <div className="home-experience-grid">
-
-            <article className="home-experience-item">
-              <span>01</span>
-
-              <div>
-                <h3>Discover</h3>
-
-                <p>
-                  We begin by understanding your personality,
-                  preferences, occasion, and vision.
-                </p>
-              </div>
-            </article>
-
-            <article className="home-experience-item">
-              <span>02</span>
-
-              <div>
-                <h3>Create</h3>
-
-                <p>
-                  Our beauty professionals and designers
-                  bring your ideas to life with care.
-                </p>
-              </div>
-            </article>
-
-            <article className="home-experience-item">
-              <span>03</span>
-
-              <div>
-                <h3>Refine</h3>
-
-                <p>
-                  Every detail is carefully adjusted until
-                  everything feels naturally right for you.
-                </p>
-              </div>
-            </article>
-
-            <article className="home-experience-item">
-              <span>04</span>
-
-              <div>
-                <h3>Reveal</h3>
-
-                <p>
-                  Step into your finished look with confidence,
-                  elegance, and a sense of yourself.
-                </p>
-              </div>
-            </article>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* =====================================================
-          LOOKBOOK
-      ===================================================== */}
-
-      <section className="home-lookbook-section">
-
-        <div className="home-lookbook-inner">
-
-          <div className="home-lookbook-heading">
-
-            <div>
-              <p className="home-section-eyebrow">
-                OUR WORLD
-              </p>
-
-              <h2>
-                Beauty.
-                <span>Fashion.</span>
-                Craftsmanship.
-              </h2>
-            </div>
-
-            <p>
-              A glimpse into the details, textures, and
-              transformations that define WildFloral.
-            </p>
-
-          </div>
-
-          <div className="home-lookbook-grid">
-
-            <div className="home-lookbook-card home-lookbook-card--large">
-              <span>BEAUTY</span>
-            </div>
-
-            <div className="home-lookbook-card home-lookbook-card--medium">
-              <span>STYLE</span>
-            </div>
-
-            <div className="home-lookbook-card home-lookbook-card--small">
-              <span>CRAFT</span>
-            </div>
-
-            <div className="home-lookbook-card home-lookbook-card--small">
-              <span>DETAIL</span>
-            </div>
-
-          </div>
-
-          <a
-            href="/services"
-            className="home-lookbook-link"
-          >
-            Explore Our Collection
-            <span>→</span>
-          </a>
-
-        </div>
-
-      </section>
-
-
-      {/* =====================================================
-          WHY WILDFLORAL
-      ===================================================== */}
-
-      <section className="home-why-section">
-
-        <div className="home-why-inner">
-
-          <div className="home-why-heading">
-
-            <p className="home-section-eyebrow">
-              WHY WILDFLORAL
-            </p>
-
-            <h2>
-              The Details
-              <span>Matter.</span>
-            </h2>
-
-          </div>
-
-          <div className="home-why-grid">
-
-            <article className="home-why-card">
-              <span>01</span>
-
-              <h3>
-                Expert Craftsmanship
-              </h3>
-
-              <p>
-                Skilled professionals who understand
-                the importance of every detail.
-              </p>
-            </article>
-
-            <article className="home-why-card">
-              <span>02</span>
-
-              <h3>
-                Personalized Care
-              </h3>
-
-              <p>
-                Every experience is shaped around
-                your preferences and individuality.
-              </p>
-            </article>
-
-            <article className="home-why-card">
-              <span>03</span>
-
-              <h3>
-                Premium Quality
-              </h3>
-
-              <p>
-                Carefully selected products, materials,
-                and techniques for beautiful results.
-              </p>
-            </article>
-
-            <article className="home-why-card">
-              <span>04</span>
-
-              <h3>
-                Made for You
-              </h3>
-
-              <p>
-                Beauty and fashion created to feel
-                authentic to who you are.
-              </p>
-            </article>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* =====================================================
-          CUSTOM FASHION
-      ===================================================== */}
-
-      <section className="home-fashion-section">
-
-        <div className="home-fashion-inner">
-
-          <div className="home-fashion-visual">
-            <div className="home-fashion-visual-content">
-              <span>
-                WILDFLORAL
-              </span>
-
-              <strong>
-                MADE
-                <br />
-                FOR
-                <br />
-                YOU
-              </strong>
-            </div>
-          </div>
-
-          <div className="home-fashion-content">
-
-            <p className="home-section-eyebrow">
-              CUSTOM FASHION
-            </p>
-
-            <h2>
-              Designed
-              <span>
-                Specifically for You.
-              </span>
-            </h2>
-
-            <p>
-              Your measurements. Your personality.
-              Your occasion. Your vision.
-            </p>
-
-            <p>
-              From fabric selection to the final fitting,
-              every element is carefully considered to
-              create something that feels uniquely yours.
-            </p>
-
-            <a
-              href="/services"
-              className="home-fashion-link"
+{/* =====================================================
+    PERSONAL STYLE
+===================================================== */}
+
+<section className="atelier-section atelier-style-section">
+
+  <div className="atelier-container">
+
+    {/* =================================================
+        SECTION HEADER
+    ================================================= */}
+
+    <div className="atelier-section-heading">
+
+      <div className="atelier-heading-content">
+
+        <span className="atelier-eyebrow">
+          PERSONAL STYLE
+        </span>
+
+        <h2>
+          Crafted for Your
+          <em>Personal Style</em>
+        </h2>
+
+      </div>
+
+      <p className="atelier-section-description">
+        Every detail is considered to create a beauty and
+        fashion experience that feels distinctly yours.
+      </p>
+
+    </div>
+
+
+    {/* =================================================
+        IMAGE ERROR
+    ================================================= */}
+
+    {imageLoadError && (
+      <p
+        className="atelier-image-error"
+        role="alert"
+      >
+        {imageLoadError}
+      </p>
+    )}
+
+
+    {/* =================================================
+        LOADING SKELETON
+    ================================================= */}
+
+    {isFeaturedLoading && (
+      <div
+        className="atelier-service-grid"
+        aria-busy="true"
+        aria-label="Loading featured services"
+      >
+        <div className="atelier-skeleton-card" />
+        <div className="atelier-skeleton-card" />
+        <div className="atelier-skeleton-card" />
+      </div>
+    )}
+
+
+    {/* =================================================
+        EMPTY STATE
+    ================================================= */}
+
+    {!isFeaturedLoading &&
+      !imageLoadError &&
+      !hasFeaturedContent && (
+        <p className="atelier-empty-state">
+          New services and designs are on the way — check
+          back soon.
+        </p>
+    )}
+
+
+    {/* =================================================
+        SERVICE CARDS
+    ================================================= */}
+
+    {!isFeaturedLoading && hasFeaturedContent && (
+      <div className="atelier-service-grid">
+
+        {/* =================================================
+            CARD 01 + 02 — BEAUTY
+        ================================================= */}
+
+        {beautyServices
+          .slice(0, 2)
+          .map((service, index) => (
+
+            <article
+              className={`atelier-service-card atelier-scroll-reveal ${
+                index === 0
+                  ? 'atelier-scroll-delay-1'
+                  : 'atelier-scroll-delay-2'
+              }`}
+              key={service.id}
             >
-              Discover Fashion Design
-              <span>→</span>
-            </a>
 
-          </div>
+              <div className="atelier-card-image">
 
-        </div>
+                <img
+                  src={service.image_url}
+                  alt={service.name}
+                  loading="lazy"
+                />
 
-      </section>
+                <div
+                  className="atelier-card-image-overlay"
+                  aria-hidden="true"
+                >
+                  <span>
+                    0{index + 1}
+                  </span>
+                </div>
+
+              </div>
 
 
-      {/* =====================================================
-          CLIENT STORIES
-      ===================================================== */}
+              <div className="atelier-card-content">
 
-      <section className="home-client-section">
+                <div className="atelier-card-meta">
 
-        <div className="home-client-inner">
+                  <span>
+                    0{index + 1} / BEAUTY
+                  </span>
 
-          <p className="home-section-eyebrow">
-            CLIENT STORIES
-          </p>
+                  <span>
+                    WILDFLORAL
+                  </span>
 
-          <blockquote>
-            “I came looking for a beautiful look.
-            I left feeling completely myself.”
-          </blockquote>
+                </div>
 
-          <span className="home-client-name">
-            — A WildFloral Client
+
+                <h3>
+                  {service.name}
+                </h3>
+
+
+                <p>
+                  {service.category ||
+                    'A personalized beauty service'}
+                </p>
+
+
+                <a
+                  href="/services"
+                  className="atelier-card-link"
+                >
+
+                  <span>
+                    Explore Service
+                  </span>
+
+                  <span
+                    className="atelier-card-arrow"
+                    aria-hidden="true"
+                  >
+                    ↗
+                  </span>
+
+                </a>
+
+              </div>
+
+            </article>
+
+          ))}
+
+
+        {/* =================================================
+            CARD 03 — FASHION
+        ================================================= */}
+
+        {fashionImages
+          .slice(0, 1)
+          .map((image) => (
+
+            <article
+              className="atelier-service-card atelier-scroll-reveal atelier-scroll-delay-3"
+              key={image.id}
+            >
+
+              <div className="atelier-card-image">
+
+                <img
+                  src={image.imageUrl}
+                  alt={
+                    image.altText ||
+                    image.name
+                  }
+                  loading="lazy"
+                />
+
+                <div
+                  className="atelier-card-image-overlay"
+                  aria-hidden="true"
+                >
+                  <span>
+                    03
+                  </span>
+                </div>
+
+              </div>
+
+
+              <div className="atelier-card-content">
+
+                <div className="atelier-card-meta">
+
+                  <span>
+                    03 / FASHION
+                  </span>
+
+                  <span>
+                    ATELIER
+                  </span>
+
+                </div>
+
+
+                <h3>
+                  {image.name}
+                </h3>
+
+
+                <p>
+                  Bespoke fashion shaped around
+                  your style and occasion.
+                </p>
+
+
+                <a
+                  href="/fashion"
+                  className="atelier-card-link"
+                >
+
+                  <span>
+                    Explore Fashion
+                  </span>
+
+                  <span
+                    className="atelier-card-arrow"
+                    aria-hidden="true"
+                  >
+                    ↗
+                  </span>
+
+                </a>
+
+              </div>
+
+            </article>
+
+          ))}
+
+      </div>
+    )}
+
+  </div>
+
+</section>
+
+{/* =====================================================
+    EDITORIAL FEATURE
+===================================================== */}
+
+<section className="atelier-feature-section">
+
+  {/* =================================================
+      SECTION HEADER
+  ================================================= */}
+
+  <div className="atelier-section-heading">
+
+    <div className="atelier-heading-content">
+
+      <span className="atelier-eyebrow">
+        EDITORIAL FEATURE
+      </span>
+
+      <h2>
+        Beauty &amp; Fashion
+        <em>In Every Detail</em>
+      </h2>
+
+    </div>
+
+    <p className="atelier-section-description">
+      Thoughtfully composed beauty and fashion moments,
+      created with an editorial point of view.
+    </p>
+
+  </div>
+
+
+  <div className="atelier-feature-container">
+
+    {/* =================================================
+        IMAGE 01
+    ================================================= */}
+
+    <article
+      className="
+        atelier-feature-image-card
+        atelier-scroll-reveal
+        atelier-scroll-delay-1
+      "
+    >
+
+      <div className="atelier-feature-image">
+
+        {homeFeatureImageOne ? (
+          <img
+            src={homeFeatureImageOne}
+            alt="Wildfloral fashion atelier"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className="atelier-feature-image-fallback"
+            aria-hidden="true"
+          />
+        )}
+
+      </div>
+
+
+      <div className="atelier-feature-image-caption">
+
+        <div>
+          <span>
+            ATELIER CRAFT
           </span>
 
-          <div className="home-client-dots">
-            <i className="active" />
-            <i />
-            <i />
-          </div>
-
+          <h3>
+            Bespoke Drape &amp; Line
+          </h3>
         </div>
 
-      </section>
+        <em>
+          01
+        </em>
+
+      </div>
+
+    </article>
 
 
-      {/* =====================================================
-          FINAL CTA
-      ===================================================== */}
+    {/* =================================================
+        CENTER EDITORIAL CARD
+    ================================================= */}
 
-      <section className="home-final-section">
+    <article
+      className="
+        atelier-feature-editorial
+        atelier-scroll-reveal
+        atelier-scroll-delay-2
+      "
+    >
 
-        <div className="home-final-inner">
+      <div className="atelier-feature-editorial-icon">
+        ✧
+      </div>
 
-          <p className="home-section-eyebrow">
-            YOUR MOMENT
-          </p>
 
-          <h2>
-            Your Style.
-            <span>Your Moment.</span>
-            Your WildFloral.
-          </h2>
+      <span className="atelier-feature-editorial-label">
+        PURE BOTANICALS
+      </span>
 
-          <p>
-            Begin your personalized beauty and fashion
-            experience with us.
-          </p>
 
-          <div className="home-final-actions">
+      <blockquote>
+        "Every treatment is
+        custom-compounded from
+        certified botanical
+        distillations, matched
+        precisely to cellular
+        resonance."
+      </blockquote>
 
-            <a
-              href="/booking"
-              className="home-final-primary"
-            >
-              Book Appointment
-            </a>
 
-            <a
-              href="/services"
-              className="home-final-secondary"
-            >
-              Explore Services
-            </a>
+      <div className="atelier-feature-editorial-footer">
 
-          </div>
+        <span>
+          COMPOUNDED FRESH
+        </span>
 
+        <small>
+          Cold-pressed botanical oils
+        </small>
+
+      </div>
+
+    </article>
+
+
+    {/* =================================================
+        IMAGE 02
+    ================================================= */}
+
+    <article
+      className="
+        atelier-feature-image-card
+        atelier-feature-image-card-right
+        atelier-scroll-reveal
+        atelier-scroll-delay-3
+      "
+    >
+
+      <div className="atelier-feature-image">
+
+        {homeFeatureImageTwo ? (
+          <img
+            src={homeFeatureImageTwo}
+            alt="Wildfloral beauty artistry"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className="atelier-feature-image-fallback"
+            aria-hidden="true"
+          />
+        )}
+
+      </div>
+
+
+      <div className="atelier-feature-image-caption">
+
+        <div>
+          <span>
+            SKIN HARMONY
+          </span>
+
+          <h3>
+            Luminous Artistry
+          </h3>
         </div>
 
-      </section>
+        <em>
+          02
+        </em>
 
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+{/* =====================================================
+    BEAUTY PHILOSOPHY
+===================================================== */}
+
+<section className="atelier-philosophy-section">
+
+  <div className="atelier-philosophy-container">
+
+    {/* =================================================
+        PHILOSOPHY QUOTE
+    ================================================= */}
+
+    <div
+      className="
+        atelier-philosophy-quote
+        atelier-scroll-reveal
+        atelier-scroll-delay-1
+      "
+    >
+
+      <span className="atelier-philosophy-symbol">
+        ✦
+      </span>
+
+      <blockquote>
+        "True luxury is a personal silhouette tailored to
+        your innate grace."
+      </blockquote>
+
+      <span className="atelier-philosophy-label">
+        WILDFLORAL ATELIER
+      </span>
+
+      <small>
+        BEAUTY &amp; FASHION
+      </small>
+
+    </div>
+
+
+    {/* =================================================
+        PHILOSOPHY CARDS
+    ================================================= */}
+
+    <div className="atelier-philosophy-grid">
+
+      {/* CARD 01 */}
+
+      <article
+        className="
+          atelier-philosophy-card
+          atelier-scroll-reveal
+          atelier-scroll-delay-1
+        "
+      >
+
+        <span className="atelier-philosophy-number">
+          01
+        </span>
+
+        <h3>
+          Botanical Formulation
+        </h3>
+
+        <p>
+          We believe beauty begins with considered
+          ingredients, precise rituals, and formulas
+          created to complement your natural rhythm.
+        </p>
+
+      </article>
+
+
+      {/* CARD 02 */}
+
+      <article
+        className="
+          atelier-philosophy-card
+          atelier-scroll-reveal
+          atelier-scroll-delay-2
+        "
+      >
+
+        <span className="atelier-philosophy-number">
+          02
+        </span>
+
+        <h3>
+          Sartorial Precision
+        </h3>
+
+        <p>
+          Every silhouette is thoughtfully shaped around
+          your proportions, personality, occasion, and
+          individual expression.
+        </p>
+
+      </article>
+
+
+      {/* CARD 03 */}
+
+      <article
+        className="
+          atelier-philosophy-card
+          atelier-scroll-reveal
+          atelier-scroll-delay-3
+        "
+      >
+
+        <span className="atelier-philosophy-number">
+          03
+        </span>
+
+        <h3>
+          Intimate Sanctuary
+        </h3>
+
+        <p>
+          Your experience is designed as a private
+          moment of refinement, where beauty and fashion
+          come together effortlessly.
+        </p>
+
+      </article>
+
+    </div>
+
+
+    {/* =================================================
+        CONSULTATION CTA
+    ================================================= */}
+
+    <div
+      className="
+        atelier-philosophy-cta
+        atelier-scroll-reveal
+        atelier-scroll-delay-3
+      "
+    >
+
+      <div className="atelier-philosophy-cta-content">
+
+        <span>
+          PRIVATE ATELIER
+        </span>
+
+        <h2>
+          Begin Your Consultation
+        </h2>
+
+        <p>
+          Discover a personalized beauty and fashion
+          experience created entirely around you.
+        </p>
+
+      </div>
+
+
+      <div className="atelier-philosophy-cta-actions">
+
+        <a
+          href="/booking"
+          className="atelier-philosophy-primary-link"
+        >
+          <span>
+            BOOK APPOINTMENT
+          </span>
+
+          <span aria-hidden="true">
+            ↗
+          </span>
+        </a>
+
+
+        <a
+          href="/services"
+          className="atelier-philosophy-secondary-link"
+        >
+          EXPLORE SERVICES
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* =====================================================
+    GALLERY
+===================================================== */}
+
+<section className="atelier-gallery-section">
+
+  <div className="atelier-container">
+
+    {/* =================================================
+        SECTION HEADER
+    ================================================= */}
+
+    <div className="atelier-section-heading">
+
+      <div className="atelier-heading-content">
+
+        <span className="atelier-eyebrow">
+          THE COLLECTION
+        </span>
+
+        <h2>
+          Moments From
+          <em>The Atelier Floor</em>
+        </h2>
+
+      </div>
+
+      <p className="atelier-section-description">
+        A closer look at the textures, rituals, and
+        finishing touches behind every Wildfloral
+        appointment.
+      </p>
+
+    </div>
+
+
+    {/* =================================================
+        GALLERY GRID
+    ================================================= */}
+
+    <div className="atelier-gallery-grid">
+
+      {homeGalleryImages.map((image, index) => (
+
+        <figure
+          className={`atelier-gallery-item atelier-scroll-reveal ${
+            galleryStaggerDelays[index % galleryStaggerDelays.length]
+          }`}
+          key={image.id}
+        >
+
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading="lazy"
+          />
+
+          <figcaption>
+            {image.caption}
+          </figcaption>
+
+        </figure>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</section>
+
+
+{/* =====================================================
+    THE DETAILS MATTER
+===================================================== */}
+
+<section className="wf-details-section">
+
+  <div className="wf-details-container">
+
+    {/* =================================================
+        SECTION HEADER
+    ================================================= */}
+
+    <div className="wf-details-header atelier-scroll-reveal atelier-scroll-delay-1">
+
+      <span className="wf-details-eyebrow">
+        WILDFLORAL ATELIER
+      </span>
+
+      <h2 className="wf-details-heading">
+        The Details Matter.
+      </h2>
+
+      <p className="wf-details-subheading">
+        Every appointment is shaped around the things that make you,
+        you — your personality, your vision, your occasion, your taste.
+      </p>
+
+    </div>
+
+
+    {/* =================================================
+        FOUR FEATURE CARDS
+    ================================================= */}
+
+    <div className="wf-details-grid">
+
+      <article className="wf-details-card atelier-scroll-reveal atelier-scroll-delay-1">
+        <div className="wf-details-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 3C14 3 7 8.5 7 15C7 18.866 10.134 22 14 22C17.866 22 21 18.866 21 15C21 8.5 14 3 14 3Z" stroke="#765282" strokeWidth="1.4" strokeLinejoin="round"/>
+            <path d="M14 22V25" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M11 25H17" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span className="wf-details-card-number">01</span>
+        <h3>Expert Craftsmanship</h3>
+        <p>
+          Each service is delivered with precision and artistry
+          developed through years of dedicated practice.
+        </p>
+      </article>
+
+      <article className="wf-details-card atelier-scroll-reveal atelier-scroll-delay-2">
+        <div className="wf-details-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="10" r="5" stroke="#765282" strokeWidth="1.4"/>
+            <path d="M5 24C5 19.582 9.029 16 14 16C18.971 16 23 19.582 23 24" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span className="wf-details-card-number">02</span>
+        <h3>Personalised Care</h3>
+        <p>
+          Your appointments are never off-the-shelf. Every
+          decision is made with your unique needs in mind.
+        </p>
+      </article>
+
+      <article className="wf-details-card atelier-scroll-reveal atelier-scroll-delay-3">
+        <div className="wf-details-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 4L16.5 10.5L23 11L18 16L19.5 23L14 20L8.5 23L10 16L5 11L11.5 10.5L14 4Z" stroke="#765282" strokeWidth="1.4" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <span className="wf-details-card-number">03</span>
+        <h3>Premium Quality</h3>
+        <p>
+          Only the finest materials and formulations are used —
+          chosen for their efficacy and sensory experience.
+        </p>
+      </article>
+
+      <article className="wf-details-card atelier-scroll-reveal atelier-scroll-delay-3">
+        <div className="wf-details-card-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="20" height="14" rx="2" stroke="#765282" strokeWidth="1.4"/>
+            <path d="M9 8V6C9 4.895 9.895 4 11 4H17C18.105 4 19 4.895 19 6V8" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M14 13V17" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M12 15H16" stroke="#765282" strokeWidth="1.4" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span className="wf-details-card-number">04</span>
+        <h3>Made For You</h3>
+        <p>
+          From the first consultation to the final look,
+          everything is curated entirely around you.
+        </p>
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+{/* =====================================================
+    DESIGNED SPECIFICALLY FOR YOU — SPLIT SECTION
+===================================================== */}
+
+<section className="wf-split-section">
+
+  {/* =================================================
+      LEFT — IMAGE
+  ================================================= */}
+
+  <div className="wf-split-image-col atelier-scroll-reveal atelier-scroll-delay-1">
+
+    <div className="wf-split-image-wrap">
+
+      {homeFeatureImageOne ? (
+        <img
+          src={homeFeatureImageOne}
+          alt="Wildfloral atelier — made for you"
+          loading="lazy"
+        />
+      ) : (
+        <div
+          className="wf-split-image-fallback"
+          aria-hidden="true"
+        />
+      )}
+
+      <div
+        className="wf-split-image-badge"
+        aria-hidden="true"
+      >
+        <span>MADE FOR YOU</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  {/* =================================================
+      RIGHT — COPY
+  ================================================= */}
+
+  <div className="wf-split-copy-col atelier-scroll-reveal atelier-scroll-delay-2">
+
+    <span className="wf-split-eyebrow">
+      ATELIER PARTNER
+    </span>
+
+    <h2 className="wf-split-heading">
+      Designed Specifically
+      <em> for You.</em>
+    </h2>
+
+    <p className="wf-split-body">
+      Your assessments. Your personality. Your occasion. Your
+      vision. At Wildfloral, every visit is a conversation — we
+      listen first, then create.
+    </p>
+
+    <p className="wf-split-body">
+      From The Fitting Room to The Final Stitch, every detail is shaped
+      to make your experience feel as individual as the look itself.
+    </p>
+
+    <a
+      href="/services"
+      className="wf-split-link"
+    >
+      <span>DISCOVER YOUR STYLE</span>
+      <span className="wf-split-link-arrow" aria-hidden="true">↗</span>
+    </a>
+
+  </div>
+
+</section>
+
+
+{/* =====================================================
+    TESTIMONIAL QUOTE
+===================================================== */}
+
+<section className="wf-testimonial-section">
+
+  <div className="wf-testimonial-container">
+
+    <div className="wf-testimonial-inner atelier-scroll-reveal atelier-scroll-delay-1">
+
+      <span
+        className="wf-testimonial-mark"
+        aria-hidden="true"
+      >
+        ✦
+      </span>
+
+      <blockquote className="wf-testimonial-quote">
+        "I came looking for a beautiful look,
+        I left feeling completely myself."
+      </blockquote>
+
+      <footer className="wf-testimonial-footer">
+        <span className="wf-testimonial-attribution">
+          A WILDFLORAL CLIENT
+        </span>
+        <span
+          className="wf-testimonial-divider"
+          aria-hidden="true"
+        />
+        <span className="wf-testimonial-location">
+          BEAUTY &amp; FASHION
+        </span>
+      </footer>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+{/* =====================================================
+    FINAL CTA — YOUR STYLE. YOUR MOMENT.
+===================================================== */}
+
+<section className="wf-final-cta-section">
+
+  <div
+    className="wf-final-cta-overlay"
+    aria-hidden="true"
+  />
+
+  <div className="wf-final-cta-container">
+
+    <div className="wf-final-cta-inner atelier-scroll-reveal atelier-scroll-delay-1">
+
+      <span className="wf-final-cta-eyebrow">
+        YOUR WILDFLORAL
+      </span>
+
+      <h2 className="wf-final-cta-heading">
+        Your Style. Your Moment.
+        <em> Your WildFloral.</em>
+      </h2>
+
+      <p className="wf-final-cta-body">
+        Begin your personalized beauty and fashion experience
+        with a consultation designed entirely around you.
+      </p>
+
+      <div className="wf-final-cta-actions">
+
+        <a
+          href="/booking"
+          className="wf-final-cta-primary"
+        >
+          BOOK APPOINTMENT
+        </a>
+
+        <a
+          href="/services"
+          className="wf-final-cta-secondary"
+        >
+          EXPLORE SERVICES
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
     </main>
   )

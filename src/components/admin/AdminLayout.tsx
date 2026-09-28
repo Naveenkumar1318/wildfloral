@@ -2,6 +2,7 @@ import {
   Link,
   NavLink,
   Outlet,
+  useLocation,
   useNavigate,
 } from 'react-router-dom'
 
@@ -292,12 +293,13 @@ customers: (
 
 function AdminLayout() {
   const navigate = useNavigate()
-
-  const [mobileMenuOpen, setMobileMenuOpen] =
-    useState(false)
+  const location = useLocation()
 
   const [openSection, setOpenSection] =
     useState<string | null>(null)
+
+  const [mobileOpenSection, setMobileOpenSection] =
+  useState<string | null>(null)
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -318,19 +320,22 @@ function AdminLayout() {
     )
   }
 
-  function closeMobileMenu() {
-    setMobileMenuOpen(false)
-    setOpenSection(null)
-  }
+  function toggleMobileSection(
+  section: string,
+) {
+  setMobileOpenSection((current) =>
+    current === section
+      ? null
+      : section,
+  )
+}
+
+function closeMobileSection() {
+  setMobileOpenSection(null)
+}
 
   return (
-    <div
-      className={`admin-layout ${
-        mobileMenuOpen
-          ? 'mobile-menu-open'
-          : ''
-      }`}
-    >
+    <div className="admin-layout">
 
       {/* =================================================
           MOBILE HEADER
@@ -338,53 +343,72 @@ function AdminLayout() {
 
       <header className="admin-mobile-header">
 
-        <button
-          type="button"
-          className="admin-mobile-menu-button"
-          aria-label={
-            mobileMenuOpen
-              ? 'Close menu'
-              : 'Open menu'
-          }
-          aria-expanded={mobileMenuOpen}
-          onClick={() =>
-            setMobileMenuOpen(
-              (current) => !current,
-            )
-          }
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+  {/* =====================================================
+      ADMIN BRAND
+  ===================================================== */}
 
-        <Link
-          to="/admin"
-          className="admin-mobile-brand"
-          onClick={closeMobileMenu}
-        >
-          <span className="admin-mobile-brand-logo">
-            <Icon type="logo" />
-          </span>
+  <Link
+    to="/admin"
+    className="admin-mobile-brand"
+    aria-label="WildFloral Administration"
+  >
+    <span className="admin-mobile-brand-logo">
+      <Icon type="logo" />
+    </span>
 
-          <span>
-            WildFloral
-          </span>
-        </Link>
+    <span className="admin-mobile-brand-content">
+      <strong>
+        WildFloral
+      </strong>
 
-      </header>
+      <small>
+        ADMINISTRATION
+      </small>
+    </span>
+  </Link>
 
 
-      {/* =================================================
-          MOBILE OVERLAY
-      ================================================= */}
+  {/* =====================================================
+      MOBILE HEADER ACTIONS
+  ===================================================== */}
 
-      <button
-        type="button"
-        className="admin-mobile-overlay"
-        aria-label="Close navigation"
-        onClick={closeMobileMenu}
-      />
+  <div className="admin-mobile-header-actions">
+
+    {/* BACK TO WEBSITE */}
+
+    <Link
+      to="/"
+      className="admin-mobile-header-action"
+    >
+      <span className="admin-mobile-header-action-icon">
+        <Icon type="website" />
+      </span>
+
+      <span>
+        Back to Website
+      </span>
+    </Link>
+
+
+    {/* LOGOUT */}
+
+    <button
+      type="button"
+      className="admin-mobile-header-action admin-mobile-header-logout"
+      onClick={() => void handleLogout()}
+    >
+      <span className="admin-mobile-header-action-icon">
+        <Icon type="logout" />
+      </span>
+
+      <span>
+        Logout
+      </span>
+    </button>
+
+  </div>
+
+</header>
 
 
       {/* =================================================
@@ -398,7 +422,6 @@ function AdminLayout() {
         <Link
           to="/admin"
           className="admin-sidebar-brand"
-          onClick={closeMobileMenu}
         >
           <span className="admin-sidebar-logo">
             <Icon type="logo" />
@@ -435,7 +458,6 @@ function AdminLayout() {
           <NavLink
             to="/admin"
             end
-            onClick={closeMobileMenu}
             className={({ isActive }) =>
               `admin-nav-item ${
                 isActive
@@ -493,7 +515,6 @@ function AdminLayout() {
 
               <NavLink
                 to="/admin/bookings/beauty"
-                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -510,9 +531,8 @@ function AdminLayout() {
               </NavLink>
 
               <NavLink
-  to="/admin/bookings/fashion"
-  onClick={closeMobileMenu}
-  className={({ isActive }) =>
+                to="/admin/bookings/fashion"
+                className={({ isActive }) =>
     `admin-nav-subitem ${
       isActive
         ? 'active'
@@ -570,7 +590,6 @@ function AdminLayout() {
 
     <NavLink
       to="/admin/enquiries/beauty"
-      onClick={closeMobileMenu}
       className={({ isActive }) =>
         `admin-nav-subitem ${
           isActive
@@ -588,7 +607,6 @@ function AdminLayout() {
 
     <NavLink
       to="/admin/enquiries/fashion"
-      onClick={closeMobileMenu}
       className={({ isActive }) =>
         `admin-nav-subitem ${
           isActive
@@ -647,7 +665,6 @@ function AdminLayout() {
 
               <NavLink
                 to="/admin/services/beauty"
-                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -664,9 +681,8 @@ function AdminLayout() {
               </NavLink>
 
               <NavLink
-  to="/admin/services/fashion"
-  onClick={closeMobileMenu}
-  className={({ isActive }) =>
+                to="/admin/services/fashion"
+                className={({ isActive }) =>
     `admin-nav-subitem ${
       isActive ? 'active' : ''
     }`
@@ -723,7 +739,6 @@ function AdminLayout() {
 
               <NavLink
                 to="/admin/offers/beauty"
-                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -741,7 +756,6 @@ function AdminLayout() {
 
               <NavLink
                 to="/admin/services/fashion/offers"
-                onClick={closeMobileMenu}
                 className={({ isActive }) =>
                   `admin-nav-subitem ${
                     isActive
@@ -800,7 +814,6 @@ function AdminLayout() {
 
     <NavLink
       to="/admin/op-customers/beauty"
-      onClick={closeMobileMenu}
       className={({ isActive }) =>
         `admin-nav-subitem ${
           isActive
@@ -821,7 +834,6 @@ function AdminLayout() {
 
     <NavLink
       to="/admin/op-customers/fashion"
-      onClick={closeMobileMenu}
       className={({ isActive }) =>
         `admin-nav-subitem ${
           isActive
@@ -858,7 +870,6 @@ function AdminLayout() {
           <Link
             to="/"
             className="admin-bottom-item"
-            onClick={closeMobileMenu}
           >
             <span className="admin-bottom-icon">
               <Icon type="website" />
@@ -890,6 +901,393 @@ function AdminLayout() {
 
       </aside>
 
+
+{/* =================================================
+    MOBILE BOTTOM NAVIGATION
+================================================= */}
+
+<nav
+  className="admin-mobile-bottom-nav"
+  aria-label="Mobile admin navigation"
+>
+
+  {/* =================================================
+      HOME
+  ================================================= */}
+
+  <NavLink
+    to="/admin"
+    end
+    onClick={closeMobileSection}
+    className={({ isActive }) =>
+      `admin-mobile-bottom-item ${
+        isActive ? 'active' : ''
+      }`
+    }
+  >
+    <span className="admin-mobile-bottom-icon">
+      <Icon type="dashboard" />
+    </span>
+
+    <span className="admin-mobile-bottom-label">
+      Home
+    </span>
+  </NavLink>
+
+
+  {/* =================================================
+      BOOKINGS
+  ================================================= */}
+
+  <div
+    className={`admin-mobile-bottom-group ${
+      mobileOpenSection === 'bookings'
+        ? 'open'
+        : ''
+    }`}
+  >
+
+    <button
+      type="button"
+      className={`admin-mobile-bottom-item admin-mobile-bottom-button ${
+        location.pathname.startsWith(
+          '/admin/bookings',
+        )
+          ? 'active'
+          : ''
+      }`}
+      onClick={() =>
+        toggleMobileSection('bookings')
+      }
+      aria-expanded={
+        mobileOpenSection === 'bookings'
+      }
+    >
+      <span className="admin-mobile-bottom-icon">
+        <Icon type="bookings" />
+      </span>
+
+      <span className="admin-mobile-bottom-label">
+        Bookings
+      </span>
+    </button>
+
+
+    <div className="admin-mobile-submenu">
+
+      <NavLink
+        to="/admin/bookings/beauty"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Beauty Bookings
+      </NavLink>
+
+
+      <NavLink
+        to="/admin/bookings/fashion"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Fashion Bookings
+      </NavLink>
+
+    </div>
+
+  </div>
+
+
+  {/* =================================================
+      ENQUIRY
+  ================================================= */}
+
+  <div
+    className={`admin-mobile-bottom-group ${
+      mobileOpenSection === 'enquiries'
+        ? 'open'
+        : ''
+    }`}
+  >
+
+    <button
+      type="button"
+      className={`admin-mobile-bottom-item admin-mobile-bottom-button ${
+        location.pathname.startsWith(
+          '/admin/enquiries',
+        )
+          ? 'active'
+          : ''
+      }`}
+      onClick={() =>
+        toggleMobileSection('enquiries')
+      }
+      aria-expanded={
+        mobileOpenSection === 'enquiries'
+      }
+    >
+      <span className="admin-mobile-bottom-icon">
+        <Icon type="enquiries" />
+      </span>
+
+      <span className="admin-mobile-bottom-label">
+        Enquiry
+      </span>
+    </button>
+
+
+    <div className="admin-mobile-submenu">
+
+      <NavLink
+        to="/admin/enquiries/beauty"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Beauty Enquiry
+      </NavLink>
+
+
+      <NavLink
+        to="/admin/enquiries/fashion"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Fashion Enquiry
+      </NavLink>
+
+    </div>
+
+  </div>
+
+
+  {/* =================================================
+      SERVICES
+  ================================================= */}
+
+  <div
+    className={`admin-mobile-bottom-group ${
+      mobileOpenSection === 'services'
+        ? 'open'
+        : ''
+    }`}
+  >
+
+    <button
+      type="button"
+      className={`admin-mobile-bottom-item admin-mobile-bottom-button ${
+        location.pathname.startsWith(
+          '/admin/services',
+        )
+          ? 'active'
+          : ''
+      }`}
+      onClick={() =>
+        toggleMobileSection('services')
+      }
+      aria-expanded={
+        mobileOpenSection === 'services'
+      }
+    >
+      <span className="admin-mobile-bottom-icon">
+        <Icon type="services" />
+      </span>
+
+      <span className="admin-mobile-bottom-label">
+        Services
+      </span>
+    </button>
+
+
+    <div className="admin-mobile-submenu">
+
+      <NavLink
+        to="/admin/services/beauty"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Beauty Services
+      </NavLink>
+
+
+      <NavLink
+        to="/admin/services/fashion"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Fashion Services
+      </NavLink>
+
+    </div>
+
+  </div>
+
+
+  {/* =================================================
+      OFFERS
+  ================================================= */}
+
+  <div
+    className={`admin-mobile-bottom-group ${
+      mobileOpenSection === 'offers'
+        ? 'open'
+        : ''
+    }`}
+  >
+
+    <button
+      type="button"
+      className={`admin-mobile-bottom-item admin-mobile-bottom-button ${
+        location.pathname.startsWith(
+          '/admin/offers',
+        ) ||
+        location.pathname.startsWith(
+          '/admin/services/fashion/offers',
+        )
+          ? 'active'
+          : ''
+      }`}
+      onClick={() =>
+        toggleMobileSection('offers')
+      }
+      aria-expanded={
+        mobileOpenSection === 'offers'
+      }
+    >
+      <span className="admin-mobile-bottom-icon">
+        <Icon type="offers" />
+      </span>
+
+      <span className="admin-mobile-bottom-label">
+        Offers
+      </span>
+    </button>
+
+
+    <div className="admin-mobile-submenu">
+
+      <NavLink
+        to="/admin/offers/beauty"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Beauty Offers
+      </NavLink>
+
+
+      <NavLink
+        to="/admin/services/fashion/offers"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Fashion Offers
+      </NavLink>
+
+    </div>
+
+  </div>
+
+
+  {/* =================================================
+      OP CUSTOMER
+  ================================================= */}
+
+  <div
+    className={`admin-mobile-bottom-group ${
+      mobileOpenSection === 'customers'
+        ? 'open'
+        : ''
+    }`}
+  >
+
+    <button
+      type="button"
+      className={`admin-mobile-bottom-item admin-mobile-bottom-button ${
+        location.pathname.startsWith(
+          '/admin/op-customers',
+        )
+          ? 'active'
+          : ''
+      }`}
+      onClick={() =>
+        toggleMobileSection('customers')
+      }
+      aria-expanded={
+        mobileOpenSection === 'customers'
+      }
+    >
+      <span className="admin-mobile-bottom-icon">
+        <Icon type="customers" />
+      </span>
+
+      <span className="admin-mobile-bottom-label">
+        OP Customer
+      </span>
+    </button>
+
+
+    <div className="admin-mobile-submenu">
+
+      <NavLink
+        to="/admin/op-customers/beauty"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Beauty Customer
+      </NavLink>
+
+
+      <NavLink
+        to="/admin/op-customers/fashion"
+        onClick={closeMobileSection}
+        className={({ isActive }) =>
+          `admin-mobile-submenu-item ${
+            isActive ? 'active' : ''
+          }`
+        }
+      >
+        Fashion Customer
+      </NavLink>
+
+    </div>
+
+  </div>
+
+</nav>
 
       {/* =================================================
           MAIN CONTENT
