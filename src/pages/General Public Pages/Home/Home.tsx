@@ -342,7 +342,6 @@ function Home() {
         )
         const fashionRows =
           (fashionImagesResult.data ?? []) as HomeFashionImageRow[]
-        const includedDesignIds = new Set<string>()
 
         const featuredBeautyServices: HomeBeautyService[] = beautyRows.slice(0, 2).map((service, index) => ({
           id: service.id,
