@@ -2,31 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://wildfloral.online/</loc>
+    <loc>https://www.wildfloral.online/</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/about</loc>
+    <loc>https://www.wildfloral.online/about</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/services</loc>
+    <loc>https://www.wildfloral.online/services</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/fashion</loc>
+    <loc>https://www.wildfloral.online/fashion</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/contact</loc>
+    <loc>https://www.wildfloral.online/contact</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/enquiry</loc>
+    <loc>https://www.wildfloral.online/enquiry</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.online/booking</loc>
+    <loc>https://www.wildfloral.online/booking</loc>
+  </url>
+
+  <url>
+    <loc>https://www.wildfloral.online/fashion-booking</loc>
+  </url>
+
+  <url>
+    <loc>https://www.wildfloral.online/privacy</loc>
+  </url>
+
+  <url>
+    <loc>https://www.wildfloral.online/terms</loc>
   </url>
 
 </urlset>
