@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Link,
@@ -194,7 +194,58 @@ function CustomerSidebar() {
     useState(false)
   const [openGroup, setOpenGroup] =
     useState<'bookings' | 'enquiries' | null>('bookings')
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
   const location = useLocation()
+
+  useEffect(() => {
+    setNavVisible(true)
+    lastScrollY.current = window.scrollY
+  }, [location.pathname])
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const previousScrollY = lastScrollY.current
+      const delta = currentScrollY - previousScrollY
+
+      if (currentScrollY <= 50) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      if (mobileMenuOpen || mobileEnquiryOpen) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      if (Math.abs(delta) < 6) {
+        return
+      }
+
+      if (delta > 0) {
+        // Scrolling down -> hide
+        setNavVisible(false)
+      } else {
+        // Scrolling up -> show
+        setNavVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [mobileMenuOpen, mobileEnquiryOpen])
 
   useEffect(() => {
     if (location.pathname.startsWith('/account/enquiries/')) {
@@ -249,7 +300,7 @@ function CustomerSidebar() {
           MOBILE HEADER
       ===================================================== */}
 
-<header className="customer-mobile-header">
+<header className={`customer-mobile-header ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
 
   {/* =====================================================
       MOBILE BRAND
@@ -641,7 +692,9 @@ function CustomerSidebar() {
       ===================================================== */}
 
       <nav
-        className="customer-mobile-bottom-nav"
+        className={`customer-mobile-bottom-nav ${
+          navVisible ? 'nav-visible' : 'nav-hidden'
+        }`}
         aria-label="Mobile customer navigation"
       >
 

@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { supabase } from '../../lib/supabase'
 
@@ -299,7 +299,59 @@ function AdminLayout() {
     useState<string | null>(null)
 
   const [mobileOpenSection, setMobileOpenSection] =
-  useState<string | null>(null)
+    useState<string | null>(null)
+
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    setNavVisible(true)
+    lastScrollY.current = window.scrollY
+  }, [location.pathname])
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const previousScrollY = lastScrollY.current
+      const delta = currentScrollY - previousScrollY
+
+      if (currentScrollY <= 50) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      if (mobileOpenSection !== null) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      if (Math.abs(delta) < 6) {
+        return
+      }
+
+      if (delta > 0) {
+        // Scrolling down -> hide
+        setNavVisible(false)
+      } else {
+        // Scrolling up -> show
+        setNavVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [mobileOpenSection])
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -321,18 +373,18 @@ function AdminLayout() {
   }
 
   function toggleMobileSection(
-  section: string,
-) {
-  setMobileOpenSection((current) =>
-    current === section
-      ? null
-      : section,
-  )
-}
+    section: string,
+  ) {
+    setMobileOpenSection((current) =>
+      current === section
+        ? null
+        : section,
+    )
+  }
 
-function closeMobileSection() {
-  setMobileOpenSection(null)
-}
+  function closeMobileSection() {
+    setMobileOpenSection(null)
+  }
 
   return (
     <div className="admin-layout">
@@ -341,7 +393,7 @@ function closeMobileSection() {
           MOBILE HEADER
       ================================================= */}
 
-      <header className="admin-mobile-header">
+      <header className={`admin-mobile-header ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
 
   {/* =====================================================
       ADMIN BRAND
@@ -907,7 +959,9 @@ function closeMobileSection() {
 ================================================= */}
 
 <nav
-  className="admin-mobile-bottom-nav"
+  className={`admin-mobile-bottom-nav ${
+    navVisible ? 'nav-visible' : 'nav-hidden'
+  }`}
   aria-label="Mobile admin navigation"
 >
 
