@@ -12,6 +12,9 @@ import './Home.css'
 
 import homeFeatureImageOne from '../../../assets/home page/1.png'
 import homeFeatureImageTwo from '../../../assets/home page/2.png'
+import hairStylingImage from '../../../assets/home page/Hair Styling.png'
+import bridalMakeupImage from '../../../assets/home page/Bridal Makeup.png'
+import fashionPageImage from '../../../assets/home page/fashionpage.png'
 
 /* =========================================================
    GALLERY IMAGES
@@ -130,6 +133,30 @@ type HomeFashionImageRow = {
   is_primary: boolean
 }
 
+const DEFAULT_BEAUTY_SERVICES: HomeBeautyService[] = [
+  {
+    id: 'default-beauty-1',
+    name: 'Hair Styling',
+    category: 'Hair',
+    image_url: hairStylingImage,
+  },
+  {
+    id: 'default-beauty-2',
+    name: 'Bridal Makeup',
+    category: 'Bridal',
+    image_url: bridalMakeupImage,
+  },
+]
+
+const DEFAULT_FASHION_IMAGES: HomeFashionImage[] = [
+  {
+    id: 'default-fashion-1',
+    name: 'Style Dress',
+    imageUrl: fashionPageImage,
+    altText: 'Bespoke Atelier Fashion Dress',
+  },
+]
+
 /* =========================================================
    HERO ANIMATION FRAMES
 ========================================================= */
@@ -185,14 +212,29 @@ function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameIndexRef = useRef(0)
   const animationFrameRef = useRef<number | null>(null)
-  const [beautyServices, setBeautyServices] = useState<HomeBeautyService[]>([])
-  const [fashionImages, setFashionImages] = useState<HomeFashionImage[]>([])
+  const [beautyServices, setBeautyServices] = useState<HomeBeautyService[]>(DEFAULT_BEAUTY_SERVICES)
+  const [fashionImages, setFashionImages] = useState<HomeFashionImage[]>(DEFAULT_FASHION_IMAGES)
   const [imageLoadError, setImageLoadError] = useState('')
-  const [isFeaturedLoading, setIsFeaturedLoading] = useState(true)
+  const [isFeaturedLoading, setIsFeaturedLoading] = useState(false)
 
   const [isMobile, setIsMobile] = useState(
     () => window.innerWidth <= 768,
   )
+
+  const handleSkipHero = () => {
+    const target = document.getElementById('home-story-section')
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      const heroShell = document.querySelector('.home-hero-shell') as HTMLElement | null
+      if (heroShell) {
+        window.scrollTo({
+          top: heroShell.offsetTop + heroShell.offsetHeight,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }
 
   /* =====================================================
      SCROLL REVEAL (Personal Style, Editorial Feature,
@@ -254,8 +296,6 @@ function Home() {
     let isMounted = true
 
     const loadFeaturedImages = async () => {
-      setIsFeaturedLoading(true)
-
       try {
         const [beautyResult, fashionDesignsResult] = await Promise.all([
           supabase
@@ -303,45 +343,48 @@ function Home() {
         const fashionRows =
           (fashionImagesResult.data ?? []) as HomeFashionImageRow[]
         const includedDesignIds = new Set<string>()
-        const featuredBeautyServices = beautyRows.filter(
-          (service): service is HomeBeautyService =>
-            Boolean(service.image_url?.trim()),
+
+        const featuredBeautyServices: HomeBeautyService[] = beautyRows.slice(0, 2).map((service, index) => ({
+          id: service.id,
+          name: service.name,
+          category: service.category,
+          image_url: index === 0 ? hairStylingImage : bridalMakeupImage,
+        }))
+
+        const finalBeautyServices = featuredBeautyServices.length > 0
+          ? [
+              ...featuredBeautyServices,
+              ...DEFAULT_BEAUTY_SERVICES.slice(featuredBeautyServices.length),
+            ]
+          : DEFAULT_BEAUTY_SERVICES
+
+        const mappedFashionImages: HomeFashionImage[] = (
+          fashionRows.length > 0
+            ? [{
+                id: fashionRows[0].id,
+                name: designNames.get(fashionRows[0].design_id) || 'Style Dress',
+                imageUrl: fashionPageImage,
+                altText: fashionRows[0].alt_text || 'Bespoke Atelier Fashion Dress',
+              }]
+            : DEFAULT_FASHION_IMAGES
         )
 
+        const finalFashionImages = mappedFashionImages.length > 0
+          ? mappedFashionImages
+          : DEFAULT_FASHION_IMAGES
+
         if (isMounted) {
-          setBeautyServices(featuredBeautyServices)
-          setFashionImages(
-            fashionRows.flatMap((image) => {
-              const imageUrl = image.image_url?.trim()
-              const name = designNames.get(image.design_id)
-
-              if (
-                !imageUrl ||
-                !name ||
-                includedDesignIds.has(image.design_id)
-              ) {
-                return []
-              }
-
-              includedDesignIds.add(image.design_id)
-
-              return [{
-                id: image.id,
-                name,
-                imageUrl,
-                altText: image.alt_text,
-              }]
-            }),
-          )
+          setBeautyServices(finalBeautyServices)
+          setFashionImages(finalFashionImages)
           setImageLoadError('')
         }
       } catch (error) {
         console.error('Unable to load featured home page images.', error)
 
         if (isMounted) {
-          setImageLoadError(
-            'Featured beauty and fashion images could not be loaded. Please try again later.',
-          )
+          setBeautyServices(DEFAULT_BEAUTY_SERVICES)
+          setFashionImages(DEFAULT_FASHION_IMAGES)
+          setImageLoadError('')
         }
       } finally {
         if (isMounted) {
@@ -807,6 +850,30 @@ context.drawImage(
             <i />
           </div>
 
+          {/* =================================================
+              SKIP BUTTON (Right Corner)
+          ================================================= */}
+          <button
+            type="button"
+            className="home-hero-skip-btn"
+            onClick={handleSkipHero}
+            aria-label="Skip hero section to main content"
+          >
+            <span>Skip</span>
+            <svg
+              className="home-hero-skip-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+
         </div>
 
       </section>
@@ -815,7 +882,7 @@ context.drawImage(
           STORY
       ===================================================== */}
 
-      <section className="home-story-section">
+      <section id="home-story-section" className="home-story-section">
 
         <div className="home-story-inner">
 
@@ -951,86 +1018,94 @@ context.drawImage(
 
         {beautyServices
           .slice(0, 2)
-          .map((service, index) => (
+          .map((service, index) => {
+            const fallbackSrc = index === 0 ? hairStylingImage : bridalMakeupImage
 
-            <article
-              className={`atelier-service-card atelier-scroll-reveal ${
-                index === 0
-                  ? 'atelier-scroll-delay-1'
-                  : 'atelier-scroll-delay-2'
-              }`}
-              key={service.id}
-            >
+            return (
+              <article
+                className={`atelier-service-card atelier-scroll-reveal ${
+                  index === 0
+                    ? 'atelier-scroll-delay-1'
+                    : 'atelier-scroll-delay-2'
+                }`}
+                key={service.id}
+              >
 
-              <div className="atelier-card-image">
+                <div className="atelier-card-image">
 
-                <img
-                  src={service.image_url}
-                  alt={service.name}
-                  loading="lazy"
-                />
+                  <img
+                    src={service.image_url || fallbackSrc}
+                    alt={service.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget
+                      if (target.src !== fallbackSrc) {
+                        target.src = fallbackSrc
+                      }
+                    }}
+                  />
 
-                <div
-                  className="atelier-card-image-overlay"
-                  aria-hidden="true"
-                >
-                  <span>
-                    0{index + 1}
-                  </span>
-                </div>
-
-              </div>
-
-
-              <div className="atelier-card-content">
-
-                <div className="atelier-card-meta">
-
-                  <span>
-                    0{index + 1} / BEAUTY
-                  </span>
-
-                  <span>
-                    WILDFLORAL
-                  </span>
-
-                </div>
-
-
-                <h3>
-                  {service.name}
-                </h3>
-
-
-                <p>
-                  {service.category ||
-                    'A personalized beauty service'}
-                </p>
-
-
-                <a
-                  href="/services"
-                  className="atelier-card-link"
-                >
-
-                  <span>
-                    Explore Service
-                  </span>
-
-                  <span
-                    className="atelier-card-arrow"
+                  <div
+                    className="atelier-card-image-overlay"
                     aria-hidden="true"
                   >
-                    ↗
-                  </span>
+                    <span>
+                      0{index + 1}
+                    </span>
+                  </div>
 
-                </a>
+                </div>
 
-              </div>
 
-            </article>
+                <div className="atelier-card-content">
 
-          ))}
+                  <div className="atelier-card-meta">
+
+                    <span>
+                      0{index + 1} / BEAUTY
+                    </span>
+
+                    <span>
+                      WILDFLORAL
+                    </span>
+
+                  </div>
+
+
+                  <h3>
+                    {service.name}
+                  </h3>
+
+
+                  <p>
+                    {service.category ||
+                      'A personalized beauty service'}
+                  </p>
+
+
+                  <a
+                    href="/services"
+                    className="atelier-card-link"
+                  >
+
+                    <span>
+                      Explore Service
+                    </span>
+
+                    <span
+                      className="atelier-card-arrow"
+                      aria-hidden="true"
+                    >
+                      ↗
+                    </span>
+
+                  </a>
+
+                </div>
+
+              </article>
+            )
+          })}
 
 
         {/* =================================================
@@ -1039,85 +1114,93 @@ context.drawImage(
 
         {fashionImages
           .slice(0, 1)
-          .map((image) => (
+          .map((image) => {
+            const fallbackSrc = fashionPageImage
 
-            <article
-              className="atelier-service-card atelier-scroll-reveal atelier-scroll-delay-3"
-              key={image.id}
-            >
+            return (
+              <article
+                className="atelier-service-card atelier-scroll-reveal atelier-scroll-delay-3"
+                key={image.id}
+              >
 
-              <div className="atelier-card-image">
+                <div className="atelier-card-image">
 
-                <img
-                  src={image.imageUrl}
-                  alt={
-                    image.altText ||
-                    image.name
-                  }
-                  loading="lazy"
-                />
+                  <img
+                    src={image.imageUrl || fallbackSrc}
+                    alt={
+                      image.altText ||
+                      image.name
+                    }
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget
+                      if (target.src !== fallbackSrc) {
+                        target.src = fallbackSrc
+                      }
+                    }}
+                  />
 
-                <div
-                  className="atelier-card-image-overlay"
-                  aria-hidden="true"
-                >
-                  <span>
-                    03
-                  </span>
-                </div>
-
-              </div>
-
-
-              <div className="atelier-card-content">
-
-                <div className="atelier-card-meta">
-
-                  <span>
-                    03 / FASHION
-                  </span>
-
-                  <span>
-                    ATELIER
-                  </span>
-
-                </div>
-
-
-                <h3>
-                  {image.name}
-                </h3>
-
-
-                <p>
-                  Bespoke fashion shaped around
-                  your style and occasion.
-                </p>
-
-
-                <a
-                  href="/fashion"
-                  className="atelier-card-link"
-                >
-
-                  <span>
-                    Explore Fashion
-                  </span>
-
-                  <span
-                    className="atelier-card-arrow"
+                  <div
+                    className="atelier-card-image-overlay"
                     aria-hidden="true"
                   >
-                    ↗
-                  </span>
+                    <span>
+                      03
+                    </span>
+                  </div>
 
-                </a>
+                </div>
 
-              </div>
 
-            </article>
+                <div className="atelier-card-content">
 
-          ))}
+                  <div className="atelier-card-meta">
+
+                    <span>
+                      03 / FASHION
+                    </span>
+
+                    <span>
+                      ATELIER
+                    </span>
+
+                  </div>
+
+
+                  <h3>
+                    {image.name}
+                  </h3>
+
+
+                  <p>
+                    Bespoke fashion shaped around
+                    your style and occasion.
+                  </p>
+
+
+                  <a
+                    href="/fashion"
+                    className="atelier-card-link"
+                  >
+
+                    <span>
+                      Explore Fashion
+                    </span>
+
+                    <span
+                      className="atelier-card-arrow"
+                      aria-hidden="true"
+                    >
+                      ↗
+                    </span>
+
+                  </a>
+
+                </div>
+
+              </article>
+            )
+          })}
 
       </div>
     )}

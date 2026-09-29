@@ -435,6 +435,99 @@
 
 
 /* =========================================================
+   HERO SKIP BUTTON
+========================================================= */
+
+.home-hero-skip-btn {
+  position: absolute;
+
+  right: clamp(
+    1.5rem,
+    7vw,
+    7rem
+  );
+
+  bottom: clamp(
+    2rem,
+    5vh,
+    4rem
+  );
+
+  z-index: 20;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+
+  padding: 0.35rem 0.5rem;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.28rem;
+  text-transform: uppercase;
+  line-height: 1;
+
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.home-hero-skip-btn:hover {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.home-hero-skip-btn:active {
+  opacity: 0.7;
+}
+
+.home-hero-skip-btn:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 4px;
+}
+
+.home-hero-skip-icon {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  opacity: 0.82;
+  transition: transform 0.2s ease;
+}
+
+.home-hero-skip-btn:hover .home-hero-skip-icon {
+  transform: translateY(2px);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .home-hero-skip-btn {
+    right: clamp(1rem, 4vw, 1.5rem);
+    bottom: clamp(1.5rem, 4vh, 2.5rem);
+    padding: 0.25rem 0.35rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.2rem;
+  }
+}
+
+
+/* =========================================================
    STORY SECTION
 ========================================================= */
 
@@ -444,6 +537,8 @@
   z-index: 10;
 
   width: 100%;
+
+  scroll-margin-top: 5.5rem;
 
   background:
     linear-gradient(
@@ -1131,6 +1226,8 @@
 
   width: 100%;
 
+  scroll-margin-top: 5.5rem;
+
   padding:
     clamp(5rem, 9vw, 8rem)
     1.5rem;
@@ -1491,7 +1588,7 @@
   height: 100%;
 
   object-fit: cover;
-    object-position: center top; /* ← add this */
+  object-position: center top;
 
   transform:
     scale(1)
