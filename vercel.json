@@ -2,27 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/about",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/services",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/fashion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/enquiry",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/booking",
+      "source": "/((?!sitemap\\.xml|robots\\.txt).*)",
       "destination": "/index.html"
     }
   ]
