@@ -679,7 +679,7 @@ textarea::placeholder {
 
 @media (max-width: 640px) {
   body {
-    padding-bottom: 56px;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 10px));
   }
 }
 

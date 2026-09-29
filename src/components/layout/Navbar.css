@@ -21,6 +21,7 @@
   color: rgba(255, 255, 255, 0.9);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   padding: 8px 0;
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
   font-size: 12px;
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
 }
@@ -433,11 +434,14 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgba(90, 1, 181, 0.95);
+  background-color: rgba(90, 1, 181, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 8px 6px;
+  padding-top: 8px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
   justify-content: space-around;
   align-items: center;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
@@ -514,38 +518,51 @@
   }
 
   body {
-    padding-bottom: 56px;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 10px));
   }
 }
 
 /* =========================================================
-   HOME CINEMATIC HERO NAVBAR STATE
+   SMART SCROLL NAVIGATION (Hide on Down, Show on Up)
+   Applied on both Desktop and Mobile
 ========================================================= */
 
 .site-header-wrapper {
+  transform: translateY(0);
   transition:
-    transform 0.45s ease,
-    opacity 0.35s ease;
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+  will-change: transform;
 }
 
-.site-header-wrapper.home-hero-hidden {
+.site-header-wrapper.nav-hidden {
   transform: translateY(-100%);
-  opacity: 0;
   pointer-events: none;
+}
+
+.site-header-wrapper.nav-visible {
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 /* =========================================================
-   HOME CINEMATIC HERO MOBILE NAV STATE
+   MOBILE BOTTOM NAVIGATION (Hide on Down, Show on Up)
 ========================================================= */
 
 .mobile-bottom-nav {
+  transform: translateY(0);
   transition:
-    transform 0.45s ease,
-    opacity 0.35s ease;
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
-.mobile-bottom-nav.home-hero-hidden {
+.mobile-bottom-nav.nav-hidden {
   transform: translateY(100%);
-  opacity: 0;
   pointer-events: none;
+}
+
+.mobile-bottom-nav.nav-visible {
+  transform: translateY(0);
+  pointer-events: auto;
 }

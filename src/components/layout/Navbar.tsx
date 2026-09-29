@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   Phone,
@@ -20,9 +20,8 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [homeHeroHidden, setHomeHeroHidden] = useState(
-    location.pathname === '/',
-  )
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
 
   /* =======================================================
      AUTH SESSION
@@ -56,76 +55,84 @@ function Navbar() {
   }, [])
 
   /* =======================================================
-     CLOSE MOBILE MENU ON ROUTE CHANGE
+     CLOSE MOBILE MENU ON ROUTE CHANGE & RESET VISIBILITY
   ======================================================= */
 
   useEffect(() => {
     setMobileOpen(false)
+    setNavVisible(true)
+    lastScrollY.current = window.scrollY
   }, [location.pathname])
 
   /* =======================================================
-     SCROLL BEHAVIOUR
+     SMART SCROLL BEHAVIOUR (Hide on Scroll Down, Show on Scroll Up)
   ======================================================= */
 
   useEffect(() => {
-    const isHomePage = location.pathname === '/'
-
-    if (!isHomePage) {
-      setHomeHeroHidden(false)
-      return
-    }
+    lastScrollY.current = window.scrollY
 
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
+      const currentScrollY = window.scrollY
+      const previousScrollY = lastScrollY.current
+      const delta = currentScrollY - previousScrollY
 
-      const hero = document.querySelector<HTMLElement>(
-        '.home-hero-shell',
-      )
+      setScrolled(currentScrollY > 10)
 
-      const viewport = document.querySelector<HTMLElement>(
-        '.home-hero-viewport',
-      )
-
-      if (!hero || !viewport) {
-        setHomeHeroHidden(window.scrollY === 0)
+      // Always show navbar at top of page
+      if (currentScrollY <= 60) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
         return
       }
 
-      const heroEnd =
-        hero.offsetTop +
-        hero.offsetHeight -
-        viewport.offsetHeight
+      // If mobile drawer menu is open, keep navbar visible
+      if (mobileOpen) {
+        setNavVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
 
-      setHomeHeroHidden(
-        window.scrollY < Math.max(0, heroEnd),
-      )
+      // Handle Home page cinematic hero animation section
+      const isHomePage = location.pathname === '/'
+      if (isHomePage) {
+        const hero = document.querySelector<HTMLElement>('.home-hero-shell')
+        const viewport = document.querySelector<HTMLElement>('.home-hero-viewport')
+        if (hero && viewport) {
+          const heroEnd = hero.offsetTop + hero.offsetHeight - viewport.offsetHeight
+          if (currentScrollY > 30 && currentScrollY < heroEnd) {
+            setNavVisible(false)
+            lastScrollY.current = currentScrollY
+            return
+          }
+        }
+      }
+
+      // Filter micro jitter / rubber-banding
+      if (Math.abs(delta) < 6) {
+        return
+      }
+
+      if (delta > 0) {
+        // Scrolling DOWN -> Hide navbar
+        setNavVisible(false)
+      } else {
+        // Scrolling UP -> Show navbar
+        setNavVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
     }
 
     handleScroll()
 
-    window.addEventListener(
-      'scroll',
-      handleScroll,
-      { passive: true },
-    )
-
-    window.addEventListener(
-      'resize',
-      handleScroll,
-    )
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
 
     return () => {
-      window.removeEventListener(
-        'scroll',
-        handleScroll,
-      )
-
-      window.removeEventListener(
-        'resize',
-        handleScroll,
-      )
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
     }
-  }, [location.pathname])
+  }, [location.pathname, mobileOpen])
 
   useLayoutEffect(() => {
     const header = document.querySelector<HTMLElement>(
@@ -183,7 +190,7 @@ function Navbar() {
     <>
       <div
         className={`site-header-wrapper ${
-          homeHeroHidden ? 'home-hero-hidden' : ''
+          navVisible ? 'nav-visible' : 'nav-hidden'
         }`}
       >
         {/* =================================================
@@ -327,7 +334,7 @@ function Navbar() {
       {/* MOBILE BOTTOM NAVIGATION BAR */}
       <nav
         className={`mobile-bottom-nav ${
-          homeHeroHidden ? 'home-hero-hidden' : ''
+          navVisible ? 'nav-visible' : 'nav-hidden'
         }`}
       >
         <NavLink to="/" end className="bottom-nav-item">
