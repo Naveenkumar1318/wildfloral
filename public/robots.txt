@@ -8,4 +8,4 @@ Disallow: /register
 Disallow: /forgot-password
 Disallow: /auth
 
-Sitemap: https://wildfloral.vercel.app/sitemap.xml
+Sitemap: https://wildfloral.online/sitemap.xml
