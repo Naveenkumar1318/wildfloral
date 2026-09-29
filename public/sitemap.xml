@@ -2,35 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://wildfloral.vercel.app/</loc>
+    <loc>https://wildfloral.online/</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/about</loc>
+    <loc>https://wildfloral.online/about</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/services</loc>
+    <loc>https://wildfloral.online/services</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/fashion</loc>
+    <loc>https://wildfloral.online/fashion</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/portfolio</loc>
+    <loc>https://wildfloral.online/contact</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/contact</loc>
+    <loc>https://wildfloral.online/enquiry</loc>
   </url>
 
   <url>
-    <loc>https://wildfloral.vercel.app/enquiry</loc>
-  </url>
-
-  <url>
-    <loc>https://wildfloral.vercel.app/booking</loc>
+    <loc>https://wildfloral.online/booking</loc>
   </url>
 
 </urlset>
