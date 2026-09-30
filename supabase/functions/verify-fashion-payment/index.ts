@@ -283,51 +283,6 @@ if (error) {
       }
 
 
-      /* =====================================================
-         MARK RAZORPAY PAYMENT AS PAID
-      ===================================================== */
-
-      const {
-        error: paymentUpdateError,
-      } = await supabase
-        .from("fashion_order_payments")
-        .update({
-          status: "paid",
-          transaction_reference:
-            razorpayPaymentId,
-          razorpay_payment_id:
-            razorpayPaymentId,
-          razorpay_signature:
-            razorpaySignature,
-          updated_at:
-            new Date().toISOString(),
-        })
-        .eq(
-          "order_id",
-          orderId,
-        )
-        .eq(
-          "razorpay_order_id",
-          razorpayOrderId,
-        );
-
-
-      if (paymentUpdateError) {
-        console.error(
-          "Failed to update fashion payment status:",
-          paymentUpdateError,
-        );
-
-        return jsonResponse(
-          {
-            error:
-              "Payment was verified, but the payment record could not be updated.",
-          },
-          500,
-        );
-      }
-
-
       return jsonResponse({
         success: true,
 
