@@ -14,9 +14,9 @@
     }
   ],
   "rewrites": [
-  {
-    "source": "/((?!sitemap\\.xml|robots\\.txt|llms\\.txt|logo\\.png|favicon\\.svg|.*\\..*).*)",
-    "destination": "/$1/index.html"
-  }
-]
+    {
+      "source": "/((?!sitemap\\.xml|robots\\.txt|llms\\.txt|logo\\.png|favicon\\.svg|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
