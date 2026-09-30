@@ -287,12 +287,12 @@ function CustomerSidebar() {
   }
 
   async function handleLogout() {
-    await supabase.auth.signOut()
+  await supabase.auth.signOut()
 
-    closeMobileMenu()
+  closeMobileMenu()
 
-    window.location.href = '/login'
-  }
+  window.location.href = '/login?redirect=/'
+}
 
   return (
     <>
