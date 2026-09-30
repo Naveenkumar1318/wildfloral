@@ -283,6 +283,8 @@ if (error) {
       }
 
 
+      // Payment status is already updated atomically
+      // inside finalize_fashion_payment().
       return jsonResponse({
         success: true,
 
