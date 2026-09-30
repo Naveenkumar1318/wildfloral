@@ -1935,7 +1935,14 @@ window.scrollTo({
         <button
           type="button"
           className="booking-step-back"
-          onClick={goBack}
+          onClick={() => {
+  if (flow.step === 1) {
+    navigate('/services')
+    return
+  }
+
+  goBack()
+}}
           disabled={submitting}
         >
           <span>
