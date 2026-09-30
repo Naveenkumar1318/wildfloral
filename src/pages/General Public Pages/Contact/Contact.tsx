@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Phone,
@@ -14,12 +14,35 @@ import {
   Sparkles,
   Car,
 } from 'lucide-react'
-
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getContactPageSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 import './Contact.css'
 
 const Contact: React.FC = () => {
+  const contactSchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getContactPageSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Contact', url: '/contact' },
+      ]),
+    ],
+    [],
+  )
+
   return (
     <main className="contact-page">
+      <SEO
+        title="Contact WildFloral | Neela Mega Nagar, Hosur"
+        description="Visit WildFloral studio at 3-1/2 Neela Mega Nagar, 1st Cross, Hosur. Call or WhatsApp +91 8838894677 to schedule your beauty or fashion appointment."
+        canonical="https://www.wildfloral.online/contact"
+        schemas={contactSchemas}
+      />
       {/* Top Ambient Glow Fields */}
       <div className="contact-ambient-glow glow-top-right"></div>
       <div className="contact-ambient-glow glow-top-left"></div>
@@ -69,30 +92,28 @@ const Contact: React.FC = () => {
           {/* Eyebrow Pill */}
           <div className="contact-eyebrow-pill">
             <span className="contact-pulse-dot"></span>
-            <span className="eyebrow-text">Contact WildFloral</span>
+            <span className="eyebrow-text">Contact WildFloral Hosur</span>
           </div>
 
           {/* Headline */}
           <h1 className="contact-hero-title">
-            Let’s create{' '}
-            <span className="italic-highlight">something beautiful.</span>
+            Contact WildFloral Studio in{' '}
+            <span className="italic-highlight">Hosur</span>
           </h1>
 
           {/* Description */}
           <p className="contact-hero-description">
-            Whether you are looking for a beauty service, planning a special
-            occasion, or exploring a custom fashion idea, we would love to hear
-            from you.
+            Whether you are booking a beauty appointment, planning bridal makeup, or consulting on custom haute couture fashion, connect with our studio at Neela Mega Nagar, Hosur.
           </p>
 
           {/* Dual CTAs */}
           <div className="contact-hero-actions">
-            <a href="tel:8838894677" className="btn-contact-primary">
+            <a href="tel:+918838894677" className="btn-contact-primary">
               <Phone size={18} />
-              <span>Call Us</span>
+              <span>Call +91 8838894677</span>
             </a>
-            <Link to="/enquiry" className="btn-contact-secondary">
-              <span>Make an Enquiry</span>
+            <Link to="/booking" className="btn-contact-secondary">
+              <span>Book Online</span>
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -145,11 +166,11 @@ const Contact: React.FC = () => {
               </div>
 
               <span className="card-label">PHONE &amp; WHATSAPP</span>
-              <a href="tel:8838894677" className="card-heading-link">
-                8838894677
+              <a href="tel:+918838894677" className="card-heading-link">
+                +91 8838894677
               </a>
               <p className="card-subtext">
-                Call or message us for instant appointments and styling queries.
+                Call or WhatsApp us for instant appointments and styling consultations in Hosur.
               </p>
 
               <div className="card-footer-box">
@@ -184,7 +205,7 @@ const Contact: React.FC = () => {
               <span className="card-label">VISIT OUR ATELIER</span>
               <h3 className="card-heading">Hosur Studio</h3>
               <p className="card-subtext">
-                3-1/2, Neela Mega Nagar, 1st Cross, Hosur, Tamil Nadu
+                3-1/2, Neela Mega Nagar, 1st Cross, Hosur, Tamil Nadu, 635109, India
               </p>
 
               <div className="card-footer-box">

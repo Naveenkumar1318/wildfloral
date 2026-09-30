@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 
 import { supabase } from '../../../lib/supabase'
+import { SEO } from '../../../components/common/SEO'
 
 import './CustomerRegister.css'
 
@@ -563,6 +564,7 @@ function CustomerRegister() {
 
   return (
     <main className="customer-register-page">
+      <SEO title="Client Registration | WildFloral" noIndex={true} />
 
       {/* =====================================================
           LEFT CONTENT

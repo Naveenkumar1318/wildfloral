@@ -18,6 +18,7 @@ import {
 } from 'react-router-dom'
 
 import { supabase } from '../../../lib/supabase'
+import { SEO } from '../../../components/common/SEO'
 
 import './AdminLogin.css'
 
@@ -219,6 +220,7 @@ function AdminLogin() {
 
   return (
     <main className="admin-login-page">
+      <SEO title="Admin Login | WildFloral" noIndex={true} />
 
       <section
         className="admin-login-container"

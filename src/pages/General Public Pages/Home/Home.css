@@ -4314,11 +4314,91 @@
   .wf-split-link,
   .wf-split-link-arrow,
   .wf-final-cta-primary,
-  .wf-final-cta-secondary {
+  .wf-final-cta-secondary,
+  .wf-glance-card,
+  .wf-faq-item {
     transition: none;
   }
 
-  .wf-details-card:hover {
+  .wf-details-card:hover,
+  .wf-glance-card:hover,
+  .wf-faq-item:hover {
     transform: none;
   }
+}
+
+/* =========================================================
+   HOME PAGE: AT A GLANCE & FAQ LUXURY INTEGRATION
+========================================================= */
+
+.home-page .wf-glance-section {
+  background: linear-gradient(180deg, #ffffff 0%, #faf8f5 60%, #ffffff 100%);
+  color: #121212;
+  border-top: 1px solid rgba(90, 1, 181, 0.06);
+  border-bottom: 1px solid rgba(90, 1, 181, 0.06);
+}
+
+.home-page .wf-glance-title,
+.home-page .wf-faq-title {
+  color: #121212;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+.home-page .wf-glance-subtitle,
+.home-page .wf-faq-subtitle {
+  color: #64748b;
+}
+
+.home-page .wf-glance-card {
+  background: #ffffff;
+  border: 1px solid rgba(90, 1, 181, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.home-page .wf-glance-card:hover {
+  border-color: rgba(90, 1, 181, 0.28);
+  box-shadow: 0 12px 32px rgba(90, 1, 181, 0.08);
+}
+
+.home-page .wf-glance-value {
+  color: #121212;
+}
+
+.home-page .wf-glance-detail {
+  color: #64748b;
+}
+
+.home-page .wf-faq-section {
+  background: linear-gradient(180deg, #f8f6fb 0%, #ffffff 50%, #faf8f5 100%);
+  color: #121212;
+  border-top: 1px solid rgba(90, 1, 181, 0.06);
+}
+
+.home-page .wf-faq-item {
+  background: #ffffff;
+  border: 1px solid rgba(90, 1, 181, 0.09);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+}
+
+.home-page .wf-faq-item:hover {
+  border-color: rgba(90, 1, 181, 0.25);
+  box-shadow: 0 6px 20px rgba(90, 1, 181, 0.05);
+}
+
+.home-page .wf-faq-item-open {
+  border-color: rgba(90, 1, 181, 0.35);
+  box-shadow: 0 10px 28px rgba(90, 1, 181, 0.07);
+}
+
+.home-page .wf-faq-question-btn {
+  color: #121212;
+}
+
+.home-page .wf-faq-question-btn:hover {
+  color: #5a01b5;
+}
+
+.home-page .wf-faq-answer-content {
+  color: #475569;
 }

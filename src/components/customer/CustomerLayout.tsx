@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase'
-
+import { SEO } from '../common/SEO'
 import './CustomerLayout.css'
 
 type IconType =
@@ -296,6 +296,7 @@ function CustomerSidebar() {
 
   return (
     <>
+      <SEO title="Customer Portal | WildFloral" noIndex={true} />
       {/* =====================================================
           MOBILE HEADER
       ===================================================== */}

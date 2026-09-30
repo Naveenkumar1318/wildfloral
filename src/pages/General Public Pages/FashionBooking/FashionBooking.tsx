@@ -15,6 +15,11 @@ import {
 } from '../../../lib/fashionCart'
 
 import type { FashionCartItem } from '../../../lib/fashionCart'
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 
 import './FashionBooking.css'
 
@@ -246,6 +251,18 @@ function getImageForDesign(
 
 function FashionBooking() {
   const navigate = useNavigate()
+
+  const fashionBookingSchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Fashion & Couture', url: '/fashion' },
+        { name: 'Fashion Booking', url: '/fashion-booking' },
+      ]),
+    ],
+    [],
+  )
 
   const [
     currentStep,
@@ -1708,9 +1725,9 @@ async function verifyRazorpayPayment(
             WILDFLORAL FASHION
           </span>
 
-          <h1>
+          <h2 className="fashion-empty-title">
             Your Cart Is Empty
-          </h1>
+          </h2>
 
           <p>
             Explore our fashion
@@ -1789,9 +1806,9 @@ async function verifyRazorpayPayment(
             </svg>
           </div>
 
-          <h1 className="fashion-success-title">
+          <h2 className="fashion-success-title">
             Order Confirmed
-          </h1>
+          </h2>
 
           <p className="fashion-success-subtitle">
             Your fashion order has been successfully placed & confirmed
@@ -1868,6 +1885,12 @@ async function verifyRazorpayPayment(
 
   return (
     <main className="fashion-booking-page">
+      <SEO
+        title="Book Fashion Consultation | WildFloral Hosur"
+        description="Book your bespoke fashion consultation and measurements appointment with master designers at WildFloral studio in Hosur or doorstep."
+        canonical="https://www.wildfloral.online/fashion-booking"
+        schemas={fashionBookingSchemas}
+      />
       <header className="fashion-booking-header">
         <div className="fashion-header-inner">
           <button
@@ -1885,21 +1908,19 @@ async function verifyRazorpayPayment(
 
           <div className="fashion-header-copy">
             <span>
-              WILDFLORAL
+              WILDFLORAL HOSUR
               <b> / </b>
               FASHION STUDIO
             </span>
 
             <h1>
-              Complete Your
-              <em> Order</em>
+              Book Bespoke Fashion &amp; Order Consultations in{' '}
+              <em>Hosur</em>
             </h1>
 
             <p>
-              A refined checkout
-              experience for your
-              WildFloral fashion
-              purchase.
+              A refined checkout and custom fitting consultation
+              experience for your WildFloral fashion garments in Hosur.
             </p>
           </div>
         </div>

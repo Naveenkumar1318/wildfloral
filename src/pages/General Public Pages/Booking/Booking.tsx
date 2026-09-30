@@ -43,6 +43,11 @@ import {
   getServices,
   type Service,
 } from '../../../lib/services'
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 import { supabase } from '../../../lib/supabase'
 
 import BookingProgress from './components/BookingProgress'
@@ -184,6 +189,17 @@ function Booking() {
   /* =======================================================
      STATE
   ======================================================= */
+
+  const bookingSchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Book Appointment', url: '/booking' },
+      ]),
+    ],
+    [],
+  )
 
   const [
     flow,
@@ -2601,12 +2617,12 @@ window.scrollTo({
 
           </div>
 
-          <h1>
+          <h2 className="booking-status-heading">
             Preparing your
             <em>
               appointment.
             </em>
-          </h1>
+          </h2>
 
           <p>
             Restoring your selected
@@ -2638,10 +2654,10 @@ if (createdBookingId) {
           APPOINTMENT REQUESTED
         </span>
 
-        <h1>
+        <h2 className="booking-status-heading">
           Your appointment is
           <span>successfully requested.</span>
-        </h1>
+        </h2>
 
         <p>
           Your booking has been received successfully.
@@ -2731,6 +2747,12 @@ if (createdBookingId) {
 
   return (
     <main className="booking-page">
+      <SEO
+        title="Book Beauty Appointment | WildFloral Hosur"
+        description="Reserve your luxury beauty therapy, hair styling, bridal makeup, or doorstep appointment online with WildFloral in Hosur. Instant confirmation."
+        canonical="https://www.wildfloral.online/booking"
+        schemas={bookingSchemas}
+      />
 
       {/* =================================================
           TOP BAR
@@ -2807,16 +2829,16 @@ if (createdBookingId) {
 
                 <span />
 
-                WILDFLORAL BEAUTY
+                WILDFLORAL HOSUR
 
                 <span />
 
               </div>
 
               <h1>
-                Book your
+                Book Beauty Appointments &amp; Consultations in{' '}
                 <em>
-                  appointment.
+                  Hosur
                 </em>
               </h1>
 

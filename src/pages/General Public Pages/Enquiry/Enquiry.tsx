@@ -37,6 +37,11 @@ import {
 } from '../../../lib/services'
 
 import { supabase } from '../../../lib/supabase'
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 
 import SelectedServicesStep from '../Booking/steps/SelectedServicesStep'
 
@@ -308,6 +313,17 @@ function mapService(
 function Enquiry() {
   const navigate =
     useNavigate()
+
+  const enquirySchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Enquiry', url: '/enquiry' },
+      ]),
+    ],
+    [],
+  )
 
   const [
     searchParams,
@@ -1483,12 +1499,12 @@ window.scrollTo({
             ENQUIRY RECEIVED
           </span>
 
-          <h1>
+          <h2 className="enquiry-success-title">
             Thank you for
             <span>
               choosing WildFloral.
             </span>
-          </h1>
+          </h2>
 
           <p>
             Your beauty service enquiry
@@ -1536,6 +1552,12 @@ window.scrollTo({
 
  return (
   <main className="booking-page enquiry-page">
+    <SEO
+      title="Beauty & Bridal Enquiry | WildFloral Hosur"
+      description="Send an enquiry for custom bridal packages, party styling, and luxury beauty services with WildFloral in Hosur."
+      canonical="https://www.wildfloral.online/enquiry"
+      schemas={enquirySchemas}
+    />
 
     {/* =================================================
         TOP BAR
@@ -1608,24 +1630,24 @@ window.scrollTo({
 
               <span />
 
-              WILDFLORAL BEAUTY
+              WILDFLORAL HOSUR
 
               <span />
 
             </div>
 
             <h1>
-              Share your
+              Beauty &amp; Bridal Consultation Enquiry in{' '}
               <em>
-                enquiry.
+                Hosur
               </em>
             </h1>
 
             <p>
               Tell us what you are looking for
-              and our team will create a
-              personalized beauty experience
-              around your needs.
+              and our master artisans will curate a
+              personalized beauty or bridal experience
+              around your needs in Hosur.
             </p>
 
             <div className="booking-hero-benefits">

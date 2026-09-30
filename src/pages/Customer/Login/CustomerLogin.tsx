@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 
 import { supabase } from '../../../lib/supabase'
+import { SEO } from '../../../components/common/SEO'
 
 import './CustomerLogin.css'
 
@@ -469,6 +470,7 @@ function CustomerLogin() {
 
   return (
     <main className="customer-auth-page">
+      <SEO title="Client Sign In | WildFloral" noIndex={true} />
 
       {/* =====================================================
           LEFT VISUAL

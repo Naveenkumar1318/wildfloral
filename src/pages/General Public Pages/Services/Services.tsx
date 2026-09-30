@@ -36,6 +36,12 @@ import {
   loadOPFlow,
   toggleOPService,
 } from '../../../lib/opCustomerFlow'
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getServicesSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 
 import './Services.css'
 
@@ -610,6 +616,18 @@ function formatOfferDate(
 function Services() {
   const navigate =
     useNavigate()
+
+  const servicesSchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getServicesSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Services', url: '/services' },
+      ]),
+    ],
+    [],
+  )
 
   const [
     searchParams,
@@ -2425,6 +2443,12 @@ function Services() {
 
   return (
     <main className="services-page">
+      <SEO
+        title="Beauty & Fashion Services in Hosur | WildFloral"
+        description="Explore luxury beauty and fashion services at WildFloral in Hosur — bridal makeup, hair styling, skin therapies, custom couture, and doorstep experiences."
+        canonical="https://www.wildfloral.online/services"
+        schemas={servicesSchemas}
+      />
 
       {/* =================================================
           ASSIGNMENT HEADER BANNER
@@ -2464,16 +2488,16 @@ function Services() {
           <div className="services-hero-content">
             <div className="services-hero-badge">
               <span>✦</span>
-              <span>WILDFLORAL BEAUTY </span>
+              <span>WILDFLORAL HOSUR</span>
             </div>
 
             <h1>
-              Awaken Your Senses in{' '}
-              <span>BEAUTY SERVICES.</span>
+              Beauty &amp; Fashion Services in{' '}
+              <span>Hosur.</span>
             </h1>
 
             <p>
-              Immerse in bespoke restorative services crafted around aromatic French lavender, royal purple orchid soaks, amethyst crystal bodywork, and restorative botanical tranquility.
+              Explore WildFloral's full sanctuary of luxury beauty therapies, bridal makeup artistry, hair rituals, skincare, and bespoke haute couture tailoring in Hosur.
             </p>
 
 

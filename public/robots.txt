@@ -1,11 +1,81 @@
+# Robots.txt for WildFloral (https://www.wildfloral.online)
+
+# Default crawler rules
 User-agent: *
 Allow: /
-
-Disallow: /account
+Allow: /about
+Allow: /services
+Allow: /fashion
+Allow: /contact
+Allow: /booking
+Allow: /fashion-booking
+Allow: /enquiry
+Allow: /privacy
+Allow: /terms
+Allow: /llms.txt
 Disallow: /admin
+Disallow: /admin/
+Disallow: /account
+Disallow: /account/
+Disallow: /customer
+Disallow: /customer/
 Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
-Disallow: /auth
+Disallow: /auth/
+Disallow: /api/
 
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+Disallow: /customer/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /auth/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+Disallow: /customer/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /auth/
+
+# AI & LLM Search Crawlers (GEO Optimization)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+# Sitemap location
 Sitemap: https://www.wildfloral.online/sitemap.xml

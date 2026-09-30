@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Sparkles,
@@ -13,12 +13,35 @@ import {
   Layers,
   Crown
 } from 'lucide-react'
-
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getOrganizationSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 import './About.css'
 
 const About: React.FC = () => {
+  const aboutSchemas = useMemo(
+    () => [
+      getOrganizationSchema(),
+      getLocalBusinessSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'About Us', url: '/about' },
+      ]),
+    ],
+    [],
+  )
+
   return (
     <main className="about-page">
+      <SEO
+        title="About WildFloral | Luxury Beauty & Fashion in Hosur"
+        description="Discover WildFloral in Hosur — where master artisans, private chamber sanctums, and elevated doorstep experiences create personalized beauty and couture fashion."
+        canonical="https://www.wildfloral.online/about"
+        schemas={aboutSchemas}
+      />
       {/* Background Ambient Glows */}
       <div className="ambient-glow glow-top"></div>
       <div className="ambient-glow glow-left"></div>
@@ -34,20 +57,18 @@ const About: React.FC = () => {
             <div className="about-hero-text">
               <div className="about-badge-pill">
                 <span className="pulse-dot"></span>
-                <span className="badge-text">About WildFloral</span>
+                <span className="badge-text">About WildFloral Hosur</span>
               </div>
 
               <h1 className="about-hero-title">
-                A Journey of{' '}
+                Luxury Beauty &amp; Haute Fashion in{' '}
                 <span className="italic-highlight">
-                  Beauty, Fashion &amp; Creativity.
+                  Hosur.
                 </span>
               </h1>
 
               <p className="about-hero-description">
-                WildFloral brings together Beauty Therapy, Business Administration,
-                Fashion &amp; Apparel Designing, and a growing passion for creating
-                meaningful beauty and fashion experiences.
+                WildFloral is a one-stop luxury beauty and haute fashion destination in Hosur featuring master artisans, private chamber sanctums, and elevated doorstep experiences. We specialize in bridal artistry, bespoke couture, and personalized beauty transformations designed around each client.
               </p>
 
               <div className="about-hero-actions">

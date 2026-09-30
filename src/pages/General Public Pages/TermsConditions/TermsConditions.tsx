@@ -21,6 +21,7 @@ import {
   BookOpen,
   Award
 } from 'lucide-react'
+import { SEO } from '../../../components/common/SEO'
 import './TermsConditions.css'
 
 const termsSections = [
@@ -87,6 +88,11 @@ const TermsConditions: React.FC = () => {
 
   return (
     <main className="legal-page">
+      <SEO
+        title="Terms & Conditions | WildFloral"
+        description="Read the terms and conditions for bookings, cancellations, and bespoke fashion consultations at WildFloral studio in Hosur."
+        canonical="https://www.wildfloral.online/terms"
+      />
       {/* Ambient Lighting */}
       <div className="legal-glow glow-top" />
       <div className="legal-glow glow-accent" />

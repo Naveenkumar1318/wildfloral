@@ -1,9 +1,19 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import { supabase } from '../../../lib/supabase'
+import { SEO } from '../../../components/common/SEO'
+import { FAQSection, HOME_FAQS } from '../../../components/common/FAQSection'
+import { BusinessAtAGlance } from '../../../components/common/BusinessAtAGlance'
+import {
+  getLocalBusinessSchema,
+  getOrganizationSchema,
+  getWebSiteSchema,
+  getFaqSchema,
+} from '../../../lib/seoSchemas'
 import './Home.css'
 
 /* =========================================================
@@ -794,8 +804,24 @@ context.drawImage(
   const hasFeaturedContent =
     beautyServices.length > 0 || fashionImages.length > 0
 
+  const homeSchemas = useMemo(
+    () => [
+      getOrganizationSchema(),
+      getWebSiteSchema(),
+      getLocalBusinessSchema(),
+      getFaqSchema(HOME_FAQS),
+    ],
+    [],
+  )
+
   return (
     <main className="home-page">
+      <SEO
+        title="WildFloral | Beauty & Fashion Studio in Hosur"
+        description="WildFloral is a luxury beauty and fashion studio in Hosur — bridal makeup, couture, custom outfit design and personalized consultations. Book your appointment."
+        canonical="https://www.wildfloral.online/"
+        schemas={homeSchemas}
+      />
 
       {/* =====================================================
           HERO
@@ -824,14 +850,12 @@ context.drawImage(
               </p>
 
               <h1 className="home-hero-heading">
-                Beauty &
-                <span>Fashion</span>
+                WildFloral – Beauty &amp;
+                <span>Fashion in Hosur</span>
               </h1>
 
               <p className="home-hero-copy">
-                Discover beauty services, fashion design,
-                and personalized experiences created
-                around you.
+                A luxury beauty and haute fashion studio in Hosur featuring master artisans, private chamber sanctums, and elevated doorstep experiences.
               </p>
 
             </div>
@@ -923,6 +947,11 @@ context.drawImage(
         </div>
 
       </section>
+
+      {/* =====================================================
+          AT A GLANCE FACT BLOCK (LOCAL SEO & GEO)
+      ===================================================== */}
+      <BusinessAtAGlance />
 
 {/* =====================================================
     PERSONAL STYLE
@@ -1881,6 +1910,12 @@ context.drawImage(
   </div>
 
 </section>
+
+
+{/* =====================================================
+    FAQ SECTION (SCHEMA & USER ASSISTANCE)
+===================================================== */}
+<FAQSection />
 
 
 {/* =====================================================

@@ -1,51 +1,157 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0f19" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>WildFloral | Beauty & Floral Services</title>
-
+    <title>WildFloral | Beauty & Fashion Studio in Hosur</title>
     <meta
       name="description"
-      content="WildFloral offers beauty, fashion, floral, and personalized services. Explore our services, discover custom designs, and book your appointment online."
+      content="WildFloral is a luxury beauty and fashion studio in Hosur — bridal makeup, couture, custom outfit design and personalized consultations. Book your appointment."
     />
-
-    <link rel="canonical" href="https://wildfloral.online/" />
-
+    <link rel="canonical" href="https://www.wildfloral.online/" />
     <meta name="robots" content="index, follow" />
 
-    <meta property="og:title" content="WildFloral | Beauty & Floral Services" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="WildFloral" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="WildFloral | Beauty & Fashion Studio in Hosur" />
     <meta
       property="og:description"
-      content="Explore WildFloral beauty, fashion, floral, and personalized services. Discover custom designs and book your appointment online."
+      content="WildFloral is a luxury beauty and fashion studio in Hosur — bridal makeup, couture, custom outfit design and personalized consultations. Book your appointment."
     />
-    <meta property="og:url" content="https://wildfloral.online/" />
-    <meta property="og:type" content="website" />
-<meta property="og:site_name" content="WildFloral" />
-<meta
-  property="og:image"
-  content="https://wildfloral.online/og-image.jpg"
-/>
+    <meta property="og:url" content="https://www.wildfloral.online/" />
+    <meta property="og:image" content="https://www.wildfloral.online/logo.png" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="WildFloral | Beauty & Floral Services" />
-<meta
-  name="twitter:description"
-  content="Explore WildFloral beauty, fashion, floral, and personalized services. Discover custom designs and book your appointment online."
-/>
-<meta
-  name="twitter:image"
-  content="https://wildfloral.online/og-image.jpg"
-/>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WildFloral | Beauty & Fashion Studio in Hosur" />
+    <meta
+      name="twitter:description"
+      content="WildFloral is a luxury beauty and fashion studio in Hosur — bridal makeup, couture, custom outfit design and personalized consultations. Book your appointment."
+    />
+    <meta name="twitter:image" content="https://www.wildfloral.online/logo.png" />
+
+    <!-- Core Business Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.wildfloral.online/#organization",
+          "name": "WildFloral",
+          "alternateName": "WildFloral Beauty & Fashion",
+          "url": "https://www.wildfloral.online",
+          "logo": "https://www.wildfloral.online/logo.png",
+          "image": "https://www.wildfloral.online/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/wildfloral_beauty_destination"
+          ],
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 8838894677",
+              "contactType": "customer service",
+              "areaServed": "IN",
+              "availableLanguage": ["English", "Tamil"]
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.wildfloral.online/#website",
+          "name": "WildFloral",
+          "url": "https://www.wildfloral.online",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://www.wildfloral.online/#organization"
+          }
+        },
+        {
+          "@type": ["BeautySalon", "ClothingStore"],
+          "@id": "https://www.wildfloral.online/#localbusiness",
+          "name": "WildFloral",
+          "alternateName": "WildFloral Beauty & Fashion Studio",
+          "description": "A one-stop luxury beauty and haute fashion destination in Hosur featuring master artisans, private chamber sanctums, and elevated doorstep experiences. Services include bridal, couture, and personalized beauty transformations.",
+          "url": "https://www.wildfloral.online",
+          "logo": "https://www.wildfloral.online/logo.png",
+          "image": "https://www.wildfloral.online/logo.png",
+          "telephone": "+91 8838894677",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "3-1/2, Neela Mega Nagar, 1st Cross",
+            "addressLocality": "Hosur",
+            "addressRegion": "Tamil Nadu",
+            "postalCode": "635109",
+            "addressCountry": "IN"
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "opens": "09:00",
+              "closes": "21:00"
+            }
+          ],
+          "areaServed": {
+            "@type": "City",
+            "name": "Hosur"
+          },
+          "sameAs": [
+            "https://www.instagram.com/wildfloral_beauty_destination"
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Payment SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   </head>
 
   <body>
     <div id="root"></div>
+
+    <noscript>
+      <header>
+        <h1>WildFloral — Beauty &amp; Fashion Studio in Hosur</h1>
+        <p>A one-stop luxury beauty and haute fashion destination in Hosur featuring master artisans, private chamber sanctums, and elevated doorstep experiences. Services include bridal, couture, and personalized beauty transformations, starting with a consultation designed around each client.</p>
+      </header>
+      <section>
+        <h2>Studio Details</h2>
+        <p><strong>Address:</strong> 3-1/2, Neela Mega Nagar, 1st Cross, Hosur, Tamil Nadu, 635109, India</p>
+        <p><strong>Phone / WhatsApp:</strong> +91 8838894677</p>
+        <p><strong>Hours:</strong> Monday–Sunday, 09:00–21:00 (Walk-ins &amp; prior reservations welcomed)</p>
+      </section>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/services">Beauty &amp; Fashion Services</a></li>
+          <li><a href="/fashion">Haute Couture &amp; Fashion Design</a></li>
+          <li><a href="/booking">Book Beauty Appointment</a></li>
+          <li><a href="/fashion-booking">Book Fashion Consultation</a></li>
+          <li><a href="/contact">Contact Studio</a></li>
+        </ul>
+      </nav>
+    </noscript>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

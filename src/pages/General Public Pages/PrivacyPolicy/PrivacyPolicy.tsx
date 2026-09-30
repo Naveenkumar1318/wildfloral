@@ -18,6 +18,7 @@ import {
   Clock,
   BookOpen
 } from 'lucide-react'
+import { SEO } from '../../../components/common/SEO'
 import './PrivacyPolicy.css'
 
 const sections = [
@@ -83,6 +84,11 @@ const PrivacyPolicy: React.FC = () => {
 
   return (
     <main className="legal-page">
+      <SEO
+        title="Privacy Policy | WildFloral"
+        description="Learn how WildFloral protects your privacy and handles your personal information when booking beauty services or fashion consultations in Hosur."
+        canonical="https://www.wildfloral.online/privacy"
+      />
       {/* Background Glows */}
       <div className="legal-glow glow-top" />
       <div className="legal-glow glow-accent" />

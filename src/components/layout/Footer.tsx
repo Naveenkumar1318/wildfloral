@@ -143,9 +143,18 @@ function Footer() {
                   <Phone size={16} />
                 </div>
                 <div className="contact-details">
-                  <span className="contact-label">DIRECT / WHATSAPP</span>
-                  <a href="tel:8838894677" className="contact-value-link">
-                    8838894677
+                  <span className="contact-label">DIRECT CALL &amp; WHATSAPP</span>
+                  <a href="tel:+918838894677" className="contact-value-link">
+                    +91 8838894677
+                  </a>
+                  <a
+                    href="https://wa.me/918838894677"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-value-link"
+                    style={{ fontSize: '0.8rem', color: '#c084fc', marginTop: '2px' }}
+                  >
+                    Chat on WhatsApp ↗
                   </a>
                 </div>
               </div>
@@ -158,7 +167,7 @@ function Footer() {
                 <div className="contact-details">
                   <span className="contact-label">STUDIO LOCATION</span>
                   <p className="contact-value-text">
-                    3-1/2, Neela Mega Nagar, 1st Cross, Hosur
+                    3-1/2, Neela Mega Nagar, 1st Cross, Hosur, Tamil Nadu, 635109, India
                   </p>
                 </div>
               </div>
@@ -169,14 +178,14 @@ function Footer() {
                   <Globe size={16} />
                 </div>
                 <div className="contact-details">
-                  <span className="contact-label">Our Website</span>
+                  <span className="contact-label">OFFICIAL WEBSITE</span>
                   <a
-                    href="https://wildfloral.online"
+                    href="https://www.wildfloral.online"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="contact-value-link link-with-arrow"
                   >
-                    <span>wildfloral.online</span>
+                    <span>www.wildfloral.online</span>
                     <ArrowUpRight size={13} />
                   </a>
                 </div>

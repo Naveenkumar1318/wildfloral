@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase'
+import { SEO } from '../../components/common/SEO'
 
 import './ForgotPassword.css'
 
@@ -100,6 +101,7 @@ function ForgotPassword() {
   if (sent) {
     return (
       <main className="register-page">
+        <SEO title="Reset Password | WildFloral" noIndex={true} />
         <section className="register-form-area">
           <div className="register-form-header">
             <span>
@@ -151,12 +153,12 @@ function ForgotPassword() {
               WILDFLORAL
             </span>
 
-            <h1>
+            <h2>
               Simple,
               <span>
                 secure access.
               </span>
-            </h1>
+            </h2>
 
             <p>
               No passwords to remember.
@@ -171,6 +173,7 @@ function ForgotPassword() {
 
   return (
     <main className="register-page">
+      <SEO title="Reset Password | WildFloral" noIndex={true} />
       <section className="register-intro">
         <Link
           to="/"

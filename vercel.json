@@ -1,8 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wildfloral.online"
+        }
+      ],
+      "destination": "https://www.wildfloral.online/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
-      "source": "/((?!sitemap\\.xml|robots\\.txt).*)",
+      "source": "/((?!sitemap\\.xml|robots\\.txt|llms\\.txt|logo\\.png|favicon\\.svg|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]

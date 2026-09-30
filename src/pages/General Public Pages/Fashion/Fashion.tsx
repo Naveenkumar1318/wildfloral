@@ -28,6 +28,12 @@ import {
 } from '../../../lib/fashionCart'
 
 import Ai_FashionEnquiry from '../Enquiry/Ai_FashionEnquiry'
+import { SEO } from '../../../components/common/SEO'
+import {
+  getLocalBusinessSchema,
+  getFashionSchema,
+  getBreadcrumbSchema,
+} from '../../../lib/seoSchemas'
 import './Fashion.css'
 
 /* =========================================================
@@ -1292,7 +1298,7 @@ function FashionProductDetailsModal({
               {design.subcategory?.name || 'STYLE'}
             </div>
 
-            <h1>{design.name}</h1>
+            <h2 className="fashion-modal-title">{design.name}</h2>
 
             <p className="fashion-product-description">{design.description}</p>
 
@@ -1688,15 +1694,14 @@ function FashionHero({
   return (
     <section className="fashion-hero">
       <div className="fashion-hero-copy">
-        <span className="fashion-hero-eyebrow">WildFloral fashion</span>
+        <span className="fashion-hero-eyebrow">WILDFLORAL ATELIER HOSUR</span>
 
         <h1>
-          Fashion made <em>around you</em>
+          Custom Fashion Design in <em>Hosur</em>
         </h1>
 
         <p className="fashion-hero-lead">
-          Browse designs by category, choose your size and book it. Can’t find
-          the one you have in mind? We’ll design it with you.
+          Bespoke fashion design, bridal couture, and precision tailoring crafted around you in Hosur. From personal consultation and custom pattern making to chamber fitting sessions.
         </p>
 
         <div className="fashion-hero-cta">
@@ -2389,6 +2394,18 @@ function handleIncreaseCartItem(
     0,
   )
 
+  const fashionSchemas = useMemo(
+    () => [
+      getLocalBusinessSchema(),
+      getFashionSchema(),
+      getBreadcrumbSchema([
+        { name: 'Home', url: '/' },
+        { name: 'Fashion & Couture', url: '/fashion' },
+      ]),
+    ],
+    [],
+  )
+
   /* LOADING */
 
   if (loading) {
@@ -2406,6 +2423,12 @@ function handleIncreaseCartItem(
 
   return (
     <main className="fashion-page">
+      <SEO
+        title="Custom Fashion Design in Hosur | WildFloral"
+        description="Bespoke fashion design, bridal wear, couture tailoring, and personalized style consultations at WildFloral studio in Hosur. Book your fitting session."
+        canonical="https://www.wildfloral.online/fashion"
+        schemas={fashionSchemas}
+      />
       {/* HERO */}
       <FashionHero
         designs={designs}

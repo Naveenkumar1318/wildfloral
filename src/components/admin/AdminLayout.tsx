@@ -9,7 +9,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 
 import { supabase } from '../../lib/supabase'
-
+import { SEO } from '../common/SEO'
 import './AdminLayout.css'
 
 type IconType =
@@ -388,7 +388,7 @@ function AdminLayout() {
 
   return (
     <div className="admin-layout">
-
+      <SEO title="Admin Portal | WildFloral" noIndex={true} />
       {/* =================================================
           MOBILE HEADER
       ================================================= */}

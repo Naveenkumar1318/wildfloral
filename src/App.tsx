@@ -30,6 +30,8 @@ import PrivacyPolicy
   from './pages/General Public Pages/PrivacyPolicy/PrivacyPolicy'
 import TermsConditions
   from './pages/General Public Pages/TermsConditions/TermsConditions'
+import NotFound
+  from './pages/General Public Pages/NotFound/NotFound'
 
   import CustomerFashionBooking
   from './pages/Customer/customer_Fashion_Booking/customer_Fashion_Booking'
@@ -273,6 +275,11 @@ function App() {
         <Route
           path="/terms"
           element={<TermsConditions />}
+        />
+
+        <Route
+          path="*"
+          element={<NotFound />}
         />
 
       </Route>
