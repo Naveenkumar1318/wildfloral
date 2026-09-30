@@ -54,6 +54,7 @@ type ExistingSize = {
 }
 
 type SizeRow = {
+  id?: string
   size: string
   price: string
   stockQuantity: string
@@ -468,27 +469,22 @@ function AdminFashionDesignForm() {
 
               if (!existing) {
                 return {
+                  id: undefined,
                   size,
                   price: '',
-                  stockQuantity:
-                    '0',
-                  isActive:
-                    false,
+                  stockQuantity: '0',
+                  isActive: false,
                 }
               }
 
               return {
+                id: existing.id,
                 size,
-                price:
-                  String(
-                    existing.price,
-                  ),
-                stockQuantity:
-                  String(
-                    existing.stock_quantity,
-                  ),
-                isActive:
-                  existing.is_active,
+                price: String(existing.price),
+                stockQuantity: String(
+                  existing.stock_quantity,
+                ),
+                isActive: existing.is_active,
               }
             },
           ),
@@ -532,9 +528,9 @@ function AdminFashionDesignForm() {
       subcategories.some(
         (subcategory) =>
           subcategory.id ===
-            subcategoryId &&
+          subcategoryId &&
           subcategory.category_id ===
-            nextCategoryId,
+          nextCategoryId,
       )
 
     if (
@@ -599,7 +595,7 @@ function AdminFashionDesignForm() {
     Math.max(
       0,
       MAX_IMAGES -
-        imageCount,
+      imageCount,
     )
 
   /* =========================================================
@@ -642,10 +638,9 @@ function AdminFashionDesignForm() {
       remainingImageSlots
     ) {
       setError(
-        `Only ${remainingImageSlots} image${
-          remainingImageSlots === 1
-            ? ''
-            : 's'
+        `Only ${remainingImageSlots} image${remainingImageSlots === 1
+          ? ''
+          : 's'
         } can be added. Maximum is ${MAX_IMAGES}.`,
       )
     }
@@ -725,9 +720,9 @@ function AdminFashionDesignForm() {
         )
           ? current
           : [
-              ...current,
-              imageId,
-            ],
+            ...current,
+            imageId,
+          ],
     )
   }
 
@@ -792,7 +787,7 @@ function AdminFashionDesignForm() {
             ...image,
             is_primary:
               image.id ===
-                imageId &&
+              imageId &&
               !deletedImageIds.includes(
                 image.id,
               ),
@@ -857,12 +852,12 @@ function AdminFashionDesignForm() {
         current.map(
           (row) =>
             row.size ===
-            size
+              size
               ? {
-                  ...row,
-                  [field]:
-                    value,
-                }
+                ...row,
+                [field]:
+                  value,
+              }
               : row,
         ),
     )
@@ -878,10 +873,10 @@ function AdminFashionDesignForm() {
   ) {
     const extension =
       file.type ===
-      'image/webp'
+        'image/webp'
         ? 'webp'
         : file.type ===
-            'image/png'
+          'image/png'
           ? 'png'
           : 'jpg'
 
@@ -981,7 +976,7 @@ function AdminFashionDesignForm() {
     if (
       !validSubcategory ||
       validSubcategory.category_id !==
-        categoryId
+      categoryId
     ) {
       setError(
         'The selected sub category does not belong to the selected main category.',
@@ -1015,9 +1010,9 @@ function AdminFashionDesignForm() {
         minDelivery,
       ) ||
       minDelivery <
-        MIN_DELIVERY_DAYS ||
+      MIN_DELIVERY_DAYS ||
       minDelivery >
-        MAX_DELIVERY_DAYS
+      MAX_DELIVERY_DAYS
     ) {
       setError(
         `Minimum delivery days must be between ${MIN_DELIVERY_DAYS} and ${MAX_DELIVERY_DAYS}.`,
@@ -1030,9 +1025,9 @@ function AdminFashionDesignForm() {
         maxDelivery,
       ) ||
       maxDelivery <
-        MIN_DELIVERY_DAYS ||
+      MIN_DELIVERY_DAYS ||
       maxDelivery >
-        MAX_DELIVERY_DAYS
+      MAX_DELIVERY_DAYS
     ) {
       setError(
         `Maximum delivery days must be between ${MIN_DELIVERY_DAYS} and ${MAX_DELIVERY_DAYS}.`,
@@ -1095,7 +1090,7 @@ function AdminFashionDesignForm() {
 
       if (
         size.stockQuantity ===
-          '' ||
+        '' ||
         !Number.isInteger(
           stock,
         ) ||
@@ -1339,7 +1334,7 @@ function AdminFashionDesignForm() {
 
         const {
           error:
-            deleteImagesError,
+          deleteImagesError,
         } =
           await supabase
             .from(
@@ -1373,70 +1368,25 @@ function AdminFashionDesignForm() {
       }
 
       /* =====================================================
-         NORMALIZE PRIMARY
+         CLEAR ALL PRIMARY IMAGES
       ===================================================== */
 
-      if (
-        newPrimary
-      ) {
-        const {
-          error:
-            clearPrimaryError,
-        } =
-          await supabase
-            .from(
-              'fashion_design_images',
-            )
-            .update({
-              is_primary:
-                false,
-            })
-            .eq(
-              'design_id',
-              createdDesignId,
-            )
+      const {
+        error: clearPrimaryError,
+      } = await supabase
+        .from('fashion_design_images')
+        .update({
+          is_primary: false,
+        })
+        .eq(
+          'design_id',
+          createdDesignId,
+        )
 
-        if (
-          clearPrimaryError
-        ) {
-          throw new Error(
-            clearPrimaryError.message,
-          )
-        }
-      }
-
-      /* =====================================================
-         SAVE EXISTING PRIMARY
-      ===================================================== */
-
-      if (
-        existingPrimary &&
-        !newPrimary
-      ) {
-        const {
-          error:
-            primaryError,
-        } =
-          await supabase
-            .from(
-              'fashion_design_images',
-            )
-            .update({
-              is_primary:
-                true,
-            })
-            .eq(
-              'id',
-              existingPrimary.id,
-            )
-
-        if (
-          primaryError
-        ) {
-          throw new Error(
-            primaryError.message,
-          )
-        }
+      if (clearPrimaryError) {
+        throw new Error(
+          clearPrimaryError.message,
+        )
       }
 
       /* =====================================================
@@ -1498,7 +1448,7 @@ function AdminFashionDesignForm() {
       ) {
         const {
           error:
-            insertImagesError,
+          insertImagesError,
         } =
           await supabase
             .from(
@@ -1537,70 +1487,80 @@ function AdminFashionDesignForm() {
       }
 
       /* =====================================================
-         REBUILD SIZE DATA
+         SAVE FINAL PRIMARY IMAGE
       ===================================================== */
 
-      const {
-        error:
-          deleteSizesError,
-      } =
-        await supabase
-          .from(
-            'fashion_design_sizes',
-          )
-          .delete()
+      if (existingPrimary) {
+        const {
+          error: finalPrimaryError,
+        } = await supabase
+          .from('fashion_design_images')
+          .update({
+            is_primary: true,
+          })
           .eq(
-            'design_id',
-            createdDesignId,
+            'id',
+            existingPrimary.id,
           )
 
-      if (
-        deleteSizesError
-      ) {
-        throw new Error(
-          deleteSizesError.message,
-        )
+        if (finalPrimaryError) {
+          throw new Error(
+            finalPrimaryError.message,
+          )
+        }
       }
 
-      const {
-        error:
-          insertSizesError,
-      } =
-        await supabase
-          .from(
-            'fashion_design_sizes',
-          )
-          .insert(
-            activeSizes.map(
-              (size) => ({
-                design_id:
-                  createdDesignId,
+      /* =====================================================
+         SAVE SIZE DATA
+      ===================================================== */
 
-                size:
-                  size.size,
+      for (const size of sizes) {
+        const price = Number(size.price)
+        const stock = Number(size.stockQuantity)
 
-                price:
-                  Number(
-                    size.price,
-                  ),
+        if (size.id) {
+          const {
+            error: updateSizeError,
+          } = await supabase
+            .from('fashion_design_sizes')
+            .update({
+              price,
+              stock_quantity: stock,
+              is_active: size.isActive,
+              updated_at:
+                new Date().toISOString(),
+            })
+            .eq('id', size.id)
+            .eq('design_id', createdDesignId)
 
-                stock_quantity:
-                  Number(
-                    size.stockQuantity,
-                  ),
+          if (updateSizeError) {
+            throw new Error(
+              `Unable to update ${size.size} size: ${updateSizeError.message}`,
+            )
+          }
 
-                is_active:
-                  true,
-              }),
-            ),
-          )
+          continue
+        }
 
-      if (
-        insertSizesError
-      ) {
-        throw new Error(
-          insertSizesError.message,
-        )
+        if (size.isActive) {
+          const {
+            error: insertSizeError,
+          } = await supabase
+            .from('fashion_design_sizes')
+            .insert({
+              design_id: createdDesignId,
+              size: size.size,
+              price,
+              stock_quantity: stock,
+              is_active: true,
+            })
+
+          if (insertSizeError) {
+            throw new Error(
+              `Unable to add ${size.size} size: ${insertSizeError.message}`,
+            )
+          }
+        }
       }
 
       /* =====================================================
@@ -1621,7 +1581,7 @@ function AdminFashionDesignForm() {
         },
       )
     } catch (
-      submitError
+    submitError
     ) {
       if (
         uploadedPaths.length
@@ -2186,15 +2146,14 @@ Generic Name: T-Shirt`}
               </div>
 
               <label
-                className={`fashion-design-upload-button ${
-                  remainingImageSlots ===
+                className={`fashion-design-upload-button ${remainingImageSlots ===
                   0
-                    ? 'disabled'
-                    : ''
-                }`}
+                  ? 'disabled'
+                  : ''
+                  }`}
               >
                 {remainingImageSlots ===
-                0
+                  0
                   ? 'Image Limit Reached'
                   : 'Add Images'}
 
@@ -2233,29 +2192,120 @@ Generic Name: T-Shirt`}
             {(existingImages.length >
               0 ||
               newImages.length >
-                0) && (
+              0) && (
 
-              <div className="fashion-design-images-grid">
+                <div className="fashion-design-images-grid">
 
-                {existingImages.map(
-                  (image) => {
-                    const deleted =
-                      deletedImageIds.includes(
-                        image.id,
-                      )
+                  {existingImages.map(
+                    (image) => {
+                      const deleted =
+                        deletedImageIds.includes(
+                          image.id,
+                        )
 
-                    return (
-                      <div
-                        className={`fashion-design-image-item ${
-                          image.is_primary &&
-                          !deleted
+                      return (
+                        <div
+                          className={`fashion-design-image-item ${image.is_primary &&
+                            !deleted
                             ? 'primary'
                             : ''
-                        } ${
-                          deleted
-                            ? 'deleted'
-                            : ''
-                        }`}
+                            } ${deleted
+                              ? 'deleted'
+                              : ''
+                            }`}
+                          key={
+                            image.id
+                          }
+                        >
+
+                          <div className="fashion-design-image-frame">
+
+                            <img
+                              src={
+                                image.image_url
+                              }
+                              alt={
+                                image.alt_text ||
+                                name
+                              }
+                              loading="lazy"
+                              decoding="async"
+                            />
+
+                            {image.is_primary &&
+                              !deleted && (
+                                <span className="fashion-primary-label">
+                                  Primary
+                                </span>
+                              )}
+
+                            {deleted && (
+                              <span className="fashion-deleted-label">
+                                Removed
+                              </span>
+                            )}
+
+                          </div>
+
+                          <div className="fashion-design-image-actions">
+
+                            {deleted ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  restoreExistingImage(
+                                    image.id,
+                                  )
+                                }
+                              >
+                                Restore
+                              </button>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setExistingPrimary(
+                                      image.id,
+                                    )
+                                  }
+                                  disabled={
+                                    image.is_primary
+                                  }
+                                >
+                                  {image.is_primary
+                                    ? 'Primary Image'
+                                    : 'Make Primary'}
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className="danger"
+                                  onClick={() =>
+                                    removeExistingImage(
+                                      image.id,
+                                    )
+                                  }
+                                >
+                                  Remove
+                                </button>
+                              </>
+                            )}
+
+                          </div>
+
+                        </div>
+                      )
+                    },
+                  )}
+
+                  {newImages.map(
+                    (image) => (
+                      <div
+                        className={`fashion-design-image-item ${image.isPrimary
+                          ? 'primary'
+                          : ''
+                          }`}
                         key={
                           image.id
                         }
@@ -2265,158 +2315,64 @@ Generic Name: T-Shirt`}
 
                           <img
                             src={
-                              image.image_url
+                              image.preview
                             }
                             alt={
-                              image.alt_text ||
+                              image.altText ||
                               name
                             }
-                            loading="lazy"
-                            decoding="async"
                           />
 
-                          {image.is_primary &&
-                            !deleted && (
-                              <span className="fashion-primary-label">
-                                Primary
-                              </span>
-                            )}
-
-                          {deleted && (
-                            <span className="fashion-deleted-label">
-                              Removed
+                          {image.isPrimary && (
+                            <span className="fashion-primary-label">
+                              Primary
                             </span>
                           )}
+
+                          <span className="fashion-new-image-label">
+                            New
+                          </span>
 
                         </div>
 
                         <div className="fashion-design-image-actions">
 
-                          {deleted ? (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                restoreExistingImage(
-                                  image.id,
-                                )
-                              }
-                            >
-                              Restore
-                            </button>
-                          ) : (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setExistingPrimary(
-                                    image.id,
-                                  )
-                                }
-                                disabled={
-                                  image.is_primary
-                                }
-                              >
-                                {image.is_primary
-                                  ? 'Primary Image'
-                                  : 'Make Primary'}
-                              </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setNewPrimary(
+                                image.id,
+                              )
+                            }
+                            disabled={
+                              image.isPrimary
+                            }
+                          >
+                            {image.isPrimary
+                              ? 'Primary Image'
+                              : 'Make Primary'}
+                          </button>
 
-                              <button
-                                type="button"
-                                className="danger"
-                                onClick={() =>
-                                  removeExistingImage(
-                                    image.id,
-                                  )
-                                }
-                              >
-                                Remove
-                              </button>
-                            </>
-                          )}
+                          <button
+                            type="button"
+                            className="danger"
+                            onClick={() =>
+                              removeNewImage(
+                                image.id,
+                              )
+                            }
+                          >
+                            Remove
+                          </button>
 
                         </div>
 
                       </div>
-                    )
-                  },
-                )}
+                    ),
+                  )}
 
-                {newImages.map(
-                  (image) => (
-                    <div
-                      className={`fashion-design-image-item ${
-                        image.isPrimary
-                          ? 'primary'
-                          : ''
-                      }`}
-                      key={
-                        image.id
-                      }
-                    >
-
-                      <div className="fashion-design-image-frame">
-
-                        <img
-                          src={
-                            image.preview
-                          }
-                          alt={
-                            image.altText ||
-                            name
-                          }
-                        />
-
-                        {image.isPrimary && (
-                          <span className="fashion-primary-label">
-                            Primary
-                          </span>
-                        )}
-
-                        <span className="fashion-new-image-label">
-                          New
-                        </span>
-
-                      </div>
-
-                      <div className="fashion-design-image-actions">
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setNewPrimary(
-                              image.id,
-                            )
-                          }
-                          disabled={
-                            image.isPrimary
-                          }
-                        >
-                          {image.isPrimary
-                            ? 'Primary Image'
-                            : 'Make Primary'}
-                        </button>
-
-                        <button
-                          type="button"
-                          className="danger"
-                          onClick={() =>
-                            removeNewImage(
-                              image.id,
-                            )
-                          }
-                        >
-                          Remove
-                        </button>
-
-                      </div>
-
-                    </div>
-                  ),
-                )}
-
-              </div>
-            )}
+                </div>
+              )}
 
           </section>
 
@@ -2553,11 +2509,10 @@ Generic Name: T-Shirt`}
 
                           <button
                             type="button"
-                            className={`fashion-size-toggle ${
-                              size.isActive
-                                ? 'active'
-                                : ''
-                            }`}
+                            className={`fashion-size-toggle ${size.isActive
+                              ? 'active'
+                              : ''
+                              }`}
                             onClick={() =>
                               updateSize(
                                 size.size,
@@ -2607,11 +2562,10 @@ Generic Name: T-Shirt`}
 
                 <button
                   type="button"
-                  className={`fashion-setting-toggle ${
-                    isActive
-                      ? 'active'
-                      : ''
-                  }`}
+                  className={`fashion-setting-toggle ${isActive
+                    ? 'active'
+                    : ''
+                    }`}
                   onClick={() =>
                     setIsActive(
                       (value) =>
@@ -2641,11 +2595,10 @@ Generic Name: T-Shirt`}
 
                 <button
                   type="button"
-                  className={`fashion-setting-toggle ${
-                    isFeatured
-                      ? 'active'
-                      : ''
-                  }`}
+                  className={`fashion-setting-toggle ${isFeatured
+                    ? 'active'
+                    : ''
+                    }`}
                   onClick={() =>
                     setIsFeatured(
                       (value) =>

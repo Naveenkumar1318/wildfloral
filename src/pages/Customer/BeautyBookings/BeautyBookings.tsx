@@ -434,16 +434,42 @@ function getLocationAddress(
    SERVICE DISPLAY
 ========================================================= */
 
+type ServiceRecord = {
+  id: string
+  name: string
+  description?: string | null
+  price?: number | string | null
+  duration_minutes?: number | string | null
+  image_url?: string | null
+}
+
 function getServiceDisplay(
   item: BookingItem,
   services: Service[],
+  rawServices: ServiceRecord[] = [],
 ) {
+  const cleanId = (item.service_id ?? '').trim().toLowerCase()
+  const cleanName = (item.service_name ?? '').trim().toLowerCase()
+
   const service =
     services.find(
       (value) =>
-        value.id ===
-        item.service_id,
+        (value.id && value.id.toLowerCase() === cleanId) ||
+        (cleanName && value.name?.toLowerCase().trim() === cleanName),
     )
+
+  const rawService =
+    rawServices.find(
+      (value) =>
+        (value.id && value.id.toLowerCase() === cleanId) ||
+        (cleanName && value.name?.toLowerCase().trim() === cleanName),
+    )
+
+  const imageUrl =
+    service?.imageUrl ||
+    (service as { image_url?: string | null } | undefined)?.image_url ||
+    rawService?.image_url ||
+    null
 
   const bookedPrice =
     Math.max(
@@ -456,6 +482,7 @@ function getServiceDisplay(
       Number(
         service?.originalPrice ??
           service?.price ??
+          rawService?.price ??
           bookedPrice,
       ) || bookedPrice,
       bookedPrice,
@@ -504,6 +531,8 @@ function getServiceDisplay(
 
   return {
     service,
+    rawService,
+    imageUrl,
     originalPrice,
     displayPrice,
     discountAmount,
@@ -532,6 +561,14 @@ function BeautyBookings() {
     setServices,
   ] =
     useState<Service[]>(
+      [],
+    )
+
+  const [
+    rawServices,
+    setRawServices,
+  ] =
+    useState<ServiceRecord[]>(
       [],
     )
 
@@ -632,6 +669,7 @@ function BeautyBookings() {
       if (!user) {
         setBookings([])
         setServices([])
+        setRawServices([])
 
         setError(
           'You must be signed in to view your bookings.',
@@ -643,6 +681,7 @@ function BeautyBookings() {
       const [
         bookingsResponse,
         servicesResponse,
+        allServicesResponse,
       ] =
         await Promise.all([
           supabase
@@ -690,7 +729,21 @@ function BeautyBookings() {
               },
             ),
 
-          getServices(),
+          getServices().catch((err) => {
+            console.warn('getServices error:', err)
+            return [] as Service[]
+          }),
+
+          supabase
+            .from('services')
+            .select(`
+              id,
+              name,
+              description,
+              price,
+              duration_minutes,
+              image_url
+            `),
         ])
 
       if (
@@ -710,7 +763,11 @@ function BeautyBookings() {
       )
 
       setServices(
-        servicesResponse,
+        servicesResponse ?? [],
+      )
+
+      setRawServices(
+        (allServicesResponse.data ?? []) as ServiceRecord[],
       )
     } catch (err) {
       console.error(
@@ -2129,6 +2186,7 @@ function BeautyBookings() {
                           getServiceDisplay(
                             item,
                             services,
+                            rawServices,
                           )
 
                         return (
@@ -2141,26 +2199,34 @@ function BeautyBookings() {
 
                             <div className="beauty-selected-service-image">
 
-                              {display.service?.imageUrl ? (
+                              {display.imageUrl ? (
 
                                 <img
                                   src={
-                                    display
-                                      .service
-                                      .imageUrl
+                                    display.imageUrl
                                   }
                                   alt={
                                     item.service_name
                                   }
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none'
+                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                    if (fallback) {
+                                      fallback.style.display = 'flex'
+                                    }
+                                  }}
                                 />
 
-                              ) : (
+                              ) : null}
 
-                                <span>
-                                  WF
-                                </span>
-
-                              )}
+                              <span
+                                style={{
+                                  display: display.imageUrl ? 'none' : 'flex',
+                                }}
+                              >
+                                WF
+                              </span>
 
                             </div>
 

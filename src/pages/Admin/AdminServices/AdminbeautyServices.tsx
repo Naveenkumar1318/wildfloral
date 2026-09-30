@@ -80,6 +80,12 @@ function AdminBeautyServices() {
   const [dropdownOpen, setDropdownOpen] =
     useState(false)
 
+  const [serviceToDelete, setServiceToDelete] =
+    useState<Service | null>(null)
+
+  const [deleting, setDeleting] =
+    useState(false)
+
   const [currentPage, setCurrentPage] =
     useState(() => {
       try {
@@ -541,38 +547,43 @@ function AdminBeautyServices() {
      DELETE SERVICE
   ======================================================= */
 
-  async function deleteService(
+  function requestDelete(
     service: Service,
   ) {
-    const confirmed =
-      window.confirm(
-        `Delete "${service.name}"?`,
-      )
+    setServiceToDelete(service)
+  }
 
-    if (!confirmed) {
+  async function confirmDeleteService() {
+    if (!serviceToDelete || deleting) {
       return
     }
 
+    setDeleting(true)
     setError('')
 
     const { error } =
       await supabase
         .from('services')
         .delete()
-        .eq('id', service.id)
+        .eq('id', serviceToDelete.id)
+
+    setDeleting(false)
 
     if (error) {
-      setError(error.message)
-
+      setError(
+        `Unable to delete service: ${error.message}`,
+      )
       return
     }
 
     setServices((current) =>
       current.filter(
         (item) =>
-          item.id !== service.id,
+          item.id !== serviceToDelete.id,
       ),
     )
+
+    setServiceToDelete(null)
   }
 
   /* =======================================================
@@ -1378,7 +1389,7 @@ function AdminBeautyServices() {
                                 type="button"
                                 className="delete"
                                 onClick={() =>
-                                  void deleteService(
+                                  requestDelete(
                                     service,
                                   )
                                 }
@@ -1506,6 +1517,79 @@ function AdminBeautyServices() {
         </section>
 
       </div>
+
+      {/* =========================================================
+          DELETE CONFIRMATION MODAL
+      ========================================================= */}
+
+      {serviceToDelete && (
+        <div
+          className="beauty-service-modal-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target ===
+                event.currentTarget &&
+              !deleting
+            ) {
+              setServiceToDelete(null)
+            }
+          }}
+        >
+          <div
+            className="beauty-service-confirm-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-service-title"
+          >
+            <div className="beauty-service-modal-icon">
+              !
+            </div>
+
+            {serviceToDelete.image_url && (
+              <div className="beauty-service-modal-preview">
+                <img
+                  src={serviceToDelete.image_url}
+                  alt={serviceToDelete.name}
+                />
+              </div>
+            )}
+
+            <h2 id="delete-service-title">
+              Permanently delete "{serviceToDelete.name}"?
+            </h2>
+
+            <p>
+              The service will be removed from the catalogue, but existing bookings and enquiries will be preserved.
+            </p>
+
+            <div className="beauty-service-modal-actions">
+              <button
+                type="button"
+                onClick={() =>
+                  setServiceToDelete(null)
+                }
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="danger"
+                onClick={() =>
+                  void confirmDeleteService()
+                }
+                disabled={deleting}
+              >
+                {deleting
+                  ? 'Deleting...'
+                  : 'Delete Service'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   )

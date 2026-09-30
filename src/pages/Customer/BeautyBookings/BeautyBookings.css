@@ -2081,6 +2081,120 @@
 
 
 /* =========================================================
+   SELECTED SERVICES GRID & CARDS
+========================================================= */
+
+.beauty-selected-services-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.beauty-selected-service-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e2eae1;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.beauty-selected-service-card:hover {
+  border-color: #bcd0be;
+  box-shadow: 0 2px 8px rgba(33, 69, 50, 0.05);
+}
+
+.beauty-selected-service-image {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #edf5eb;
+  border: 1px solid #dce8db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.beauty-selected-service-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.beauty-selected-service-image span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #356546;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.beauty-selected-service-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.beauty-selected-service-content strong {
+  color: #24352b;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.beauty-selected-service-content span {
+  color: #728078;
+  font-size: 10px;
+}
+
+.beauty-selected-service-content small {
+  display: inline-flex;
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e8f4e5;
+  color: #3c7040;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.beauty-selected-service-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 60px;
+}
+
+.beauty-selected-service-price > span {
+  color: #8a918d;
+  font-size: 9px;
+  text-decoration: line-through;
+}
+
+.beauty-selected-service-price strong {
+  color: #1e4530;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
    NOTES
 ========================================================= */
 

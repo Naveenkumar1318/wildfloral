@@ -51,9 +51,10 @@ type FashionOrder = {
 type FashionOrderItem = {
   id: string
   order_id: string
-  design_id: string
-  design_size_id: string
+  design_id: string | null
+  design_size_id: string | null
   design_name: string
+  design_image_url: string | null
   size: string
   quantity: number | string
   unit_price: number | string
@@ -74,22 +75,9 @@ type FashionOrderPayment = {
   updated_at: string
 }
 
-type FashionDesignImage = {
-  id: string
-  design_id: string
-  image_url: string
-  alt_text: string | null
-  display_order: number
-  is_primary: boolean
-}
-
 type OrderWithRelations = FashionOrder & {
   items: FashionOrderItem[]
   payment: FashionOrderPayment | null
-  imagesByDesign: Record<
-    string,
-    FashionDesignImage | undefined
-  >
 }
 
 type FilterValue =
@@ -1102,6 +1090,7 @@ function CustomerFashionBooking() {
                   design_id,
                   design_size_id,
                   design_name,
+                  design_image_url,
                   size,
                   quantity,
                   unit_price,
@@ -1172,27 +1161,8 @@ function CustomerFashionBooking() {
               : (paymentsResult.data ??
                   []) as FashionOrderPayment[]
 
-          const paidOrderIds =
-            new Set(
-              payments
-                .filter(
-                  (payment) =>
-                    payment.status === 'paid',
-                )
-                .map(
-                  (payment) =>
-                    payment.order_id,
-                ),
-            )
-
           const visibleOrders =
-            loadedOrders.filter(
-              (order) =>
-                order.status !== 'pending' ||
-                paidOrderIds.has(
-                  order.id,
-                ),
-            )
+            loadedOrders
 
           if (
             paymentsResult.error
@@ -1205,101 +1175,15 @@ function CustomerFashionBooking() {
 
           /*
            * =================================================
-           * LOAD DESIGN IMAGES
+           * HISTORICAL ORDER IMAGES
            * =================================================
+           *
+           * Images are now stored directly on
+           * fashion_order_items.design_image_url.
+           *
+           * Do not load images from the live
+           * fashion_design_images table here.
            */
-
-          const designIds = [
-            ...new Set(
-              items
-                .map(
-                  (item) =>
-                    item.design_id,
-                )
-                .filter(Boolean),
-            ),
-          ]
-
-          let designImages: FashionDesignImage[] =
-            []
-
-          if (
-            designIds.length > 0
-          ) {
-            const {
-              data:
-                imageData,
-              error:
-                imageError,
-            } =
-              await supabase
-                .from(
-                  'fashion_design_images',
-                )
-                .select(`
-                  id,
-                  design_id,
-                  image_url,
-                  alt_text,
-                  display_order,
-                  is_primary
-                `)
-                .in(
-                  'design_id',
-                  designIds,
-                )
-                .order(
-                  'is_primary',
-                  {
-                    ascending:
-                      false,
-                  },
-                )
-                .order(
-                  'display_order',
-                  {
-                    ascending:
-                      true,
-                  },
-                )
-
-            if (
-              imageError
-            ) {
-              throw imageError
-            }
-
-            designImages =
-              (imageData ??
-                []) as FashionDesignImage[]
-          }
-
-          /*
-           * =================================================
-           * MAP PRIMARY IMAGE PER DESIGN
-           * =================================================
-           */
-
-          const imagesByDesign =
-            new Map<
-              string,
-              FashionDesignImage
-            >()
-
-          for (
-            const image of designImages
-          ) {
-            if (
-              !imagesByDesign.has(
-                image.design_id,
-              )
-            ) {
-              imagesByDesign.set(
-                image.design_id,
-                image,
-              )
-            }
-          }
 
           /*
            * =================================================
@@ -1370,22 +1254,6 @@ function CustomerFashionBooking() {
                     order.id,
                   ) ?? []
 
-                const orderImages: Record<
-                  string,
-                  FashionDesignImage | undefined
-                > = {}
-
-                for (
-                  const item of orderItems
-                ) {
-                  orderImages[
-                    item.design_id
-                  ] =
-                    imagesByDesign.get(
-                      item.design_id,
-                    )
-                }
-
                 return {
                   ...order,
                   items:
@@ -1394,8 +1262,6 @@ function CustomerFashionBooking() {
                     paymentByOrder.get(
                       order.id,
                     ) ?? null,
-                  imagesByDesign:
-                    orderImages,
                 }
               },
             )
@@ -2335,16 +2201,9 @@ function CustomerFashionBooking() {
                           (
                             item,
                           ) => {
-                            const image =
-                              order
-                                .imagesByDesign[
-                                item
-                                  .design_id
-                              ]
-
                             const imageUrl =
                               getFashionImageUrl(
-                                image?.image_url,
+                                item.design_image_url,
                               )
 
                             return (
@@ -2366,7 +2225,6 @@ function CustomerFashionBooking() {
                                         imageUrl
                                       }
                                       alt={
-                                        image?.alt_text ||
                                         item.design_name
                                       }
                                       loading="lazy"
@@ -2632,16 +2490,9 @@ function CustomerFashionBooking() {
                             (
                               item,
                             ) => {
-                              const image =
-                                order
-                                  .imagesByDesign[
-                                  item
-                                    .design_id
-                                ]
-
                               const imageUrl =
                                 getFashionImageUrl(
-                                  image?.image_url,
+                                  item.design_image_url,
                                 )
 
                               const pricing =
@@ -2669,7 +2520,6 @@ function CustomerFashionBooking() {
                                           imageUrl
                                         }
                                         alt={
-                                          image?.alt_text ||
                                           item.design_name
                                         }
                                         loading="lazy"

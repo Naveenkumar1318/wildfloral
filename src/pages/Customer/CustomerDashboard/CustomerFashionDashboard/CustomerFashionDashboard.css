@@ -816,6 +816,12 @@
   color: #3f7e62;
 }
 
+.fashion-order-status.delivered {
+  background: #e0f2fe;
+
+  color: #0369a1;
+}
+
 .fashion-order-status.completed {
   background: #e5f2e8;
 

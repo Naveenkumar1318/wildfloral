@@ -1536,36 +1536,40 @@ async function verifyRazorpayPayment(
       ----------------------------------------- */
 
       const itemsPayload =
-        orderItems.map(
-          (item) => ({
-            order_id:
-              order.id,
+  orderItems.map(
+    (item) => ({
+      order_id:
+        order.id,
 
-            design_id:
-              item.designId,
+      design_id:
+        item.designId,
 
-            design_size_id:
-              item.designSizeId,
+      design_size_id:
+        item.designSizeId,
 
-            design_name:
-              item.design.name,
+      design_name:
+        item.design.name,
 
-            size:
-              item.size,
+      design_image_url:
+        item.image?.image_url ??
+        null,
 
-            quantity:
-              item.quantity,
+      size:
+        item.size,
 
-            unit_price:
-              item.unitPrice,
+      quantity:
+        item.quantity,
 
-            discount_amount:
-              0,
+      unit_price:
+        item.unitPrice,
 
-            final_price:
-              item.lineTotal,
-          }),
-        )
+      discount_amount:
+        0,
+
+      final_price:
+        item.lineTotal,
+    }),
+  )
 
       const {
         error: itemsError,

@@ -22,6 +22,7 @@ type FashionOrderStatus =
   | 'confirmed'
   | 'processing'
   | 'ready'
+  | 'delivered'
   | 'completed'
   | 'cancelled'
 
@@ -31,7 +32,7 @@ type FashionOrderItem = {
   quantity: number
   final_price: number
   size: string
-  image_url: string
+  design_image_url: string | null
 }
 
 type FashionOrder = {
@@ -109,6 +110,9 @@ function getStatusLabel(
 
     case 'ready':
       return 'Ready'
+
+    case 'delivered':
+      return 'Delivered'
 
     case 'completed':
       return 'Completed'
@@ -207,14 +211,7 @@ function CustomerFashionDashboard() {
                   quantity,
                   final_price,
                   size,
-                  design_id,
-                  fashion_designs (
-                    fashion_design_images (
-                      image_url,
-                      is_primary,
-                      display_order
-                    )
-                  )
+                  design_image_url
                 )
               `,
             )
@@ -234,80 +231,50 @@ function CustomerFashionDashboard() {
         }
 
         const normalizedOrders: FashionOrder[] =
-  (data ?? []).map(
-    (order) => ({
-      id: order.id,
-      order_number:
-        order.order_number,
-      total_amount:
-        Number(
-          order.total_amount ?? 0,
-        ),
-      status:
-        order.status as FashionOrderStatus,
-      created_at:
-        order.created_at,
-      items:
-        Array.isArray(
-          order.fashion_order_items,
-        )
-          ? order.fashion_order_items.map(
-              (item) => {
-                const design =
-                  Array.isArray(
-                    item.fashion_designs,
-                  )
-                    ? item.fashion_designs[0]
-                    : item.fashion_designs
+          (data ?? []).map(
+            (order) => ({
+              id: order.id,
+              order_number:
+                order.order_number,
+              total_amount:
+                Number(
+                  order.total_amount ?? 0,
+                ),
+              status:
+                order.status as FashionOrderStatus,
+              created_at:
+                order.created_at,
+              items:
+                Array.isArray(
+                  order.fashion_order_items,
+                )
+                  ? order.fashion_order_items.map(
+                      (item) => ({
+                        id: item.id,
 
-                const images =
-                  Array.isArray(
-                    design?.fashion_design_images,
-                  )
-                    ? design.fashion_design_images
-                    : []
+                        design_name:
+                          item.design_name,
 
-                const primaryImage =
-                  images.find(
-                    (image) =>
-                      image.is_primary === true,
-                  ) ??
-                  images
-                    .slice()
-                    .sort(
-                      (
-                        first,
-                        second,
-                      ) =>
-                        Number(
-                          first.display_order ?? 0,
-                        ) -
-                        Number(
-                          second.display_order ?? 0,
-                        ),
-                    )[0]
+                        quantity:
+                          Number(
+                            item.quantity ?? 0,
+                          ),
 
-                return {
-                  id: item.id,
-                  design_name:
-                    item.design_name,
-                  quantity:
-                    Number(
-                      item.quantity ?? 0,
-                    ),
-                  final_price:
-                    Number(
-                      item.final_price ?? 0,
-                    ),
-                  size: item.size,
-                  image_url:
-                    primaryImage?.image_url ?? '',
-                }
-              },
-            )
-          : [],
-    }),
-  )
+                        final_price:
+                          Number(
+                            item.final_price ?? 0,
+                          ),
+
+                        size:
+                          item.size,
+
+                        design_image_url:
+                          item.design_image_url ?? null,
+                      }),
+                    )
+                  : [],
+            }),
+          )
 
         setOrders(
           normalizedOrders,
@@ -821,9 +788,9 @@ function CustomerFashionDashboard() {
                         >
 
                           <div className="fashion-order-image">
-                            {order.items[0]?.image_url ? (
+                            {order.items[0]?.design_image_url ? (
                               <img
-                                src={order.items[0].image_url}
+                                src={order.items[0].design_image_url}
                                 alt={order.items[0].design_name}
                                 loading="lazy"
                               />
@@ -1023,18 +990,18 @@ function CustomerFashionDashboard() {
                             >
 
                               <div className="fashion-order-image">
-  {order.items[0]?.image_url ? (
-    <img
-      src={order.items[0].image_url}
-      alt={
-        order.items[0].design_name
-      }
-      loading="lazy"
-    />
-  ) : (
-    <span>WF</span>
-  )}
-</div>
+                                {order.items[0]?.design_image_url ? (
+                                  <img
+                                    src={order.items[0].design_image_url}
+                                    alt={
+                                      order.items[0].design_name
+                                    }
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <span>WF</span>
+                                )}
+                              </div>
 
                               <div>
                                 <strong>

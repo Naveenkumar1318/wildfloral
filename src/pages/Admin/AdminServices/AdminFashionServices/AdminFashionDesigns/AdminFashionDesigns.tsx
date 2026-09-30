@@ -591,30 +591,7 @@ function AdminFashionDesigns() {
 
   /*
    * =========================================================
-   * STORAGE PATH
-   * =========================================================
-   */
-
-  function getStoragePathFromUrl(
-    url: string,
-  ) {
-    const marker =
-      '/storage/v1/object/public/fashion-images/'
-
-    if (
-      !url.includes(marker)
-    ) {
-      return null
-    }
-
-    return url.split(
-      marker,
-    )[1]
-  }
-
-  /*
-   * =========================================================
-   * DELETE
+   * PERMANENT DELETE
    * =========================================================
    */
 
@@ -643,18 +620,6 @@ function AdminFashionDesigns() {
       return
     }
 
-    const imagePaths =
-      design.fashion_design_images
-        .map(
-          (image) =>
-            getStoragePathFromUrl(
-              image.image_url,
-            ),
-        )
-        .filter(
-          Boolean,
-        ) as string[]
-
     const {
       error: deleteError,
     } = await supabase
@@ -674,37 +639,6 @@ function AdminFashionDesigns() {
       return
     }
 
-    /*
-     * Remove images from storage
-     */
-
-    if (
-      imagePaths.length
-    ) {
-      const {
-        error:
-          storageError,
-      } =
-        await supabase.storage
-          .from(
-            'fashion-images',
-          )
-          .remove(
-            imagePaths,
-          )
-
-      if (storageError) {
-        console.warn(
-          'Fashion service deleted but image cleanup failed:',
-          storageError.message,
-        )
-      }
-    }
-
-    /*
-     * Update local state
-     */
-
     setDesigns(
       (current) =>
         current.filter(
@@ -718,7 +652,7 @@ function AdminFashionDesigns() {
     setDeleting(false)
 
     setSuccess(
-      'Fashion service deleted successfully.',
+      'Fashion service deleted permanently.',
     )
   }
 
@@ -1469,11 +1403,11 @@ function AdminFashionDesigns() {
             </h2>
 
             <p>
-              This action cannot be
-              undone. The service,
-              its size records and
-              image records will be
-              deleted.
+              This service will be removed
+              from the active catalogue.
+              Existing customer orders and
+              completed orders will not be
+              affected.
             </p>
 
             <div className="fashion-design-modal-actions">
@@ -1497,7 +1431,7 @@ function AdminFashionDesigns() {
                 disabled={deleting}
               >
                 {deleting
-                  ? 'Deleting...'
+                  ? 'Removing...'
                   : 'Delete Service'}
               </button>
 

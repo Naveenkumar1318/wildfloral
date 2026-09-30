@@ -1998,3 +1998,148 @@ button:disabled {
     flex-basis: 240px;
   }
 }
+
+/* =========================================================
+   DELETE CONFIRMATION MODAL
+========================================================= */
+
+.beauty-service-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(20, 34, 58, 0.45);
+  backdrop-filter: blur(4px);
+  animation: beautyModalFadeIn 0.2s ease-out;
+}
+
+.beauty-service-confirm-modal {
+  width: min(100%, 440px);
+  padding: 28px 24px;
+  border: 1px solid #dce4ef;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(20, 35, 65, 0.22);
+  text-align: center;
+  animation: beautyModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.beauty-service-modal-icon {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  border: 1px solid #efcaca;
+  border-radius: 50%;
+  background: #fff5f5;
+  color: #b34848;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.beauty-service-modal-preview {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #e9edf3;
+  box-shadow: 0 4px 14px rgba(20, 35, 65, 0.08);
+}
+
+.beauty-service-modal-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.beauty-service-confirm-modal h2 {
+  margin: 0 0 10px;
+  color: #1a2740;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.beauty-service-confirm-modal p {
+  margin: 0 0 8px;
+  color: #586882;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.beauty-service-modal-subtext {
+  margin: 12px 0 0 !important;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f6f8fb;
+  border: 1px solid #e5ecf5;
+  color: #72829a !important;
+  font-size: 12px !important;
+}
+
+.beauty-service-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.beauty-service-modal-actions button {
+  min-height: 40px;
+  padding: 0 20px;
+  border: 1px solid #d9e2ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #4b5a6f;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.beauty-service-modal-actions button:hover:not(:disabled) {
+  background: #f7f9fc;
+  border-color: #c9d5e4;
+}
+
+.beauty-service-modal-actions button.danger {
+  border-color: #c53030;
+  background: #c53030;
+  color: #ffffff;
+}
+
+.beauty-service-modal-actions button.danger:hover:not(:disabled) {
+  background: #9b2c2c;
+  border-color: #9b2c2c;
+}
+
+.beauty-service-modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes beautyModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes beautyModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+

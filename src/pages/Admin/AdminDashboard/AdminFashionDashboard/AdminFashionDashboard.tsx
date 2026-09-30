@@ -35,24 +35,16 @@ type FashionOrderStatus =
   | 'cancelled'
   | string
 
-type FashionDesignImage = {
-  image_url: string
-  is_primary: boolean
-  display_order: number
-}
-
 type FashionOrderItem = {
   id: string
-  design_id: string
+  design_id: string | null
   design_name: string
+  design_image_url: string | null
   size: string
   quantity: number
   unit_price: number
   discount_amount: number
   final_price: number
-  fashion_designs?: {
-    fashion_design_images?: FashionDesignImage[]
-  } | null
 }
 
 type FashionOrder = {
@@ -234,6 +226,9 @@ function getStatusLabel(
     case 'ready':
       return 'Ready'
 
+    case 'delivered':
+      return 'Delivered'
+
     case 'completed':
       return 'Completed'
 
@@ -262,6 +257,9 @@ function getStatusClass(
     case 'ready':
       return 'ready'
 
+    case 'delivered':
+      return 'delivered'
+
     case 'completed':
       return 'completed'
 
@@ -273,40 +271,10 @@ function getStatusClass(
   }
 }
 
-function getPrimaryImage(
+function getDesignImage(
   item: FashionOrderItem,
 ): string {
-  const images =
-    item.fashion_designs
-      ?.fashion_design_images ?? []
-
-  const primary =
-    images.find(
-      (image) =>
-        image.is_primary,
-    )
-
-  if (primary?.image_url) {
-    return primary.image_url
-  }
-
-  const ordered =
-    images
-      .slice()
-      .sort(
-        (
-          first,
-          second,
-        ) =>
-          Number(
-            first.display_order,
-          ) -
-          Number(
-            second.display_order,
-          ),
-      )
-
-  return ordered[0]?.image_url ?? ''
+  return item.design_image_url ?? ''
 }
 
 /* =========================================================
@@ -458,18 +426,12 @@ function AdminFashionDashboard() {
                     id,
                     design_id,
                     design_name,
+                    design_image_url,
                     size,
                     quantity,
                     unit_price,
                     discount_amount,
-                    final_price,
-                    fashion_designs (
-                      fashion_design_images (
-                        image_url,
-                        is_primary,
-                        display_order
-                      )
-                    )
+                    final_price
                   )
                 `,
               )
@@ -510,7 +472,7 @@ function AdminFashionDashboard() {
 
                 const imageUrl =
                   firstItem
-                    ? getPrimaryImage(
+                    ? getDesignImage(
                         firstItem,
                       )
                     : ''
@@ -643,13 +605,17 @@ function AdminFashionDashboard() {
             (order) => {
               order.items.forEach(
                 (item) => {
+                  const productKey =
+                    item.design_id ||
+                    item.design_name
+
                   const existing =
                     performanceMap.get(
-                      item.design_id,
+                      productKey,
                     )
 
                   const imageUrl =
-                    getPrimaryImage(
+                    getDesignImage(
                       item,
                     )
 
@@ -676,10 +642,11 @@ function AdminFashionDashboard() {
                   }
 
                   performanceMap.set(
-                    item.design_id,
+                    productKey,
                     {
                       designId:
-                        item.design_id,
+                        item.design_id ??
+                        productKey,
 
                       designName:
                         item.design_name,

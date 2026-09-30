@@ -18,7 +18,6 @@ type OrderStatus =
   | 'confirmed'
   | 'processing'
   | 'ready'
-  | 'delivered'
   | 'completed'
   | 'cancelled'
 
@@ -56,14 +55,15 @@ type FashionOrder = {
 type FashionOrderItem = {
   id: string
   order_id: string
-  design_id: string
+  design_id: string | null
   design_size_id: string | null
   design_name: string
+  design_image_url: string | null
   size: string
-  quantity: number
-  unit_price: number
-  discount_amount: number
-  final_price: number
+  quantity: number | string
+  unit_price: number | string
+  discount_amount: number | string
+  final_price: number | string
   created_at: string
 }
 
@@ -89,15 +89,6 @@ type FashionOrderPayment = {
   razorpay_order_id: string | null
   razorpay_payment_id: string | null
   razorpay_signature: string | null
-}
-
-type FashionDesignImage = {
-  id: string
-  design_id: string
-  image_url: string
-  alt_text: string | null
-  display_order: number
-  is_primary: boolean
 }
 
 type ItemPricing = {
@@ -133,12 +124,8 @@ const STATUS_OPTIONS: Array<{
     label: 'Order Ready',
   },
   {
-    value: 'delivered',
-    label: 'Order Delivered',
-  },
-  {
     value: 'completed',
-    label: 'Order Completed',
+    label: 'Delivered & Completed',
   },
   {
     value: 'cancelled',
@@ -434,11 +421,6 @@ function AdminFashionBookings() {
     payments,
     setPayments,
   ] = useState<FashionOrderPayment[]>([])
-
-  const [
-    designImages,
-    setDesignImages,
-  ] = useState<FashionDesignImage[]>([])
 
   const [
     loading,
@@ -745,6 +727,7 @@ function AdminFashionBookings() {
                 design_id,
                 design_size_id,
                 design_name,
+                design_image_url,
                 size,
                 quantity,
                 unit_price,
@@ -852,67 +835,6 @@ function AdminFashionBookings() {
               ...Array.from(
                 latestPaymentByOrder.values(),
               ),
-            ],
-          )
-
-          const designIds =
-            Array.from(
-              new Set(
-                newItems.map(
-                  (item) =>
-                    item.design_id,
-                ),
-              ),
-            )
-
-          if (!designIds.length) {
-            return
-          }
-
-          const {
-            data: imageData,
-            error: imageError,
-          } =
-            await supabase
-              .from(
-                'fashion_design_images',
-              )
-              .select(`
-                id,
-                design_id,
-                image_url,
-                alt_text,
-                display_order,
-                is_primary
-              `)
-              .in(
-                'design_id',
-                designIds,
-              )
-              .order(
-                'display_order',
-                {
-                  ascending: true,
-                },
-              )
-
-          if (imageError) {
-            throw imageError
-          }
-
-          const newImages =
-            (imageData ??
-              []) as FashionDesignImage[]
-
-          setDesignImages(
-            (previous) => [
-              ...previous.filter(
-                (image) =>
-                  !designIds.includes(
-                    image.design_id,
-                  ),
-              ),
-              ...newImages,
             ],
           )
         } catch (err) {
@@ -1201,28 +1123,7 @@ function AdminFashionBookings() {
     )
   }
 
-  /* =======================================================
-     DESIGN IMAGE
-  ======================================================= */
 
-  function getDesignImage(
-    designId: string,
-  ): string | null {
-    const image =
-      designImages.find(
-        (item) =>
-          item.design_id ===
-            designId &&
-          item.is_primary,
-      ) ??
-      designImages.find(
-        (item) =>
-          item.design_id ===
-          designId,
-      )
-
-    return image?.image_url ?? null
-  }
 
   /* =======================================================
      LOAD SINGLE ORDER DETAILS
@@ -1251,6 +1152,7 @@ function AdminFashionBookings() {
                 design_id,
                 design_size_id,
                 design_name,
+                design_image_url,
                 size,
                 quantity,
                 unit_price,
@@ -1342,65 +1244,6 @@ function AdminFashionBookings() {
                     payment.order_id !==
                     orderId,
                 ),
-            )
-          }
-
-          const designIds =
-            Array.from(
-              new Set(
-                orderItems.map(
-                  (item) =>
-                    item.design_id,
-                ),
-              ),
-            )
-
-          if (designIds.length) {
-            const {
-              data: imageData,
-              error: imageError,
-            } =
-              await supabase
-                .from(
-                  'fashion_design_images',
-                )
-                .select(`
-                  id,
-                  design_id,
-                  image_url,
-                  alt_text,
-                  display_order,
-                  is_primary
-                `)
-                .in(
-                  'design_id',
-                  designIds,
-                )
-                .order(
-                  'display_order',
-                  {
-                    ascending: true,
-                  },
-                )
-
-            if (imageError) {
-              throw imageError
-            }
-
-            const newImages =
-              (imageData ??
-                []) as FashionDesignImage[]
-
-            setDesignImages(
-              (previous) => [
-                ...previous.filter(
-                  (image) =>
-                    !designIds.includes(
-                      image.design_id,
-                    ),
-                ),
-                ...newImages,
-              ],
             )
           }
         } catch (err) {
@@ -1556,15 +1399,18 @@ function AdminFashionBookings() {
        * loading screen.
        */
       await loadOrders(false)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(
         'Failed to update order status:',
         err,
       )
 
-      setError(
-        'Unable to update order status.',
-      )
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : 'Unable to update order status.'
+
+      setError(message)
     } finally {
       setUpdatingStatus(false)
     }
@@ -1716,7 +1562,7 @@ function AdminFashionBookings() {
               ],
               [
                 'completed',
-                'Completed',
+                'Delivered & Completed',
                 statistics.completed,
               ],
               [
@@ -2029,11 +1875,6 @@ function AdminFashionBookings() {
                           .slice(0, 3)
                           .map(
                             (item) => {
-                              const image =
-                                getDesignImage(
-                                  item.design_id,
-                                )
-
                               return (
                                 <div
                                   key={
@@ -2042,10 +1883,10 @@ function AdminFashionBookings() {
                                   className="admin-fashion-mini-item"
                                 >
                                   <div className="admin-fashion-mini-image">
-                                    {image ? (
+                                    {item.design_image_url ? (
                                       <img
                                         src={
-                                          image
+                                          item.design_image_url
                                         }
                                         alt={
                                           item.design_name
@@ -2281,6 +2122,22 @@ function AdminFashionBookings() {
               </div>
             </div>
 
+            {error && (
+              <div
+                className="admin-fashion-error admin-fashion-modal-error"
+                role="alert"
+              >
+                <span>{error}</span>
+                <button
+                  type="button"
+                  onClick={() => setError('')}
+                  aria-label="Close error"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
             {detailLoading ? (
               <div className="admin-fashion-detail-loading">
                 <div className="admin-fashion-spinner" />
@@ -2393,11 +2250,6 @@ function AdminFashionBookings() {
                           itemIndex,
                           orderItems,
                         ) => {
-                          const image =
-                            getDesignImage(
-                              item.design_id,
-                            )
-
                           const pricing =
                             getItemPricing(
                               selectedOrder,
@@ -2414,10 +2266,10 @@ function AdminFashionBookings() {
                             >
                               <div className="admin-fashion-item-design">
                                 <div className="admin-fashion-detail-item-image">
-                                  {image ? (
+                                  {item.design_image_url ? (
                                     <img
                                       src={
-                                        image
+                                        item.design_image_url
                                       }
                                       alt={
                                         item.design_name

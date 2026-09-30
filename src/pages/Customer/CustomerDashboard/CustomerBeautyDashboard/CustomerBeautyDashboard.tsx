@@ -108,6 +108,101 @@ type Activity = {
   timestamp: number
 }
 
+type RawService = {
+  id: string
+  name: string
+  description?: string | null
+  price?: number | string | null
+  duration_minutes?: number | string | null
+  image_url?: string | null
+}
+
+function getBookingServiceImage(
+  booking: Booking,
+  services: RawService[],
+): string | null {
+  const firstItem = booking.booking_items?.[0]
+
+  const serviceId =
+    String(
+      firstItem?.service_id ||
+      booking.service_id ||
+      '',
+    )
+      .trim()
+      .toLowerCase()
+
+  const serviceName =
+    String(
+      firstItem?.service_name ||
+      '',
+    )
+      .trim()
+      .toLowerCase()
+
+  if (serviceId) {
+    const matchedById = services.find(
+      (service) =>
+        service.id
+          .trim()
+          .toLowerCase() === serviceId,
+    )
+
+    if (matchedById?.image_url) {
+      return matchedById.image_url
+    }
+  }
+
+  if (serviceName) {
+    const matchedByName = services.find(
+      (service) =>
+        service.name
+          .trim()
+          .toLowerCase() === serviceName,
+    )
+
+    if (matchedByName?.image_url) {
+      return matchedByName.image_url
+    }
+  }
+
+  return null
+}
+
+function getEnquiryServiceImage(
+  enquiry: Enquiry,
+  services: RawService[],
+): string | null {
+  const items = enquiry.items ?? []
+
+  for (const item of items) {
+    const serviceId = String(item.service_id ?? '')
+      .trim()
+      .toLowerCase()
+
+    const serviceName = String(item.service_name ?? '')
+      .trim()
+      .toLowerCase()
+
+    const matched = services.find((service) => {
+      const serviceIdMatch =
+        serviceId && service.id.toLowerCase() === serviceId
+
+      const serviceNameMatch =
+        serviceName &&
+        service.name.toLowerCase().trim() === serviceName
+
+      return Boolean(serviceIdMatch || serviceNameMatch)
+    })
+
+    if (matched?.image_url) {
+      return matched.image_url
+    }
+  }
+
+  return null
+}
+
 
 /* =========================================================
    HELPERS
@@ -585,6 +680,12 @@ function CustomerBeautyDashboard() {
     useState<Enquiry[]>([])
 
   const [
+    services,
+    setServices,
+  ] =
+    useState<RawService[]>([])
+
+  const [
     loading,
     setLoading,
   ] =
@@ -731,13 +832,30 @@ function CustomerBeautyDashboard() {
             )
 
 
+        const servicesPromise =
+          supabase
+            .from(
+              'services',
+            )
+            .select(`
+              id,
+              name,
+              description,
+              price,
+              duration_minutes,
+              image_url
+            `)
+
+
         const [
           bookingsResult,
           enquiriesResult,
+          servicesResult,
         ] =
           await Promise.all([
             bookingsPromise,
             enquiriesPromise,
+            servicesPromise,
           ])
 
 
@@ -752,6 +870,22 @@ function CustomerBeautyDashboard() {
         ) {
           throw enquiriesResult.error
         }
+
+        if (
+          servicesResult.error
+        ) {
+          throw servicesResult.error
+        }
+
+        const rawServices =
+          (
+            servicesResult.data ??
+            []
+          ) as unknown as RawService[]
+
+        setServices(
+          rawServices,
+        )
 
 
         const bookingRows =
@@ -1679,9 +1813,15 @@ function CustomerBeautyDashboard() {
                             booking.booking_date,
                           )
 
-                        const services =
+                        const servicesList =
                           getBookingServices(
                             booking,
+                          )
+
+                        const serviceImg =
+                          getBookingServiceImage(
+                            booking,
+                            services,
                           )
 
                         return (
@@ -1704,6 +1844,24 @@ function CustomerBeautyDashboard() {
 
                             </div>
 
+                            <div className="customer-beauty-record-image">
+                              {serviceImg ? (
+                                <img
+                                  src={serviceImg}
+                                  alt={servicesList[0] || 'Service'}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none'
+                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                    if (fallback) fallback.style.display = 'flex'
+                                  }}
+                                />
+                              ) : null}
+                              <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                                WF
+                              </span>
+                            </div>
+
 
                             <div className="customer-beauty-record-content">
 
@@ -1714,9 +1872,9 @@ function CustomerBeautyDashboard() {
                               </h5>
 
                               <p>
-                                {services.length >
+                                {servicesList.length >
                                 0
-                                  ? services.join(
+                                  ? servicesList.join(
                                       ', ',
                                     )
                                   : 'Beauty service'}
@@ -1847,9 +2005,15 @@ function CustomerBeautyDashboard() {
                             enquiry.preferred_date,
                           )
 
-                        const services =
+                        const servicesList =
                           getEnquiryServices(
                             enquiry,
+                          )
+
+                        const serviceImg =
+                          getEnquiryServiceImage(
+                            enquiry,
+                            services,
                           )
 
                         return (
@@ -1872,6 +2036,24 @@ function CustomerBeautyDashboard() {
 
                             </div>
 
+                            <div className="customer-beauty-record-image">
+                              {serviceImg ? (
+                                <img
+                                  src={serviceImg}
+                                  alt={servicesList[0] || 'Service'}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none'
+                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                    if (fallback) fallback.style.display = 'flex'
+                                  }}
+                                />
+                              ) : null}
+                              <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                                WF
+                              </span>
+                            </div>
+
 
                             <div className="customer-beauty-record-content">
 
@@ -1882,9 +2064,9 @@ function CustomerBeautyDashboard() {
                               </h5>
 
                               <p>
-                                {services.length >
+                                {servicesList.length >
                                 0
-                                  ? services.join(
+                                  ? servicesList.join(
                                       ', ',
                                     )
                                   : 'Beauty enquiry'}
@@ -2043,9 +2225,15 @@ function CustomerBeautyDashboard() {
                             booking.booking_date,
                           )
 
-                        const services =
+                        const servicesList =
                           getBookingServices(
                             booking,
+                          )
+
+                        const serviceImg =
+                          getBookingServiceImage(
+                            booking,
+                            services,
                           )
 
                         return (
@@ -2068,6 +2256,24 @@ function CustomerBeautyDashboard() {
 
                             </div>
 
+                            <div className="customer-beauty-record-image">
+                              {serviceImg ? (
+                                <img
+                                  src={serviceImg}
+                                  alt={servicesList[0] || 'Service'}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none'
+                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                    if (fallback) fallback.style.display = 'flex'
+                                  }}
+                                />
+                              ) : null}
+                              <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                                WF
+                              </span>
+                            </div>
+
 
                             <div className="customer-beauty-record-content">
 
@@ -2078,9 +2284,9 @@ function CustomerBeautyDashboard() {
                               </h5>
 
                               <p>
-                                {services.length >
+                                {servicesList.length >
                                 0
-                                  ? services.join(
+                                  ? servicesList.join(
                                       ', ',
                                     )
                                   : 'Beauty service'}
@@ -2205,9 +2411,15 @@ function CustomerBeautyDashboard() {
                             enquiry.preferred_date,
                           )
 
-                        const services =
+                        const servicesList =
                           getEnquiryServices(
                             enquiry,
+                          )
+
+                        const serviceImg =
+                          getEnquiryServiceImage(
+                            enquiry,
+                            services,
                           )
 
                         return (
@@ -2230,6 +2442,24 @@ function CustomerBeautyDashboard() {
 
                             </div>
 
+                            <div className="customer-beauty-record-image">
+                              {serviceImg ? (
+                                <img
+                                  src={serviceImg}
+                                  alt={servicesList[0] || 'Service'}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none'
+                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                    if (fallback) fallback.style.display = 'flex'
+                                  }}
+                                />
+                              ) : null}
+                              <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                                WF
+                              </span>
+                            </div>
+
 
                             <div className="customer-beauty-record-content">
 
@@ -2240,9 +2470,9 @@ function CustomerBeautyDashboard() {
                               </h5>
 
                               <p>
-                                {services.length >
+                                {servicesList.length >
                                 0
-                                  ? services.join(
+                                  ? servicesList.join(
                                       ', ',
                                     )
                                   : 'Beauty enquiry'}
@@ -2514,7 +2744,7 @@ function CustomerBeautyDashboard() {
                           booking.booking_date,
                         )
 
-                      const services =
+                      const servicesList =
                         getBookingServices(
                           booking,
                         )
@@ -2523,6 +2753,12 @@ function CustomerBeautyDashboard() {
                         isCompletedBooking(
                           booking,
                         )
+
+                      const serviceImg =
+                          getBookingServiceImage(
+                            booking,
+                            services,
+                          )
 
                       return (
                         <div
@@ -2544,6 +2780,24 @@ function CustomerBeautyDashboard() {
 
                           </div>
 
+                          <div className="customer-beauty-month-image">
+                            {serviceImg ? (
+                              <img
+                                src={serviceImg}
+                                alt={servicesList[0] || 'Service'}
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none'
+                                  const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                  if (fallback) fallback.style.display = 'flex'
+                                }}
+                              />
+                            ) : null}
+                            <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                              WF
+                            </span>
+                          </div>
+
 
                           <div className="customer-beauty-month-info">
 
@@ -2554,9 +2808,9 @@ function CustomerBeautyDashboard() {
                             </strong>
 
                             <span>
-                              {services.length >
+                              {servicesList.length >
                               0
-                                ? services.join(
+                                ? servicesList.join(
                                     ', ',
                                   )
                                 : 'Beauty service'}
@@ -2662,7 +2916,7 @@ function CustomerBeautyDashboard() {
                           enquiry.preferred_date,
                         )
 
-                      const services =
+                      const servicesList =
                         getEnquiryServices(
                           enquiry,
                         )
@@ -2670,6 +2924,12 @@ function CustomerBeautyDashboard() {
                       const completed =
                         isCompletedEnquiry(
                           enquiry,
+                        )
+
+                      const serviceImg =
+                        getEnquiryServiceImage(
+                          enquiry,
+                          services,
                         )
 
                       return (
@@ -2692,6 +2952,24 @@ function CustomerBeautyDashboard() {
 
                           </div>
 
+                          <div className="customer-beauty-month-image">
+                            {serviceImg ? (
+                              <img
+                                src={serviceImg}
+                                alt={servicesList[0] || 'Service'}
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none'
+                                  const fallback = e.currentTarget.nextElementSibling as HTMLElement | null
+                                  if (fallback) fallback.style.display = 'flex'
+                                }}
+                              />
+                            ) : null}
+                            <span style={{ display: serviceImg ? 'none' : 'flex' }}>
+                              WF
+                            </span>
+                          </div>
+
 
                           <div className="customer-beauty-month-info">
 
@@ -2702,9 +2980,9 @@ function CustomerBeautyDashboard() {
                             </strong>
 
                             <span>
-                              {services.length >
+                              {servicesList.length >
                               0
-                                ? services.join(
+                                ? servicesList.join(
                                     ', ',
                                   )
                                 : 'Beauty enquiry'}

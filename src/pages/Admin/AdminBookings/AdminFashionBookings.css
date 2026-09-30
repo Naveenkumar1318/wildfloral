@@ -187,6 +187,10 @@
   cursor: pointer;
 }
 
+.admin-fashion-modal-error {
+  margin: 16px 20px 0;
+}
+
 /* =========================================================
    STATISTICS
 ========================================================= */
@@ -593,6 +597,11 @@
 .admin-fashion-status.ready {
   background: #e8f7f0;
   color: #327452;
+}
+
+.admin-fashion-status.delivered {
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .admin-fashion-status.completed {
