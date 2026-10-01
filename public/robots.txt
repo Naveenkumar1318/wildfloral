@@ -78,4 +78,4 @@ Disallow: /admin/
 Disallow: /account/
 
 # Sitemap location
-Sitemap: https://www.wildfloral.online/sitemap.xml
+Sitemap: https://wildfloral.online/sitemap.xml
