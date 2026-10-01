@@ -2444,11 +2444,11 @@ function Services() {
   return (
     <main className="services-page">
       <SEO
-        title="Beauty & Fashion Services in Hosur | WildFloral"
-        description="Explore luxury beauty and fashion services at WildFloral in Hosur — bridal makeup, hair styling, skin therapies, custom couture, and doorstep experiences."
-        canonical="https://www.wildfloral.online/services"
-        schemas={servicesSchemas}
-      />
+  title="Beauty Services in Hosur | Bridal Makeup, Hair & Skincare | WildFloral"
+  description="Explore WildFloral beauty services in Hosur including bridal makeup, professional hair styling, facial and skincare treatments and personalized beauty services."
+  canonical="https://www.wildfloral.online/services"
+  schemas={servicesSchemas}
+/>
 
       {/* =================================================
           ASSIGNMENT HEADER BANNER

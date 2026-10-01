@@ -38,11 +38,11 @@ const Contact: React.FC = () => {
   return (
     <main className="contact-page">
       <SEO
-        title="Contact WildFloral | Neela Mega Nagar, Hosur"
-        description="Visit WildFloral studio at 3-1/2 Neela Mega Nagar, 1st Cross, Hosur. Call or WhatsApp +91 8838894677 to schedule your beauty or fashion appointment."
-        canonical="https://www.wildfloral.online/contact"
-        schemas={contactSchemas}
-      />
+  title="Contact Beauty Salon & Fashion Studio in Hosur | WildFloral"
+  description="Contact WildFloral in Hosur for beauty appointments, bridal makeup, hair styling, skincare, custom dress design and fashion consultations."
+  canonical="https://www.wildfloral.online/contact"
+  schemas={contactSchemas}
+/>
       {/* Top Ambient Glow Fields */}
       <div className="contact-ambient-glow glow-top-right"></div>
       <div className="contact-ambient-glow glow-top-left"></div>

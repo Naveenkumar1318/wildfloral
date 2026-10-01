@@ -817,11 +817,11 @@ context.drawImage(
   return (
     <main className="home-page">
       <SEO
-        title="WildFloral | Beauty & Fashion Studio in Hosur"
-        description="WildFloral is a luxury beauty and fashion studio in Hosur — bridal makeup, couture, custom outfit design and personalized consultations. Book your appointment."
-        canonical="https://www.wildfloral.online/"
-        schemas={homeSchemas}
-      />
+  title="Beauty Salon & Fashion Studio in Hosur | WildFloral"
+  description="WildFloral is a beauty salon and fashion studio in Hosur offering bridal makeup, hair styling, skincare, custom dress design, couture fashion and personalized appointments."
+  canonical="https://www.wildfloral.online/"
+  schemas={homeSchemas}
+/>
 
       {/* =====================================================
           HERO

@@ -1694,7 +1694,7 @@ function FashionHero({
   return (
     <section className="fashion-hero">
       <div className="fashion-hero-copy">
-        <span className="fashion-hero-eyebrow">WILDFLORAL ATELIER HOSUR</span>
+        <span className="fashion-hero-eyebrow">WILDFLORAL HOSUR</span>
 
         <h1>
           Custom Fashion Design in <em>Hosur</em>
@@ -2424,11 +2424,11 @@ function handleIncreaseCartItem(
   return (
     <main className="fashion-page">
       <SEO
-        title="Custom Fashion Design in Hosur | WildFloral"
-        description="Bespoke fashion design, bridal wear, couture tailoring, and personalized style consultations at WildFloral studio in Hosur. Book your fitting session."
-        canonical="https://www.wildfloral.online/fashion"
-        schemas={fashionSchemas}
-      />
+  title="Fashion Designer & Custom Dress Shop in Hosur | WildFloral"
+  description="WildFloral is a fashion studio in Hosur offering custom dress design, women's fashion, bespoke outfits, couture fashion and personalized styling."
+  canonical="https://www.wildfloral.online/fashion"
+  schemas={fashionSchemas}
+/>
       {/* HERO */}
       <FashionHero
         designs={designs}

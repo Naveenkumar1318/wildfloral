@@ -37,11 +37,11 @@ const About: React.FC = () => {
   return (
     <main className="about-page">
       <SEO
-        title="About WildFloral | Luxury Beauty & Fashion in Hosur"
-        description="Discover WildFloral in Hosur — where master artisans, private chamber sanctums, and elevated doorstep experiences create personalized beauty and couture fashion."
-        canonical="https://www.wildfloral.online/about"
-        schemas={aboutSchemas}
-      />
+  title="About WildFloral | Beauty & Fashion Studio in Hosur"
+  description="Learn about WildFloral, a beauty salon and fashion studio in Hosur offering bridal beauty, hair styling, skincare, custom dress design and personalized fashion services."
+  canonical="https://www.wildfloral.online/about"
+  schemas={aboutSchemas}
+/>
       {/* Background Ambient Glows */}
       <div className="ambient-glow glow-top"></div>
       <div className="ambient-glow glow-left"></div>
