@@ -2492,9 +2492,12 @@ function Services() {
             </div>
 
             <h1>
-              Beauty &amp; Fashion Services in{' '}
+              Beauty Services in
               <span>Hosur.</span>
             </h1>
+            <h2>Bridal Makeup</h2>
+<h2>Hair Styling</h2>
+<h2>Facial & Skincare</h2>
 
             <p>
               Explore WildFloral's full sanctuary of luxury beauty therapies, bridal makeup artistry, hair rituals, skincare, and bespoke haute couture tailoring in Hosur.

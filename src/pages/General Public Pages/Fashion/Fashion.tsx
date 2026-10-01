@@ -1697,7 +1697,7 @@ function FashionHero({
         <span className="fashion-hero-eyebrow">WILDFLORAL HOSUR</span>
 
         <h1>
-          Custom Fashion Design in <em>Hosur</em>
+          Custom Fashion Design & Dress Studio  <em>Hosur</em>
         </h1>
 
         <p className="fashion-hero-lead">
