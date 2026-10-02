@@ -1808,6 +1808,38 @@ if (
         )
       }
 
+      let customerProfileId =
+        profile?.id ?? null
+
+      if (!customerProfileId) {
+        const {
+          data: createdProfile,
+          error: createProfileError,
+        } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            full_name:
+              primaryPerson.name.trim() ||
+              null,
+            email:
+              primaryPerson.email.trim() ||
+              user.email ||
+              null,
+          })
+          .select('id')
+          .single()
+
+        if (createProfileError) {
+          throw new Error(
+            `Unable to create your customer profile: ${createProfileError.message}`,
+          )
+        }
+
+        customerProfileId =
+          createdProfile.id
+      }
+
       const customerName =
         primaryPerson.name.trim() ||
         profile?.full_name?.trim() ||
@@ -1914,7 +1946,7 @@ if (
         .from('bookings')
         .insert({
           customer_id:
-            user.id,
+            customerProfileId,
 
           service_id:
             primaryService.id,
