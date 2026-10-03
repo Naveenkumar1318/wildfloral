@@ -619,19 +619,22 @@ function AdminFashionOffers() {
             )
           }
 
+          const loadedSubcategories =
+            (subcategoriesResponse.data ??
+              []) as FashionSubcategory[]
+          const loadedDesigns =
+            (designsResponse.data ??
+              []) as FashionDesign[]
+
           setCategories(
             (categoriesResponse.data ??
               []) as FashionCategory[],
           )
-
           setSubcategories(
-            (subcategoriesResponse.data ??
-              []) as FashionSubcategory[],
+            loadedSubcategories,
           )
-
           setDesigns(
-            (designsResponse.data ??
-              []) as FashionDesign[],
+            loadedDesigns,
           )
 
           const rawOffers =
@@ -808,6 +811,57 @@ function AdminFashionOffers() {
               OfferTarget =
               existing.scope_type
 
+            let editCategoryIds =
+              existing.categoryIds
+            let editSubcategoryIds =
+              existing.subcategoryIds
+
+            /*
+             * Restore parents for older design offers
+             * that only saved design mappings.
+             */
+            if (
+              editTarget ===
+                'design' &&
+              existing.designIds.length > 0
+            ) {
+              const selectedDesigns =
+                loadedDesigns.filter(
+                  (design) =>
+                    existing.designIds.includes(
+                      design.id,
+                    ),
+                )
+
+              editSubcategoryIds =
+                Array.from(
+                  new Set([
+                    ...existing.subcategoryIds,
+                    ...selectedDesigns.map(
+                      (design) =>
+                        design.subcategory_id,
+                    ),
+                  ]),
+                )
+
+              editCategoryIds =
+                Array.from(
+                  new Set(
+                    loadedSubcategories
+                      .filter(
+                        (subcategory) =>
+                          editSubcategoryIds.includes(
+                            subcategory.id,
+                          ),
+                      )
+                      .map(
+                        (subcategory) =>
+                          subcategory.category_id,
+                      ),
+                  ),
+                )
+            }
+
             if (
               editTarget ===
               'subcategory'
@@ -832,10 +886,10 @@ function AdminFashionOffers() {
                   editTarget,
 
                 categoryIds:
-                  existing.categoryIds,
+                  editCategoryIds,
 
                 subcategoryIds:
-                  existing.subcategoryIds,
+                  editSubcategoryIds,
 
                 designIds:
                   existing.designIds,
@@ -887,10 +941,10 @@ function AdminFashionOffers() {
                   editTarget,
 
                 categoryIds:
-                  existing.categoryIds,
+                  editCategoryIds,
 
                 subcategoryIds:
-                  existing.subcategoryIds,
+                  editSubcategoryIds,
 
                 designIds:
                   existing.designIds,
@@ -1454,20 +1508,111 @@ function AdminFashionOffers() {
             designId,
           )
 
+        const design =
+          designs.find(
+            (item) =>
+              item.id === designId,
+          )
+
+        if (!design) {
+          return previous
+        }
+
+        const designIds =
+          exists
+            ? previous.designIds.filter(
+                (id) =>
+                  id !== designId,
+              )
+            : [
+                ...previous.designIds,
+                designId,
+              ]
+
+        if (
+          previous.target !==
+          'design'
+        ) {
+          return {
+            ...previous,
+            designIds,
+          }
+        }
+
+        if (exists) {
+          const remainingDesigns =
+            designs.filter(
+              (item) =>
+                designIds.includes(
+                  item.id,
+                ),
+            )
+
+          const subcategoryIds =
+            Array.from(
+              new Set(
+                remainingDesigns.map(
+                  (item) =>
+                    item.subcategory_id,
+                ),
+              ),
+            )
+
+          const categoryIds =
+            Array.from(
+              new Set(
+                subcategories
+                  .filter(
+                    (subcategory) =>
+                      subcategoryIds.includes(
+                        subcategory.id,
+                      ),
+                  )
+                  .map(
+                    (subcategory) =>
+                      subcategory.category_id,
+                  ),
+              ),
+            )
+
+          return {
+            ...previous,
+            designIds,
+            subcategoryIds,
+            categoryIds,
+          }
+        }
+
+        const subcategoryIds =
+          Array.from(
+            new Set([
+              ...previous.subcategoryIds,
+              design.subcategory_id,
+            ]),
+          )
+
+        const categoryIds =
+          Array.from(
+            new Set(
+              subcategories
+                .filter(
+                  (subcategory) =>
+                    subcategoryIds.includes(
+                      subcategory.id,
+                    ),
+                )
+                .map(
+                  (subcategory) =>
+                    subcategory.category_id,
+                ),
+            ),
+          )
+
         return {
           ...previous,
-
-          designIds:
-            exists
-              ? previous.designIds.filter(
-                  (id) =>
-                    id !==
-                    designId,
-                )
-              : [
-                  ...previous.designIds,
-                  designId,
-                ],
+          designIds,
+          subcategoryIds,
+          categoryIds,
         }
       },
     )
@@ -1740,11 +1885,33 @@ function AdminFashionOffers() {
       form.target ===
       'subcategory'
     ) {
+      /*
+       * Save parent categories.
+       * This is required so the edit page can
+       * restore the complete selection.
+       */
+      const categoryIds =
+        Array.from(
+          new Set(
+            subcategories
+              .filter(
+                (subcategory) =>
+                  form.subcategoryIds.includes(
+                    subcategory.id,
+                  ),
+              )
+              .map(
+                (subcategory) =>
+                  subcategory.category_id,
+              ),
+          ),
+        )
+
       if (
-        form.categoryIds.length
+        categoryIds.length
       ) {
         const categoryRows =
-          form.categoryIds.map(
+          categoryIds.map(
             (categoryId) => ({
               offer_id:
                 offerId,
@@ -1773,6 +1940,9 @@ function AdminFashionOffers() {
         }
       }
 
+      /*
+       * Save selected subcategories.
+       */
       if (
         form.subcategoryIds.length
       ) {
@@ -1806,6 +1976,10 @@ function AdminFashionOffers() {
         }
       }
 
+      /*
+       * Save selected designs only when
+       * Specific Designs is selected.
+       */
       if (
         form.subcategoryDesignMode ===
           'specific' &&
@@ -1847,17 +2021,14 @@ function AdminFashionOffers() {
     /*
      * SPECIFIC DESIGN
      *
-     * Save the parent subcategories
-     * as well as selected designs.
+     * Save parent categories and
+     * subcategories so the edit page can
+     * restore the complete selection.
      */
     if (
       form.target ===
       'design'
     ) {
-      /*
-       * Determine categories from
-       * selected subcategories.
-       */
       const categoryIds =
         Array.from(
           new Set(
@@ -1973,6 +2144,8 @@ function AdminFashionOffers() {
           )
         }
       }
+
+      return
     }
   }
 

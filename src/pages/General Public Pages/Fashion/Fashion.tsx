@@ -135,6 +135,7 @@ type FashionOffer = {
   is_active: boolean
   applies_to_all: boolean
   priority: number
+  scope_type: 'all' | 'category' | 'subcategory' | 'design'
 }
 
 type OfferCategory = { offer_id: string; category_id: string }
@@ -563,7 +564,8 @@ async function loadFashionData() {
         ends_at,
         is_active,
         applies_to_all,
-        priority
+        priority,
+        scope_type
       `)
       .eq('is_active', true)
       .order('priority', { ascending: false }),
@@ -678,32 +680,138 @@ function getApplicableOffer(
   offerScopes: OfferScope[],
   now: number,
 ): FashionOffer | null {
-  const applicable = offerScopes.filter((scope) => {
-    if (!isOfferLive(scope.offer, now)) return false
-    if (scope.offer.applies_to_all) return true
-    if (scope.designIds.includes(design.id)) return true
+  const applicable =
+    offerScopes.filter(
+      (scope) => {
+        const offer =
+          scope.offer
 
-    if (
-      design.subcategory?.id &&
-      scope.subcategoryIds.includes(design.subcategory.id)
-    ) {
-      return true
-    }
+        if (
+          !isOfferLive(
+            offer,
+            now,
+          )
+        ) {
+          return false
+        }
 
-    if (
-      design.category?.id &&
-      scope.categoryIds.includes(design.category.id)
-    ) {
-      return true
-    }
+        /*
+         * SPECIFIC DESIGN
+         * Highest specificity.
+         */
+        if (
+          offer.scope_type ===
+          'design'
+        ) {
+          return scope.designIds.includes(
+            design.id,
+          )
+        }
 
-    return false
-  })
+        /*
+         * SUBCATEGORY
+         */
+        if (
+          offer.scope_type ===
+          'subcategory'
+        ) {
+          if (
+            scope.designIds.length > 0
+          ) {
+            return scope.designIds.includes(
+              design.id,
+            )
+          }
 
-  if (!applicable.length) return null
+          return Boolean(
+            design.subcategory?.id &&
+              scope.subcategoryIds.includes(
+                design.subcategory.id,
+              ),
+          )
+        }
 
-  return [...applicable].sort(
-    (a, b) => Number(b.offer.priority) - Number(a.offer.priority),
+        /*
+         * MAIN CATEGORY
+         */
+        if (
+          offer.scope_type ===
+          'category'
+        ) {
+          return Boolean(
+            design.category?.id &&
+              scope.categoryIds.includes(
+                design.category.id,
+              ),
+          )
+        }
+
+        /*
+         * ALL FASHION
+         */
+        if (
+          offer.scope_type ===
+          'all'
+        ) {
+          return (
+            offer.applies_to_all ===
+            true
+          )
+        }
+
+        return false
+      },
+    )
+
+  if (
+    applicable.length ===
+    0
+  ) {
+    return null
+  }
+
+  /*
+   * More specific offer always
+   * takes precedence.
+   */
+  const scopeRank: Record<
+    FashionOffer['scope_type'],
+    number
+  > = {
+    design: 4,
+    subcategory: 3,
+    category: 2,
+    all: 1,
+  }
+
+  return [
+    ...applicable,
+  ].sort(
+    (a, b) => {
+      const scopeDifference =
+        scopeRank[
+          b.offer.scope_type
+        ] -
+        scopeRank[
+          a.offer.scope_type
+        ]
+
+      if (
+        scopeDifference !==
+        0
+      ) {
+        return scopeDifference
+      }
+
+      return (
+        Number(
+          b.offer.priority,
+        ) -
+        Number(
+          a.offer.priority,
+        )
+      )
+    },
   )[0].offer
 }
 
