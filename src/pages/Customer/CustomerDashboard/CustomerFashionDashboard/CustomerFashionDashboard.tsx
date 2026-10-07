@@ -50,6 +50,21 @@ type MonthlyOrder = {
   orders: FashionOrder[]
 }
 
+type CustomDesignEnquiry = {
+  id: string
+  name: string
+  design_type: string
+  preferred_date: string | null
+  reference_image_url: string | null
+  status:
+    | 'new'
+    | 'contacted'
+    | 'in_progress'
+    | 'accepted'
+    | 'rejected'
+    | 'closed'
+}
+
 const RECENT_ORDER_LIMIT = 5
 
 /* =========================================================
@@ -141,6 +156,11 @@ function CustomerFashionDashboard() {
   ] = useState<FashionOrder[]>([])
 
   const [
+    customEnquiries,
+    setCustomEnquiries,
+  ] = useState<CustomDesignEnquiry[]>([])
+
+  const [
     cartCount,
     setCartCount,
   ] = useState(0)
@@ -184,6 +204,7 @@ function CustomerFashionDashboard() {
 
         if (!user) {
           setOrders([])
+          setCustomEnquiries([])
           setCartCount(
             getFashionCartCount(),
           )
@@ -191,6 +212,32 @@ function CustomerFashionDashboard() {
 
           return
         }
+
+        const { data: enquiryRows, error: enquiryError } =
+          await supabase
+            .from('custom_design_enquiries')
+            .select(
+              `
+                id,
+                name,
+                design_type,
+                preferred_date,
+                reference_image_url,
+                status
+              `,
+            )
+            .eq('customer_id', user.id)
+            .order('created_at', {
+              ascending: false,
+            })
+
+        if (enquiryError) {
+          throw enquiryError
+        }
+
+        setCustomEnquiries(
+          (enquiryRows ?? []) as CustomDesignEnquiry[],
+        )
 
         const {
           data,
@@ -349,6 +396,21 @@ function CustomerFashionDashboard() {
 
   const totalOrders =
     orders.length
+
+  const upcomingEnquiries =
+    customEnquiries.filter(
+      (enquiry) =>
+        enquiry.status === 'accepted',
+    )
+
+  const completedEnquiries =
+    customEnquiries.filter(
+      (enquiry) =>
+        enquiry.status === 'rejected',
+    )
+
+  const totalEnquiries =
+    customEnquiries.length
 
   /* =======================================================
      RECENT ORDERS
@@ -700,7 +762,7 @@ function CustomerFashionDashboard() {
                 </span>
 
                 <strong>
-                  0
+                  {totalEnquiries}
                 </strong>
 
                 <p>
@@ -1241,31 +1303,92 @@ function CustomerFashionDashboard() {
                     </span>
 
                     <h3>
-                      Our Upcoming Enquiries
+                      <span className="fashion-box-title-icon" aria-hidden="true">💬</span>
+                      Upcoming Enquiries
                     </h3>
                   </div>
 
                   <strong>
-                    0
+                    {upcomingEnquiries.length}
                   </strong>
 
                 </div>
 
-                <div className="fashion-custom-empty">
+                <div className="fashion-custom-enquiry-list">
+                  {upcomingEnquiries.length > 0 ? (
+                    upcomingEnquiries.map((enquiry) => {
+                      const dateObj = enquiry.preferred_date
+                        ? new Date(enquiry.preferred_date)
+                        : null
+                      const isValidDate =
+                        dateObj && !Number.isNaN(dateObj.getTime())
 
-                  <div className="fashion-empty-icon">
-                    ?
-                  </div>
+                      return (
+                        <div
+                          key={enquiry.id}
+                          className="fashion-enquiry-item"
+                        >
+                          <div className="fashion-enquiry-date">
+                            <strong>
+                              {isValidDate
+                                ? dateObj.getDate()
+                                : '—'}
+                            </strong>
 
-                  <h4>
-                    No upcoming enquiries
-                  </h4>
+                            <span>
+                              {isValidDate
+                                ? dateObj
+                                    .toLocaleDateString('en-US', {
+                                      month: 'short',
+                                    })
+                                    .toUpperCase()
+                                : 'DATE'}
+                            </span>
+                          </div>
 
-                  <p>
-                    Your active customization
-                    enquiries will appear here.
-                  </p>
+                          <div className="fashion-enquiry-image">
+                            {enquiry.reference_image_url ? (
+                              <img
+                                src={enquiry.reference_image_url}
+                                alt={enquiry.design_type}
+                              />
+                            ) : (
+                              <span>WF</span>
+                            )}
+                          </div>
 
+                          <div className="fashion-enquiry-details">
+                            <strong>
+                              {enquiry.name}
+                            </strong>
+
+                            <p>
+                              {enquiry.design_type}
+                            </p>
+
+                            <span>
+                              Custom Fashion Enquiry
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div className="fashion-custom-empty">
+                      <div className="fashion-empty-icon">
+                        ?
+                      </div>
+
+                      <h4>
+                        No upcoming enquiries
+                      </h4>
+
+                      <p>
+                        Your accepted fashion enquiries
+                        will appear here.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
               </article>
@@ -1284,31 +1407,92 @@ function CustomerFashionDashboard() {
                     </span>
 
                     <h3>
+                      <span className="fashion-box-title-icon" aria-hidden="true">✓</span>
                       Completed Enquiries
                     </h3>
                   </div>
 
                   <strong>
-                    0
+                    {completedEnquiries.length}
                   </strong>
 
                 </div>
 
-                <div className="fashion-custom-empty">
+                <div className="fashion-custom-enquiry-list">
+                  {completedEnquiries.length > 0 ? (
+                    completedEnquiries.map((enquiry) => {
+                      const dateObj = enquiry.preferred_date
+                        ? new Date(enquiry.preferred_date)
+                        : null
+                      const isValidDate =
+                        dateObj && !Number.isNaN(dateObj.getTime())
 
-                  <div className="fashion-empty-icon">
-                    ✓
-                  </div>
+                      return (
+                        <div
+                          key={enquiry.id}
+                          className="fashion-enquiry-item"
+                        >
+                          <div className="fashion-enquiry-date">
+                            <strong>
+                              {isValidDate
+                                ? dateObj.getDate()
+                                : '—'}
+                            </strong>
 
-                  <h4>
-                    No completed enquiries
-                  </h4>
+                            <span>
+                              {isValidDate
+                                ? dateObj
+                                    .toLocaleDateString('en-US', {
+                                      month: 'short',
+                                    })
+                                    .toUpperCase()
+                                : 'DATE'}
+                            </span>
+                          </div>
 
-                  <p>
-                    Completed customization
-                    enquiries will appear here.
-                  </p>
+                          <div className="fashion-enquiry-image">
+                            {enquiry.reference_image_url ? (
+                              <img
+                                src={enquiry.reference_image_url}
+                                alt={enquiry.design_type}
+                              />
+                            ) : (
+                              <span>WF</span>
+                            )}
+                          </div>
 
+                          <div className="fashion-enquiry-details">
+                            <strong>
+                              {enquiry.name}
+                            </strong>
+
+                            <p>
+                              {enquiry.design_type}
+                            </p>
+
+                            <span>
+                              Rejected enquiry
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div className="fashion-custom-empty">
+                      <div className="fashion-empty-icon">
+                        ✓
+                      </div>
+
+                      <h4>
+                        No completed enquiries
+                      </h4>
+
+                      <p>
+                        Your completed fashion enquiries
+                        will appear here.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
               </article>

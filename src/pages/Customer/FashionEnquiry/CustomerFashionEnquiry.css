@@ -1,609 +1,1440 @@
 /* =========================================================
-   CUSTOMER FASHION ENQUIRY
+   CUSTOMER FASHION ENQUIRY - MATCHING BEAUTY ENQUIRIES STYLING
 ========================================================= */
+
+.customer-fashion-enquiry,
+.customer-fashion-enquiry * {
+  box-sizing: border-box;
+}
 
 .customer-fashion-enquiry {
   width: 100%;
-  overflow: hidden;
-
-  background: #fbfcfa;
-  color: #173d2d;
+  max-width: 1320px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 36px 38px 80px;
+  color: #26382f;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(214, 234, 211, 0.6), transparent 30rem),
+    linear-gradient(180deg, #f8fbf7 0%, #f1f7f0 100%);
 }
 
-
 /* =========================================================
-   HERO
+   HEADER
 ========================================================= */
 
-.customer-fashion-enquiry-hero {
-  min-height: 560px;
-
+.customer-fashion-enquiry-header {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  padding: 80px 24px;
-
-  text-align: center;
-
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 24px;
+  padding: 32px 36px;
+  overflow: hidden;
+  border: 1px solid #d5e4d3;
+  border-radius: 24px;
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      #edf5eb 0%,
-      #f8faf7 42%,
-      #ffffff 100%
-    );
+    linear-gradient(118deg, rgba(255, 255, 255, 0.98), rgba(246, 251, 245, 0.94)),
+    #ffffff;
+  box-shadow: 0 16px 40px rgba(42, 79, 52, 0.08);
 }
 
-.customer-fashion-enquiry-hero-content {
-  width: 100%;
-  max-width: 820px;
+.customer-fashion-enquiry-header::after {
+  position: absolute;
+  right: -110px;
+  bottom: -160px;
+  width: 380px;
+  height: 380px;
+  border: 1px solid rgba(100, 143, 93, 0.15);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 25px rgba(100, 143, 93, 0.045),
+    0 0 0 54px rgba(100, 143, 93, 0.03);
+  content: '';
+  pointer-events: none;
 }
 
-.customer-fashion-enquiry-eyebrow {
-  display: inline-block;
+.customer-fashion-enquiry-header > * {
+  position: relative;
+  z-index: 1;
+}
 
-  margin-bottom: 22px;
-
-  color: #66865f;
-
+.customer-fashion-enquiry-back-button {
+  appearance: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid #d3e1d1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #556c60;
+  cursor: pointer;
   font-size: 11px;
   font-weight: 700;
-
-  letter-spacing: 0.2em;
-}
-
-.customer-fashion-enquiry-hero h1 {
-  margin: 0;
-
-  color: #173d2d;
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
-  font-size: clamp(48px, 7vw, 82px);
-
-  font-weight: 400;
-
-  line-height: 1.02;
-
-  letter-spacing: -0.03em;
-}
-
-.customer-fashion-enquiry-hero h1 span {
-  display: block;
-
-  margin-top: 8px;
-
-  color: #719269;
-
-  font-style: italic;
-}
-
-.customer-fashion-enquiry-hero-content > p {
-  max-width: 650px;
-
-  margin: 28px auto 0;
-
-  color: #6f7f76;
-
-  font-size: 16px;
-
-  line-height: 1.8;
-}
-
-
-/* =========================================================
-   HERO ACTIONS
-========================================================= */
-
-.customer-fashion-enquiry-actions {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 14px;
-
-  margin-top: 34px;
-}
-
-.customer-fashion-enquiry-whatsapp,
-.customer-fashion-enquiry-call {
-  min-width: 155px;
-
-  padding: 15px 25px;
-
-  border-radius: 999px;
-
-  text-decoration: none;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-
+  letter-spacing: 0.8px;
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.customer-fashion-enquiry-whatsapp {
-  background: #234f3b;
-
-  color: #ffffff;
-
-  box-shadow:
-    0 10px 25px rgba(35, 79, 59, 0.16);
+.customer-fashion-enquiry-back-button span {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.2s ease;
 }
 
-.customer-fashion-enquiry-call {
-  border: 1px solid #cbd8c8;
-
-  background: #ffffff;
-
-  color: #315740;
+.customer-fashion-enquiry-back-button:hover {
+  border-color: #b9cdb7;
+  background: #f4f8f3;
+  color: #315842;
+  box-shadow: 0 6px 16px rgba(42, 65, 50, 0.08);
+  transform: translateY(-1px);
 }
 
-.customer-fashion-enquiry-whatsapp:hover,
-.customer-fashion-enquiry-call:hover {
-  transform: translateY(-2px);
-}
-
-
-/* =========================================================
-   CUSTOMIZATION
-========================================================= */
-
-.customer-fashion-enquiry-customization {
-  padding: 100px 24px;
-
-  background: #ffffff;
+.customer-fashion-enquiry-back-button:hover span {
+  transform: translateX(-2px);
 }
 
 .customer-fashion-enquiry-heading {
-  max-width: 720px;
-
-  margin: 0 auto 55px;
-
-  text-align: center;
+  flex: 1;
+  max-width: 660px;
 }
 
-.customer-fashion-enquiry-heading > span {
-  color: #76936f;
-
+.customer-fashion-enquiry-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #648858;
   font-size: 10px;
   font-weight: 700;
-
-  letter-spacing: 0.18em;
+  letter-spacing: 3px;
+  line-height: 1.4;
 }
 
-.customer-fashion-enquiry-heading h2 {
-  margin: 14px 0 15px;
-
-  color: #173d2d;
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
-  font-size: clamp(36px, 5vw, 55px);
-
+.customer-fashion-enquiry-heading h1 {
+  margin: 0;
+  color: #1c3529;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 3.8vw, 52px);
   font-weight: 400;
-
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: -1.8px;
 }
 
-.customer-fashion-enquiry-heading h2 em {
-  display: block;
-
-  color: #719269;
-
+.customer-fashion-enquiry-heading h1 span {
+  color: #4b7f43;
   font-style: italic;
 }
 
 .customer-fashion-enquiry-heading p {
-  max-width: 600px;
-
-  margin: 0 auto;
-
-  color: #77857d;
-
-  font-size: 14px;
-
-  line-height: 1.8;
+  max-width: 580px;
+  margin: 12px 0 0;
+  color: #687a6e;
+  font-size: 13px;
+  line-height: 1.65;
 }
 
-
-/* =========================================================
-   CUSTOMIZATION GRID
-========================================================= */
-
-.customer-fashion-enquiry-grid {
-  width: 100%;
-  max-width: 1150px;
-
-  margin: 0 auto;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
+.customer-fashion-enquiry-header-side {
+  display: flex;
+  align-items: center;
   gap: 16px;
 }
 
-.customer-fashion-enquiry-card {
-  min-height: 230px;
-
-  padding: 30px 24px;
-
-  border: 1px solid #e4ebe2;
-
+.customer-fashion-enquiry-count {
+  flex: 0 0 120px;
+  min-height: 94px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 14px;
+  border: 1px solid #d5e4d3;
   border-radius: 18px;
-
-  background: #fbfcfa;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.customer-fashion-enquiry-card:hover {
-  transform: translateY(-5px);
-
-  box-shadow:
-    0 18px 40px rgba(35, 65, 45, 0.07);
-}
-
-.customer-fashion-enquiry-card > span {
-  display: block;
-
-  margin-bottom: 35px;
-
-  color: #91a58b;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  letter-spacing: 0.1em;
-}
-
-.customer-fashion-enquiry-card h3 {
-  margin: 0 0 12px;
-
-  color: #244b38;
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
-  font-size: 23px;
-
-  font-weight: 500;
-}
-
-.customer-fashion-enquiry-card p {
-  margin: 0;
-
-  color: #78857e;
-
-  font-size: 12px;
-
-  line-height: 1.7;
-}
-
-
-/* =========================================================
-   CONTACT
-========================================================= */
-
-.customer-fashion-enquiry-contact {
-  padding: 100px 24px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f0f6ee,
-      #f9fbf8
-    );
-}
-
-.customer-fashion-enquiry-contact-card {
-  width: 100%;
-  max-width: 850px;
-
-  margin: 0 auto;
-
-  padding: 65px 50px;
-
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 30px rgba(42, 79, 52, 0.08);
   text-align: center;
-
-  background: #ffffff;
-
-  border: 1px solid #e0e9dd;
-
-  border-radius: 28px;
-
-  box-shadow:
-    0 20px 60px rgba(35, 65, 45, 0.06);
 }
 
-.customer-fashion-enquiry-contact-eyebrow {
-  color: #719269;
+.customer-fashion-enquiry-count span {
+  display: block;
+  color: #839788;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
 
+.customer-fashion-enquiry-count strong {
+  display: block;
+  margin-top: 6px;
+  color: #4f8045;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.customer-fashion-enquiry-header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.customer-fashion-enquiry-new-btn,
+.customer-fashion-enquiry-refresh {
+  appearance: none;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 11px;
   font-size: 10px;
   font-weight: 700;
-
-  letter-spacing: 0.18em;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.customer-fashion-enquiry-contact-card h2 {
-  margin: 18px 0 15px;
-
-  color: #173d2d;
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
-  font-size: clamp(38px, 5vw, 58px);
-
-  font-weight: 400;
-
-  line-height: 1.05;
+.customer-fashion-enquiry-new-btn {
+  border: 0;
+  background: linear-gradient(135deg, #4a8061, #286448);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(37, 116, 87, 0.16);
 }
 
-.customer-fashion-enquiry-contact-card h2 span {
-  display: block;
-
-  color: #719269;
-
-  font-style: italic;
+.customer-fashion-enquiry-new-btn:hover {
+  background: linear-gradient(135deg, #3f7055, #1f543c);
+  box-shadow: 0 8px 18px rgba(37, 116, 87, 0.22);
+  transform: translateY(-1px);
 }
 
-.customer-fashion-enquiry-contact-card > p {
-  max-width: 580px;
-
-  margin: 0 auto;
-
-  color: #748179;
-
-  font-size: 14px;
-
-  line-height: 1.8;
+.customer-fashion-enquiry-refresh {
+  border: 1px solid #d5e4d3;
+  background: rgba(255, 255, 255, 0.9);
+  color: #556c60;
 }
 
+.customer-fashion-enquiry-refresh:hover:not(:disabled) {
+  border-color: #b9cdb7;
+  background: #f4f8f3;
+  color: #315842;
+  transform: translateY(-1px);
+}
+
+.customer-fashion-enquiry-refresh:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
 /* =========================================================
-   PHONE
+   FILTERS
 ========================================================= */
 
-.customer-fashion-enquiry-phone {
-  margin-top: 35px;
+.customer-fashion-enquiry-filters {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  margin-bottom: 22px;
+  border: 1px solid #d5e4d3;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 24px rgba(42, 79, 52, 0.045);
 }
 
-.customer-fashion-enquiry-phone small {
-  display: block;
+.customer-fashion-enquiry-filters button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 11px;
+  color: #607267;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
 
-  margin-bottom: 9px;
-
-  color: #849189;
-
+.customer-fashion-enquiry-filters button strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 20px;
+  background: #eef3ec;
+  color: #5c7263;
   font-size: 9px;
   font-weight: 700;
-
-  letter-spacing: 0.17em;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.customer-fashion-enquiry-phone a {
-  color: #234f3b;
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
-  font-size: clamp(28px, 4vw, 40px);
-
-  text-decoration: none;
-
-  letter-spacing: 0.03em;
+.customer-fashion-enquiry-filters button:hover {
+  background: #eff6ee;
+  color: #2e553a;
+  transform: translateY(-1px);
 }
 
-
-/* =========================================================
-   CONTACT BUTTONS
-========================================================= */
-
-.customer-fashion-enquiry-contact-actions {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 12px;
-
-  margin-top: 30px;
+.customer-fashion-enquiry-filters button:focus-visible {
+  outline: 3px solid rgba(74, 127, 66, 0.25);
+  outline-offset: 1px;
 }
 
-.customer-fashion-enquiry-contact-whatsapp,
-.customer-fashion-enquiry-contact-call {
-  min-width: 190px;
-
-  padding: 14px 22px;
-
-  border-radius: 999px;
-
-  text-decoration: none;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  letter-spacing: 0.07em;
-
-  transition:
-    transform 0.25s ease;
+.customer-fashion-enquiry-filters button.active {
+  background: linear-gradient(135deg, #4a7f42, #35692f);
+  color: #ffffff;
+  box-shadow: 0 7px 16px rgba(57, 106, 50, 0.18);
 }
 
-.customer-fashion-enquiry-contact-whatsapp {
-  background: #234f3b;
-
+.customer-fashion-enquiry-filters button.active strong {
+  background: rgba(255, 255, 255, 0.25);
   color: #ffffff;
 }
 
-.customer-fashion-enquiry-contact-call {
-  border: 1px solid #cbd8c8;
+/* =========================================================
+   STATES
+========================================================= */
 
-  background: #ffffff;
-
-  color: #315740;
+.customer-fashion-enquiry-state,
+.customer-fashion-enquiry-empty {
+  width: 100%;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  border: 1px solid #d7e5d5;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 12px 30px rgba(42, 79, 52, 0.055);
+  text-align: center;
 }
 
-.customer-fashion-enquiry-contact-whatsapp:hover,
-.customer-fashion-enquiry-contact-call:hover {
+.customer-fashion-enquiry-state p,
+.customer-fashion-enquiry-empty p {
+  margin: 12px 0 0;
+  color: #728479;
+  font-size: 13px;
+  max-width: 540px;
+}
+
+.customer-fashion-enquiry-error {
+  border-color: #ead9d4;
+  background: #fffdfc;
+  gap: 12px;
+}
+
+.customer-fashion-enquiry-error > span {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f7ebe8;
+  color: #a76b5d;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.customer-fashion-enquiry-error strong {
+  color: #7c5148;
+  font-size: 15px;
+}
+
+.customer-fashion-enquiry-error p {
+  margin-top: 6px;
+  color: #8c6760;
+}
+
+.customer-fashion-enquiry-retry-btn {
+  margin-top: 8px;
+  appearance: none;
+  border: 0;
+  padding: 8px 18px;
+  border-radius: 10px;
+  background: #49372d;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.customer-fashion-enquiry-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2.5px solid #dfe8dd;
+  border-top-color: #4f8045;
+  border-radius: 50%;
+  animation: customer-fashion-spin 0.8s linear infinite;
+}
+
+@keyframes customer-fashion-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.customer-fashion-enquiry-empty-number {
+  color: #8ca27d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 26px;
+}
+
+.customer-fashion-enquiry-empty h2 {
+  margin: 12px 0 0;
+  color: #243b2f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.customer-fashion-enquiry-start-btn {
+  margin-top: 20px;
+  appearance: none;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4a8061, #286448);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(37, 116, 87, 0.16);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.customer-fashion-enquiry-start-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #3f7055, #1f543c);
+}
+
+/* =========================================================
+   ENQUIRY LIST
+========================================================= */
+
+.customer-fashion-enquiry-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================================================
+   ENQUIRY CARD
+========================================================= */
+
+.customer-fashion-enquiry-card {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #d8e6d6;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(44, 65, 52, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.customer-fashion-enquiry-card:hover {
+  border-color: #b7ceb3;
+  box-shadow: 0 16px 36px rgba(44, 65, 52, 0.1);
   transform: translateY(-2px);
 }
 
-
 /* =========================================================
-   NOTE
+   CARD HEADER
 ========================================================= */
 
-.customer-fashion-enquiry-note {
-  max-width: 500px;
-
-  margin: 35px auto 0 !important;
-
-  color: #89948e !important;
-
-  font-size: 11px !important;
-
-  line-height: 1.7 !important;
+.customer-fashion-enquiry-card-header {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e4ede2;
+  background: linear-gradient(180deg, #ffffff, #fbfdfb);
 }
 
+.customer-fashion-enquiry-card-header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.customer-fashion-enquiry-card-header > div > span {
+  color: #89988e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.customer-fashion-enquiry-card-header > div > strong {
+  color: #20382d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
 
 /* =========================================================
-   TABLET
+   STATUS BADGES
 ========================================================= */
 
-@media (max-width: 900px) {
-  .customer-fashion-enquiry-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+.customer-fashion-enquiry-status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 29px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+}
+
+.customer-fashion-enquiry-status i {
+  width: 5px;
+  height: 5px;
+  display: block;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.customer-fashion-enquiry-status.status-new {
+  border-color: #dcead6;
+  background: #edf6ea;
+  color: #558739;
+}
+
+.customer-fashion-enquiry-status.status-contacted-accepted {
+  border-color: #cfe5c8;
+  background: #e7f4e2;
+  color: #3f7b30;
+}
+
+.customer-fashion-enquiry-status.status-contacted-rejected {
+  border-color: #f0dad5;
+  background: #fbf0ee;
+  color: #a8584b;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.customer-fashion-enquiry-card-body {
+  width: 100%;
+  padding: 22px 24px;
+}
+
+.customer-fashion-enquiry-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.customer-fashion-enquiry-index {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cfe0cc;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #eef7eb, #e1efdd);
+  color: #4f8045;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.customer-fashion-enquiry-main h2 {
+  margin: 0;
+  color: #203a2c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.customer-fashion-enquiry-main p {
+  margin: 4px 0 0;
+  color: #829286;
+  font-size: 11px;
+}
+
+/* =========================================================
+   STATUS MESSAGE
+========================================================= */
+
+.customer-fashion-enquiry-status-message {
+  margin-top: 16px;
+  padding: 13px 16px;
+  border: 1px solid #dfe7de;
+  border-radius: 12px;
+  background: #f8faf7;
+}
+
+.customer-fashion-enquiry-status-message strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.customer-fashion-enquiry-status-message p {
+  margin: 4px 0 0;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.status-message-new {
+  border-color: #dce8d7;
+  background: #f5f9f2;
+}
+
+.status-message-new strong {
+  color: #558739;
+}
+
+.status-message-new p {
+  color: #677d63;
+}
+
+.status-message-contacted-accepted {
+  border-color: #cfdfc7;
+  background: #f1f8ee;
+}
+
+.status-message-contacted-accepted strong {
+  color: #3f7b30;
+}
+
+.status-message-contacted-accepted p {
+  color: #54744d;
+}
+
+.status-message-contacted-rejected {
+  border-color: #f0dad5;
+  background: #fcf5f3;
+}
+
+.status-message-contacted-rejected strong {
+  color: #a8584b;
+}
+
+.status-message-contacted-rejected p {
+  color: #8b5f58;
+}
+
+/* =========================================================
+   INFO GRID
+========================================================= */
+
+.customer-fashion-enquiry-info-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid #d9e6d7;
+  border-radius: 14px;
+  background: #f8fbf7;
+}
+
+.customer-fashion-enquiry-info-card > div {
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 13px 18px;
+  border-right: 1px solid #d9e6d7;
+}
+
+.customer-fashion-enquiry-info-card > div:last-child {
+  border-right: 0;
+}
+
+.customer-fashion-enquiry-info-card span {
+  margin-bottom: 6px;
+  color: #89988e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.customer-fashion-enquiry-info-card strong {
+  color: #243d31;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.customer-fashion-enquiry-accent-value {
+  color: #4d8044 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px !important;
+}
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.customer-fashion-enquiry-card-footer {
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 24px;
+  border-top: 1px solid #e2ebe0;
+  background: #fbfdfb;
+}
+
+.customer-fashion-enquiry-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.customer-fashion-enquiry-summary span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid #dce8da;
+  border-radius: 20px;
+  background: #f1f7ef;
+  color: #647a6b;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   CARD ACTIONS
+========================================================= */
+
+.customer-fashion-enquiry-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.customer-fashion-enquiry-view-button {
+  appearance: none;
+  border: 0;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4a8061, #286448);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  box-shadow: 0 6px 14px rgba(37, 116, 87, 0.15);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.customer-fashion-enquiry-view-button:hover {
+  background: linear-gradient(135deg, #3f7055, #1f543c);
+  box-shadow: 0 8px 18px rgba(37, 116, 87, 0.22);
+  transform: translateY(-1px);
+}
+
+.customer-fashion-enquiry-view-button span {
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.customer-fashion-enquiry-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 32px;
+}
+
+.customer-fashion-enquiry-pagination-button,
+.customer-fashion-enquiry-pagination-pages button {
+  appearance: none;
+  min-width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d5e4d3;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #65776c;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-fashion-enquiry-pagination-button:hover:not(:disabled),
+.customer-fashion-enquiry-pagination-pages button:hover {
+  background: #f1f7ef;
+  border-color: #b7ceb3;
+}
+
+.customer-fashion-enquiry-pagination-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.customer-fashion-enquiry-pagination-pages {
+  display: flex;
+  gap: 5px;
+}
+
+.customer-fashion-enquiry-pagination-pages button.active {
+  border-color: #3d7137;
+  background: linear-gradient(135deg, #4a7f42, #35692f);
+  color: #ffffff;
+}
+
+/* =========================================================
+   MODAL BACKDROP
+========================================================= */
+
+.customer-fashion-enquiry-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(28, 42, 34, 0.52);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.customer-fashion-enquiry-modal {
+  position: relative;
+  width: min(980px, 100%);
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #d4e3d2;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 35px 90px rgba(20, 36, 27, 0.26);
+}
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.customer-fashion-enquiry-modal-header {
+  min-height: 84px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 28px;
+  border-bottom: 1px solid #e1ebe0;
+  background: linear-gradient(118deg, #ffffff, #f7fbf6);
+}
+
+.customer-fashion-enquiry-modal-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.customer-fashion-enquiry-modal-header > div:first-child > span {
+  color: #88988d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.customer-fashion-enquiry-modal-header h2 {
+  margin: 0;
+  color: #20392d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.customer-fashion-enquiry-modal-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customer-fashion-enquiry-modal-close {
+  appearance: none;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d6e4d4;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #5c6c62;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.customer-fashion-enquiry-modal-close:hover {
+  border-color: #b9cdb7;
+  background: #f1f7ef;
+  color: #254d37;
+}
+
+/* =========================================================
+   MODAL CONTENT
+========================================================= */
+
+.customer-fashion-enquiry-modal-content {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 28px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: #cad7c8 transparent;
+}
+
+.customer-fashion-enquiry-modal-content::-webkit-scrollbar {
+  width: 7px;
+}
+
+.customer-fashion-enquiry-modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customer-fashion-enquiry-modal-content::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #cad7c8;
+}
+
+/* =========================================================
+   MODAL STATUS
+========================================================= */
+
+.customer-fashion-enquiry-detail-status {
+  margin-bottom: 22px;
+  padding: 16px 20px;
+  border: 1px solid #dfe7de;
+  border-radius: 14px;
+}
+
+.customer-fashion-enquiry-detail-status > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #88988d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.customer-fashion-enquiry-detail-status > strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.customer-fashion-enquiry-detail-status > p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   MODAL TOP GRID
+========================================================= */
+
+.customer-fashion-enquiry-modal-top-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.customer-fashion-enquiry-modal-top-grid > div {
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 13px 16px;
+  border: 1px solid #d9e6d7;
+  border-radius: 13px;
+  background: #f7fbf6;
+}
+
+.customer-fashion-enquiry-modal-top-grid span {
+  margin-bottom: 6px;
+  color: #89988e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.customer-fashion-enquiry-modal-top-grid strong {
+  color: #243c30;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   DETAIL SECTION
+========================================================= */
+
+.customer-fashion-enquiry-detail-section {
+  width: 100%;
+  margin-bottom: 26px;
+}
+
+.customer-fashion-enquiry-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.customer-fashion-enquiry-section-heading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.customer-fashion-enquiry-section-heading span {
+  color: #88988d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.customer-fashion-enquiry-section-heading h3 {
+  margin: 0;
+  color: #243c30;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* =========================================================
+   SPECS GRID
+========================================================= */
+
+.customer-fashion-enquiry-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.customer-fashion-enquiry-spec-card {
+  padding: 14px 16px;
+  border: 1px solid #dce8da;
+  border-radius: 12px;
+  background: #f8faf7;
+}
+
+.customer-fashion-enquiry-spec-card span {
+  display: block;
+  margin-bottom: 6px;
+  color: #89988e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.customer-fashion-enquiry-spec-card strong {
+  color: #263d31;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   REFERENCE CARD
+========================================================= */
+
+.customer-fashion-enquiry-reference-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border: 1px solid #dce8da;
+  border-radius: 14px;
+  background: #f8faf7;
+}
+
+.customer-fashion-enquiry-reference-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d5e4d3;
+}
+
+.customer-fashion-enquiry-reference-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.customer-fashion-enquiry-reference-info span {
+  color: #89988e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.customer-fashion-enquiry-reference-info a {
+  display: inline-flex;
+  align-items: center;
+  color: #286448;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.customer-fashion-enquiry-reference-info a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.customer-fashion-enquiry-notes {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border: 1px solid #dfe7de;
+  border-radius: 13px;
+  background: #f8faf7;
+}
+
+.customer-fashion-enquiry-notes > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #88988d;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.customer-fashion-enquiry-notes p {
+  margin: 0;
+  color: #556c60;
+  font-size: 11px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.customer-fashion-enquiry-modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 28px;
+  border-top: 1px solid #e1e8e0;
+  background: #ffffff;
+}
+
+.customer-fashion-enquiry-modal-footer button {
+  appearance: none;
+  min-width: 100px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid #d5e4d3;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #4b6054;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-fashion-enquiry-modal-footer button:hover {
+  border-color: #b9cdb7;
+  background: #f1f7ef;
+  color: #244b34;
+}
+
+/* =========================================================
+   RESPONSIVE (TABLET & MOBILE)
+========================================================= */
+
+@media (max-width: 1024px) {
+  .customer-fashion-enquiry {
+    padding: 30px 24px 60px;
   }
 
-  .customer-fashion-enquiry-card {
-    min-height: 210px;
+  .customer-fashion-enquiry-specs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .customer-fashion-enquiry-modal-top-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-  .customer-fashion-enquiry-hero {
-    min-height: auto;
-
-    padding: 70px 20px;
+@media (max-width: 768px) {
+  .customer-fashion-enquiry {
+    padding: 24px 16px 50px;
   }
 
-  .customer-fashion-enquiry-hero h1 {
-    font-size: 47px;
-  }
-
-  .customer-fashion-enquiry-hero-content > p {
-    font-size: 14px;
-  }
-
-  .customer-fashion-enquiry-actions {
+  .customer-fashion-enquiry-header {
     flex-direction: column;
-
-    align-items: stretch;
-
-    max-width: 300px;
-
-    margin-left: auto;
-    margin-right: auto;
+    align-items: flex-start;
+    min-height: auto;
+    padding: 24px 20px;
+    border-radius: 20px;
+    gap: 18px;
   }
 
-  .customer-fashion-enquiry-whatsapp,
-  .customer-fashion-enquiry-call {
+  .customer-fashion-enquiry-header-side {
     width: 100%;
-
-    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
-  .customer-fashion-enquiry-customization {
-    padding: 70px 18px;
+  .customer-fashion-enquiry-count {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 18px;
   }
 
-  .customer-fashion-enquiry-grid {
+  .customer-fashion-enquiry-count strong {
+    margin-top: 0;
+    font-size: 24px;
+  }
+
+  .customer-fashion-enquiry-header-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .customer-fashion-enquiry-new-btn,
+  .customer-fashion-enquiry-refresh {
+    flex: 1;
+    min-height: 40px;
+    text-align: center;
+  }
+
+  .customer-fashion-enquiry-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 5px;
+    border-radius: 14px;
+  }
+
+  .customer-fashion-enquiry-filters button {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 10px;
+    font-size: 9px;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .customer-fashion-enquiry-info-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .customer-fashion-enquiry-info-card > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .customer-fashion-enquiry-info-card > div:nth-child(-n + 2) {
+    border-bottom: 1px solid #d9e6d7;
+  }
+
+  .customer-fashion-enquiry-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .customer-fashion-enquiry-card-actions {
+    width: 100%;
+  }
+
+  .customer-fashion-enquiry-view-button {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  .customer-fashion-enquiry-modal-backdrop {
+    padding: 12px;
+  }
+
+  .customer-fashion-enquiry-modal {
+    max-height: calc(100vh - 24px);
+    border-radius: 18px;
+  }
+
+  .customer-fashion-enquiry-modal-header {
+    min-height: 70px;
+    padding: 16px 18px;
+  }
+
+  .customer-fashion-enquiry-modal-content {
+    padding: 18px;
+  }
+
+  .customer-fashion-enquiry-specs-grid {
     grid-template-columns: 1fr;
   }
 
-  .customer-fashion-enquiry-card {
-    min-height: auto;
-
-    padding: 25px;
-  }
-
-  .customer-fashion-enquiry-card > span {
-    margin-bottom: 25px;
-  }
-
-  .customer-fashion-enquiry-contact {
-    padding: 70px 18px;
-  }
-
-  .customer-fashion-enquiry-contact-card {
-    padding: 45px 22px;
-
-    border-radius: 22px;
-  }
-
-  .customer-fashion-enquiry-contact-card h2 {
-    font-size: 40px;
-  }
-
-  .customer-fashion-enquiry-contact-actions {
-    flex-direction: column;
-
-    align-items: stretch;
-  }
-
-  .customer-fashion-enquiry-contact-whatsapp,
-  .customer-fashion-enquiry-contact-call {
-    width: 100%;
-
-    box-sizing: border-box;
+  .customer-fashion-enquiry-modal-footer {
+    padding: 14px 18px;
   }
 }
 
+@media (max-width: 560px) {
+  .customer-fashion-enquiry {
+    padding: 16px 12px 40px;
+  }
 
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
+  .customer-fashion-enquiry-header {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .customer-fashion-enquiry-heading h1 {
+    font-size: 30px;
+    letter-spacing: -1px;
+  }
+
+  .customer-fashion-enquiry-heading p {
+    font-size: 12px;
+  }
+
+  .customer-fashion-enquiry-filters {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .customer-fashion-enquiry-filters button {
+    justify-content: space-between;
+    padding: 0 14px;
+    min-height: 38px;
+  }
+
+  .customer-fashion-enquiry-card {
+    border-radius: 16px;
+  }
+
+  .customer-fashion-enquiry-card-header {
+    padding: 14px 16px;
+  }
+
+  .customer-fashion-enquiry-card-body {
+    padding: 18px 16px;
+  }
+
+  .customer-fashion-enquiry-reference-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .customer-fashion-enquiry-reference-img {
+    width: 100%;
+    height: 160px;
+  }
+
+  .customer-fashion-enquiry-modal-footer button {
+    width: 100%;
+  }
+}
 
 @media (max-width: 380px) {
-  .customer-fashion-enquiry-hero {
-    padding: 60px 16px;
+  .customer-fashion-enquiry-info-card {
+    grid-template-columns: 1fr;
   }
 
-  .customer-fashion-enquiry-hero h1 {
-    font-size: 40px;
+  .customer-fashion-enquiry-info-card > div,
+  .customer-fashion-enquiry-info-card > div:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid #d9e6d7;
   }
 
-  .customer-fashion-enquiry-heading h2 {
-    font-size: 34px;
-  }
-
-  .customer-fashion-enquiry-contact-card h2 {
-    font-size: 34px;
+  .customer-fashion-enquiry-info-card > div:last-child {
+    border-bottom: 0;
   }
 }

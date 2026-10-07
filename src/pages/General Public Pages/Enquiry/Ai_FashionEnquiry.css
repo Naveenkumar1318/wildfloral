@@ -1,9 +1,8 @@
 /* =========================================================
    AI FASHION ASSISTANT
-   Floating Button + Right Side Drawer
-   Desktop / Tablet / Mobile
+   Floating Button + Right Side Drawer + Interactive Chat Flow
+   Desktop / Tablet / Mobile (Fully Responsive)
 ========================================================= */
-
 
 /* =========================================================
    RESET / BASE
@@ -16,17 +15,15 @@
   box-sizing: border-box;
 }
 
-
 /* =========================================================
    FLOATING AI BUTTON
-   Positioned directly ABOVE the Floating Cart button
 ========================================================= */
 
 .ai-fashion-float-button {
   position: fixed;
-  right: clamp(20px, 3.5vw, 36px);
-  bottom: calc(clamp(20px, 3.5vw, 36px) + 62px + 14px);
-  z-index: 901;
+  right: clamp(16px, 3.5vw, 32px);
+  bottom: calc(clamp(16px, 3.5vw, 32px) + 64px + 12px);
+  z-index: 900;
 
   display: inline-flex;
   align-items: center;
@@ -37,33 +34,33 @@
   min-width: 0;
   max-width: max-content;
 
-  padding: 6px 18px 6px 8px;
+  padding: 6px 18px 6px 7px;
 
-  border: 1px solid rgba(124, 77, 255, 0.22);
+  border: 1px solid rgba(124, 58, 237, 0.25);
   border-radius: 999px;
 
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
   box-shadow:
-    0 10px 28px rgba(108, 43, 217, 0.18),
-    0 2px 8px rgba(30, 20, 50, 0.08);
+    0 10px 28px rgba(109, 40, 217, 0.16),
+    0 2px 8px rgba(30, 20, 50, 0.06);
 
   cursor: pointer;
   font-family: inherit;
 
   transition:
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.25s ease;
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s ease;
 }
 
 .ai-fashion-float-button:hover {
   transform: translateY(-3px) scale(1.02);
-  border-color: rgba(124, 77, 255, 0.45);
+  border-color: rgba(124, 58, 237, 0.5);
   box-shadow:
-    0 14px 34px rgba(108, 43, 217, 0.26),
+    0 14px 34px rgba(109, 40, 217, 0.24),
     0 4px 12px rgba(30, 20, 50, 0.1);
 }
 
@@ -71,14 +68,8 @@
   transform: translateY(0) scale(0.98);
 }
 
-
-/* =========================================================
-   FLOATING ICON
-========================================================= */
-
 .ai-fashion-float-icon {
   flex: 0 0 auto;
-
   width: 38px;
   height: 38px;
 
@@ -87,36 +78,27 @@
   justify-content: center;
 
   border-radius: 50%;
-
-  background: linear-gradient(135deg, #7c4dff 0%, #6935f2 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: #ffffff;
 
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-
-  box-shadow: 0 4px 10px rgba(124, 77, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
 }
-
-
-/* =========================================================
-   FLOATING TEXT
-========================================================= */
 
 .ai-fashion-float-text {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
   line-height: 1.15;
   text-align: left;
 }
 
 .ai-fashion-float-text strong {
   display: block;
-  color: #1e0938;
-  font-size: 14px;
+  color: #1e1035;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -125,12 +107,11 @@
 .ai-fashion-float-text small {
   display: block;
   margin-top: 2px;
-  color: #72628b;
+  color: #72608c;
   font-size: 11px;
   font-weight: 500;
   white-space: nowrap;
 }
-
 
 /* =========================================================
    BACKDROP
@@ -138,9 +119,7 @@
 
 .ai-fashion-backdrop {
   position: fixed;
-
   inset: 0;
-
   z-index: 10000;
 
   width: 100%;
@@ -149,23 +128,22 @@
   border: 0;
   padding: 0;
 
-  background: rgba(20, 12, 35, 0.38);
+  background: rgba(18, 10, 32, 0.45);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 
-  cursor: default;
-
-  animation: aiFashionBackdropIn 0.2s ease forwards;
+  cursor: pointer;
+  animation: aiFashionBackdropFade 0.25s ease forwards;
 }
 
-@keyframes aiFashionBackdropIn {
+@keyframes aiFashionBackdropFade {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
 }
-
 
 /* =========================================================
    DRAWER
@@ -173,45 +151,34 @@
 
 .ai-fashion-drawer {
   position: fixed;
-
   top: 0;
   right: 0;
   bottom: 0;
-
   z-index: 10001;
 
-  width: min(430px, 100vw);
+  width: min(440px, 100vw);
+  height: 100%;
+  height: 100dvh;
 
   display: flex;
   flex-direction: column;
 
   overflow: hidden;
-
   background: #ffffff;
+  border-left: 1px solid rgba(124, 58, 237, 0.12);
 
-  border-left: 1px solid rgba(91, 35, 190, 0.12);
-
-  box-shadow:
-    -16px 0 50px rgba(30, 15, 60, 0.18);
-
-  animation: aiFashionDrawerIn 0.3s cubic-bezier(
-    0.22,
-    1,
-    0.36,
-    1
-  ) forwards;
+  box-shadow: -16px 0 45px rgba(25, 12, 50, 0.18);
+  animation: aiFashionDrawerSlide 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes aiFashionDrawerIn {
+@keyframes aiFashionDrawerSlide {
   from {
     transform: translateX(100%);
   }
-
   to {
     transform: translateX(0);
   }
 }
-
 
 /* =========================================================
    DRAWER HEADER
@@ -219,117 +186,78 @@
 
 .ai-fashion-drawer-header {
   flex: 0 0 auto;
-
-  min-height: 88px;
+  min-height: 82px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 14px;
 
-  gap: 16px;
+  padding: 16px 20px;
 
-  padding: 18px 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #5700b9 0%,
-      #7100d5 55%,
-      #7d20e8 100%
-    );
-
+  background: linear-gradient(135deg, #581c87 0%, #6b21a8 40%, #7c3aed 100%);
   color: #ffffff;
+  box-shadow: 0 4px 20px rgba(88, 28, 135, 0.2);
 }
-
-
-/* =========================================================
-   DRAWER BRAND
-========================================================= */
 
 .ai-fashion-drawer-brand {
   min-width: 0;
-
   display: flex;
   align-items: center;
-
   gap: 12px;
 }
 
-
-/* =========================================================
-   DRAWER LOGO
-========================================================= */
-
 .ai-fashion-drawer-logo {
   flex: 0 0 auto;
-
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
-
   background: #ffffff;
+  color: #6d28d9;
 
-  color: #6800c8;
-
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
-
-/* =========================================================
-   DRAWER TITLE
-========================================================= */
 
 .ai-fashion-drawer-title {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
 }
 
 .ai-fashion-drawer-title > span {
-  font-size: 15px;
+  font-size: 10.5px;
   font-weight: 700;
-
-  letter-spacing: 0.08em;
-
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
   white-space: nowrap;
 }
 
 .ai-fashion-drawer-title h2 {
-  margin: 3px 0 0;
-
+  margin: 1px 0 0;
   color: #ffffff;
-
-  font-size: 17px;
-  font-weight: 500;
-
+  font-size: 18px;
+  font-weight: 700;
   line-height: 1.2;
 }
 
 .ai-fashion-drawer-title small {
-  margin-top: 3px;
-
-  color: rgba(255, 255, 255, 0.72);
-
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.75);
   font-size: 11px;
 }
 
-
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
-
 .ai-fashion-close-button {
   flex: 0 0 auto;
-
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 
   display: flex;
   align-items: center;
@@ -338,28 +266,23 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.12);
-
+  background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
 
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 300;
-
   line-height: 1;
 
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
 .ai-fashion-close-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-
+  background: rgba(255, 255, 255, 0.3);
   transform: rotate(90deg);
 }
-
 
 /* =========================================================
    DRAWER BODY
@@ -367,257 +290,574 @@
 
 .ai-fashion-drawer-body {
   flex: 1 1 auto;
-
   min-height: 0;
 
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding: 22px 20px 28px;
+  padding: 20px 18px 24px;
+  background: linear-gradient(180deg, #faf7fe 0%, #ffffff 100%);
 
-  background:
-    linear-gradient(
-      180deg,
-      #fbf9ff 0%,
-      #ffffff 100%
-    );
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 
   overscroll-behavior: contain;
-
   scrollbar-width: thin;
+  scrollbar-color: #d8b4fe transparent;
 }
 
+.ai-fashion-drawer-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ai-fashion-drawer-body::-webkit-scrollbar-thumb {
+  background: #d8b4fe;
+  border-radius: 4px;
+}
 
 /* =========================================================
-   MESSAGE ROW
+   AUTH CHECKING LOADER
+========================================================= */
+
+.ai-fashion-loading {
+  align-self: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #f3e8ff;
+  color: #7c3aed;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+  animation: aiFashionPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes aiFashionPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+/* =========================================================
+   MESSAGE ROWS
 ========================================================= */
 
 .ai-fashion-message-row {
   display: flex;
   align-items: flex-start;
-
-  gap: 11px;
-
-  margin-bottom: 20px;
+  gap: 10px;
+  max-width: 100%;
+  animation: aiFashionMsgFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes aiFashionMsgFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-/* =========================================================
-   MESSAGE AVATAR
-========================================================= */
+.ai-fashion-message-row.user-message-row,
+.ai-fashion-message-row.customer {
+  justify-content: flex-end;
+}
 
 .ai-fashion-message-avatar {
   flex: 0 0 auto;
-
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
+  background: #f3e8ff;
+  color: #7c3aed;
 
-  background: #f0e9ff;
-
-  color: #6d24d5;
-
-  font-size: 17px;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
 }
 
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
 .ai-fashion-message {
-  min-width: 0;
+  max-width: 84%;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  word-break: break-word;
+}
 
-  padding: 15px 16px;
-
+.ai-fashion-message-primary {
   border-radius: 4px 18px 18px 18px;
-
   background: #ffffff;
+  border: 1px solid #ebdffa;
+  color: #3b2854;
+  box-shadow: 0 4px 16px rgba(45, 20, 75, 0.05);
+}
 
-  border: 1px solid #eee7f8;
-
-  box-shadow: 0 5px 18px rgba(45, 20, 75, 0.06);
+.ai-fashion-message-user,
+.ai-fashion-message-customer {
+  border-radius: 18px 4px 18px 18px;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.22);
 }
 
 .ai-fashion-message-label {
   display: block;
-
-  margin-bottom: 9px;
-
-  color: #5e20b8;
-
-  font-size: 12px;
+  margin-bottom: 5px;
+  color: #7c3aed;
+  font-size: 10.5px;
   font-weight: 700;
-
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .ai-fashion-message p {
   margin: 0;
-
-  color: #59605d;
-
-  font-size: 14px;
-
-  line-height: 1.65;
+  white-space: pre-line;
 }
-
-.ai-fashion-message p + p {
-  margin-top: 9px;
-}
-
 
 /* =========================================================
-   DEVELOPMENT CARD
+   IN-MESSAGE OPTION GRID & PILL BUTTONS
 ========================================================= */
 
-.ai-fashion-development-card {
+.ai-fashion-option-grid {
   display: flex;
-  align-items: flex-start;
-
-  gap: 13px;
-
-  margin-bottom: 26px;
-
-  padding: 17px;
-
-  border: 1px solid #eadcff;
-  border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #faf6ff 0%,
-      #f4ecff 100%
-    );
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #f2e9fc;
 }
 
-.ai-fashion-development-icon {
-  flex: 0 0 auto;
+.ai-fashion-option-button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #d8b4fe;
+  background: #ffffff;
+  color: #581c87;
 
-  width: 40px;
-  height: 40px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.06);
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ai-fashion-option-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(109, 40, 217, 0.25);
+}
+
+.ai-fashion-option-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.ai-fashion-option-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   INPUT ROW & CONTROLS (TEXT & DATE)
+========================================================= */
+
+.ai-fashion-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 0;
+  animation: aiFashionMsgFade 0.25s ease forwards;
+}
+
+.ai-fashion-text-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 46px;
+  padding: 0 16px;
+
+  border: 1.5px solid #d8b4fe;
+  border-radius: 12px;
+  background: #ffffff;
+
+  font-family: inherit;
+  font-size: 13.5px;
+  color: #27143f;
+
+  outline: none;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.05);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ai-fashion-text-input::placeholder {
+  color: #9d8db3;
+}
+
+.ai-fashion-text-input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+.ai-fashion-send-button {
+  flex: 0 0 auto;
+  height: 46px;
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.25);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.ai-fashion-send-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(109, 40, 217, 0.35);
+}
+
+.ai-fashion-send-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   AUTH CARD (LOGIN REQUIRED STATE)
+========================================================= */
+
+.ai-fashion-auth-card {
+  margin-top: 6px;
+  padding: 22px 18px;
+  text-align: center;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #ebdffa;
+  box-shadow: 0 4px 18px rgba(45, 20, 75, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: aiFashionMsgFade 0.28s ease forwards;
+}
+
+.ai-fashion-auth-card strong {
+  color: #1e1035;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ai-fashion-auth-card p {
+  margin: 0 0 10px;
+  color: #635378;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 290px;
+}
+
+.ai-fashion-login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 24px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.25);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ai-fashion-login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(109, 40, 217, 0.35);
+}
+
+.ai-fashion-login-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   ERROR BANNER
+========================================================= */
+
+.ai-fashion-error {
+  margin: 4px 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #e11d48;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   REVIEW ENQUIRY CARD
+========================================================= */
+
+.ai-fashion-review-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #ebdffa;
+  box-shadow: 0 6px 20px rgba(45, 20, 75, 0.06);
+  animation: aiFashionMsgFade 0.28s ease forwards;
+}
+
+.ai-fashion-section-label {
+  display: block;
+  margin-bottom: 12px;
+  color: #7c3aed;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ai-fashion-review-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f4edfb;
+  font-size: 13px;
+}
+
+.ai-fashion-review-item:last-of-type {
+  border-bottom: none;
+  padding-bottom: 14px;
+}
+
+.ai-fashion-review-item span {
+  flex: 0 0 auto;
+  color: #7c6d92;
+  font-weight: 500;
+}
+
+.ai-fashion-review-item strong {
+  color: #25123d;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+}
+
+.ai-fashion-submit-button {
+  width: 100%;
+  height: 48px;
+  margin-top: 4px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  border: none;
   border-radius: 12px;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  color: #ffffff;
 
-  background: #ffffff;
-
-  font-size: 18px;
-
-  box-shadow: 0 4px 12px rgba(90, 25, 170, 0.08);
-}
-
-.ai-fashion-development-card h3 {
-  margin: 1px 0 7px;
-
-  color: #3f176f;
-
-  font-size: 15px;
+  font-family: inherit;
+  font-size: 14.5px;
   font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.28);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
 }
 
-.ai-fashion-development-card p {
-  margin: 0;
-
-  color: #6c6574;
-
-  font-size: 13px;
-
-  line-height: 1.6;
+.ai-fashion-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.38);
 }
 
+.ai-fashion-submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ai-fashion-submit-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
 
 /* =========================================================
-   CUSTOMIZATION
+   SUCCESS CARD
 ========================================================= */
 
-.ai-fashion-customization {
-  margin-top: 4px;
-}
-
-.ai-fashion-section-label {
-  display: block;
-
-  margin-bottom: 13px;
-
-  color: #7025ce;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  letter-spacing: 0.14em;
-}
-
-
-/* =========================================================
-   CUSTOMIZATION GRID
-========================================================= */
-
-.ai-fashion-customization-grid {
-  display: grid;
-
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-}
-
-
-/* =========================================================
-   CUSTOMIZATION ITEM
-========================================================= */
-
-.ai-fashion-customization-item {
-  min-height: 78px;
-
+.ai-fashion-success-card {
+  padding: 24px 20px;
+  text-align: center;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fbf8ff 0%, #ffffff 100%);
+  border: 1px solid #ebdffa;
+  box-shadow: 0 6px 22px rgba(45, 20, 75, 0.06);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-
-  padding: 13px;
-
-  border: 1px solid #eee8f7;
-  border-radius: 14px;
-
-  background: #ffffff;
-
-  box-shadow: 0 4px 14px rgba(40, 20, 70, 0.04);
-
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
+  align-items: center;
+  animation: aiFashionMsgFade 0.3s ease forwards;
 }
 
-.ai-fashion-customization-item:hover {
-  transform: translateY(-2px);
+.ai-fashion-success-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 12px;
 
-  border-color: #d9c2f6;
-}
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.ai-fashion-customization-item span {
-  color: #a995bd;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
 
-  font-size: 10px;
+  font-size: 24px;
   font-weight: 700;
-
-  letter-spacing: 0.08em;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
 }
 
-.ai-fashion-customization-item strong {
-  color: #33283e;
+.ai-fashion-success-card h3 {
+  margin: 0 0 8px;
+  color: #1e1035;
+  font-size: 20px;
+  font-weight: 700;
+}
 
+.ai-fashion-success-card p {
+  margin: 0 0 8px;
+  color: #635378;
+  font-size: 13.5px;
+  line-height: 1.55;
+  max-width: 320px;
+}
+
+.ai-fashion-success-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+.ai-fashion-new-chat-button,
+.ai-fashion-clear-chat-button {
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
+.ai-fashion-new-chat-button {
+  border: none;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.25);
+}
+
+.ai-fashion-clear-chat-button {
+  border: 1.5px solid #d8b4fe;
+  background: #ffffff;
+  color: #6d28d9;
+}
+
+.ai-fashion-new-chat-button:hover,
+.ai-fashion-clear-chat-button:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   BOTTOM QUICK CHAT ACTIONS (CLEAR / NEW CHAT)
+========================================================= */
+
+.ai-fashion-chat-actions {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 18px;
+  background: #faf7fe;
+  border-top: 1px solid #f0eaf8;
+}
+
+.ai-fashion-chat-actions button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #e2d3f7;
+  background: #ffffff;
+  color: #6d28d9;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ai-fashion-chat-actions button:hover {
+  background: #f3e8ff;
+  border-color: #c4b5fd;
+  color: #581c87;
+  box-shadow: 0 2px 6px rgba(109, 40, 217, 0.08);
+}
 
 /* =========================================================
    DRAWER FOOTER
@@ -625,49 +865,36 @@
 
 .ai-fashion-drawer-footer {
   flex: 0 0 auto;
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
 
-  padding: 16px 20px 20px;
-
-  border-top: 1px solid #eee8f7;
-
+  border-top: 1px solid #f0eaf8;
   background: #ffffff;
-
-  box-shadow: 0 -5px 18px rgba(30, 20, 50, 0.04);
+  box-shadow: 0 -4px 16px rgba(30, 20, 50, 0.04);
 }
 
 .ai-fashion-help-text {
   display: block;
-
-  margin-bottom: 10px;
-
-  color: #6e6874;
-
-  font-size: 12px;
+  margin-bottom: 9px;
+  color: #6d627c;
+  font-size: 11.5px;
+  font-weight: 600;
 }
-
-
-/* =========================================================
-   CONTACT BUTTONS
-========================================================= */
 
 .ai-fashion-contact-actions {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
-  gap: 9px;
+  gap: 10px;
 }
 
 .ai-fashion-whatsapp-button,
 .ai-fashion-call-button {
-  min-height: 44px;
+  min-height: 42px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 12px;
-
   text-decoration: none;
 
   font-size: 13px;
@@ -675,59 +902,45 @@
 
   transition:
     transform 0.2s ease,
+    box-shadow 0.2s ease,
     opacity 0.2s ease;
 }
 
 .ai-fashion-whatsapp-button {
-  background: #218c4c;
-
+  background: #25d366;
   color: #ffffff;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.25);
 }
 
 .ai-fashion-call-button {
-  background: #eee5fb;
-
-  color: #5c1eaa;
+  background: #f3e8ff;
+  color: #6d28d9;
+  border: 1px solid #e9d5ff;
 }
 
 .ai-fashion-whatsapp-button:hover,
 .ai-fashion-call-button:hover {
   transform: translateY(-1px);
-
-  opacity: 0.92;
+  opacity: 0.95;
 }
-
-
-/* =========================================================
-   PHONE NOTE
-========================================================= */
 
 .ai-fashion-phone-note {
   display: block;
-
-  margin-top: 9px;
-
-  color: #96909c;
-
-  font-size: 10px;
-
+  margin-top: 8px;
+  color: #988ca8;
+  font-size: 11px;
   text-align: center;
 }
 
-
 /* =========================================================
-   TABLET
+   RESPONSIVE: TABLET (<= 900px)
 ========================================================= */
 
 @media (max-width: 900px) {
-
   .ai-fashion-float-button {
     right: 20px;
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 62px + 12px);
-
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 60px + 10px);
     height: 48px;
-    width: auto;
-
     padding: 5px 15px 5px 6px;
     gap: 10px;
   }
@@ -735,7 +948,6 @@
   .ai-fashion-float-icon {
     width: 36px;
     height: 36px;
-
     font-size: 15px;
   }
 
@@ -744,388 +956,213 @@
   }
 
   .ai-fashion-float-text small {
-    font-size: 10px;
+    font-size: 10.5px;
   }
 
   .ai-fashion-drawer {
-    width: min(400px, 88vw);
+    width: min(420px, 92vw);
   }
 }
 
-
 /* =========================================================
-   MOBILE
+   RESPONSIVE: MOBILE (<= 640px)
 ========================================================= */
 
-@media (max-width: 600px) {
-
-  /* -------------------------------------------------------
-     SMALL FLOATING BUTTON
-  ------------------------------------------------------- */
-
+@media (max-width: 640px) {
   .ai-fashion-float-button {
-    right: 18px;
-
-    /*
-      Positioned cleanly ABOVE the cart button and mobile nav
-    */
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 56px + 10px);
-
-    width: auto;
-    min-width: 0;
-
-    height: 42px;
-    min-height: 42px;
-
-    padding: 4px 12px 4px 5px;
-
+    right: 14px;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 54px + 8px);
+    height: 44px;
+    min-height: 44px;
+    padding: 4px 14px 4px 5px;
     gap: 8px;
-
-    border-radius: 999px;
-
     box-shadow:
-      0 8px 24px rgba(108, 43, 217, 0.2),
+      0 8px 24px rgba(109, 40, 217, 0.2),
       0 2px 6px rgba(30, 20, 50, 0.08);
   }
 
-
-  /* -------------------------------------------------------
-     SMALL ICON
-  ------------------------------------------------------- */
-
   .ai-fashion-float-icon {
-    width: 32px;
-    height: 32px;
-
+    width: 34px;
+    height: 34px;
     font-size: 14px;
   }
 
-
-  /* -------------------------------------------------------
-     SMALL TEXT
-  ------------------------------------------------------- */
-
   .ai-fashion-float-text strong {
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.1;
   }
 
   .ai-fashion-float-text small {
     margin-top: 1px;
-    font-size: 9px;
+    font-size: 9.5px;
     line-height: 1.1;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE BACKDROP
-  ------------------------------------------------------- */
-
-  .ai-fashion-backdrop {
-    background: rgba(20, 12, 35, 0.42);
-  }
-
-
-  /* -------------------------------------------------------
-     MOBILE RIGHT DRAWER
-     
-     IMPORTANT:
-     This remains a RIGHT SIDE drawer.
-     It does NOT become a bottom sheet.
-  ------------------------------------------------------- */
-
   .ai-fashion-drawer {
-    top: 0;
-    right: 0;
-    bottom: 0;
-
-    width: min(88vw, 360px);
-
-    max-width: 360px;
-
-    border-left: 1px solid rgba(91, 35, 190, 0.14);
-    border-radius: 18px 0 0 18px;
-
-    box-shadow:
-      -12px 0 35px rgba(30, 15, 60, 0.2);
-
-    animation: aiFashionDrawerInMobile 0.28s
-      cubic-bezier(0.22, 1, 0.36, 1)
-      forwards;
+    width: 100vw;
+    max-width: 100vw;
+    border-left: none;
   }
-
-  @keyframes aiFashionDrawerInMobile {
-    from {
-      transform: translateX(100%);
-    }
-
-    to {
-      transform: translateX(0);
-    }
-  }
-
-
-  /* -------------------------------------------------------
-     MOBILE HEADER
-  ------------------------------------------------------- */
 
   .ai-fashion-drawer-header {
-    min-height: 68px;
-
-    padding: 12px 13px;
-  }
-
-  .ai-fashion-drawer-brand {
-    gap: 9px;
+    min-height: 72px;
+    padding: 12px 16px;
   }
 
   .ai-fashion-drawer-logo {
-    width: 36px;
-    height: 36px;
-
-    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
   }
 
   .ai-fashion-drawer-title > span {
-    font-size: 11px;
+    font-size: 9.5px;
   }
 
   .ai-fashion-drawer-title h2 {
-    margin-top: 2px;
-
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .ai-fashion-drawer-title small {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .ai-fashion-close-button {
-    width: 32px;
-    height: 32px;
-
-    font-size: 21px;
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
   }
-
-
-  /* -------------------------------------------------------
-     MOBILE BODY
-  ------------------------------------------------------- */
 
   .ai-fashion-drawer-body {
-    padding: 15px 13px 20px;
+    padding: 16px 14px 20px;
+    gap: 12px;
   }
-
-
-  /* -------------------------------------------------------
-     MOBILE MESSAGE
-  ------------------------------------------------------- */
 
   .ai-fashion-message-row {
     gap: 8px;
-
-    margin-bottom: 14px;
   }
 
   .ai-fashion-message-avatar {
     width: 30px;
     height: 30px;
-
     font-size: 13px;
   }
 
   .ai-fashion-message {
-    padding: 11px 12px;
-
-    border-radius: 3px 13px 13px 13px;
+    max-width: 88%;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 
-  .ai-fashion-message-label {
-    margin-bottom: 6px;
-
-    font-size: 9px;
+  .ai-fashion-option-button {
+    padding: 7px 13px;
+    font-size: 12px;
   }
 
-  .ai-fashion-message p {
-    font-size: 11px;
-
-    line-height: 1.5;
+  .ai-fashion-input-row {
+    gap: 6px;
   }
 
-  .ai-fashion-message p + p {
-    margin-top: 7px;
+  .ai-fashion-text-input {
+    height: 42px;
+    font-size: 13px;
+    padding: 0 13px;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE DEVELOPMENT CARD
-  ------------------------------------------------------- */
-
-  .ai-fashion-development-card {
-    gap: 9px;
-
-    margin-bottom: 17px;
-
-    padding: 11px;
-
-    border-radius: 12px;
+  .ai-fashion-send-button {
+    height: 42px;
+    padding: 0 16px;
+    font-size: 13px;
   }
 
-  .ai-fashion-development-icon {
-    width: 31px;
-    height: 31px;
-
-    border-radius: 9px;
-
-    font-size: 14px;
+  .ai-fashion-auth-card {
+    padding: 18px 14px;
   }
 
-  .ai-fashion-development-card h3 {
-    margin: 0 0 4px;
-
-    font-size: 11px;
+  .ai-fashion-login-button {
+    padding: 10px 20px;
+    font-size: 13px;
   }
 
-  .ai-fashion-development-card p {
-    font-size: 10px;
-
-    line-height: 1.45;
+  .ai-fashion-review-card {
+    padding: 14px;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE CUSTOMIZATION
-  ------------------------------------------------------- */
-
-  .ai-fashion-section-label {
-    margin-bottom: 8px;
-
-    font-size: 8px;
-
-    letter-spacing: 0.1em;
+  .ai-fashion-submit-button {
+    height: 44px;
+    font-size: 13.5px;
   }
-
-  .ai-fashion-customization-grid {
-    gap: 7px;
-  }
-
-  .ai-fashion-customization-item {
-    min-height: 58px;
-
-    padding: 9px;
-
-    border-radius: 10px;
-  }
-
-  .ai-fashion-customization-item span {
-    font-size: 8px;
-  }
-
-  .ai-fashion-customization-item strong {
-    font-size: 10px;
-  }
-
-
-  /* -------------------------------------------------------
-     MOBILE FOOTER
-  ------------------------------------------------------- */
 
   .ai-fashion-drawer-footer {
-    padding: 11px 13px 13px;
-  }
-
-  .ai-fashion-help-text {
-    margin-bottom: 7px;
-
-    font-size: 9px;
-  }
-
-  .ai-fashion-contact-actions {
-    gap: 7px;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .ai-fashion-whatsapp-button,
   .ai-fashion-call-button {
-    min-height: 36px;
-
-    border-radius: 9px;
-
-    font-size: 10px;
-  }
-
-  .ai-fashion-phone-note {
-    margin-top: 6px;
-
-    font-size: 8px;
+    min-height: 40px;
+    font-size: 12px;
   }
 }
 
-
 /* =========================================================
-   VERY SMALL PHONES
+   RESPONSIVE: VERY SMALL PHONES (<= 360px)
 ========================================================= */
 
-@media (max-width: 380px) {
-
+@media (max-width: 360px) {
   .ai-fashion-float-button {
-    right: 14px;
-    bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 52px + 8px);
-
-    height: 38px;
-    min-height: 38px;
-
+    right: 10px;
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 50px + 6px);
+    height: 40px;
+    min-height: 40px;
     padding: 3px 10px 3px 4px;
-    gap: 7px;
+    gap: 6px;
   }
 
   .ai-fashion-float-icon {
-    width: 28px;
-    height: 28px;
-
+    width: 30px;
+    height: 30px;
     font-size: 12px;
   }
 
   .ai-fashion-float-text strong {
-    font-size: 11px;
+    font-size: 11.5px;
   }
 
   .ai-fashion-float-text small {
-    font-size: 8px;
+    font-size: 8.5px;
   }
 
-  .ai-fashion-drawer {
-    width: 91vw;
-
-    border-radius: 15px 0 0 15px;
-  }
-
-  .ai-fashion-drawer-body {
-    padding-left: 11px;
-    padding-right: 11px;
-  }
-
-  .ai-fashion-customization-grid {
-    grid-template-columns: 1fr 1fr;
+  .ai-fashion-send-button {
+    padding: 0 12px;
   }
 }
-
 
 /* =========================================================
    REDUCE MOTION
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
   .ai-fashion-float-button,
   .ai-fashion-close-button,
-  .ai-fashion-customization-item,
+  .ai-fashion-option-button,
+  .ai-fashion-send-button,
+  .ai-fashion-submit-button,
+  .ai-fashion-new-chat-button,
+  .ai-fashion-clear-chat-button,
+  .ai-fashion-login-button,
   .ai-fashion-whatsapp-button,
   .ai-fashion-call-button {
     transition: none;
   }
 
   .ai-fashion-drawer,
-  .ai-fashion-backdrop {
+  .ai-fashion-backdrop,
+  .ai-fashion-message-row,
+  .ai-fashion-input-row,
+  .ai-fashion-review-card,
+  .ai-fashion-success-card,
+  .ai-fashion-auth-card,
+  .ai-fashion-loading {
     animation: none;
   }
 }

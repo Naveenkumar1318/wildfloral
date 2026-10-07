@@ -21,18 +21,12 @@ type EnquiryStatus =
   | 'contacted'
   | 'accepted'
   | 'rejected'
-  | 'converted'
-  | 'closed'
-  | 'completed'
 
 type EnquiryFilter =
   | 'all'
   | 'new'
-  | 'contacted'
-  | 'accepted'
-  | 'rejected'
-  | 'converted'
-  | 'completed'
+  | 'contactedAccepted'
+  | 'contactedRejected'
 
 type Enquiry = {
   id: string
@@ -238,24 +232,10 @@ function formatContactPreference(
    STATUS
 ========================================================= */
 
-function normalizeStatus(
-  status: EnquiryStatus,
-): EnquiryStatus {
-  if (
-    status === 'completed'
-  ) {
-    return 'closed'
-  }
-
-  return status
-}
-
 function formatStatus(
   status: EnquiryStatus,
 ) {
-  switch (
-    normalizeStatus(status)
-  ) {
+  switch (status) {
     case 'new':
       return 'Enquiry Processing'
 
@@ -268,12 +248,6 @@ function formatStatus(
     case 'rejected':
       return 'Rejected'
 
-    case 'converted':
-      return 'Booking Created'
-
-    case 'closed':
-      return 'Closed'
-
     default:
       return status
   }
@@ -282,9 +256,7 @@ function formatStatus(
 function getStatusMessage(
   status: EnquiryStatus,
 ) {
-  switch (
-    normalizeStatus(status)
-  ) {
+  switch (status) {
     case 'new':
       return 'Your enquiry is being reviewed by our team.'
 
@@ -292,16 +264,10 @@ function getStatusMessage(
       return 'Our team has contacted you regarding this enquiry.'
 
     case 'accepted':
-      return 'Your enquiry has been accepted. You can now select your service and book your appointment.'
+      return 'Your enquiry has been accepted.'
 
     case 'rejected':
-      return 'This enquiry was not accepted by our team.'
-
-    case 'converted':
-      return 'Your enquiry has been converted into a booking.'
-
-    case 'closed':
-      return 'This enquiry has been closed.'
+      return 'Your enquiry has been rejected.'
 
     default:
       return ''
@@ -343,10 +309,6 @@ function getServiceDuration(
 
   return `${hours} hr ${remaining} min`
 }
-
-/* =========================================================
-   STATUS HELPERS
-========================================================= */
 
 /* =========================================================
    COMPONENT
@@ -748,21 +710,29 @@ function BeautyEnquiries() {
         return enquiries
       }
 
-      if (activeFilter === 'completed') {
+      if (activeFilter === 'new') {
         return enquiries.filter(
-          (enquiry) =>
-            normalizeStatus(
-              enquiry.status,
-            ) === 'closed',
+          (enquiry) => enquiry.status === 'new',
         )
       }
 
-      return enquiries.filter(
-        (enquiry) =>
-          normalizeStatus(
-            enquiry.status,
-          ) === activeFilter,
-      )
+      if (activeFilter === 'contactedAccepted') {
+        return enquiries.filter(
+          (enquiry) =>
+            enquiry.status === 'contacted' ||
+            enquiry.status === 'accepted',
+        )
+      }
+
+      if (activeFilter === 'contactedRejected') {
+        return enquiries.filter(
+          (enquiry) =>
+            enquiry.status === 'contacted' ||
+            enquiry.status === 'rejected',
+        )
+      }
+
+      return enquiries
     }, [
       enquiries,
       activeFilter,
@@ -777,50 +747,21 @@ function BeautyEnquiries() {
 
   const newCount =
     enquiries.filter(
-      (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'new',
+      (enquiry) => enquiry.status === 'new',
     ).length
 
-  const contactedCount =
+  const contactedAcceptedCount =
     enquiries.filter(
       (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'contacted',
+        enquiry.status === 'contacted' ||
+        enquiry.status === 'accepted',
     ).length
 
-  const acceptedCount =
+  const contactedRejectedCount =
     enquiries.filter(
       (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'accepted',
-    ).length
-
-  const rejectedCount =
-    enquiries.filter(
-      (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'rejected',
-    ).length
-
-  const convertedCount =
-    enquiries.filter(
-      (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'converted',
-    ).length
-
-  const completedCount =
-    enquiries.filter(
-      (enquiry) =>
-        normalizeStatus(
-          enquiry.status,
-        ) === 'closed',
+        enquiry.status === 'contacted' ||
+        enquiry.status === 'rejected',
     ).length
 
   /* =======================================================
@@ -914,37 +855,6 @@ function BeautyEnquiries() {
           item.price || 0,
         ),
       0,
-    )
-  }
-
-  /* =======================================================
-     ACCEPTED → SERVICES
-  ======================================================= */
-
-  function handleBookAppointment() {
-    if (
-      !selectedEnquiry
-    ) {
-      return
-    }
-
-    /*
-     * The enquiry has already been accepted.
-     *
-     * We intentionally do NOT automatically book
-     * anything here.
-     *
-     * Customer goes to the normal Services page,
-     * selects the required service(s), and then
-     * continues through the existing booking flow.
-     */
-
-    setSelectedEnquiryId(
-      null,
-    )
-
-    navigate(
-      '/services',
     )
   }
 
@@ -1096,98 +1006,38 @@ function BeautyEnquiries() {
           type="button"
           role="tab"
           aria-selected={
-            activeFilter === 'contacted'
+            activeFilter === 'contactedAccepted'
           }
           className={
-            activeFilter === 'contacted'
+            activeFilter === 'contactedAccepted'
               ? 'active'
               : ''
           }
           onClick={() =>
-            handleFilterChange('contacted')
+            handleFilterChange('contactedAccepted')
           }
         >
-          <span>CONTACTED</span>
-
-          <strong>
-            {contactedCount}
-          </strong>
+          <span>CONTACTED / ACCEPTED</span>
+          <strong>{contactedAcceptedCount}</strong>
         </button>
 
         <button
           type="button"
           role="tab"
           aria-selected={
-            activeFilter === 'accepted'
+            activeFilter === 'contactedRejected'
           }
           className={
-            activeFilter === 'accepted'
+            activeFilter === 'contactedRejected'
               ? 'active'
               : ''
           }
           onClick={() =>
-            handleFilterChange('accepted')
+            handleFilterChange('contactedRejected')
           }
         >
-          <span>ACCEPTED</span>
-          <strong>{acceptedCount}</strong>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={
-            activeFilter === 'rejected'
-          }
-          className={
-            activeFilter === 'rejected'
-              ? 'active'
-              : ''
-          }
-          onClick={() =>
-            handleFilterChange('rejected')
-          }
-        >
-          <span>REJECTED</span>
-          <strong>{rejectedCount}</strong>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={
-            activeFilter === 'converted'
-          }
-          className={
-            activeFilter === 'converted'
-              ? 'active'
-              : ''
-          }
-          onClick={() =>
-            handleFilterChange('converted')
-          }
-        >
-          <span>CONVERTED</span>
-          <strong>{convertedCount}</strong>
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={
-            activeFilter === 'completed'
-          }
-          className={
-            activeFilter === 'completed'
-              ? 'active'
-              : ''
-          }
-          onClick={() =>
-            handleFilterChange('completed')
-          }
-        >
-          <span>COMPLETED</span>
-          <strong>{completedCount}</strong>
+          <span>CONTACTED / REJECTED</span>
+          <strong>{contactedRejectedCount}</strong>
         </button>
 
       </section>
@@ -1248,19 +1098,15 @@ function BeautyEnquiries() {
             </span>
 
             <h2>
-
               {activeFilter === 'all'
                 ? 'No beauty enquiries yet.'
-                : `No ${activeFilter} enquiries yet.`}
-
+                : 'No enquiries matching this filter.'}
             </h2>
 
             <p>
-
               {activeFilter === 'all'
                 ? 'Your submitted beauty service enquiries will appear here.'
                 : 'Enquiries matching this status will appear here.'}
-
             </p>
 
           </section>
@@ -1287,11 +1133,6 @@ function BeautyEnquiries() {
                     pageSize +
                   index +
                   1
-
-                const normalizedStatus =
-                  normalizeStatus(
-                    enquiry.status,
-                  )
 
                 return (
                   <article
@@ -1321,7 +1162,7 @@ function BeautyEnquiries() {
                       </div>
 
                       <span
-                        className={`beauty-enquiry-status status-${normalizedStatus}`}
+                        className={`beauty-enquiry-status status-${enquiry.status}`}
                       >
                         <i />
 
@@ -1368,7 +1209,7 @@ function BeautyEnquiries() {
                       {/* STATUS MESSAGE */}
 
                       <div
-                        className={`beauty-enquiry-status-message status-message-${normalizedStatus}`}
+                        className={`beauty-enquiry-status-message status-message-${enquiry.status}`}
                       >
                         <strong>
                           {formatStatus(
@@ -1476,22 +1317,6 @@ function BeautyEnquiries() {
                       </div>
 
                       <div className="beauty-enquiry-card-actions">
-
-                        {normalizedStatus ===
-                          'accepted' && (
-                          <button
-                            type="button"
-                            className="beauty-enquiry-book-button"
-                            onClick={() => {
-                              setSelectedEnquiryId(
-                                enquiry.id,
-                              )
-                            }}
-                          >
-                            Select Service &amp;
-                            Book Appointment
-                          </button>
-                        )}
 
                         <button
                           type="button"
@@ -1676,9 +1501,7 @@ function BeautyEnquiries() {
               <div className="beauty-enquiry-modal-header-right">
 
                 <span
-                  className={`beauty-enquiry-status status-${normalizeStatus(
-                    selectedEnquiry.status,
-                  )}`}
+                  className={`beauty-enquiry-status status-${selectedEnquiry.status}`}
                 >
                   <i />
 
@@ -1709,9 +1532,7 @@ function BeautyEnquiries() {
               {/* STATUS */}
 
               <section
-                className={`beauty-enquiry-detail-status status-message-${normalizeStatus(
-                  selectedEnquiry.status,
-                )}`}
+                className={`beauty-enquiry-detail-status status-message-${selectedEnquiry.status}`}
               >
 
                 <span>
@@ -2187,22 +2008,6 @@ function BeautyEnquiries() {
             {/* MODAL FOOTER */}
 
             <footer className="beauty-enquiry-modal-footer">
-
-              {normalizeStatus(
-                selectedEnquiry.status,
-              ) ===
-                'accepted' && (
-                <button
-                  type="button"
-                  className="beauty-enquiry-modal-book-button"
-                  onClick={
-                    handleBookAppointment
-                  }
-                >
-                  Select Service &amp;
-                  Book Appointment
-                </button>
-              )}
 
               <button
                 type="button"

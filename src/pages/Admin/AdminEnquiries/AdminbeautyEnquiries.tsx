@@ -22,8 +22,12 @@ type EnquiryStatus =
   | 'contacted'
   | 'accepted'
   | 'rejected'
-  | 'converted'
-  | 'closed'
+
+type StatusFilter =
+  | 'all'
+  | 'new'
+  | 'contactedAccepted'
+  | 'contactedRejected'
 
 type Enquiry = {
   id: string
@@ -81,13 +85,19 @@ type EnquiryDetails = {
    CONSTANTS
 ========================================================= */
 
-const STATUS_OPTIONS: EnquiryStatus[] = [
-  'new',
-  'contacted',
-  'accepted',
-  'rejected',
-  'converted',
-  'closed',
+const STATUS_OPTIONS = [
+  {
+    value: 'new' as EnquiryStatus,
+    label: 'New',
+  },
+  {
+    value: 'accepted' as EnquiryStatus,
+    label: 'Contacted / Accepted',
+  },
+  {
+    value: 'rejected' as EnquiryStatus,
+    label: 'Contacted / Rejected',
+  },
 ]
 
 const PAGE_SIZE = 10
@@ -207,12 +217,6 @@ function formatStatus(
     case 'rejected':
       return 'Rejected'
 
-    case 'converted':
-      return 'Converted'
-
-    case 'closed':
-      return 'Closed'
-
     default:
       return status
   }
@@ -305,9 +309,7 @@ function AdminbeautyEnquiries() {
     statusFilter,
     setStatusFilter,
   ] =
-    useState<
-      'all' | EnquiryStatus
-    >('all')
+    useState<StatusFilter>('all')
 
   const [
     currentPage,
@@ -754,39 +756,23 @@ function AdminbeautyEnquiries() {
           )
         }
 
-const updatedEnquiry =
-  data as Enquiry
+        const updatedEnquiry =
+          data as Enquiry
 
-/*
- * Update local table immediately.
- */
-setEnquiries(
-  (current) =>
-    current.map(
-      (item) =>
-        item.id ===
-        updatedEnquiry.id
-          ? updatedEnquiry
-          : item,
-    ),
-)
+        setEnquiries(
+          (current) =>
+            current.map(
+              (item) =>
+                item.id ===
+                updatedEnquiry.id
+                  ? updatedEnquiry
+                  : item,
+            ),
+        )
 
-/*
- * Close the details drawer after
- * a successful save.
- */
-setSelectedDetails(null)
+        setSelectedDetails(null)
 
-/*
- * Reload the complete enquiry list.
- *
- * This refreshes:
- * - enquiry rows
- * - statistics
- * - status counts
- * - filtered results
- */
-await loadEnquiries()
+        await loadEnquiries()
       } catch (
         updateError
       ) {
@@ -822,10 +808,25 @@ await loadEnquiries()
           enquiry,
         ) => {
           const matchesStatus =
-            statusFilter ===
-              'all' ||
-            enquiry.status ===
-              statusFilter
+            statusFilter === 'all' ||
+            (
+              statusFilter === 'new' &&
+              enquiry.status === 'new'
+            ) ||
+            (
+              statusFilter === 'contactedAccepted' &&
+              (
+                enquiry.status === 'contacted' ||
+                enquiry.status === 'accepted'
+              )
+            ) ||
+            (
+              statusFilter === 'contactedRejected' &&
+              (
+                enquiry.status === 'contacted' ||
+                enquiry.status === 'rejected'
+              )
+            )
 
           if (
             !matchesStatus
@@ -920,56 +921,27 @@ await loadEnquiries()
 
         new:
           enquiries.filter(
-            (
-              item,
-            ) =>
+            (item) =>
               item.status ===
               'new',
           ).length,
 
-        contacted:
+        contactedAccepted:
           enquiries.filter(
-            (
-              item,
-            ) =>
+            (item) =>
               item.status ===
-              'contacted',
+                'contacted' ||
+              item.status ===
+                'accepted',
           ).length,
 
-        accepted:
+        contactedRejected:
           enquiries.filter(
-            (
-              item,
-            ) =>
+            (item) =>
               item.status ===
-              'accepted',
-          ).length,
-
-        rejected:
-          enquiries.filter(
-            (
-              item,
-            ) =>
+                'contacted' ||
               item.status ===
-              'rejected',
-          ).length,
-
-        converted:
-          enquiries.filter(
-            (
-              item,
-            ) =>
-              item.status ===
-              'converted',
-          ).length,
-
-        closed:
-          enquiries.filter(
-            (
-              item,
-            ) =>
-              item.status ===
-              'closed',
+                'rejected',
           ).length,
       }),
       [enquiries],
@@ -1032,20 +1004,19 @@ await loadEnquiries()
   return (
     <main className="admin-enquiries">
       
-<div className="admin-enquiries-back-row">
-  <button
-    type="button"
-    className="admin-enquiries-back-button"
-    onClick={() =>
-      navigate('/admin')
-    }
-    aria-label="Back to Dashboard"
-  >
-    <span aria-hidden="true">←</span>
-    <span>Back to Dashboard</span>
-  </button>
-</div>
-
+      <div className="admin-enquiries-back-row">
+        <button
+          type="button"
+          className="admin-enquiries-back-button"
+          onClick={() =>
+            navigate('/admin')
+          }
+          aria-label="Back to Dashboard"
+        >
+          <span aria-hidden="true">←</span>
+          <span>Back to Dashboard</span>
+        </button>
+      </div>
 
       {/* ===================================================
           HEADER
@@ -1053,7 +1024,6 @@ await loadEnquiries()
 
       <div className="admin-enquiries-header">
         
-
         <div>
 
           <span className="admin-enquiries-eyebrow">
@@ -1088,7 +1058,6 @@ await loadEnquiries()
 
       </div>
 
-
       {/* ===================================================
           STATISTICS
       =================================================== */}
@@ -1096,7 +1065,6 @@ await loadEnquiries()
       <section className="admin-enquiry-statistics">
 
         <div className="admin-enquiry-stat">
-
           <span>
             TOTAL
           </span>
@@ -1104,11 +1072,9 @@ await loadEnquiries()
           <strong>
             {statistics.total}
           </strong>
-
         </div>
 
         <div className="admin-enquiry-stat">
-
           <span>
             NEW
           </span>
@@ -1116,71 +1082,29 @@ await loadEnquiries()
           <strong>
             {statistics.new}
           </strong>
-
         </div>
 
         <div className="admin-enquiry-stat">
-
           <span>
-            CONTACTED
+            CONTACTED / ACCEPTED
           </span>
 
           <strong>
-            {statistics.contacted}
+            {statistics.contactedAccepted}
           </strong>
-
         </div>
 
         <div className="admin-enquiry-stat">
-
           <span>
-            ACCEPTED
+            CONTACTED / REJECTED
           </span>
 
           <strong>
-            {statistics.accepted}
+            {statistics.contactedRejected}
           </strong>
-
-        </div>
-
-        <div className="admin-enquiry-stat">
-
-          <span>
-            REJECTED
-          </span>
-
-          <strong>
-            {statistics.rejected}
-          </strong>
-
-        </div>
-
-        <div className="admin-enquiry-stat">
-
-          <span>
-            CONVERTED
-          </span>
-
-          <strong>
-            {statistics.converted}
-          </strong>
-
-        </div>
-
-        <div className="admin-enquiry-stat">
-
-          <span>
-            CLOSED
-          </span>
-
-          <strong>
-            {statistics.closed}
-          </strong>
-
         </div>
 
       </section>
-
 
       {/* ===================================================
           TOOLBAR
@@ -1208,11 +1132,10 @@ await loadEnquiries()
 
         </div>
 
-
         <div className="admin-enquiries-filter">
 
           <label htmlFor="enquiry-status-filter">
-            Status
+            Status Filter
           </label>
 
           <select
@@ -1220,10 +1143,7 @@ await loadEnquiries()
             value={statusFilter}
             onChange={(event) =>
               setStatusFilter(
-                event.target
-                  .value as
-                  | 'all'
-                  | EnquiryStatus,
+                event.target.value as StatusFilter,
               )
             }
           >
@@ -1232,27 +1152,23 @@ await loadEnquiries()
               All Enquiries
             </option>
 
-            {STATUS_OPTIONS.map(
-              (
-                status,
-              ) => (
-                <option
-                  key={status}
-                  value={status}
-                >
-                  {formatStatus(
-                    status,
-                  )}
-                </option>
-              ),
-            )}
+            <option value="new">
+              New
+            </option>
+
+            <option value="contactedAccepted">
+              Contacted / Accepted
+            </option>
+
+            <option value="contactedRejected">
+              Contacted / Rejected
+            </option>
 
           </select>
 
         </div>
 
       </section>
-
 
       {/* ===================================================
           ERROR
@@ -1280,7 +1196,6 @@ await loadEnquiries()
 
         </div>
       )}
-
 
       {/* ===================================================
           ENQUIRY CARD
@@ -1311,7 +1226,6 @@ await loadEnquiries()
           </p>
 
         </div>
-
 
         {/* ===============================================
             LOADING
@@ -1435,7 +1349,6 @@ await loadEnquiries()
 
                           </td>
 
-
                           <td>
 
                             <div className="admin-enquiry-table-customer">
@@ -1451,7 +1364,6 @@ await loadEnquiries()
                             </div>
 
                           </td>
-
 
                           <td>
 
@@ -1473,7 +1385,6 @@ await loadEnquiries()
 
                           </td>
 
-
                           <td>
 
                             <span>
@@ -1484,7 +1395,6 @@ await loadEnquiries()
 
                           </td>
 
-
                           <td>
 
                             <strong className="admin-enquiry-table-total">
@@ -1494,7 +1404,6 @@ await loadEnquiries()
                             </strong>
 
                           </td>
-
 
                           <td>
 
@@ -1513,7 +1422,6 @@ await loadEnquiries()
                             </span>
 
                           </td>
-
 
                           <td>
 
@@ -1541,7 +1449,6 @@ await loadEnquiries()
               </table>
 
             </div>
-
 
             {/* =========================================
                 PAGINATION
@@ -1572,7 +1479,6 @@ await loadEnquiries()
                 >
                   Previous
                 </button>
-
 
                 <div>
 
@@ -1613,7 +1519,6 @@ await loadEnquiries()
 
                 </div>
 
-
                 <button
                   type="button"
                   onClick={() =>
@@ -1644,7 +1549,6 @@ await loadEnquiries()
         )}
 
       </section>
-
 
       {/* ===================================================
           DETAILS DRAWER
@@ -1709,7 +1613,6 @@ await loadEnquiries()
 
             </div>
 
-
             {detailsLoading ? (
 
               <div className="admin-enquiries-state">
@@ -1769,7 +1672,6 @@ await loadEnquiries()
 
                 </section>
 
-
                 {/* =========================================
                     CUSTOMER
                 ========================================== */}
@@ -1788,7 +1690,6 @@ await loadEnquiries()
 
                   </div>
 
-
                   <div className="admin-enquiry-info-grid">
 
                     <div>
@@ -1804,7 +1705,6 @@ await loadEnquiries()
 
                     </div>
 
-
                     <div>
 
                       <span>
@@ -1818,7 +1718,6 @@ await loadEnquiries()
 
                     </div>
 
-
                     <div>
 
                       <span>
@@ -1831,7 +1730,6 @@ await loadEnquiries()
                       </strong>
 
                     </div>
-
 
                     <div>
 
@@ -1853,7 +1751,6 @@ await loadEnquiries()
 
                 </section>
 
-
                 {/* =========================================
                     PREFERENCES
                 ========================================== */}
@@ -1871,7 +1768,6 @@ await loadEnquiries()
                     </h3>
 
                   </div>
-
 
                   <div className="admin-enquiry-info-grid">
 
@@ -1891,7 +1787,6 @@ await loadEnquiries()
 
                     </div>
 
-
                     <div>
 
                       <span>
@@ -1908,7 +1803,6 @@ await loadEnquiries()
 
                     </div>
 
-
                     <div>
 
                       <span>
@@ -1924,7 +1818,6 @@ await loadEnquiries()
                       </strong>
 
                     </div>
-
 
                     <div>
 
@@ -1946,7 +1839,6 @@ await loadEnquiries()
 
                 </section>
 
-
                 {/* =========================================
                     PEOPLE & SERVICES
                 ========================================== */}
@@ -1964,7 +1856,6 @@ await loadEnquiries()
                     </h3>
 
                   </div>
-
 
                   <div className="admin-enquiry-people-list">
 
@@ -2024,7 +1915,6 @@ await loadEnquiries()
                                   )}
                                 </div>
 
-
                                 <div className="admin-enquiry-person-details">
 
                                   <span>
@@ -2059,7 +1949,6 @@ await loadEnquiries()
 
                                 </div>
 
-
                                 <strong className="admin-enquiry-person-total">
                                   {formatCurrency(
                                     personTotal,
@@ -2067,7 +1956,6 @@ await loadEnquiries()
                                 </strong>
 
                               </div>
-
 
                               <div className="admin-enquiry-person-services">
 
@@ -2130,7 +2018,6 @@ await loadEnquiries()
 
                                             </div>
 
-
                                             <div className="admin-enquiry-service-content">
 
                                               <div className="admin-enquiry-service-title-row">
@@ -2151,7 +2038,6 @@ await loadEnquiries()
 
                                               </div>
 
-
                                               <div className="admin-enquiry-service-duration">
 
                                                 <span>
@@ -2162,7 +2048,6 @@ await loadEnquiries()
                                                 </span>
 
                                               </div>
-
 
                                               <div className="admin-enquiry-service-pricing">
 
@@ -2179,7 +2064,6 @@ await loadEnquiries()
                                                   </strong>
 
                                                 </div>
-
 
                                                 {Number(
                                                   item.discount_amount,
@@ -2200,7 +2084,6 @@ await loadEnquiries()
 
                                                   </div>
                                                 )}
-
 
                                                 <div className="admin-enquiry-final-price-row">
 
@@ -2240,7 +2123,6 @@ await loadEnquiries()
 
                 </section>
 
-
                 {/* =========================================
                     BILLING
                 ========================================== */}
@@ -2258,7 +2140,6 @@ await loadEnquiries()
                     </h3>
 
                   </div>
-
 
                   <div className="admin-enquiry-pricing">
 
@@ -2278,7 +2159,6 @@ await loadEnquiries()
 
                     </div>
 
-
                     <div>
 
                       <span>
@@ -2295,7 +2175,6 @@ await loadEnquiries()
                       </strong>
 
                     </div>
-
 
                     <div className="admin-enquiry-pricing-total">
 
@@ -2316,7 +2195,6 @@ await loadEnquiries()
                   </div>
 
                 </section>
-
 
                 {/* =========================================
                     CUSTOMER MESSAGE
@@ -2351,7 +2229,6 @@ await loadEnquiries()
                   </section>
                 )}
 
-
                 {/* =========================================
                     ADMIN MANAGEMENT
                 ========================================== */}
@@ -2370,7 +2247,6 @@ await loadEnquiries()
 
                   </div>
 
-
                   <div className="admin-enquiry-field">
 
                     <label htmlFor="admin-enquiry-status">
@@ -2380,44 +2256,28 @@ await loadEnquiries()
                     <select
                       id="admin-enquiry-status"
                       value={
-                        editStatus
+                        editStatus === 'contacted'
+                          ? 'accepted'
+                          : editStatus
                       }
-                      onChange={(
-                        event,
-                      ) =>
+                      onChange={(event) =>
                         setEditStatus(
-                          event.target
-                            .value as EnquiryStatus,
+                          event.target.value as EnquiryStatus,
                         )
                       }
-                      disabled={
-                        saving
-                      }
+                      disabled={saving}
                     >
-
-                      {STATUS_OPTIONS.map(
-                        (
-                          status,
-                        ) => (
-                          <option
-                            key={
-                              status
-                            }
-                            value={
-                              status
-                            }
-                          >
-                            {formatStatus(
-                              status,
-                            )}
-                          </option>
-                        ),
-                      )}
-
+                      {STATUS_OPTIONS.map((status) => (
+                        <option
+                          key={status.value}
+                          value={status.value}
+                        >
+                          {status.label}
+                        </option>
+                      ))}
                     </select>
 
                   </div>
-
 
                   <div className="admin-enquiry-field">
 
@@ -2446,7 +2306,6 @@ await loadEnquiries()
                     />
 
                   </div>
-
 
                   <button
                     type="button"
