@@ -2847,8 +2847,16 @@ html {
 
 @media (max-width: 768px) {
   .fashion-floating-cart {
-    right: 18px;
-    bottom: calc(72px + env(safe-area-inset-bottom));
+    right: 16px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    z-index: 920;
+  }
+
+  .fashion-hero-controls {
+    left: 50%;
+    right: auto;
+    bottom: 16px;
+    transform: translateX(-50%);
   }
 
   .fashion-hero {
@@ -3051,16 +3059,19 @@ html {
     max-width: none;
     border-radius: 20px;
     justify-content: space-between;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
   }
 
   .fashion-floating-cart {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
+    right: 14px;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
 
   .fashion-floating-cart svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 }
 
