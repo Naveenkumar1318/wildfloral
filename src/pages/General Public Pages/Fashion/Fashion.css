@@ -1112,8 +1112,8 @@ html {
   width: 100%;
   height: 100%;
   min-height: 220px;
-  background: radial-gradient(circle at 50% 40%, rgba(124, 77, 255, 0.28) 0%, rgba(240, 233, 248, 0.95) 70%), var(--fs-tint);
-  color: var(--fs-accent);
+  background: radial-gradient(circle at 50% 40%, rgba(217, 160, 56, 0.25) 0%, rgba(25, 13, 44, 0.96) 70%);
+  color: var(--fs-gold);
   font-size: 0;
   text-align: center;
   overflow: hidden;
@@ -1126,24 +1126,28 @@ html {
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 12px 28px rgba(124, 77, 255, 0.28);
-  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(217, 160, 56, 0.45);
+  box-shadow: 0 12px 30px rgba(217, 160, 56, 0.25);
+  font-size: 2.4rem;
   animation: fashion-gift-bounce 2.5s ease-in-out infinite;
 }
 
 .fashion-promo-placeholder::after {
   content: 'EXCLUSIVE GIFT OFFER';
   font-family: var(--fs-body);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.16em;
-  color: var(--fs-accent);
+  letter-spacing: 0.14em;
+  color: #f7d288;
   text-transform: uppercase;
   padding: 6px 18px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.12);
+  background: rgba(217, 160, 56, 0.18);
+  border: 1px solid rgba(217, 160, 56, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fashion-gift-bounce {
@@ -1560,22 +1564,17 @@ html {
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   min-height: 350px;
   border-radius: var(--fs-radius-lg);
-  background: var(--fs-tint);
-  border: 1px solid var(--fs-line);
+  background: linear-gradient(135deg, #180d2b 0%, #2f174e 60%, #3e1e63 100%);
+  color: #ffffff;
+  border: 1px solid rgba(217, 160, 56, 0.3);
   overflow: hidden;
-  box-shadow: var(--fs-shadow-sm);
+  box-shadow: 0 16px 36px rgba(24, 13, 43, 0.25);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .fashion-promo-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--fs-shadow-md);
-}
-
-.fashion-promo-featured {
-  background: linear-gradient(135deg, var(--fs-dark) 0%, #341e52 100%);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 22px 48px rgba(24, 13, 43, 0.35), 0 0 25px rgba(217, 160, 56, 0.2);
 }
 
 .fashion-promo-copy {
@@ -1583,20 +1582,16 @@ html {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
   padding: clamp(26px, 3.5vw, 44px);
 }
 
 .fashion-promo-label {
-  color: var(--fs-accent);
+  color: var(--fs-gold);
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-
-.fashion-promo-featured .fashion-promo-label {
-  color: var(--fs-gold);
 }
 
 .fashion-promo-copy h2,
@@ -1607,6 +1602,8 @@ html {
 .fashion-promo-card h2 em {
   font-size: clamp(1.7rem, 2.6vw, 2.3rem);
   color: #ffffff !important;
+  line-height: 1.15;
+  margin: 0;
 }
 
 .fashion-promo-discount {
@@ -1615,21 +1612,15 @@ html {
   font-style: italic;
   font-weight: 500;
   line-height: 1;
-  color: var(--fs-accent);
-}
-
-.fashion-promo-featured .fashion-promo-discount {
   color: var(--fs-gold);
 }
 
 .fashion-promo-copy > p {
   max-width: 350px;
-  color: var(--fs-muted);
-  font-size: 0.95rem;
-}
-
-.fashion-promo-featured .fashion-promo-copy > p {
   color: rgba(255, 255, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .fashion-promo-code {
@@ -1637,23 +1628,28 @@ html {
   align-items: center;
   gap: 10px;
   padding: 8px 16px;
-  border: 1.5px dashed currentColor;
+  border: 1.5px dashed rgba(217, 160, 56, 0.55);
   border-radius: var(--fs-radius-sm);
+  background: rgba(217, 160, 56, 0.12);
+  color: #ffffff;
   font-size: 0.82rem;
+}
+
+.fashion-promo-code span {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
 }
 
 .fashion-promo-code strong {
   font-size: 0.98rem;
   letter-spacing: 0.12em;
+  font-weight: 700;
 }
 
 .fashion-promo-validity {
-  color: var(--fs-muted);
-  font-size: 0.84rem;
-}
-
-.fashion-promo-featured .fashion-promo-validity {
   color: rgba(255, 255, 255, 0.65);
+  font-size: 0.84rem;
 }
 
 .fashion-promo-button {
@@ -1663,8 +1659,8 @@ html {
   margin-top: 6px;
   padding: 14px 26px;
   border-radius: 999px;
-  background: var(--fs-dark);
-  color: #fff;
+  background: var(--fs-gold);
+  color: #241904;
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
@@ -1675,20 +1671,18 @@ html {
 .fashion-promo-button svg {
   width: 16px;
   height: 16px;
+  transition: transform 0.25s ease;
 }
 
 .fashion-promo-button:hover {
-  background: var(--fs-accent);
-  box-shadow: 0 8px 20px var(--fs-accent-glow);
+  background: #ffffff;
+  color: var(--fs-dark);
+  box-shadow: 0 8px 24px rgba(217, 160, 56, 0.4);
+  transform: translateY(-2px);
 }
 
-.fashion-promo-featured .fashion-promo-button {
-  background: var(--fs-gold);
-  color: #241904;
-}
-
-.fashion-promo-featured .fashion-promo-button:hover {
-  background: #fff;
+.fashion-promo-button:hover svg {
+  transform: translateX(4px);
 }
 
 .fashion-promo-art {
@@ -1711,87 +1705,103 @@ html {
 
 .fashion-custom-section {
   max-width: var(--fs-max);
-  margin: clamp(32px, 5vw, 64px) auto;
+  margin: clamp(40px, 6vw, 76px) auto;
   padding: 0 var(--fs-gutter);
 }
 
+.fashion-custom-section .fashion-custom-content,
 .fashion-custom-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: clamp(48px, 7vw, 96px) clamp(24px, 6vw, 80px);
-  border-radius: var(--fs-radius-lg);
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  padding: clamp(52px, 7vw, 96px) clamp(24px, 6vw, 80px) !important;
+  border-radius: var(--fs-radius-lg) !important;
   background:
-    radial-gradient(circle at 15% 20%, rgba(124, 77, 255, 0.4), transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(217, 160, 56, 0.2), transparent 45%),
-    linear-gradient(135deg, #1d102e 0%, #291840 100%);
-  color: #fff;
-  text-align: center;
-  overflow: hidden;
-  box-shadow: var(--fs-shadow-md);
+    radial-gradient(circle at 18% 22%, rgba(124, 77, 255, 0.45) 0%, transparent 48%),
+    radial-gradient(circle at 82% 78%, rgba(217, 160, 56, 0.28) 0%, transparent 48%),
+    linear-gradient(135deg, #160c28 0%, #24143a 50%, #31184f 100%) !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 20px 48px rgba(22, 12, 40, 0.25) !important;
 }
 
 .fashion-custom-content > span {
-  color: var(--fs-gold);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  display: inline-block !important;
+  color: var(--fs-gold) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 2px !important;
 }
 
 .fashion-custom-content h2,
 .fashion-custom-content h2 span {
-  font-size: clamp(2.3rem, 5.2vw, 4.2rem);
-  line-height: 1.02;
+  font-size: clamp(2.3rem, 5.2vw, 4.2rem) !important;
+  line-height: 1.1 !important;
   color: #ffffff !important;
+  margin: 0 !important;
+  font-family: var(--fs-display) !important;
+  font-weight: 400 !important;
 }
 
 .fashion-custom-content h2 em {
-  display: block;
-  font-weight: 400;
-  color: var(--fs-accent-soft) !important;
+  display: block !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  color: #d6bcfa !important;
+  margin-top: 6px !important;
 }
 
 .fashion-custom-content > p {
-  max-width: 540px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 1.05rem;
-  line-height: 1.65;
+  max-width: 560px !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+  margin: 0 !important;
 }
 
 .fashion-custom-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 10px;
-  padding: 16px 34px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--fs-dark);
-  font-weight: 600;
-  font-size: 0.98rem;
-  text-decoration: none;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin-top: 10px !important;
+  padding: 16px 36px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: var(--fs-dark) !important;
+  font-weight: 700 !important;
+  font-size: 0.98rem !important;
+  text-decoration: none !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: none !important;
+  cursor: pointer !important;
+  width: auto !important;
+  max-width: fit-content !important;
 }
 
 .fashion-custom-button svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s ease;
+  width: 18px !important;
+  height: 18px !important;
+  transition: transform 0.3s ease !important;
 }
 
 .fashion-custom-button:hover {
-  background: var(--fs-gold);
-  color: #241904;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(217, 160, 56, 0.4);
+  background: var(--fs-gold) !important;
+  color: #241904 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 34px rgba(217, 160, 56, 0.45) !important;
 }
 
 .fashion-custom-button:hover svg {
-  transform: translateX(5px);
+  transform: translateX(5px) !important;
 }
 
 /* =========================================================

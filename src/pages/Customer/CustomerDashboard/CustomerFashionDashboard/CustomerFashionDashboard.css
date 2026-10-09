@@ -1287,10 +1287,7 @@
   font-weight: 700;
 }
 
-.customer-fashion-dashboard .fashion-custom-enquiry-list,
-.customer-fashion-dashboard .fashion-custom-content,
-.fashion-custom-enquiry-list,
-.fashion-custom-content {
+.customer-fashion-dashboard .fashion-custom-enquiry-list {
   position: static !important;
 
   display: flex !important;

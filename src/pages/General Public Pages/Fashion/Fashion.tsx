@@ -1541,7 +1541,7 @@ function FashionProductDetailsModal({
 
 function FashionPromoCard({
   offer,
-  featured,
+  featured = true,
 }: {
   offer: FashionOffer
   featured?: boolean
@@ -1554,7 +1554,7 @@ function FashionPromoCard({
     >
       <div className="fashion-promo-copy">
         <span className="fashion-promo-label">
-          {featured ? 'EXCLUSIVE FASHION OFFER' : 'FASHION OFFER'}
+          EXCLUSIVE FASHION OFFER
         </span>
 
         <h2>{offer.title}</h2>
@@ -2748,11 +2748,11 @@ function handleIncreaseCartItem(
           </div>
 
           <div className="fashion-offers-grid">
-            {activeOffers.slice(0, 2).map((offer, index) => (
+            {activeOffers.slice(0, 2).map((offer) => (
               <FashionPromoCard
                 key={offer.id}
                 offer={offer}
-                featured={index === 0}
+                featured={true}
               />
             ))}
           </div>

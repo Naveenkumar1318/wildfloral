@@ -31,7 +31,7 @@
   min-width: 0;
   min-height: 100vh;
   margin: 0;
-  padding: 0 0 120px;
+  padding: 0 0 24px;
 
   background: var(--background);
   color: var(--on-surface);
@@ -1444,7 +1444,7 @@
   padding: 56px 32px;
   text-align: center;
   box-shadow: 0 12px 36px rgba(124, 58, 237, 0.08);
-  margin-bottom: 56px;
+  margin-bottom: 20px;
 }
 
 .services-final span {
@@ -1494,10 +1494,10 @@
 }
 
 .fashion-stats-strip {
-  padding-top: 52px;
-  padding-bottom: 64px;
+  padding-top: 24px;
+  padding-bottom: 20px;
   border-top: 1px solid rgba(124, 58, 237, 0.15);
-  margin-top: 48px;
+  margin-top: 20px;
 }
 
 .fashion-stats-container {
@@ -1697,7 +1697,7 @@
 /* Tablet & Mobile Screens (<= 768px) */
 @media (max-width: 768px) {
   .services-page {
-    padding-bottom: 150px;
+    padding-bottom: 16px;
   }
 
   .services-hero-container,
@@ -1947,8 +1947,8 @@
   }
 
   .fashion-stats-strip {
-    padding: 28px 0 32px;
-    margin-top: 20px;
+    padding: 16px 0 12px;
+    margin-top: 12px;
     width: 100%;
   }
 

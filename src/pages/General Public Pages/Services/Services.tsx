@@ -3103,7 +3103,7 @@ function Services() {
               </svg>
             </div>
             <div className="fashion-stat-content">
-              <strong>15+</strong>
+              <strong>3+</strong>
               <span>Years Heritage</span>
             </div>
           </div>
