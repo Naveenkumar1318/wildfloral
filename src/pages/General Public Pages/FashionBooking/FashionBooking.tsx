@@ -29,12 +29,28 @@ import './FashionBooking.css'
 
 type BookingStep = 1 | 2 | 3
 
+type FashionCategory = {
+  id: string
+  name: string
+  slug: string
+}
+
+type FashionSubcategory = {
+  id: string
+  category_id: string
+  name: string
+  slug: string
+}
+
 type FashionDesign = {
   id: string
+  subcategory_id: string
   name: string
   description: string | null
   delivery_min_days: number | null
   delivery_max_days: number | null
+  category?: FashionCategory | null
+  subcategory?: FashionSubcategory | null
 }
 
 type FashionSize = {
@@ -58,13 +74,23 @@ type FashionDesignImage = {
 type FashionOffer = {
   id: string
   title: string
+  description?: string | null
   discount_type: 'percentage' | 'fixed'
   discount_value: number | string
+  promo_code?: string | null
   starts_at: string
   ends_at: string | null
   is_active: boolean
   applies_to_all: boolean
   priority: number | string
+  scope_type: 'all' | 'category' | 'subcategory' | 'design'
+}
+
+type OfferScope = {
+  offer: FashionOffer
+  categoryIds: string[]
+  subcategoryIds: string[]
+  designIds: string[]
 }
 
 type CustomerForm = {
@@ -82,6 +108,11 @@ type OrderItem = FashionCartItem & {
   sizeData: FashionSize
   image: FashionDesignImage | null
   unitPrice: number
+  applicableOffer: FashionOffer | null
+  discountPerUnit: number
+  discountedUnitPrice: number
+  lineSubtotal: number
+  lineDiscountTotal: number
   lineTotal: number
 }
 
@@ -179,6 +210,20 @@ function formatPrice(
   ).format(value)
 }
 
+function isOfferLive(offer: FashionOffer, now: number): boolean {
+  if (!offer.is_active) return false
+  const start = new Date(offer.starts_at).getTime()
+  const end = offer.ends_at ? new Date(offer.ends_at).getTime() : Infinity
+  return start <= now && now <= end
+}
+
+function getDiscountText(offer: FashionOffer): string {
+  if (offer.discount_type === 'percentage') {
+    return `${Number(offer.discount_value)}% OFF`
+  }
+  return `${formatPrice(Number(offer.discount_value))} OFF`
+}
+
 function calculateDiscount(
   amount: number,
   offer: FashionOffer | null,
@@ -203,7 +248,7 @@ function calculateDiscount(
   ) {
     return Math.min(
       amount,
-      (amount * discountValue) / 100,
+      Math.round((amount * discountValue) / 100),
     )
   }
 
@@ -211,6 +256,62 @@ function calculateDiscount(
     amount,
     discountValue,
   )
+}
+
+function getApplicableOffer(
+  design: FashionDesign,
+  offerScopes: OfferScope[],
+  now: number,
+): FashionOffer | null {
+  const applicable = offerScopes.filter((scope) => {
+    const offer = scope.offer
+    if (!isOfferLive(offer, now)) return false
+
+    if (offer.scope_type === 'design') {
+      return scope.designIds.includes(design.id)
+    }
+
+    if (offer.scope_type === 'subcategory') {
+      if (scope.designIds.length > 0) {
+        return scope.designIds.includes(design.id)
+      }
+      return Boolean(
+        design.subcategory?.id &&
+          scope.subcategoryIds.includes(design.subcategory.id),
+      )
+    }
+
+    if (offer.scope_type === 'category') {
+      return Boolean(
+        design.category?.id &&
+          scope.categoryIds.includes(design.category.id),
+      )
+    }
+
+    if (offer.scope_type === 'all') {
+      return offer.applies_to_all === true
+    }
+
+    return false
+  })
+
+  if (applicable.length === 0) return null
+
+  const scopeRank: Record<FashionOffer['scope_type'], number> = {
+    design: 4,
+    subcategory: 3,
+    category: 2,
+    all: 1,
+  }
+
+  return [...applicable].sort((a, b) => {
+    const scopeDifference =
+      scopeRank[b.offer.scope_type] - scopeRank[a.offer.scope_type]
+    if (scopeDifference !== 0) {
+      return scopeDifference
+    }
+    return Number(b.offer.priority) - Number(a.offer.priority)
+  })[0].offer
 }
 
 function getImageForDesign(
@@ -295,10 +396,10 @@ function FashionBooking() {
     useState<FashionDesignImage[]>([])
 
   const [
-    offers,
-    setOffers,
+    offerScopes,
+    setOfferScopes,
   ] =
-    useState<FashionOffer[]>([])
+    useState<OfferScope[]>([])
 
   const [
     loading,
@@ -406,149 +507,144 @@ function FashionBooking() {
         ]
 
         const [
+          categoriesResult,
+          subcategoriesResult,
           designsResult,
           sizesResult,
           imagesResult,
           offersResult,
+          offerCategoriesResult,
+          offerSubcategoriesResult,
+          offerDesignsResult,
         ] = await Promise.all([
           supabase
-            .from(
-              'fashion_designs',
-            )
-            .select(
-              `
-                id,
-                name,
-                description,
-                delivery_min_days,
-                delivery_max_days
-              `,
-            )
-            .in(
-              'id',
-              designIds,
-            ),
+            .from('fashion_categories')
+            .select('id, name, slug'),
 
           supabase
-            .from(
-              'fashion_design_sizes',
-            )
-            .select(
-              `
-                id,
-                design_id,
-                size,
-                price,
-                stock_quantity,
-                is_active
-              `,
-            )
-            .in(
-              'id',
-              sizeIds,
-            ),
+            .from('fashion_subcategories')
+            .select('id, category_id, name, slug'),
 
           supabase
-            .from(
-              'fashion_design_images',
-            )
-            .select(
-              `
-                id,
-                design_id,
-                image_url,
-                alt_text,
-                display_order,
-                is_primary
-              `,
-            )
-            .in(
-              'design_id',
-              designIds,
-            )
-            .order(
-              'is_primary',
-              {
-                ascending: false,
-              },
-            )
-            .order(
-              'display_order',
-              {
-                ascending: true,
-              },
-            ),
+            .from('fashion_designs')
+            .select(`
+              id,
+              subcategory_id,
+              name,
+              description,
+              delivery_min_days,
+              delivery_max_days
+            `)
+            .in('id', designIds),
 
           supabase
-            .from(
-              'fashion_offers',
-            )
-            .select(
-              `
-                id,
-                title,
-                discount_type,
-                discount_value,
-                starts_at,
-                ends_at,
-                is_active,
-                applies_to_all,
-                priority
-              `,
-            )
-            .eq(
-              'is_active',
-              true,
-            ),
+            .from('fashion_design_sizes')
+            .select(`
+              id,
+              design_id,
+              size,
+              price,
+              stock_quantity,
+              is_active
+            `)
+            .in('id', sizeIds),
+
+          supabase
+            .from('fashion_design_images')
+            .select(`
+              id,
+              design_id,
+              image_url,
+              alt_text,
+              display_order,
+              is_primary
+            `)
+            .in('design_id', designIds)
+            .order('is_primary', { ascending: false })
+            .order('display_order', { ascending: true }),
+
+          supabase
+            .from('fashion_offers')
+            .select(`
+              id,
+              title,
+              description,
+              discount_type,
+              discount_value,
+              promo_code,
+              starts_at,
+              ends_at,
+              is_active,
+              applies_to_all,
+              priority,
+              scope_type
+            `)
+            .eq('is_active', true)
+            .order('priority', { ascending: false }),
+
+          supabase
+            .from('fashion_offer_categories')
+            .select('offer_id, category_id'),
+
+          supabase
+            .from('fashion_offer_subcategories')
+            .select('offer_id, subcategory_id'),
+
+          supabase
+            .from('fashion_offer_designs')
+            .select('offer_id, design_id'),
         ])
 
-        if (
-          designsResult.error
-        ) {
-          throw designsResult.error
-        }
-
-        if (
-          sizesResult.error
-        ) {
-          throw sizesResult.error
-        }
-
-        if (
-          imagesResult.error
-        ) {
-          throw imagesResult.error
-        }
-
-        if (
-          offersResult.error
-        ) {
-          throw offersResult.error
-        }
+        if (designsResult.error) throw designsResult.error
+        if (sizesResult.error) throw sizesResult.error
+        if (imagesResult.error) throw imagesResult.error
+        if (offersResult.error) throw offersResult.error
 
         if (!active) {
           return
         }
 
-        setDesigns(
-          designsResult.data ??
-            [],
+        const categories = (categoriesResult.data ?? []) as FashionCategory[]
+        const subcategories = (subcategoriesResult.data ?? []) as FashionSubcategory[]
+        const categoryMap = new Map(categories.map((c) => [c.id, c]))
+        const subcategoryMap = new Map(subcategories.map((s) => [s.id, s]))
+
+        const designsWithRelations = (designsResult.data ?? []).map((d: any) => {
+          const subcategory = subcategoryMap.get(d.subcategory_id) ?? null
+          const category = subcategory ? categoryMap.get(subcategory.category_id) ?? null : null
+          return {
+            ...d,
+            subcategory,
+            category,
+          }
+        })
+
+        const rawOffers = (offersResult.data ?? []) as FashionOffer[]
+        const offerCategories = (offerCategoriesResult.data ?? []) as { offer_id: string; category_id: string }[]
+        const offerSubcategories = (offerSubcategoriesResult.data ?? []) as { offer_id: string; subcategory_id: string }[]
+        const offerDesigns = (offerDesignsResult.data ?? []) as { offer_id: string; design_id: string }[]
+
+        const scopes = new Map<string, OfferScope>(
+          rawOffers.map((offer): [string, OfferScope] => [
+            offer.id,
+            { offer, categoryIds: [], subcategoryIds: [], designIds: [] },
+          ]),
         )
 
-        setSizes(
-          sizesResult.data ??
-            [],
-        )
+        offerCategories.forEach((link) => {
+          scopes.get(link.offer_id)?.categoryIds.push(link.category_id)
+        })
+        offerSubcategories.forEach((link) => {
+          scopes.get(link.offer_id)?.subcategoryIds.push(link.subcategory_id)
+        })
+        offerDesigns.forEach((link) => {
+          scopes.get(link.offer_id)?.designIds.push(link.design_id)
+        })
 
-        setDesignImages(
-          imagesResult.data ??
-            [],
-        )
-
-        setOffers(
-          offersResult.data ??
-            [],
-        )
+        setOfferScopes(Array.from(scopes.values()))
+        setDesigns(designsWithRelations)
+        setSizes(sizesResult.data ?? [])
+        setDesignImages(imagesResult.data ?? [])
       } catch (loadError) {
         console.error(
           'Fashion booking load error:',
@@ -575,152 +671,71 @@ function FashionBooking() {
   }, [])
 
   /* =========================================================
-     ACTIVE OFFER
+     BUILD ORDER ITEMS WITH ACCURATE DISCOUNTS
   ========================================================= */
 
-  const activeOffer =
-    useMemo(() => {
-      const now =
-        Date.now()
+  const orderItems = useMemo<OrderItem[]>(() => {
+    const now = Date.now()
 
-      return (
-        offers
-          .filter(
-            (offer) => {
-              const startsAt =
-                new Date(
-                  offer.starts_at,
-                ).getTime()
+    return cartItems
+      .map((item) => {
+        const design = designs.find((entry) => entry.id === item.designId)
+        const sizeData = sizes.find((entry) => entry.id === item.designSizeId)
 
-              const endsAt =
-                offer.ends_at
-                  ? new Date(
-                      offer.ends_at,
-                    ).getTime()
-                  : null
+        if (!design || !sizeData) {
+          return null
+        }
 
-              return (
-                offer.is_active &&
-                startsAt <= now &&
-                (
-                  endsAt === null ||
-                  endsAt >= now
-                )
-              )
-            },
-          )
-          .sort(
-            (a, b) =>
-              Number(
-                b.priority,
-              ) -
-              Number(
-                a.priority,
-              ),
-          )[0] ?? null
-      )
-    }, [offers])
+        const unitPrice = Number(sizeData.price)
+        const applicableOffer = getApplicableOffer(design, offerScopes, now)
+        const discountPerUnit = calculateDiscount(unitPrice, applicableOffer)
+        const discountedUnitPrice = Math.max(0, unitPrice - discountPerUnit)
+        const lineSubtotal = unitPrice * item.quantity
+        const lineDiscountTotal = discountPerUnit * item.quantity
+        const lineTotal = Math.max(0, lineSubtotal - lineDiscountTotal)
+
+        return {
+          ...item,
+          design,
+          sizeData,
+          image: getImageForDesign(designImages, item.designId),
+          unitPrice,
+          applicableOffer,
+          discountPerUnit,
+          discountedUnitPrice,
+          lineSubtotal,
+          lineDiscountTotal,
+          lineTotal,
+        }
+      })
+      .filter((item): item is OrderItem => item !== null)
+  }, [cartItems, designs, sizes, designImages, offerScopes])
 
   /* =========================================================
-     BUILD ORDER ITEMS
+     TOTALS & APPLIED OFFERS
   ========================================================= */
 
-  const orderItems =
-    useMemo<OrderItem[]>(() => {
-      return cartItems
-        .map((item) => {
-          const design =
-            designs.find(
-              (entry) =>
-                entry.id ===
-                item.designId,
-            )
+  const subtotal = useMemo(
+    () => orderItems.reduce((total, item) => total + item.lineSubtotal, 0),
+    [orderItems],
+  )
 
-          const sizeData =
-            sizes.find(
-              (entry) =>
-                entry.id ===
-                item.designSizeId,
-            )
+  const discountAmount = useMemo(
+    () => orderItems.reduce((total, item) => total + item.lineDiscountTotal, 0),
+    [orderItems],
+  )
 
-          if (
-            !design ||
-            !sizeData
-          ) {
-            return null
-          }
+  const totalAmount = Math.max(0, subtotal - discountAmount)
 
-          const unitPrice =
-            Number(
-              sizeData.price,
-            )
-
-          return {
-            ...item,
-            design,
-            sizeData,
-            image:
-              getImageForDesign(
-                designImages,
-                item.designId,
-              ),
-            unitPrice,
-            lineTotal:
-              unitPrice *
-              item.quantity,
-          }
-        })
-        .filter(
-          (
-            item,
-          ): item is OrderItem =>
-            item !== null,
-        )
-    }, [
-      cartItems,
-      designs,
-      sizes,
-      designImages,
-    ])
-
-  /* =========================================================
-     TOTALS
-  ========================================================= */
-
-  const subtotal =
-    useMemo(
-      () =>
-        orderItems.reduce(
-          (
-            total,
-            item,
-          ) =>
-            total +
-            item.lineTotal,
-          0,
-        ),
-      [orderItems],
-    )
-
-  const discountAmount =
-    useMemo(
-      () =>
-        calculateDiscount(
-          subtotal,
-          activeOffer,
-        ),
-      [
-        subtotal,
-        activeOffer,
-      ],
-    )
-
-  const totalAmount =
-    Math.max(
-      0,
-      subtotal -
-        discountAmount,
-    )
+  const appliedOffers = useMemo(() => {
+    const unique = new Map<string, FashionOffer>()
+    orderItems.forEach((item) => {
+      if (item.applicableOffer) {
+        unique.set(item.applicableOffer.id, item.applicableOffer)
+      }
+    })
+    return Array.from(unique.values())
+  }, [orderItems])
 
   /* =========================================================
      FORM UPDATE
@@ -1553,40 +1568,40 @@ async function verifyRazorpayPayment(
       ----------------------------------------- */
 
       const itemsPayload =
-  orderItems.map(
-    (item) => ({
-      order_id:
-        order.id,
+        orderItems.map(
+          (item) => ({
+            order_id:
+              order.id,
 
-      design_id:
-        item.designId,
+            design_id:
+              item.designId,
 
-      design_size_id:
-        item.designSizeId,
+            design_size_id:
+              item.designSizeId,
 
-      design_name:
-        item.design.name,
+            design_name:
+              item.design.name,
 
-      design_image_url:
-        item.image?.image_url ??
-        null,
+            design_image_url:
+              item.image?.image_url ??
+              null,
 
-      size:
-        item.size,
+            size:
+              item.size,
 
-      quantity:
-        item.quantity,
+            quantity:
+              item.quantity,
 
-      unit_price:
-        item.unitPrice,
+            unit_price:
+              item.unitPrice,
 
-      discount_amount:
-        0,
+            discount_amount:
+              item.lineDiscountTotal,
 
-      final_price:
-        item.lineTotal,
-    }),
-  )
+            final_price:
+              item.lineTotal,
+          }),
+        )
 
       const {
         error: itemsError,
@@ -2162,11 +2177,29 @@ async function verifyRazorpayPayment(
                               </strong>
                             </span>
 
-                            <span>
-                              {formatPrice(
-                                item.unitPrice,
-                              )}
-                            </span>
+                            {item.applicableOffer ? (
+                              <span>
+                                <strong>
+                                  {formatPrice(
+                                    item.discountedUnitPrice,
+                                  )}
+                                </strong>{' '}
+                                <s style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.9em' }}>
+                                  {formatPrice(
+                                    item.unitPrice,
+                                  )}
+                                </s>{' '}
+                                <span style={{ color: 'var(--wf-accent, #7c4dff)', fontWeight: 700 }}>
+                                  ({getDiscountText(item.applicableOffer)})
+                                </span>
+                              </span>
+                            ) : (
+                              <span>
+                                {formatPrice(
+                                  item.unitPrice,
+                                )}
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -2211,11 +2244,20 @@ async function verifyRazorpayPayment(
                             </button>
                           </div>
 
-                          <strong className="fashion-item-total">
-                            {formatPrice(
-                              item.lineTotal,
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+                            <strong className="fashion-item-total">
+                              {formatPrice(
+                                item.lineTotal,
+                              )}
+                            </strong>
+                            {item.lineDiscountTotal > 0 && (
+                              <s style={{ fontSize: '11px', color: '#8a7a9e', textDecoration: 'line-through' }}>
+                                {formatPrice(
+                                  item.lineSubtotal,
+                                )}
+                              </s>
                             )}
-                          </strong>
+                          </div>
 
                           <button
                             type="button"
@@ -2234,22 +2276,19 @@ async function verifyRazorpayPayment(
                   )}
                 </div>
 
-                {activeOffer && (
+                {appliedOffers.length > 0 && discountAmount > 0 && (
                   <div className="fashion-offer-banner">
                     <span>✦</span>
 
                     <div>
                       <strong>
-                        {
-                          activeOffer.title
-                        }
+                        {appliedOffers.map((o) => o.title).join(', ')}
                       </strong>
 
                       <p>
-                        Your available
-                        offer has been
-                        applied to this
-                        order.
+                        {appliedOffers.length === 1
+                          ? 'Your promotional offer has been applied to qualifying items in this order.'
+                          : 'Promotional offers have been applied to qualifying items in this order.'}
                       </p>
                     </div>
 
@@ -2808,11 +2847,20 @@ async function verifyRazorpayPayment(
                         </span>
                       </div>
 
-                      <b>
-                        {formatPrice(
-                          item.lineTotal,
+                      <div style={{ textAlign: 'right' }}>
+                        <b>
+                          {formatPrice(
+                            item.lineTotal,
+                          )}
+                        </b>
+                        {item.lineDiscountTotal > 0 && (
+                          <div style={{ fontSize: '10px', color: '#8a7a9e', textDecoration: 'line-through' }}>
+                            {formatPrice(
+                              item.lineSubtotal,
+                            )}
+                          </div>
                         )}
-                      </b>
+                      </div>
                     </div>
                   ),
                 )}

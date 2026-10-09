@@ -1475,16 +1475,17 @@ html {
 }
 
 .fashion-book-button {
-  border: 1px solid var(--fs-dark);
-  background: linear-gradient(135deg, var(--fs-dark) 0%, #3a2258 100%);
-  color: #fff;
-  box-shadow: var(--fs-shadow-sm);
+  border: 1px solid var(--fs-accent);
+  background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(124, 77, 255, 0.3);
 }
 
 .fashion-book-button:hover:not(:disabled) {
-  border-color: var(--fs-accent);
-  background: linear-gradient(135deg, var(--fs-accent) 0%, #6935f2 100%);
-  box-shadow: 0 8px 20px var(--fs-accent-glow);
+  border-color: #651fff;
+  background: linear-gradient(135deg, #651fff 0%, #5314e0 100%);
+  box-shadow: 0 8px 22px rgba(101, 31, 255, 0.45);
+  transform: translateY(-1px);
 }
 
 .fashion-cart-button:disabled,
@@ -1492,6 +1493,8 @@ html {
   border-color: var(--fs-line);
   background: var(--fs-tint);
   color: #bfaec9;
+  box-shadow: none;
+  transform: none;
 }
 
 /* =========================================================
@@ -2700,21 +2703,25 @@ html {
 }
 
 .fashion-product-actions button:last-child {
-  background: linear-gradient(135deg, var(--fs-dark) 0%, #3a2258 100%);
-  color: #fff;
-  box-shadow: var(--fs-shadow-sm);
+  border: 1px solid var(--fs-accent);
+  background: linear-gradient(135deg, #7c4dff 0%, #651fff 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(124, 77, 255, 0.3);
 }
 
 .fashion-product-actions button:last-child:hover:not(:disabled) {
-  border-color: var(--fs-accent);
-  background: linear-gradient(135deg, var(--fs-accent) 0%, #6935f2 100%);
-  box-shadow: 0 8px 20px var(--fs-accent-glow);
+  border-color: #651fff;
+  background: linear-gradient(135deg, #651fff 0%, #5314e0 100%);
+  box-shadow: 0 8px 22px rgba(101, 31, 255, 0.45);
+  transform: translateY(-1px);
 }
 
 .fashion-product-actions button:disabled {
   border-color: var(--fs-line);
   background: var(--fs-tint);
   color: #bfaec9;
+  box-shadow: none;
+  transform: none;
 }
 
 .fashion-product-info-section {

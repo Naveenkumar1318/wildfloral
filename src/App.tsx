@@ -1,7 +1,5 @@
-import {
-  Route,
-  Routes,
-} from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
 
 import ScrollToTop from './components/common/ScrollToTop'
 
@@ -12,207 +10,80 @@ import ScrollToTop from './components/common/ScrollToTop'
 import PublicLayout from './layouts/PublicLayout'
 
 /* =========================================================
-   GENERAL PUBLIC PAGES
-========================================================= */
-
-import Home from './pages/General Public Pages/Home/Home'
-import About from './pages/General Public Pages/About/About'
-import Services from './pages/General Public Pages/Services/Services'
-import Fashion from './pages/General Public Pages/Fashion/Fashion'
-import Contact from './pages/General Public Pages/Contact/Contact'
-import Enquiry from './pages/General Public Pages/Enquiry/Enquiry'
-import Booking from './pages/General Public Pages/Booking/Booking'
-import FashionBooking
-  from './pages/General Public Pages/FashionBooking/FashionBooking'
-import FashionBookingSuccess
-  from './pages/General Public Pages/FashionBooking/FashionBookingSuccess'
-import PrivacyPolicy
-  from './pages/General Public Pages/PrivacyPolicy/PrivacyPolicy'
-import TermsConditions
-  from './pages/General Public Pages/TermsConditions/TermsConditions'
-import NotFound
-  from './pages/General Public Pages/NotFound/NotFound'
-
-  import CustomerFashionBooking
-  from './pages/Customer/customer_Fashion_Booking/customer_Fashion_Booking'
-
-/* =========================================================
-   CUSTOMER AUTHENTICATION
-========================================================= */
-
-import CustomerLogin
-  from './pages/Customer/Login/CustomerLogin'
-
-import CustomerRegister
-  from './pages/Customer/Register/CustomerRegister'
-
-import ForgotPassword
-  from './pages/Customer/ForgotPassword'
-
-import AuthCallback
-  from './pages/Customer/AuthCallback'
-
-/* =========================================================
    CUSTOMER LAYOUT / PROTECTION
 ========================================================= */
 
-import CustomerLayout
-  from './components/customer/CustomerLayout'
-
-import CustomerProtectedRoute
-  from './components/customer/CustomerProtectedRoute'
-
-/* =========================================================
-   CUSTOMER PAGES
-========================================================= */
-
-import CustomerDashboard
-  from './pages/Customer/CustomerDashboard/CustomerDashboard'
-
-import CustomerBeautyDashboard
-  from './pages/Customer/CustomerDashboard/CustomerBeautyDashboard/CustomerBeautyDashboard'
-
-import CustomerFashionDashboard
-  from './pages/Customer/CustomerDashboard/CustomerFashionDashboard/CustomerFashionDashboard'
-
-import CustomerProfile
-  from './pages/Customer/CustomerProfile/CustomerProfile'
-
-import BeautyBookings
-  from './pages/Customer/BeautyBookings/BeautyBookings'
-
-import BeautyEnquiries
-  from './pages/Customer/BeautyEnquiries/BeautyEnquiries'
-
-import FashionEnquiry from './pages/Customer/FashionEnquiry/CustomerFashionEnquiry'
-/* =========================================================
-   ADMIN AUTHENTICATION
-========================================================= */
-
-import AdminLogin
-  from './pages/Admin/AdminLogin/AdminLogin'
+import CustomerLayout from './components/customer/CustomerLayout'
+import CustomerProtectedRoute from './components/customer/CustomerProtectedRoute'
 
 /* =========================================================
    ADMIN LAYOUT / PROTECTION
 ========================================================= */
 
-import AdminLayout
-  from './components/admin/AdminLayout'
-
-import AdminProtectedRoute
-  from './components/admin/AdminProtectedRoute'
+import AdminLayout from './components/admin/AdminLayout'
+import AdminProtectedRoute from './components/admin/AdminProtectedRoute'
 
 /* =========================================================
-   ADMIN DASHBOARDS
+   LAZY LOADED PAGES
 ========================================================= */
 
-import AdminDashboard
-  from './pages/Admin/AdminDashboard/AdminDashboard'
+const Home = lazy(() => import('./pages/General Public Pages/Home/Home'))
+const About = lazy(() => import('./pages/General Public Pages/About/About'))
+const Services = lazy(() => import('./pages/General Public Pages/Services/Services'))
+const Fashion = lazy(() => import('./pages/General Public Pages/Fashion/Fashion'))
+const Contact = lazy(() => import('./pages/General Public Pages/Contact/Contact'))
+const Enquiry = lazy(() => import('./pages/General Public Pages/Enquiry/Enquiry'))
+const Booking = lazy(() => import('./pages/General Public Pages/Booking/Booking'))
+const FashionBooking = lazy(() => import('./pages/General Public Pages/FashionBooking/FashionBooking'))
+const FashionBookingSuccess = lazy(() => import('./pages/General Public Pages/FashionBooking/FashionBookingSuccess'))
+const PrivacyPolicy = lazy(() => import('./pages/General Public Pages/PrivacyPolicy/PrivacyPolicy'))
+const TermsConditions = lazy(() => import('./pages/General Public Pages/TermsConditions/TermsConditions'))
+const NotFound = lazy(() => import('./pages/General Public Pages/NotFound/NotFound'))
 
-import AdminBeautyDashboard
-  from './pages/Admin/AdminDashboard/AdminBeautyDashboard/AdminBeautyDashboard'
+const CustomerFashionBooking = lazy(() => import('./pages/Customer/customer_Fashion_Booking/customer_Fashion_Booking'))
+const CustomerLogin = lazy(() => import('./pages/Customer/Login/CustomerLogin'))
+const CustomerRegister = lazy(() => import('./pages/Customer/Register/CustomerRegister'))
+const ForgotPassword = lazy(() => import('./pages/Customer/ForgotPassword'))
+const AuthCallback = lazy(() => import('./pages/Customer/AuthCallback'))
+const CustomerDashboard = lazy(() => import('./pages/Customer/CustomerDashboard/CustomerDashboard'))
+const CustomerBeautyDashboard = lazy(() => import('./pages/Customer/CustomerDashboard/CustomerBeautyDashboard/CustomerBeautyDashboard'))
+const CustomerFashionDashboard = lazy(() => import('./pages/Customer/CustomerDashboard/CustomerFashionDashboard/CustomerFashionDashboard'))
+const CustomerProfile = lazy(() => import('./pages/Customer/CustomerProfile/CustomerProfile'))
+const BeautyBookings = lazy(() => import('./pages/Customer/BeautyBookings/BeautyBookings'))
+const BeautyEnquiries = lazy(() => import('./pages/Customer/BeautyEnquiries/BeautyEnquiries'))
+const FashionEnquiry = lazy(() => import('./pages/Customer/FashionEnquiry/CustomerFashionEnquiry'))
 
-import AdminFashionDashboard
-  from './pages/Admin/AdminDashboard/AdminFashionDashboard/AdminFashionDashboard'
+const AdminLogin = lazy(() => import('./pages/Admin/AdminLogin/AdminLogin'))
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDashboard'))
+const AdminBeautyDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminBeautyDashboard/AdminBeautyDashboard'))
+const AdminFashionDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminFashionDashboard/AdminFashionDashboard'))
+const AdminBeautyServices = lazy(() => import('./pages/Admin/AdminServices/AdminbeautyServices'))
+const AdminBeautyCategories = lazy(() => import('./pages/Admin/AdminServices/AdminbeautyCategories'))
+const AdminBeautyCategoryForm = lazy(() => import('./pages/Admin/AdminServices/AdminbeautyCategoryForm'))
+const AdminBeautyServiceForm = lazy(() => import('./pages/Admin/AdminServices/AdminbeautyServiceForm'))
+const AdminBeautyBookings = lazy(() => import('./pages/Admin/AdminBookings/AdminBeautyBookings'))
+const AdminbeautyEnquiries = lazy(() => import('./pages/Admin/AdminEnquiries/AdminbeautyEnquiries'))
+const AdminBeautyOffers = lazy(() => import('./pages/Admin/AdminOffers/AdminBeautyOffers'))
+const OPBeautyCustomers = lazy(() => import('./pages/Admin/OPCustomers/OPBeautyCustomers'))
 
-/* =========================================================
-   ADMIN BEAUTY SERVICES
-========================================================= */
+const AdminFashionCategories = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionCategories/AdminFashionCategories'))
+const AdminFashionCategoryForm = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionCategories/AdminFashionCategoryForm'))
+const AdminFashionSubCategories = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionSubCategories/AdminFashionSubCategories'))
+const AdminFashionSubCategoryForm = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionSubCategories/AdminFashionSubCategoryForm'))
+const AdminFashionDesigns = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionDesigns/AdminFashionDesigns'))
+const AdminFashionDesignForm = lazy(() => import('./pages/Admin/AdminServices/AdminFashionServices/AdminFashionDesigns/AdminFashionDesignForm'))
+const AdminFashionOffers = lazy(() => import('./pages/Admin/AdminOffers/AdminFashionOffers'))
+const AdminFashionEnquiry = lazy(() => import('./pages/Admin/AdminEnquiries/AdminFashionEnquiry'))
+const AdminFashionOPCustomer = lazy(() => import('./pages/Admin/OPCustomers/AdminFashionOPCustomer'))
+const AdminFashionBookings = lazy(() => import('./pages/Admin/AdminBookings/AdminFashionBookings'))
 
-import AdminBeautyServices
-  from './pages/Admin/AdminServices/AdminbeautyServices'
-
-import AdminBeautyCategories
-  from './pages/Admin/AdminServices/AdminbeautyCategories'
-
-import AdminBeautyCategoryForm
-  from './pages/Admin/AdminServices/AdminbeautyCategoryForm'
-
-import AdminBeautyServiceForm
-  from './pages/Admin/AdminServices/AdminbeautyServiceForm'
-
-/* =========================================================
-   ADMIN BEAUTY BOOKINGS
-========================================================= */
-
-import AdminBeautyBookings
-  from './pages/Admin/AdminBookings/AdminBeautyBookings'
-
-/* =========================================================
-   ADMIN BEAUTY ENQUIRIES
-========================================================= */
-
-import AdminbeautyEnquiries
-  from './pages/Admin/AdminEnquiries/AdminbeautyEnquiries'
-
-/* =========================================================
-   ADMIN BEAUTY OFFERS
-========================================================= */
-
-import AdminBeautyOffers
-  from './pages/Admin/AdminOffers/AdminBeautyOffers'
-
-/* =========================================================
-   ADMIN BEAUTY OP CUSTOMERS
-========================================================= */
-
-import OPBeautyCustomers
-  from './pages/Admin/OPCustomers/OPBeautyCustomers'
-
-/* =========================================================
-   ADMIN FASHION CATEGORIES
-========================================================= */
-
-import AdminFashionCategories
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionCategories/AdminFashionCategories'
-
-import AdminFashionCategoryForm
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionCategories/AdminFashionCategoryForm'
-
-  /* =========================================================
-   ADMIN FASHION SUBCATEGORIES
-========================================================= */
-
-import AdminFashionSubCategories
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionSubCategories/AdminFashionSubCategories'
-
-import AdminFashionSubCategoryForm
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionSubCategories/AdminFashionSubCategoryForm'
-/* =========================================================
-   ADMIN FASHION DESIGNS
-========================================================= */
-
-import AdminFashionDesigns
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionDesigns/AdminFashionDesigns'
-
-import AdminFashionDesignForm
-  from './pages/Admin/AdminServices/AdminFashionServices/AdminFashionDesigns/AdminFashionDesignForm'
-/* =========================================================
-   ADMIN FASHION OFFERS
-========================================================= */
-
-import AdminFashionOffers
-  from './pages/Admin/AdminOffers/AdminFashionOffers'
-
-  /* =========================================================
-   ADMIN FASHION OP CUSTOMERS and ENQUIRIES
-========================================================= */
-import AdminFashionEnquiry from './pages/Admin/AdminEnquiries/AdminFashionEnquiry'
-import AdminFashionOPCustomer from './pages/Admin/OPCustomers/AdminFashionOPCustomer'
-
-  /* =========================================================
-   ADMIN FASHION BOOKINGS
-========================================================= */
-
-import AdminFashionBookings from './pages/Admin/AdminBookings/AdminFashionBookings'
-
-  
 function App() {
   return (
     <>
       <ScrollToTop />
 
-      <Routes>
+      <Suspense fallback={<div>Loading page...</div>}>
+        <Routes>
 
       {/* =====================================================
           PUBLIC WEBSITE
@@ -667,7 +538,8 @@ function App() {
 
       </Route>
 
-      </Routes>
+        </Routes>
+      </Suspense>
     </>
   )
 }
